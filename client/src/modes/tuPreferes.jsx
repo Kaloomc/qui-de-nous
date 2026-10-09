@@ -1,0 +1,242 @@
+import { useEffect, useRef, useState } from 'react';
+import { Confetti, PlayerChip } from '../components.jsx';
+import { sounds } from '../sound.js';
+
+export const id = 'tu-preferes';
+export const label = 'Tu préfères ?';
+export const tagline = 'A ou B : la minorité boit.';
+export const waitingText = 'Suspense…';
+export const hasSound = true;
+
+const SUSPENSE_MS = 5200;
+const SWINGS = 6;
+// Les téléphones attendent la fin de l'animation de la TV pour ne rien spoiler.
+export const revealDelayMs = SUSPENSE_MS + 700;
+
+const pct = (n, total) => (total ? Math.round((n / total) * 100) : 0);
+
+function OptionCard({ side, text, status, percent, compact }) {
+  return (
+    <div className={`option option-${side} ${status ? `option-${status}` : ''} ${compact ? 'option-compact' : ''}`}>
+      {status === 'win' && <Confetti />}
+      <span className="option-letter">{side.toUpperCase()}</span>
+      <p className="option-text">{text}</p>
+      {percent != null && <p className="option-pct pop-in">{percent} %</p>}
+    </div>
+  );
+}
+
+export function HostQuestion({ state }) {
+  const { round } = state;
+  return (
+    <>
+      <p className="round">Question {round.number}</p>
+      <h1 className="tp-title">Tu préfères…</h1>
+      <div key={round.number} className="duel slide-in">
+        <OptionCard side="a" text={round.a} />
+        <div className="duel-or">ou</div>
+        <OptionCard side="b" text={round.b} />
+      </div>
+    </>
+  );
+}
+
+/**
+ * Jauge qui oscille entre A (gauche) et B (droite), de plus en plus lentement,
+ * puis se pose sur la vraie répartition. Animée en requestAnimationFrame en
+ * écrivant directement dans le DOM, sans re-render React, pour rester fluide.
+ */
+function Balance({ shareA, onDone }) {
+  const fillRef = useRef(null);
+  const needleRef = useRef(null);
+  const rootRef = useRef(null);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const duration = reduced ? 400 : SUSPENSE_MS;
+    let raf;
+    let start = null;
+    let lastSign = 0;
+
+    const draw = (pos) => {
+      fillRef.current.style.transform = `scaleX(${pos})`;
+      needleRef.current.style.transform = `translateX(${pos * 100}%)`;
+    };
+    const beat = () => {
+      const el = rootRef.current;
+      el.classList.remove('beat');
+      void el.offsetWidth;
+      el.classList.add('beat');
+    };
+
+    sounds.heartbeat();
+    const frame = (now) => {
+      start ??= now;
+      const t = Math.min(1, (now - start) / duration);
+      const remaining = 1 - t;
+      // Centre qui glisse vers la vraie valeur, amplitude qui s'éteint, fréquence qui ralentit.
+      const center = 0.5 + (shareA - 0.5) * t * t;
+      const amplitude = 0.48 * remaining ** 1.4;
+      const swing = Math.sin(2 * Math.PI * SWINGS * (1 - remaining * remaining));
+      const pos = t < 1 ? Math.min(0.98, Math.max(0.02, center + amplitude * swing)) : shareA;
+      draw(pos);
+
+      const sign = Math.sign(swing);
+      if (t < 1 && sign !== 0 && sign !== lastSign) {
+        if (lastSign !== 0) {
+          sounds.tick(t);
+          beat();
+        }
+        lastSign = sign;
+      }
+
+      if (t < 1) raf = requestAnimationFrame(frame);
+      else {
+        sounds.reveal();
+        onDoneRef.current();
+      }
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [shareA]);
+
+  return (
+    <div ref={rootRef} className="balance">
+      <div className="balance-track">
+        <div ref={fillRef} className="balance-fill" />
+      </div>
+      <div ref={needleRef} className="balance-needle-rail">
+        <span className="balance-needle" />
+      </div>
+    </div>
+  );
+}
+
+function sideStatus(results, side) {
+  if (results.tie) return 'tie';
+  return results.majority === side ? 'win' : 'lose';
+}
+
+function Camp({ side, players, status, results }) {
+  const empty = players.length === 0;
+  const campDrinks = players.some((p) => results.drinkerIds.includes(p.id));
+  let tag = null;
+  if (status === 'win') tag = <span className="camp-tag camp-tag-win">Épargnés</span>;
+  if (status === 'lose') tag = <span className="camp-tag camp-tag-lose">{empty ? 'Personne' : 'Ils boivent !'}</span>;
+  if (status === 'tie') tag = <span className="camp-tag camp-tag-tie">{campDrinks ? 'Ils boivent !' : 'Sauvés'}</span>;
+  return (
+    <div className={`camp camp-${side} camp-${status}`}>
+      <div className="camp-head fade-up">{tag}</div>
+      <div className="camp-players">
+        {players.map((p, i) => (
+          <div key={p.id} className="land" style={{ animationDelay: `${150 + i * 110}ms` }}>
+            <PlayerChip player={p} size={players.length > 8 ? 56 : 72} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function HostResults({ state }) {
+  const { results, round } = state;
+  const [revealed, setRevealed] = useState(false);
+  const { counts, totalVotes } = results;
+  const shareA = totalVotes ? counts.a / totalVotes : 0.5;
+  const byId = new Map(state.players.map((p) => [p.id, p]));
+  const campOf = (side) =>
+    Object.entries(results.choices)
+      .filter(([, choice]) => choice === side)
+      .map(([pid]) => byId.get(pid))
+      .filter(Boolean);
+  const nonVoters = results.nonVoterIds.map((pid) => byId.get(pid)).filter(Boolean);
+  const votersDrinkOnTie = Object.keys(results.choices).some((pid) => results.drinkerIds.includes(pid));
+
+  return (
+    <div className={`tp tp-results ${revealed ? 'is-revealed' : 'is-suspense'}`}>
+      <p className="round">Question {round.number} · Tu préfères…</p>
+      <div className="duel">
+        <OptionCard side="a" text={round.a} compact status={revealed ? sideStatus(results, 'a') : null} percent={revealed ? pct(counts.a, totalVotes) : null} />
+        <div className="duel-or">ou</div>
+        <OptionCard side="b" text={round.b} compact status={revealed ? sideStatus(results, 'b') : null} percent={revealed ? pct(counts.b, totalVotes) : null} />
+      </div>
+
+      <Balance shareA={shareA} onDone={() => setRevealed(true)} />
+
+      {!revealed && <p className="suspense-label">Suspense…</p>}
+
+      {revealed && (
+        <>
+          {results.tie && (
+            <p className="tie-banner zoom-in">
+              {totalVotes === 0 ? 'Personne n’a voté : tout le monde boit !' : votersDrinkOnTie ? 'Égalité : tout le monde boit !' : 'Égalité, tout le monde est sauvé !'}
+            </p>
+          )}
+          <div className="camps">
+            <Camp side="a" players={campOf('a')} status={sideStatus(results, 'a')} results={results} />
+            <Camp side="b" players={campOf('b')} status={sideStatus(results, 'b')} results={results} />
+          </div>
+          {nonVoters.length > 0 && totalVotes > 0 && (
+            <div className="no-vote fade-up" style={{ animationDelay: '600ms' }}>
+              <span className="camp-tag camp-tag-lose">Pas voté : ils boivent</span>
+              <div className="camp-players">
+                {nonVoters.map((p) => (
+                  <PlayerChip key={p.id} player={p} size={56} badge="zzz" />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+export function PlayerVote({ state, onVote }) {
+  const { round } = state;
+  return (
+    <div className="vote tp-vote">
+      <p className="round">Question {round.number}</p>
+      <h1 className="vote-question">Tu préfères…</h1>
+      <button className="tp-choice tp-choice-a" onClick={() => onVote('a')}>
+        <span className="option-letter">A</span>
+        <span>{round.a}</span>
+      </button>
+      <div className="duel-or">ou</div>
+      <button className="tp-choice tp-choice-b" onClick={() => onVote('b')}>
+        <span className="option-letter">B</span>
+        <span>{round.b}</span>
+      </button>
+    </div>
+  );
+}
+
+export function VoteSummary({ state, choice }) {
+  if (choice !== 'a' && choice !== 'b') return null;
+  return (
+    <div className={`tp-summary tp-choice-${choice}`}>
+      <span className="option-letter">{choice.toUpperCase()}</span>
+      <span>{state.round[choice]}</span>
+    </div>
+  );
+}
+
+export function verdict(state, me) {
+  const { results } = state;
+  const choice = results.choices[me.id];
+  const drinks = results.drinkerIds.includes(me.id);
+  const { a, b } = results.counts;
+  const extra = `A : ${pct(a, results.totalVotes)} % · B : ${pct(b, results.totalVotes)} %`;
+
+  if (!choice) return { drinks: true, title: 'Tu bois !', detail: 'Tu n’as pas voté à temps.', extra };
+  if (results.tie) {
+    return drinks
+      ? { drinks, title: 'Tu bois !', detail: 'Égalité : tout le monde boit.', extra }
+      : { drinks, title: 'Sauvé !', detail: 'Égalité, tout le monde est sauvé.', extra };
+  }
+  return drinks
+    ? { drinks, title: 'Tu bois !', detail: 'Ton camp est en minorité.', extra }
+    : { drinks, title: 'Tu ne bois pas', detail: 'Tu es dans la majorité.', extra };
+}

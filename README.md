@@ -1,8 +1,13 @@
 # Qui de nous ?
 
-Jeu de soirée en temps réel, façon Kahoot. Une question s'affiche sur la TV, chacun vote depuis son téléphone pour la personne qui correspond le mieux… et les perdants boivent.
+Jeu de soirée en temps réel, façon Kahoot. Une question s'affiche sur la TV, chacun vote en secret depuis son téléphone… et les perdants boivent.
 
-> « Qui est le plus susceptible d'envoyer un message à son ex à 3h du matin ? »
+Deux modes de jeu :
+
+- **Qui de nous ?** : « Qui est le plus susceptible d'envoyer un message à son ex à 3h du matin ? » Tout le monde vote pour un joueur, le plus voté boit.
+- **Tu préfères ?** : « Ne plus jamais manger de pizza **ou** ne plus jamais regarder de film ? » Chacun choisit A ou B, une jauge à suspense départage les camps, **la minorité boit**.
+
+### Qui de nous ?
 
 | Écran (TV / PC) | | |
 |---|---|---|
@@ -11,6 +16,16 @@ Jeu de soirée en temps réel, façon Kahoot. Une question s'affiche sur la TV, 
 | Téléphone | | |
 |---|---|---|
 | ![Rejoindre](docs/screenshots/tel-rejoindre.png) | ![Vote](docs/screenshots/tel-vote.png) | ![Verdict](docs/screenshots/tel-verdict.png) |
+
+### Tu préfères ?
+
+| Écran (TV / PC) | | |
+|---|---|---|
+| ![Question](docs/screenshots/tp-ecran-question.png) | ![Suspense](docs/screenshots/tp-ecran-suspense.png) | ![Résultats](docs/screenshots/tp-ecran-resultats.png) |
+
+| Téléphone | | |
+|---|---|---|
+| ![Vote](docs/screenshots/tp-tel-vote.png) | ![Suspense](docs/screenshots/tp-tel-suspense.png) | ![Verdict](docs/screenshots/tp-tel-verdict.png) |
 
 ## Sommaire
 
@@ -32,13 +47,16 @@ Jeu de soirée en temps réel, façon Kahoot. Une question s'affiche sur la TV, 
 
 ## Fonctionnalités
 
+- **Deux modes de jeu** au choix à la création de la partie, et possibilité de changer de jeu à la fin sans que personne n'ait à rescanner.
 - Un seul site : l'écran crée la partie, les téléphones la rejoignent en scannant un **QR code** (ou en tapant un code de 4 lettres).
 - Chaque joueur choisit son **prénom** et sa **photo** (selfie ou galerie, compressée automatiquement).
-- **Vote en temps réel** avec compteur « X / N ont voté » sur l'écran.
-- **Résultats animés** : le plus voté en grand, un camembert de la répartition, et la liste de ceux qui boivent en plus.
-- Chaque téléphone affiche clairement **« Tu bois ! »** ou **« Tu ne bois pas »**.
-- **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place.
-- 85 questions intégrées, tirées au hasard sans répétition.
+- **Vote secret en temps réel** avec compteur « X / N ont voté » sur l'écran.
+- **Résultats animés** :
+  - *Qui de nous ?* : le plus voté en grand, un camembert de la répartition et la liste de ceux qui boivent en plus.
+  - *Tu préfères ?* : une jauge oscille entre A et B, ralentit, hésite, puis se pose sur le vrai résultat (avec tic-tac sonore). Les photos des joueurs atterrissent ensuite dans leur camp, la majorité a droit à des confettis.
+- Chaque téléphone affiche clairement **« Tu bois ! »** ou **« Tu ne bois pas »**. En mode *Tu préfères ?*, il attend la fin de l'animation de la TV pour ne rien gâcher.
+- **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
+- 85 questions et 90 dilemmes intégrés, tirés au hasard sans répétition.
 - Aucun compte, aucune base de données : les parties vivent en mémoire et disparaissent toutes seules.
 
 ## Démarrage rapide
@@ -161,20 +179,24 @@ Après quelques secondes, le terminal affiche :
 
 **Sur l'écran (hôte)**
 
-1. **Créer une partie** : un QR code et un code de 4 lettres s'affichent.
+1. Sur l'accueil, **choisis le jeu** (*Qui de nous ?* ou *Tu préfères ?*), puis **Créer une partie** : un QR code et un code de 4 lettres s'affichent. Le dernier jeu choisi est retenu pour la prochaine fois.
 2. Les joueurs apparaissent au fur et à mesure. Survole une photo et clique sur **×** pour retirer quelqu'un.
 3. **Lancer la partie** (au moins 2 joueurs).
-4. La question s'affiche avec le compteur de votes. Clique sur **Révéler les résultats** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne.
-5. **Question suivante**, ou **Terminer** quand vous en avez assez. Après la fin, **Rejouer avec les mêmes joueurs** relance une partie sans que personne n'ait à rescanner.
+4. La question s'affiche avec le compteur de votes. Clique sur **Révéler** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne.
+5. **Question suivante**, ou **Terminer** quand vous en avez assez. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu, et **Changer de jeu** passe à l'autre mode, sans que personne n'ait à rescanner.
+
+En mode *Tu préfères ?*, active le son de la TV pour profiter du tic-tac de la jauge. Le bouton **Son** en haut à droite permet de le couper.
 
 **Sur le téléphone (joueur)**
 
 1. Scanne le QR code (ou va sur le site et tape le code).
 2. Entre ton prénom, prends un selfie (ou choisis une photo), puis **Rejoindre la partie**.
-3. À chaque question, touche la personne de ton choix. Tu peux **changer ton vote** jusqu'à la révélation.
+3. À chaque question, touche la personne de ton choix (*Qui de nous ?*) ou le gros bouton **A** ou **B** (*Tu préfères ?*). Tu peux **changer ton vote** jusqu'à la révélation.
 4. Après la révélation, ton écran devient **rouge (tu bois)** ou **vert (tu es épargné)**.
 
 ## Règles du jeu
+
+### Qui de nous ?
 
 - Le joueur **le plus voté boit**.
 - Tous ceux qui **n'ont pas voté pour le plus voté** boivent aussi.
@@ -183,7 +205,14 @@ Après quelques secondes, le terminal affiche :
 - **Pas voté à temps** : l'hôte peut révéler sans attendre, et le retardataire boit.
 - Le plus voté qui n'a pas non plus voté comme les autres… boit deux fois.
 
-Les règles sont centralisées dans [`server/rules.js`](server/rules.js) si tu veux les modifier.
+### Tu préfères ?
+
+- Le camp qui a le plus de votes est **épargné**, **la minorité boit**.
+- **Tous du même côté** : personne ne boit.
+- **Égalité parfaite** : tout le monde est sauvé. Pour que tout le monde boive à la place, remplace `onTie: 'nobody'` par `onTie: 'everyone'` dans [`server/modes.js`](server/modes.js).
+- **Pas voté à temps** : le retardataire compte comme minoritaire et boit, même en cas d'égalité.
+
+Les règles sont des fonctions pures dans [`server/rules.js`](server/rules.js), couvertes par `npm test`.
 
 À consommer avec modération : un verre d'eau compte aussi.
 
@@ -201,7 +230,7 @@ Les règles sont centralisées dans [`server/rules.js`](server/rules.js) si tu v
 
 ## Personnaliser les questions
 
-Les questions sont dans [`server/questions.json`](server/questions.json), une par ligne :
+**Qui de nous ?** : les questions sont dans [`server/questions.json`](server/questions.json), une par ligne :
 
 ```json
 [
@@ -210,7 +239,16 @@ Les questions sont dans [`server/questions.json`](server/questions.json), une pa
 ]
 ```
 
-Ajoute, modifie ou supprime des lignes (attention aux virgules et aux guillemets), puis relance `npm start`. Pas besoin de rebuild.
+**Tu préfères ?** : les dilemmes sont dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… » :
+
+```json
+[
+  { "a": "Ne plus jamais pouvoir manger de pizza", "b": "Ne plus jamais pouvoir regarder de film" },
+  { "a": "Toujours dire ce que tu penses", "b": "Ne jamais pouvoir parler en public" }
+]
+```
+
+Ajoute, modifie ou supprime des lignes (attention aux virgules et aux guillemets), lance `npm test` pour vérifier que le fichier est valide, puis relance `npm start`. Pas besoin de rebuild.
 
 ## Héberger en ligne (gratuit)
 
@@ -240,22 +278,31 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 ```
 ├── client/                 Site React (une seule app pour l'écran et les téléphones)
 │   └── src/
-│       ├── pages/          Home (accueil), Host (écran TV), Player (téléphone)
-│       ├── components.jsx  Avatar, carte joueur, camembert SVG
+│       ├── pages/          Home (accueil + choix du jeu), Host (écran TV), Player (téléphone)
+│       ├── modes/          Un fichier par jeu : vues TV, vue de vote, verdict
+│       │   ├── quiDeNous.jsx
+│       │   ├── tuPreferes.jsx   (dont la jauge de suspense en requestAnimationFrame)
+│       │   └── index.js         Registre des modes
+│       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, progression des votes
+│       ├── sound.js        Sons synthétisés (WebAudio, aucun fichier audio)
 │       ├── lib.js          Socket.IO, navigation, stockage local
 │       └── photo.js        Recadrage et compression des photos
 ├── server/
 │   ├── index.js            Serveur HTTP + fichiers statiques + photos
 │   ├── sockets.js          Événements temps réel (hôte, joueurs)
-│   ├── gameStore.js        État des parties en mémoire
-│   ├── rules.js            Règles « Qui de nous ? » (fonctions pures, testées)
-│   └── questions.json      Liste des questions
+│   ├── gameStore.js        État des parties en mémoire (commun à tous les modes)
+│   ├── modes.js            Registre des modes : questions, validation des votes, règles
+│   ├── rules.js            Règles des deux jeux (fonctions pures, testées)
+│   ├── questions.json            Questions « Qui de nous ? »
+│   └── questionsPreferes.json    Dilemmes « Tu préfères ? »
 └── scripts/share.js        `npm run share` : serveur + tunnel Cloudflare
 ```
 
 **Fonctionnement** : le serveur garde l'état de chaque partie et le diffuse à tous les appareils à chaque changement. Les votes restent secrets jusqu'à la révélation. L'hôte et les joueurs reçoivent un identifiant secret, stocké dans le navigateur, qui leur permet de se reconnecter. Les parties inactives sont supprimées au bout de 6 heures.
 
-**Idées pour la suite** : sons et confettis, minuteur de vote, paquets de questions thématiques, questions perso de l'hôte, score des gorgées, autres mini-jeux (chaque partie porte déjà un champ `mode`).
+**Ajouter un jeu** : crée ses règles dans `server/rules.js`, déclare-le dans `server/modes.js` (questions, `isValidVote`, `computeResults`), puis crée `client/src/modes/monJeu.jsx` avec les mêmes exports que les deux modes existants et ajoute-le à `client/src/modes/index.js`. Le lobby, le QR code, la reconnexion et le déroulement des tours sont fournis.
+
+**Idées pour la suite** : minuteur de vote, paquets de questions thématiques, questions perso de l'hôte, score des gorgées sur la partie.
 
 ## Licence
 

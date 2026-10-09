@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { CODE_LENGTH, navigate, request, storage, useConnected } from '../lib.js';
+import { DEFAULT_MODE, MODES, MODE_LIST } from '../modes/index.js';
 
 export default function Home() {
   const connected = useConnected();
   const [code, setCode] = useState('');
+  const [mode, setMode] = useState(() => (MODES[storage.get('qdn:lastMode')] ? storage.get('qdn:lastMode') : DEFAULT_MODE));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+
+  function pickMode(id) {
+    setMode(id);
+    storage.set('qdn:lastMode', id);
+  }
 
   async function createGame() {
     setBusy(true);
     setError(null);
-    const res = await request('host:create');
+    const res = await request('host:create', { mode });
     setBusy(false);
     if (!res.ok) return setError(res.error);
     storage.set(`qdn:host:${res.code}`, res.hostSecret);
@@ -32,7 +39,22 @@ export default function Home() {
       <div className="home-cards">
         <section className="card">
           <h2>Sur la TV ou le PC</h2>
-          <p>Crée la partie et affiche le QR code pour que tout le monde rejoigne.</p>
+          <p>Choisis le jeu, crée la partie et affiche le QR code pour que tout le monde rejoigne.</p>
+          <div className="mode-picker" role="radiogroup" aria-label="Mode de jeu">
+            {MODE_LIST.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                role="radio"
+                aria-checked={mode === m.id}
+                className={`mode-option ${mode === m.id ? 'is-selected' : ''}`}
+                onClick={() => pickMode(m.id)}
+              >
+                <strong>{m.label}</strong>
+                <span>{m.tagline}</span>
+              </button>
+            ))}
+          </div>
           <button className="btn btn-primary btn-xl" onClick={createGame} disabled={!connected || busy}>
             {busy ? 'Création…' : 'Créer une partie'}
           </button>

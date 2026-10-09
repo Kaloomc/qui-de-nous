@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Avatar } from '../components.jsx';
 import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect } from '../lib.js';
+import { modeOf } from '../modes/index.js';
 import { fileToSquareJpeg } from '../photo.js';
 
 export default function Player({ code }) {
@@ -26,7 +27,7 @@ export default function Player({ code }) {
     const res = await request('player:resume', { code, ...saved });
     if (res.ok) {
       setStatus('joined');
-      setMyVote(res.myVote ? { round: res.round, targetId: res.myVote } : null);
+      setMyVote(res.myVote ? { round: res.round, choice: res.myVote } : null);
     } else if (res.gone) {
       storage.remove(identityKey);
       setFatal('Cette partie n’existe plus.');
@@ -57,10 +58,10 @@ export default function Player({ code }) {
     return null;
   }
 
-  async function vote(targetId) {
+  async function vote(choice) {
     const previous = myVote;
-    setMyVote({ round, targetId });
-    const res = await request('player:vote', { targetId });
+    setMyVote({ round, choice });
+    const res = await request('player:vote', { choice });
     if (!res.ok) {
       setMyVote(previous);
       setNotice(res.error);
@@ -87,18 +88,19 @@ export default function Player({ code }) {
   }
 
   const me = state?.players.find((p) => p.id === identity?.playerId);
+  const mode = modeOf(state);
 
   let content;
   if (status === 'form') content = <JoinForm code={code} onJoin={join} notice={notice} />;
   else if (status === 'resuming' || !state || !me) content = <div className="center muted">Connexion à la partie…</div>;
-  else if (state.phase === 'lobby') content = <Waiting me={me} state={state} onLeave={leave} />;
+  else if (state.phase === 'lobby') content = <Waiting me={me} state={state} mode={mode} onLeave={leave} />;
   else if (state.phase === 'question') {
     content = currentVote ? (
-      <Voted state={state} target={state.players.find((p) => p.id === currentVote.targetId)} onChange={() => setMyVote(null)} />
+      <Voted state={state} mode={mode} choice={currentVote.choice} onChange={() => setMyVote(null)} />
     ) : (
-      <Vote state={state} me={me} onVote={vote} />
+      <mode.PlayerVote state={state} me={me} onVote={vote} />
     );
-  } else if (state.phase === 'results') content = <Verdict state={state} me={me} />;
+  } else if (state.phase === 'results') content = <Results key={round} state={state} mode={mode} me={me} />;
   else content = <Ended onHome={() => navigate('/')} />;
 
   return (
@@ -179,11 +181,14 @@ function JoinForm({ code, onJoin, notice }) {
   );
 }
 
-function Waiting({ me, state, onLeave }) {
+function Waiting({ me, state, mode, onLeave }) {
   return (
     <div className="center waiting">
       <Avatar player={me} size={160} className="bounce" />
       <h1>C’est bon, {me.name} !</h1>
+      <p className="mode-pill">
+        {mode.label} <span>· {mode.tagline}</span>
+      </p>
       <p className="lead">
         {state.players.length} joueur{state.players.length > 1 ? 's' : ''} dans la partie.
         <br />
@@ -196,38 +201,16 @@ function Waiting({ me, state, onLeave }) {
   );
 }
 
-function Vote({ state, me, onVote }) {
-  return (
-    <div className="vote">
-      <p className="round">Question {state.round.number}</p>
-      <h1 className="vote-question">{state.round.text}</h1>
-      <div className="grid grid-vote">
-        {state.players.map((p) => (
-          <button key={p.id} className="vote-option" onClick={() => onVote(p.id)}>
-            <Avatar player={p} size={88} />
-            <span>{p.id === me.id ? `${p.name} (moi)` : p.name}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Voted({ state, target, onChange }) {
+function Voted({ state, mode, choice, onChange }) {
   const done = state.votedIds.length;
   return (
     <div className="center voted">
       <p className="round">Question {state.round.number}</p>
       <div className="check pop-in">✓</div>
       <h1>Vote enregistré</h1>
-      {target && (
-        <div className="voted-for">
-          <Avatar player={target} size={64} />
-          <span>Tu as voté pour {target.name}</span>
-        </div>
-      )}
+      <mode.VoteSummary state={state} choice={choice} />
       <p className="lead">
-        En attente des autres… ({done}/{state.players.length})
+        {mode.waitingText} ({done}/{state.players.length})
       </p>
       <button className="btn btn-ghost" onClick={onChange}>
         Changer mon vote
@@ -236,38 +219,35 @@ function Voted({ state, target, onChange }) {
   );
 }
 
-function Verdict({ state, me }) {
-  const { results } = state;
-  const isTop = results.topIds.includes(me.id);
-  const isWrong = results.wrongVoterIds.includes(me.id);
-  const didNotVote = results.nonVoterIds.includes(me.id);
-  const topNames = results.topIds
-    .map((id) => state.players.find((p) => p.id === id)?.name)
-    .filter(Boolean)
-    .join(' et ');
+/** Attend la fin de l'animation de la TV avant d'afficher le verdict, pour ne rien spoiler. */
+function Results({ state, mode, me }) {
+  const [ready, setReady] = useState(mode.revealDelayMs === 0);
+  useEffect(() => {
+    if (mode.revealDelayMs === 0) return undefined;
+    const timer = setTimeout(() => setReady(true), mode.revealDelayMs);
+    return () => clearTimeout(timer);
+  }, [mode]);
 
-  let title;
-  let detail;
-  if (isTop && isWrong) {
-    title = 'Tu bois 2 fois !';
-    detail = 'Tu es le plus voté, et en plus tu n’as pas voté comme les autres.';
-  } else if (isTop) {
-    title = 'Tu bois !';
-    detail = results.topIds.length > 1 ? 'Tu fais partie des plus votés.' : 'Tu es le plus voté.';
-  } else if (isWrong) {
-    title = 'Tu bois !';
-    detail = didNotVote ? 'Tu n’as pas voté à temps.' : `Tu n’as pas voté pour ${topNames || 'le plus voté'}.`;
-  } else {
-    title = 'Tu ne bois pas';
-    detail = 'Bien vu, tu as voté comme la majorité.';
+  if (!ready) {
+    return (
+      <div className="center suspense">
+        <div className="suspense-dots" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <h1>Suspense…</h1>
+        <p className="lead">Les yeux sur l’écran !</p>
+      </div>
+    );
   }
 
-  const drinks = isTop || isWrong;
+  const { drinks, title, detail, extra } = mode.verdict(state, me);
   return (
     <div className={`verdict ${drinks ? 'verdict-drink' : 'verdict-safe'}`}>
       <p className="verdict-title zoom-in">{title}</p>
       <p className="verdict-detail">{detail}</p>
-      {topNames && !isTop && <p className="verdict-top">Le plus voté : {topNames}</p>}
+      {extra && <p className="verdict-top">{extra}</p>}
       <p className="muted small">Regarde l’écran pour les résultats.</p>
     </div>
   );

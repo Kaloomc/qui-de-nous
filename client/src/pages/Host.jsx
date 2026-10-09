@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { Avatar, PieChart, PlayerChip } from '../components.jsx';
-import { colorFor, navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
+import { PlayerChip, VoteProgress, allVoted } from '../components.jsx';
+import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
+import { MODE_LIST, modeOf } from '../modes/index.js';
+import { isMuted, setMuted, unlockAudio } from '../sound.js';
 
 export default function Host({ code }) {
   const connected = useConnected();
@@ -17,6 +19,7 @@ export default function Host({ code }) {
   });
 
   async function act(event, payload) {
+    unlockAudio();
     setError(null);
     const res = await request(event, payload);
     if (!res.ok) setError(res.error);
@@ -40,23 +43,76 @@ export default function Host({ code }) {
 
   if (!state) return <main className="page center muted">Chargement…</main>;
 
+  const mode = modeOf(state);
+  const endButton = (
+    <button className="btn btn-ghost" onClick={() => act('host:end')}>
+      Terminer
+    </button>
+  );
+
   return (
-    <main className={`page host phase-${state.phase}`}>
+    <main className={`page host phase-${state.phase} mode-${mode.id}`} onPointerDown={unlockAudio}>
       {!connected && <div className="banner">Connexion perdue, reconnexion…</div>}
-      {state.phase === 'lobby' && <Lobby state={state} onStart={() => act('host:start')} onKick={kick} />}
+      {mode.hasSound && state.phase !== 'lobby' && <SoundToggle />}
+
+      {state.phase === 'lobby' && <Lobby state={state} mode={mode} onStart={() => act('host:start')} onKick={kick} />}
+
       {state.phase === 'question' && (
-        <Question state={state} onReveal={() => act('host:reveal')} onEnd={() => act('host:end')} onKick={kick} />
+        <div className="question">
+          <mode.HostQuestion state={state} />
+          <VoteProgress state={state} />
+          <div className="grid grid-host-small">
+            {state.players.map((p) => {
+              const voted = state.votedIds.includes(p.id);
+              return <PlayerChip key={p.id} player={p} size={72} dim={!voted} badge={voted ? '✓' : null} onRemove={() => kick(p)} />;
+            })}
+          </div>
+          <div className="actions">
+            {endButton}
+            <button className={`btn btn-primary btn-xl ${allVoted(state) ? 'pulse' : ''}`} onClick={() => act('host:reveal')}>
+              Révéler
+            </button>
+          </div>
+        </div>
       )}
+
       {state.phase === 'results' && (
-        <Results state={state} onNext={() => act('host:next')} onEnd={() => act('host:end')} />
+        <div className="results-screen">
+          <mode.HostResults key={state.round.number} state={state} />
+          <div className="actions">
+            {endButton}
+            <button className="btn btn-primary btn-xl" onClick={() => act('host:next')}>
+              Question suivante
+            </button>
+          </div>
+        </div>
       )}
-      {state.phase === 'ended' && <Ended state={state} onRestart={() => act('host:restart')} />}
-      {error && <div className="toast" onClick={() => setError(null)}>{error}</div>}
+
+      {state.phase === 'ended' && <Ended state={state} mode={mode} onRestart={(m) => act('host:restart', { mode: m })} />}
+
+      {error && (
+        <div className="toast" onClick={() => setError(null)}>
+          {error}
+        </div>
+      )}
     </main>
   );
 }
 
-function Lobby({ state, onStart, onKick }) {
+function SoundToggle() {
+  const [muted, setMutedState] = useState(isMuted);
+  const toggle = () => {
+    setMuted(!muted);
+    setMutedState(!muted);
+  };
+  return (
+    <button className="sound-toggle" onClick={toggle} aria-pressed={!muted}>
+      Son : {muted ? 'coupé' : 'activé'}
+    </button>
+  );
+}
+
+function Lobby({ state, mode, onStart, onKick }) {
   const joinUrl = useJoinUrl(state.code);
   const [qr, setQr] = useState(null);
 
@@ -71,6 +127,9 @@ function Lobby({ state, onStart, onKick }) {
         <h1 className="logo logo-sm">
           Qui de <span>nous</span> ?
         </h1>
+        <p className="mode-pill">
+          {mode.label} <span>· {mode.tagline}</span>
+        </p>
         <div className="qr">{qr && <img src={qr} alt={`QR code vers ${joinUrl}`} />}</div>
         <p className="join-hint">Scanne pour rejoindre, ou va sur</p>
         <p className="join-url">{joinUrl.replace(/^https?:\/\//, '').replace(/\/join\/.*$/, '')}</p>
@@ -103,137 +162,26 @@ function Lobby({ state, onStart, onKick }) {
   );
 }
 
-function Question({ state, onReveal, onEnd, onKick }) {
-  const voted = new Set(state.votedIds);
-  const total = state.players.length;
-  const done = state.votedIds.filter((id) => state.players.some((p) => p.id === id)).length;
-  const allVoted = total > 0 && done >= total;
-
-  return (
-    <div className="question">
-      <p className="round">Question {state.round.number}</p>
-      <h1 key={state.round.number} className="question-text slide-in">
-        {state.round.text}
-      </h1>
-
-      <div className="vote-progress">
-        <div className="vote-count">
-          <strong>{done}</strong> / {total} ont voté
-        </div>
-        <div className="bar">
-          <div className="bar-fill" style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
-        </div>
-      </div>
-
-      <div className="grid grid-host-small">
-        {state.players.map((p) => (
-          <PlayerChip key={p.id} player={p} size={80} dim={!voted.has(p.id)} badge={voted.has(p.id) ? '✓' : null} onRemove={() => onKick(p)} />
-        ))}
-      </div>
-
-      <div className="actions">
-        <button className="btn btn-ghost" onClick={onEnd}>
-          Terminer
-        </button>
-        <button className={`btn btn-primary btn-xl ${allVoted ? 'pulse' : ''}`} onClick={onReveal}>
-          Révéler les résultats
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function Results({ state, onNext, onEnd }) {
-  const { results } = state;
-  const byId = new Map(state.players.map((p, i) => [p.id, { ...p, color: colorFor(i) }]));
-  const top = results.topIds.map((id) => byId.get(id)).filter(Boolean);
-  const drinkers = results.wrongVoterIds.map((id) => byId.get(id)).filter(Boolean);
-  const nonVoters = new Set(results.nonVoterIds);
-  const slices = [...byId.values()]
-    .map((p) => ({ id: p.id, value: results.counts[p.id] ?? 0, color: p.color, player: p }))
-    .filter((s) => s.value > 0)
-    .sort((a, b) => b.value - a.value);
-
-  return (
-    <div className="results">
-      <p className="round">Question {state.round.number}</p>
-      <h2 className="results-question">{state.round.text}</h2>
-
-      <div className="results-main">
-        <section className="winner">
-          {top.length === 0 ? (
-            <p className="big">Personne n’a voté !</p>
-          ) : (
-            <>
-              <p className="winner-label">{top.length > 1 ? 'Égalité !' : 'Le plus voté'}</p>
-              <div className="winner-list">
-                {top.map((p) => (
-                  <div key={p.id} className="winner-card zoom-in">
-                    <Avatar player={p} size={top.length > 1 ? 160 : 240} className="winner-avatar" />
-                    <p className="winner-name">{p.name}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="winner-votes">
-                {results.topCount} vote{results.topCount > 1 ? 's' : ''} · {top.length > 1 ? 'ils boivent' : 'boit'} !
-              </p>
-            </>
-          )}
-        </section>
-
-        {slices.length > 0 && (
-          <section className="chart">
-            <PieChart slices={slices} size={320} />
-            <ul className="legend">
-              {slices.map((s, i) => (
-                <li key={s.id} className="fade-up" style={{ animationDelay: `${400 + i * 100}ms` }}>
-                  <span className="swatch" style={{ background: s.color }} />
-                  <Avatar player={s.player} size={40} />
-                  <span className="legend-name">{s.player.name}</span>
-                  <span className="legend-value">{s.value}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-      </div>
-
-      <section className="drinkers">
-        <h3>{drinkers.length ? 'N’ont pas voté pour le plus voté : ils boivent aussi' : 'Tout le monde a voté comme la majorité !'}</h3>
-        <div className="drinkers-row">
-          {drinkers.map((p, i) => (
-            <div key={p.id} className="fade-up" style={{ animationDelay: `${900 + i * 80}ms` }}>
-              <PlayerChip player={p} size={72} badge={nonVoters.has(p.id) ? 'zzz' : null} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <div className="actions">
-        <button className="btn btn-ghost" onClick={onEnd}>
-          Terminer
-        </button>
-        <button className="btn btn-primary btn-xl" onClick={onNext}>
-          Question suivante
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function Ended({ state, onRestart }) {
+function Ended({ state, mode, onRestart }) {
+  const n = state.round?.number ?? 0;
+  const others = MODE_LIST.filter((m) => m.id !== mode.id);
   return (
     <div className="center ended">
       <h1 className="logo">Partie terminée</h1>
       <p className="lead">
-        {state.round ? `${state.round.number} question${state.round.number > 1 ? 's' : ''} jouée${state.round.number > 1 ? 's' : ''}. ` : ''}
+        {n > 0 ? `${n} question${n > 1 ? 's' : ''} jouée${n > 1 ? 's' : ''}. ` : ''}
         Merci d’avoir joué !
       </p>
       <div className="actions">
         <button className="btn btn-ghost" onClick={() => navigate('/')}>
           Accueil
         </button>
-        <button className="btn btn-primary btn-xl" onClick={onRestart}>
+        {others.map((m) => (
+          <button key={m.id} className="btn btn-secondary btn-xl" onClick={() => onRestart(m.id)}>
+            Changer de jeu : {m.label}
+          </button>
+        ))}
+        <button className="btn btn-primary btn-xl" onClick={() => onRestart(mode.id)}>
           Rejouer avec les mêmes joueurs
         </button>
       </div>

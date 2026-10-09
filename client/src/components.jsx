@@ -35,6 +35,48 @@ export function PlayerChip({ player, size = 72, dim = false, badge, onRemove }) 
   );
 }
 
+export function VoteProgress({ state }) {
+  const total = state.players.length;
+  const done = state.votedIds.filter((id) => state.players.some((p) => p.id === id)).length;
+  return (
+    <div className="vote-progress">
+      <div className="vote-count">
+        <strong>{done}</strong> / {total} ont voté
+      </div>
+      <div className="bar">
+        <div className="bar-fill" style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
+      </div>
+    </div>
+  );
+}
+
+export function allVoted(state) {
+  const voted = new Set(state.votedIds);
+  return state.players.length > 0 && state.players.every((p) => voted.has(p.id));
+}
+
+const CONFETTI_COLORS = ['#ffc93c', '#3ee0c5', '#ff4f8b', '#6c8bff', '#7ee05a', '#ffffff'];
+
+export function Confetti({ count = 36 }) {
+  const pieces = Array.from({ length: count }, (_, i) => ({
+    left: `${(i * 37) % 100}%`,
+    delay: `${(i % 9) * 0.12}s`,
+    duration: `${1.6 + ((i * 13) % 10) / 10}s`,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    rotate: `${(i * 47) % 360}deg`,
+  }));
+  return (
+    <div className="confetti" aria-hidden="true">
+      {pieces.map((p, i) => (
+        <span
+          key={i}
+          style={{ left: p.left, background: p.color, animationDelay: p.delay, animationDuration: p.duration, '--r': p.rotate }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function PieChart({ slices, size = 340 }) {
   const total = slices.reduce((sum, s) => sum + s.value, 0);
   if (total === 0) return null;

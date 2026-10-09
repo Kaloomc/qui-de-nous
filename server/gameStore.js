@@ -1,8 +1,7 @@
 import { randomBytes, randomInt } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { computeResults, shuffle } from './rules.js';
+import { DEFAULT_MODE, MODES, isMode } from './modes.js';
+import { shuffle } from './rules.js';
 
-const QUESTIONS = JSON.parse(readFileSync(new URL('./questions.json', import.meta.url), 'utf8'));
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 export const CODE_LENGTH = 4;
 const GAME_TTL_MS = 6 * 60 * 60 * 1000;
@@ -22,9 +21,9 @@ function parsePhoto(dataUrl) {
 }
 
 export class Game {
-  constructor(code) {
+  constructor(code, mode = DEFAULT_MODE) {
     this.code = code;
-    this.mode = 'qui-de-nous';
+    this.mode = isMode(mode) ? mode : DEFAULT_MODE;
     this.hostSecret = token();
     this.hostSockets = new Set();
     this.players = new Map();
@@ -39,6 +38,10 @@ export class Game {
     this.question = null;
     this.votes = new Map();
     this.results = null;
+  }
+
+  get rules() {
+    return MODES[this.mode];
   }
 
   touch() {
@@ -90,7 +93,7 @@ export class Game {
 
   nextQuestion() {
     if (this.phase !== 'lobby' && this.phase !== 'results') return 'Action impossible maintenant.';
-    if (this.questionPool.length === 0) this.questionPool = shuffle(QUESTIONS);
+    if (this.questionPool.length === 0) this.questionPool = shuffle(this.rules.questions);
     this.question = this.questionPool.pop();
     this.round += 1;
     this.votes = new Map();
@@ -99,17 +102,17 @@ export class Game {
     return null;
   }
 
-  vote(playerId, targetId) {
+  vote(playerId, choice) {
     if (this.phase !== 'question') return 'Le vote est fermé.';
     if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
-    if (!this.players.has(targetId)) return 'Joueur inconnu.';
-    this.votes.set(playerId, targetId);
+    if (!this.rules.isValidVote(this, choice)) return 'Choix invalide.';
+    this.votes.set(playerId, choice);
     return null;
   }
 
   reveal() {
     if (this.phase !== 'question') return 'Aucune question en cours.';
-    this.results = computeResults([...this.players.keys()], this.votes);
+    this.results = this.rules.computeResults([...this.players.keys()], this.votes);
     this.phase = 'results';
     return null;
   }
@@ -120,8 +123,10 @@ export class Game {
     return null;
   }
 
-  restart() {
+  restart(mode = this.mode) {
     if (this.phase !== 'ended') return 'La partie n’est pas terminée.';
+    if (!isMode(mode)) return 'Mode de jeu inconnu.';
+    this.mode = mode;
     this.reset();
     return null;
   }
@@ -138,7 +143,7 @@ export class Game {
         connected: p.sockets.size > 0,
         photoUrl: p.photo ? `/api/photo/${this.code}/${p.id}?v=${p.photoVersion}` : null,
       })),
-      round: this.question ? { number: this.round, text: this.question } : null,
+      round: this.question ? { number: this.round, ...this.question } : null,
       votedIds: this.phase === 'question' ? [...this.votes.keys()] : [],
       results: this.phase === 'results' ? this.results : null,
     };
@@ -151,11 +156,11 @@ export class GameStore {
     setInterval(() => this.sweep(), 10 * 60 * 1000).unref();
   }
 
-  create() {
+  create(mode) {
     let code;
     do code = Array.from({ length: CODE_LENGTH }, () => CODE_ALPHABET[randomInt(CODE_ALPHABET.length)]).join('');
     while (this.games.has(code));
-    const game = new Game(code);
+    const game = new Game(code, mode);
     this.games.set(code, game);
     return game;
   }

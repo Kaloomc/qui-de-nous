@@ -43,8 +43,8 @@ export function registerSockets(io, store) {
       game.touch();
     }
 
-    on('host:create', (_, ack) => {
-      const game = store.create();
+    on('host:create', ({ mode }, ack) => {
+      const game = store.create(mode);
       attachHost(game);
       ack({ ok: true, code: game.code, hostSecret: game.hostSecret });
       broadcast(game);
@@ -64,7 +64,7 @@ export function registerSockets(io, store) {
       'host:next': (game) => game.nextQuestion(),
       'host:reveal': (game) => game.reveal(),
       'host:end': (game) => game.end(),
-      'host:restart': (game) => game.restart(),
+      'host:restart': (game, { mode }) => game.restart(mode),
       'host:kick': (game, { playerId }) => {
         const player = game.players.get(playerId);
         if (!player) return 'Joueur inconnu.';
@@ -107,10 +107,10 @@ export function registerSockets(io, store) {
       broadcast(game);
     });
 
-    on('player:vote', ({ targetId }, ack) => {
+    on('player:vote', ({ choice }, ack) => {
       const game = currentGame();
       if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
-      const error = game.vote(socket.data.playerId, targetId);
+      const error = game.vote(socket.data.playerId, choice);
       if (error) return ack({ ok: false, error });
       game.touch();
       broadcast(game);
