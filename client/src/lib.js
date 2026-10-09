@@ -1,0 +1,116 @@
+import { useEffect, useRef, useState } from 'react';
+import { io } from 'socket.io-client';
+
+export const CODE_LENGTH = 4;
+
+export const socket = io({ transports: ['websocket', 'polling'] });
+
+export function request(event, payload = {}, timeout = 8000) {
+  return new Promise((resolve) => {
+    socket.timeout(timeout).emit(event, payload, (err, res) => {
+      resolve(err ? { ok: false, error: 'Pas de réponse du serveur.' } : res);
+    });
+  });
+}
+
+export function useConnected() {
+  const [connected, setConnected] = useState(socket.connected);
+  useEffect(() => {
+    const up = () => setConnected(true);
+    const down = () => setConnected(false);
+    socket.on('connect', up);
+    socket.on('disconnect', down);
+    return () => {
+      socket.off('connect', up);
+      socket.off('disconnect', down);
+    };
+  }, []);
+  return connected;
+}
+
+/** Appelle `callback` maintenant si connecté, puis à chaque (re)connexion. */
+export function useOnConnect(callback) {
+  const ref = useRef(callback);
+  ref.current = callback;
+  useEffect(() => {
+    const run = () => ref.current();
+    if (socket.connected) run();
+    socket.on('connect', run);
+    return () => socket.off('connect', run);
+  }, []);
+}
+
+export function useGameState(code) {
+  const [state, setState] = useState(null);
+  useEffect(() => {
+    const onState = (s) => s.code === code && setState(s);
+    socket.on('state', onState);
+    return () => socket.off('state', onState);
+  }, [code]);
+  return state;
+}
+
+export const storage = {
+  get(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw == null ? null : JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      /* stockage indisponible (navigation privée, quota) */
+    }
+  },
+  remove(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      /* idem */
+    }
+  },
+};
+
+export function navigate(to, { replace = false } = {}) {
+  window.history[replace ? 'replaceState' : 'pushState'](null, '', to);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+}
+
+export function usePath() {
+  const [path, setPath] = useState(window.location.pathname);
+  useEffect(() => {
+    const onPop = () => setPath(window.location.pathname);
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+  return path;
+}
+
+const LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]', '::1'];
+
+/** URL de join à mettre dans le QR : si l'écran est ouvert en localhost, on bascule sur l'IP du réseau local. */
+export function useJoinUrl(code) {
+  const [base, setBase] = useState(window.location.origin);
+  useEffect(() => {
+    fetch('/api/info')
+      .then((r) => r.json())
+      .then(({ lanIps, publicUrl }) => {
+        const { protocol, hostname, port } = window.location;
+        if (publicUrl) setBase(publicUrl.replace(/\/$/, ''));
+        else if (LOCAL_HOSTS.includes(hostname) && lanIps.length) setBase(`${protocol}//${lanIps[0]}${port ? `:${port}` : ''}`);
+      })
+      .catch(() => {});
+  }, []);
+  return `${base}/join/${code}`;
+}
+
+const PALETTE = [
+  '#ff4f8b', '#ffc93c', '#3ee0c5', '#6c8bff', '#ff8a3d', '#b46cff', '#7ee05a', '#ff5a5a', '#3cc3ff', '#f78fd6',
+  '#d4e157', '#26a69a', '#ffab91', '#9575cd', '#4dd0e1', '#ffd54f', '#e57373', '#81c784', '#64b5f6', '#ba68c8',
+];
+
+export const colorFor = (index) => PALETTE[index % PALETTE.length];
