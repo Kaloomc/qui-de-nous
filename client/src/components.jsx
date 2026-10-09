@@ -44,7 +44,21 @@ function hash(text) {
   return h;
 }
 
-export function PlayerChip({ player, size = 72, dim = false, badge, onRemove }) {
+export function PlayerChip({ player, size = 72, dim = false, badge, caption, inline = false, onRemove }) {
+  if (inline) {
+    return (
+      <div className={`chip chip-inline ${player.connected ? '' : 'chip-offline'}`}>
+        <div className="chip-avatar">
+          <Avatar player={player} size={size} />
+          {badge && <span className="chip-badge">{badge}</span>}
+        </div>
+        <div className="chip-text">
+          <span className="chip-name">{player.name}</span>
+          {caption && <span className="chip-caption">{caption}</span>}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={`chip ${dim ? 'chip-dim' : ''} ${player.connected ? '' : 'chip-offline'}`}>
       <div className="chip-avatar">
@@ -57,6 +71,7 @@ export function PlayerChip({ player, size = 72, dim = false, badge, onRemove }) 
         )}
       </div>
       <span className="chip-name">{player.name}</span>
+      {caption && <span className="chip-caption">{caption}</span>}
     </div>
   );
 }

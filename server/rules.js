@@ -49,6 +49,26 @@ export function computePreferesResults(playerIds, votes, { onTie = 'nobody' } = 
   return { participantIds: playerIds, counts, totalVotes: counts.a + counts.b, tie, majority, choices, nonVoterIds, drinkerIds };
 }
 
+// Gorgées d'un tour, par joueur. Un joueur peut boire plusieurs fois dans le même tour.
+const add = (sips, id, n = 1) => {
+  sips[id] = (sips[id] ?? 0) + n;
+  return sips;
+};
+
+/** Le plus voté boit, ceux qui n'ont pas voté pour lui aussi : le plus voté qui a « mal » voté boit donc 2 fois. */
+export function sipsQuiDeNous(results) {
+  const sips = {};
+  for (const id of results.topIds) add(sips, id);
+  for (const id of results.wrongVoterIds) add(sips, id);
+  return sips;
+}
+
+export function sipsPreferes(results) {
+  const sips = {};
+  for (const id of results.drinkerIds) add(sips, id);
+  return sips;
+}
+
 export function shuffle(list) {
   const a = [...list];
   for (let i = a.length - 1; i > 0; i--) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Avatar, PieChart, PlayerChip, useRevealSound } from '../components.jsx';
 import { colorFor, serverNow, useRemaining } from '../lib.js';
 import { sounds } from '../sound.js';
+import { roundCaption } from '../sips.jsx';
 
 export const id = 'qui-de-nous';
 export const label = 'Qui de nous ?';
@@ -106,13 +107,13 @@ export function HostResults({ state }) {
               <div className="winner-list">
                 {top.map((p) => (
                   <div key={p.id} className="winner-card zoom-in">
-                    <Avatar player={p} size={top.length > 1 ? 140 : 190} className="winner-avatar" />
+                    <Avatar player={p} size={top.length > 1 ? 130 : 180} className="winner-avatar" />
                     <p className="winner-name">{p.name}</p>
                   </div>
                 ))}
               </div>
               <p className="winner-votes">
-                {results.topCount} vote{results.topCount > 1 ? 's' : ''} · {top.length > 1 ? 'ils boivent' : 'boit'} !
+                {results.topCount} vote{results.topCount > 1 ? 's' : ''} · {top.length > 1 ? 'ils boivent' : 'boit'} !{top.length === 1 && roundCaption(state, top[0].id) ? ` (${roundCaption(state, top[0].id)})` : ''}
               </p>
             </>
           )}
@@ -140,7 +141,7 @@ export function HostResults({ state }) {
         <div className="drinkers-row">
           {drinkers.map((p, i) => (
             <div key={p.id} className="fade-up" style={{ animationDelay: `${900 + i * 80}ms` }}>
-              <PlayerChip player={p} size={60} badge={nonVoters.has(p.id) ? 'zzz' : null} />
+              <PlayerChip player={p} size={56} badge={nonVoters.has(p.id) ? 'zzz' : null} caption={roundCaption(state, p.id)} inline />
             </div>
           ))}
         </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Confetti, PlayerChip, useRevealSound } from '../components.jsx';
 import { serverNow } from '../lib.js';
 import { sounds } from '../sound.js';
+import { roundCaption } from '../sips.jsx';
 
 export const id = 'tu-preferes';
 export const label = 'Tu préfères ?';
@@ -148,7 +149,7 @@ function sideStatus(results, side) {
   return results.majority === side ? 'win' : 'lose';
 }
 
-function Camp({ side, players, status, results }) {
+function Camp({ side, players, status, results, state }) {
   const empty = players.length === 0;
   const campDrinks = players.some((p) => results.drinkerIds.includes(p.id));
   let tag = null;
@@ -161,7 +162,7 @@ function Camp({ side, players, status, results }) {
       <div className="camp-players">
         {players.map((p, i) => (
           <div key={p.id} className="land" style={{ animationDelay: `${150 + i * 110}ms` }}>
-            <PlayerChip player={p} size={players.length > 8 ? 56 : 72} />
+            <PlayerChip player={p} size={players.length > 8 ? 56 : 72} caption={roundCaption(state, p.id)} />
           </div>
         ))}
       </div>
@@ -199,15 +200,15 @@ export function HostResults({ state }) {
         </p>
       )}
       <div className="camps">
-        <Camp side="a" players={campOf('a')} status={sideStatus(results, 'a')} results={results} />
-        <Camp side="b" players={campOf('b')} status={sideStatus(results, 'b')} results={results} />
+        <Camp side="a" players={campOf('a')} status={sideStatus(results, 'a')} results={results} state={state} />
+        <Camp side="b" players={campOf('b')} status={sideStatus(results, 'b')} results={results} state={state} />
       </div>
       {nonVoters.length > 0 && totalVotes > 0 && (
         <div className="no-vote fade-up" style={{ animationDelay: '600ms' }}>
           <span className="camp-tag camp-tag-lose">Pas voté : ils boivent</span>
           <div className="camp-players">
             {nonVoters.map((p) => (
-              <PlayerChip key={p.id} player={p} size={56} badge="zzz" />
+              <PlayerChip key={p.id} player={p} size={56} badge="zzz" caption={roundCaption(state, p.id)} />
             ))}
           </div>
         </div>

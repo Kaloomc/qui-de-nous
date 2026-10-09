@@ -488,7 +488,7 @@ button {
 .results-question {
   font-size: clamp(1.3rem, 2.2vw, 2.2rem);
   line-height: 1.15;
-  max-width: 40ch;
+  max-width: 60ch;
 }
 
 .results-main {
@@ -615,7 +615,7 @@ button {
 
 .drinkers h3 {
   font-size: clamp(1.1rem, 1.8vw, 1.8rem);
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .drinkers-row {
@@ -1135,6 +1135,205 @@ button {
 .switch.is-on span {
   transform: translateX(28px);
   background: #fff;
+}
+
+/* ---------- Gorgées et podium ---------- */
+
+.chip-caption {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--yellow);
+  white-space: nowrap;
+}
+
+.chip-inline {
+  flex-direction: row;
+  gap: 10px;
+  text-align: left;
+}
+
+.chip-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.host .chip-caption {
+  font-size: clamp(0.8rem, 1vw, 1rem);
+}
+
+
+.verdict-sips {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 20px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 1.1rem;
+}
+
+.verdict-sips strong {
+  font-size: 1.6rem;
+}
+
+.ended {
+  gap: 12px;
+}
+
+.podium-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(8px, 1.5vw, 20px);
+}
+
+.podium-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: clamp(150px, 16vw, 240px);
+  animation: podium-rise 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+  animation-delay: var(--delay);
+}
+
+.podium-players {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 4px 10px;
+  margin-bottom: 10px;
+}
+
+.podium-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.podium-name {
+  font-weight: 800;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+.podium-sips {
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.podium-champion {
+  border: 6px solid var(--yellow);
+  box-shadow: 0 0 50px rgba(255, 201, 60, 0.6);
+}
+
+.podium-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 10px;
+  border-radius: 16px 16px 0 0;
+  color: var(--bg);
+}
+
+.podium-1 .podium-block {
+  height: clamp(110px, 17vh, 170px);
+  background: linear-gradient(180deg, #ffd96b, #e0a400);
+}
+
+.podium-2 .podium-block {
+  height: clamp(80px, 12vh, 120px);
+  background: linear-gradient(180deg, #e7ecf5, #a8b3c7);
+}
+
+.podium-3 .podium-block {
+  height: clamp(60px, 9vh, 90px);
+  background: linear-gradient(180deg, #f0b98a, #c47a3c);
+}
+
+.podium-rank {
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.podium-title {
+  font-weight: 800;
+  font-size: clamp(0.75rem, 1vw, 1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ranking {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 24px;
+  max-width: 1100px;
+}
+
+.ranking li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 4px 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ranking-rank {
+  width: 28px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.ranking-name {
+  font-weight: 700;
+}
+
+.ranking-sips {
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.podium-total {
+  color: var(--muted);
+}
+
+.final-rank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.final-rank-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--yellow);
+  text-align: center;
+}
+
+@keyframes podium-rise {
+  from {
+    transform: translateY(120px);
+    opacity: 0;
+  }
 }
 
 /* ---------- Révélation « Qui de nous ? » ---------- */

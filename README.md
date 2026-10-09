@@ -67,6 +67,7 @@ Deux modes de jeu, au choix au moment de créer la partie :
   - *Tu préfères ?* : « Attention… », puis une jauge oscille entre A et B, ralentit, hésite et se pose sur le vrai résultat (avec tic-tac sonore). Les photos des joueurs atterrissent ensuite dans leur camp, et la majorité a droit à des confettis.
 - Chaque téléphone affiche **« Les résultats arrivent… »** pendant le suspense, puis **« Tu bois ! »** ou **« Tu ne bois pas »** au même moment que la TV : personne n'est spoilé.
 - **Mode auto** : la révélation se lance dès que tout le monde a voté, puis la question suivante arrive toute seule après un compte à rebours. Il propose aussi une pause, un minuteur de vote et un nombre de questions maximum (voir [Réglages de la partie](#réglages-de-la-partie)).
+- **Compteur de gorgées** : chaque joueur voit son total sur la TV et sur son téléphone, et la partie se termine sur un **podium** des plus assoiffés.
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
 - 150 questions et 150 dilemmes pensés pour les soirées étudiantes, du plus chill au plus gênant, tirés au hasard sans répétition.
 - Aucun compte, aucune base de données : les parties vivent en mémoire et disparaissent toutes seules.
@@ -197,7 +198,8 @@ Après quelques secondes, le terminal affiche :
 4. **Lancer la partie** (au moins 2 joueurs).
 5. La question s'affiche avec le compteur de votes. Clique sur **Révéler** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne. En mode auto, la révélation se lance toute seule.
 6. Quelques secondes de suspense, puis les résultats. Clique sur **Question suivante**, ou laisse le compte à rebours la lancer en mode auto. **Terminer** arrête la partie quand vous en avez assez.
-7. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu (avec les mêmes réglages), et **Changer de jeu** passe à l'autre mode, sans que personne n'ait à rescanner.
+7. **Terminer** affiche le **podium** : les 3 joueurs qui ont bu le plus de gorgées (ex æquo sur la même marche), le reste du classement et le total de la soirée. Chaque téléphone affiche aussi sa place.
+8. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu (avec les mêmes réglages), et **Changer de jeu** passe à l'autre mode, sans que personne n'ait à rescanner.
 
 Active le son de la TV pour le roulement de tambour, le tic-tac de la jauge et le « ding » de la révélation. Le bouton **Son** en haut à droite permet de le couper.
 
@@ -206,7 +208,7 @@ Active le son de la TV pour le roulement de tambour, le tic-tac de la jauge et l
 1. Scanne le QR code (ou va sur le site et tape le code).
 2. Entre ton prénom, prends un selfie (ou choisis une photo), puis **Rejoindre la partie**.
 3. À chaque question, touche la personne de ton choix (*Qui de nous ?*) ou le gros bouton **A** ou **B** (*Tu préfères ?*). Tu peux **changer ton vote** jusqu'à la révélation. Si un minuteur de vote est réglé, il s'affiche en haut de l'écran.
-4. Pendant le suspense, le téléphone affiche « Les résultats arrivent… ». Il devient ensuite **rouge (tu bois)** ou **vert (tu es épargné)**, en même temps que la TV.
+4. Pendant le suspense, le téléphone affiche « Les résultats arrivent… ». Il devient ensuite **rouge (tu bois)** ou **vert (tu es épargné)**, en même temps que la TV, avec les gorgées du tour et ton total de la soirée.
 
 ### Réglages de la partie
 
@@ -252,6 +254,15 @@ Les boutons **Révéler maintenant** et **Question suivante** restent toujours d
 - **Tous du même côté** : personne ne boit.
 - **Égalité parfaite** : tout le monde est sauvé. Pour que tout le monde boive à la place, remplace `onTie: 'nobody'` par `onTie: 'everyone'` dans [`server/modes.js`](server/modes.js).
 - **Pas voté à temps** : le retardataire compte comme minoritaire et boit, même en cas d'égalité.
+
+### Compteur de gorgées
+
+Chaque fois que le jeu dit « tu bois », ça compte une gorgée :
+
+- *Qui de nous ?* : 1 gorgée pour le plus voté (chaque ex æquo en cas d’égalité), 1 pour chaque joueur qui n’a pas voté pour lui. Le plus voté qui n’a pas voté pour lui-même… en prend 2.
+- *Tu préfères ?* : 1 gorgée par joueur de la minorité (et par non-votant).
+
+Le total s’affiche sous chaque joueur sur la TV pendant les questions, avec un « +1 · 4 au total » sur l’écran des résultats. Les gorgées ne sont ajoutées qu’à la fin du suspense, pour ne rien dévoiler. Un joueur retiré par l’hôte sort du classement, et le compteur repart à zéro quand on rejoue.
 
 Les règles sont des fonctions pures dans [`server/rules.js`](server/rules.js), couvertes par `npm test`.
 
@@ -340,6 +351,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │       │   ├── tuPreferes.jsx   (dont la jauge de suspense en requestAnimationFrame)
 │       │   └── index.js         Registre des modes
 │       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, progression des votes
+│       ├── sips.jsx        Compteur de gorgées : classement, podium
 │       ├── sound.js        Sons synthétisés (WebAudio, aucun fichier audio)
 │       ├── lib.js          Socket.IO, navigation, stockage local
 │       └── photo.js        Recadrage et compression des photos
@@ -348,6 +360,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │   ├── sockets.js          Événements temps réel (hôte, joueurs)
 │   ├── gameStore.js        État des parties en mémoire et déroulement : phases, minuteurs, mode auto, pause
 │   ├── flow.test.js        Tests du déroulement avec une horloge simulée
+│   ├── sips.test.js        Tests du compteur de gorgées
 │   ├── modes.js            Registre des modes : questions, validation des votes, règles
 │   ├── rules.js            Règles des deux jeux (fonctions pures, testées)
 │   ├── questions.json            Questions « Qui de nous ? »
@@ -361,7 +374,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 
 **Déroulement d'un tour** : `lobby → question → revealing → results → question… → ended`. Le serveur porte tous les minuteurs et envoie aux écrans des horodatages (`reveal.startedAt/endsAt`, `voteTimer`, `nextTimer`) : la TV et les téléphones restent synchronisés même après un rechargement. Pendant `revealing`, seule la TV reçoit les résultats (pour animer le suspense), et les téléphones les reçoivent au passage à `results`. Les actions `reveal` et `next` portent le numéro de la question, ce qui permet d'ignorer les doublons.
 
-**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, score des gorgées sur la partie.
+**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, sélecteur d'intensité (chill / épicé / hardcore), réveiller un joueur qui traîne.
 
 ## Licence
 

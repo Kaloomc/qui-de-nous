@@ -3,7 +3,8 @@ import QRCode from 'qrcode';
 import { PlayerChip, TimerBar, VoteProgress, allVoted } from '../components.jsx';
 import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
 import { MODE_LIST, modeOf } from '../modes/index.js';
-import { isMuted, setMuted, unlockAudio } from '../sound.js';
+import { Podium, sipsLabel, totalSips } from '../sips.jsx';
+import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
 const RESULTS_CHOICES = [5000, 10000, 15000, 20000];
 const VOTE_CHOICES = [0, 15000, 30000, 45000];
@@ -84,7 +85,17 @@ export default function Host({ code }) {
           <div className="grid grid-host-small">
             {state.players.map((p) => {
               const voted = state.votedIds.includes(p.id);
-              return <PlayerChip key={p.id} player={p} size={72} dim={!voted} badge={voted ? '✓' : null} onRemove={() => kick(p)} />;
+              return (
+                <PlayerChip
+                  key={p.id}
+                  player={p}
+                  size={72}
+                  dim={!voted}
+                  badge={voted ? '✓' : null}
+                  caption={sipsLabel(totalSips(state, p.id))}
+                  onRemove={() => kick(p)}
+                />
+              );
             })}
           </div>
           {state.settings.auto && !state.paused && (
@@ -328,13 +339,18 @@ function Lobby({ state, mode, onStart, onKick, onSettings }) {
 function Ended({ state, mode, onRestart }) {
   const n = state.round?.number ?? 0;
   const others = MODE_LIST.filter((m) => m.id !== mode.id);
+  useEffect(() => {
+    const id = setTimeout(() => sounds.reveal(), 900);
+    return () => clearTimeout(id);
+  }, []);
   return (
     <div className="center ended">
-      <h1 className="logo">Partie terminée</h1>
+      <h1 className="logo logo-sm">Partie terminée</h1>
       <p className="lead">
         {n > 0 ? `${n} question${n > 1 ? 's' : ''} jouée${n > 1 ? 's' : ''}. ` : ''}
         Merci d’avoir joué !
       </p>
+      <Podium state={state} />
       <div className="actions">
         <button className="btn btn-ghost" onClick={() => navigate('/')}>
           Accueil

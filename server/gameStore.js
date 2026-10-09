@@ -87,6 +87,19 @@ export class Game {
     this.results = null;
     this.reveal_ = null;
     this.waitingForPlayers = false;
+    this.sips = new Map();
+    this.roundSips = null;
+  }
+
+  /** Ajoute les gorgées du tour au total, une seule fois, à la fin du suspense (jamais avant : pas de spoiler). */
+  applySips() {
+    if (this.roundSips || !this.results) return;
+    this.roundSips = {};
+    for (const [id, n] of Object.entries(this.rules.sipsOf(this.results))) {
+      if (!this.players.has(id)) continue;
+      this.roundSips[id] = n;
+      this.sips.set(id, (this.sips.get(id) ?? 0) + n);
+    }
   }
 
   get rules() {
@@ -185,6 +198,7 @@ export class Game {
 
   removePlayer(playerId) {
     this.players.delete(playerId);
+    this.sips.delete(playerId);
     this.votes.delete(playerId);
     for (const [voter, target] of this.votes) if (target === playerId) this.votes.delete(voter);
     this.evaluate();
@@ -229,6 +243,7 @@ export class Game {
     this.votes = new Map();
     this.results = null;
     this.reveal_ = null;
+    this.roundSips = null;
     this.waitingForPlayers = false;
     this.phase = 'question';
     if (this.settings.voteMs > 0) this.schedulePausable('vote', this.settings.voteMs, () => this.onVoteTimeout());
@@ -263,6 +278,7 @@ export class Game {
 
   finishReveal() {
     if (this.phase !== 'revealing') return;
+    this.applySips();
     this.phase = 'results';
     this.evaluate();
   }
@@ -378,6 +394,8 @@ export class Game {
 
   end() {
     if (this.phase === 'ended') return null;
+    // Partie arrêtée en plein suspense : les gorgées de ce tour comptent quand même pour le podium.
+    if (this.phase === 'revealing') this.applySips();
     this.clearTimers();
     this.paused = false;
     this.phase = 'ended';
@@ -424,6 +442,8 @@ export class Game {
       voteTimer: this.phase === 'question' ? this.timerState('vote') : null,
       nextTimer: this.phase === 'results' ? this.timerState('next') : null,
       reveal: this.reveal_,
+      sips: Object.fromEntries(this.sips),
+      roundSips: this.phase === 'results' || this.phase === 'ended' ? this.roundSips : null,
       results: showResults ? this.results : null,
     };
   }

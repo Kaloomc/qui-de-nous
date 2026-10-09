@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Avatar, TimerBar } from '../components.jsx';
 import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect } from '../lib.js';
 import { modeOf } from '../modes/index.js';
+import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
 
 export default function Player({ code }) {
@@ -109,7 +110,7 @@ export default function Player({ code }) {
     );
   } else if (state.phase === 'revealing') content = <Suspense />;
   else if (state.phase === 'results') content = <Verdict state={state} mode={mode} me={me} />;
-  else content = <Ended onHome={() => navigate('/')} />;
+  else content = <Ended state={state} me={me} onHome={() => navigate('/')} />;
 
   return (
     <main className="page player">
@@ -244,20 +245,36 @@ function Suspense() {
 
 function Verdict({ state, mode, me }) {
   const { drinks, title, detail, extra } = mode.verdict(state, me);
+  const roundSips = state.roundSips?.[me.id] ?? 0;
   return (
     <div className={`verdict ${drinks ? 'verdict-drink' : 'verdict-safe'}`}>
       <p className="verdict-title zoom-in">{title}</p>
       <p className="verdict-detail">{detail}</p>
       {extra && <p className="verdict-top">{extra}</p>}
+      <p className="verdict-sips">
+        {roundSips > 0 && <strong>+{sipsLabel(roundSips)}</strong>}
+        <span>Total de la soirée : {sipsLabel(totalSips(state, me.id))}</span>
+      </p>
       <p className="muted small">Regarde l’écran pour les résultats.</p>
     </div>
   );
 }
 
-function Ended({ onHome }) {
+function Ended({ state, me, onHome }) {
+  const rows = ranking(state);
+  const mine = me && rows.find((r) => r.player.id === me.id);
+  const champion = mine && mine.rank === 1 && mine.sips > 0;
+  const tied = mine && rows.filter((r) => r.rank === mine.rank).length > 1;
   return (
     <div className="center">
       <h1>Partie terminée</h1>
+      {mine && (
+        <div className="final-rank pop-in">
+          <Avatar player={me} size={120} className={champion ? 'podium-champion' : ''} />
+          <p className="final-rank-title">{champion ? 'Le plus assoiffé de la soirée !' : `${mine.rank === 1 ? '1er' : `${mine.rank}e`}${tied ? ' ex æquo' : ''} au classement`}</p>
+          <p className="lead">{sipsLabel(mine.sips)} au total</p>
+        </div>
+      )}
       <p className="lead">Merci d’avoir joué !</p>
       <button className="btn btn-primary btn-xl" onClick={onHome}>
         Accueil
