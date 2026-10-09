@@ -17,7 +17,7 @@ export default function Home() {
   async function createGame() {
     setBusy(true);
     setError(null);
-    const res = await request('host:create', { mode });
+    const res = await request('host:create', { mode, settings: storage.get('qdn:settings') });
     setBusy(false);
     if (!res.ok) return setError(res.error);
     storage.set(`qdn:host:${res.code}`, res.hostSecret);

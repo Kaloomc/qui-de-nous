@@ -46,6 +46,7 @@ Deux modes de jeu, au choix au moment de créer la partie :
   - [4. Jouer sur le même Wi-Fi](#4-jouer-sur-le-même-wi-fi)
   - [5. Jouer à distance (sans même Wi-Fi)](#5-jouer-à-distance-sans-même-wi-fi)
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
+  - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
 - [Règles du jeu](#règles-du-jeu)
   - [Qui de nous ?](#qui-de-nous--2)
   - [Tu préfères ?](#tu-préfères--1)
@@ -61,10 +62,11 @@ Deux modes de jeu, au choix au moment de créer la partie :
 - Un seul site : l'écran crée la partie, les téléphones la rejoignent en scannant un **QR code** (ou en tapant un code de 4 lettres).
 - Chaque joueur choisit son **prénom** et sa **photo** (selfie ou galerie, compressée automatiquement).
 - **Vote secret en temps réel** avec compteur « X / N ont voté » sur l'écran.
-- **Résultats animés** :
-  - *Qui de nous ?* : le plus voté en grand, un camembert de la répartition et la liste de ceux qui boivent en plus.
-  - *Tu préfères ?* : une jauge oscille entre A et B, ralentit, hésite, puis se pose sur le vrai résultat (avec tic-tac sonore). Les photos des joueurs atterrissent ensuite dans leur camp, la majorité a droit à des confettis.
-- Chaque téléphone affiche clairement **« Tu bois ! »** ou **« Tu ne bois pas »**. En mode *Tu préfères ?*, il attend la fin de l'animation de la TV pour ne rien gâcher.
+- **Suspense avant chaque révélation**, puis résultats animés :
+  - *Qui de nous ?* : « Attention… », les photos défilent comme une roulette pendant un compte à rebours 3-2-1 (roulement de tambour, écran qui tremble), puis le plus voté en grand, un camembert de la répartition et la liste de ceux qui boivent en plus.
+  - *Tu préfères ?* : « Attention… », puis une jauge oscille entre A et B, ralentit, hésite et se pose sur le vrai résultat (avec tic-tac sonore). Les photos des joueurs atterrissent ensuite dans leur camp, et la majorité a droit à des confettis.
+- Chaque téléphone affiche **« Les résultats arrivent… »** pendant le suspense, puis **« Tu bois ! »** ou **« Tu ne bois pas »** au même moment que la TV : personne n'est spoilé.
+- **Mode auto** : la révélation se lance dès que tout le monde a voté, puis la question suivante arrive toute seule après un compte à rebours. Il propose aussi une pause, un minuteur de vote et un nombre de questions maximum (voir [Réglages de la partie](#réglages-de-la-partie)).
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
 - 150 questions et 150 dilemmes pensés pour les soirées étudiantes, du plus chill au plus gênant, tirés au hasard sans répétition.
 - Aucun compte, aucune base de données : les parties vivent en mémoire et disparaissent toutes seules.
@@ -191,18 +193,47 @@ Après quelques secondes, le terminal affiche :
 
 1. Sur l'accueil, **choisis le jeu** (*Qui de nous ?* ou *Tu préfères ?*), puis **Créer une partie** : un QR code et un code de 4 lettres s'affichent. Le dernier jeu choisi est retenu pour la prochaine fois.
 2. Les joueurs apparaissent au fur et à mesure. Survole une photo et clique sur **×** pour retirer quelqu'un.
-3. **Lancer la partie** (au moins 2 joueurs).
-4. La question s'affiche avec le compteur de votes. Clique sur **Révéler** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne.
-5. **Question suivante**, ou **Terminer** quand vous en avez assez. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu, et **Changer de jeu** passe à l'autre mode, sans que personne n'ait à rescanner.
+3. Si tu veux que la partie tourne toute seule, clique sur **Réglages** et active le **mode auto** (voir [Réglages de la partie](#réglages-de-la-partie)).
+4. **Lancer la partie** (au moins 2 joueurs).
+5. La question s'affiche avec le compteur de votes. Clique sur **Révéler** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne. En mode auto, la révélation se lance toute seule.
+6. Quelques secondes de suspense, puis les résultats. Clique sur **Question suivante**, ou laisse le compte à rebours la lancer en mode auto. **Terminer** arrête la partie quand vous en avez assez.
+7. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu (avec les mêmes réglages), et **Changer de jeu** passe à l'autre mode, sans que personne n'ait à rescanner.
 
-En mode *Tu préfères ?*, active le son de la TV pour profiter du tic-tac de la jauge. Le bouton **Son** en haut à droite permet de le couper.
+Active le son de la TV pour le roulement de tambour, le tic-tac de la jauge et le « ding » de la révélation. Le bouton **Son** en haut à droite permet de le couper.
 
 **Sur le téléphone (joueur)**
 
 1. Scanne le QR code (ou va sur le site et tape le code).
 2. Entre ton prénom, prends un selfie (ou choisis une photo), puis **Rejoindre la partie**.
-3. À chaque question, touche la personne de ton choix (*Qui de nous ?*) ou le gros bouton **A** ou **B** (*Tu préfères ?*). Tu peux **changer ton vote** jusqu'à la révélation.
-4. Après la révélation, ton écran devient **rouge (tu bois)** ou **vert (tu es épargné)**.
+3. À chaque question, touche la personne de ton choix (*Qui de nous ?*) ou le gros bouton **A** ou **B** (*Tu préfères ?*). Tu peux **changer ton vote** jusqu'à la révélation. Si un minuteur de vote est réglé, il s'affiche en haut de l'écran.
+4. Pendant le suspense, le téléphone affiche « Les résultats arrivent… ». Il devient ensuite **rouge (tu bois)** ou **vert (tu es épargné)**, en même temps que la TV.
+
+### Réglages de la partie
+
+Le bouton **Réglages** est disponible dans le lobby (sous la liste des joueurs) et pendant la partie (en haut à droite de la TV). Les réglages sont gardés quand on rejoue, et retenus par la TV pour les prochaines parties.
+
+| Réglage | Choix | Effet |
+|---|---|---|
+| **Mode auto** | Activé / désactivé (par défaut) | Révèle dès que tous les joueurs connectés ont voté, puis lance la question suivante après le temps d'affichage des résultats. |
+| **Affichage des résultats** | 5 / 10 / 15 / 20 s | Temps laissé pour lire qui boit avant la question suivante (mode auto). Une barre qui se vide le montre sur la TV. |
+| **Minuteur de vote** | Sans limite / 15 / 30 / 45 s | À zéro, on révèle avec les votes reçus : ceux qui n'ont pas voté boivent. Fonctionne aussi en mode manuel. |
+| **Nombre de questions** | Illimité / 10 / 20 / 30 | En mode auto, la partie se termine toute seule après la dernière. En manuel, la TV propose « Terminer la partie » ou « Encore une question ». |
+
+**Pendant la partie**, la barre en haut à droite de la TV permet de :
+
+- activer ou couper le **mode auto** en un clic ;
+- mettre en **Pause** : les comptes à rebours (vote et question suivante) se figent jusqu'à **Reprendre**, le temps de resservir un verre ;
+- ouvrir les **Réglages** et couper le **Son**.
+
+Les boutons **Révéler maintenant** et **Question suivante** restent toujours disponibles pour ne pas attendre.
+
+**Comment le mode auto gère les imprévus**
+
+- Seuls les joueurs **connectés** sont attendus. Un joueur qui se déconnecte est encore attendu pendant 5 secondes (le temps d'un rechargement de page), puis la partie continue sans lui : il compte comme n'ayant pas voté.
+- Un joueur qui **rejoint ou revient** pendant une question peut voter, et la révélation l'attend.
+- **Changer son vote** ne relance rien : chaque joueur ne compte qu'une fois.
+- Avec **moins de 2 joueurs connectés**, rien ne se déclenche tout seul : la TV affiche « en attente de joueurs ».
+- Si l'hôte clique au moment exact où un minuteur se termine, une seule révélation (ou une seule question suivante) a lieu.
 
 ## Règles du jeu
 
@@ -236,8 +267,9 @@ Les règles sont des fonctions pures dans [`server/rules.js`](server/rules.js), 
 | `cloudflared est introuvable` | Installe-le (voir [étape 5](#5-jouer-à-distance-sans-même-wi-fi)), puis ouvre un nouveau terminal. |
 | « Partie introuvable » | Le serveur a redémarré : les parties sont en mémoire, il faut en recréer une. |
 | Le bouton Selfie ouvre la galerie | Certains navigateurs ignorent la demande de caméra ; prends la photo depuis l'appareil photo puis choisis-la dans la galerie. |
-| Pas de son pendant la jauge de *Tu préfères ?* | Le navigateur bloque le son tant qu'on n'a pas cliqué sur la page : clique une fois n'importe où sur l'écran de la TV. Vérifie aussi le bouton **Son** en haut à droite et le volume de la TV. |
-| Les téléphones affichent « Suspense… » quelques secondes | C'est voulu en mode *Tu préfères ?* : le verdict s'affiche à la fin de l'animation de la TV, pour ne rien gâcher. |
+| Pas de son pendant le suspense | Le navigateur bloque le son tant qu'on n'a pas cliqué sur la page : clique une fois n'importe où sur l'écran de la TV. Vérifie aussi le bouton **Son** en haut à droite et le volume de la TV. |
+| Les téléphones affichent « Les résultats arrivent… » quelques secondes | C'est voulu : le verdict s'affiche à la fin du suspense, en même temps que la TV, pour ne rien gâcher. |
+| Le mode auto ne révèle pas | Un joueur connecté n'a pas encore voté (son avatar est grisé sur la TV), la partie est en **Pause**, ou il y a moins de 2 joueurs connectés. Clique sur **Révéler maintenant**, ou règle un **minuteur de vote**. |
 | `npm: command not found` | Node.js n'est pas installé ou pas dans le PATH (voir [étape 1](#1-installer-nodejs)). |
 
 ## Personnaliser les questions
@@ -292,7 +324,7 @@ Limites de l'offre gratuite : le serveur se met en veille après 15 minutes sans
 
 ```bash
 npm run dev    # serveur (port 3000, redémarrage auto) + site Vite (port 5173, rechargement à chaud)
-npm test       # tests des règles du jeu
+npm test       # tests des règles, des questions et du déroulement (mode auto, minuteurs, pause…)
 ```
 
 En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<IP du PC>:5173`.
@@ -314,7 +346,8 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 ├── server/
 │   ├── index.js            Serveur HTTP + fichiers statiques + photos
 │   ├── sockets.js          Événements temps réel (hôte, joueurs)
-│   ├── gameStore.js        État des parties en mémoire (commun à tous les modes)
+│   ├── gameStore.js        État des parties en mémoire et déroulement : phases, minuteurs, mode auto, pause
+│   ├── flow.test.js        Tests du déroulement avec une horloge simulée
 │   ├── modes.js            Registre des modes : questions, validation des votes, règles
 │   ├── rules.js            Règles des deux jeux (fonctions pures, testées)
 │   ├── questions.json            Questions « Qui de nous ? »
@@ -326,7 +359,9 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 
 **Ajouter un jeu** : crée ses règles dans `server/rules.js`, déclare-le dans `server/modes.js` (questions, `isValidVote`, `computeResults`), puis crée `client/src/modes/monJeu.jsx` avec les mêmes exports que les deux modes existants et ajoute-le à `client/src/modes/index.js`. Le lobby, le QR code, la reconnexion et le déroulement des tours sont fournis.
 
-**Idées pour la suite** : minuteur de vote, paquets de questions thématiques, questions perso de l'hôte, score des gorgées sur la partie.
+**Déroulement d'un tour** : `lobby → question → revealing → results → question… → ended`. Le serveur porte tous les minuteurs et envoie aux écrans des horodatages (`reveal.startedAt/endsAt`, `voteTimer`, `nextTimer`) : la TV et les téléphones restent synchronisés même après un rechargement. Pendant `revealing`, seule la TV reçoit les résultats (pour animer le suspense), et les téléphones les reçoivent au passage à `results`. Les actions `reveal` et `next` portent le numéro de la question, ce qui permet d'ignorer les doublons.
+
+**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, score des gorgées sur la partie.
 
 ## Licence
 

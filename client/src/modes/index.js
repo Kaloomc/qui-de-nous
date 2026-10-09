@@ -1,8 +1,8 @@
 import * as quiDeNous from './quiDeNous.jsx';
 import * as tuPreferes from './tuPreferes.jsx';
 
-// Chaque mode fournit : label, tagline, waitingText, revealDelayMs, hasSound,
-// HostQuestion, HostResults, PlayerVote, VoteSummary et verdict(state, me).
+// Chaque mode fournit : id, label, tagline, waitingText,
+// HostQuestion, HostReveal (suspense), HostResults, PlayerVote, VoteSummary et verdict(state, me).
 export const MODES = {
   [quiDeNous.id]: quiDeNous,
   [tuPreferes.id]: tuPreferes,

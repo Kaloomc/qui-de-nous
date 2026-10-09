@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { PlayerChip, VoteProgress, allVoted } from '../components.jsx';
+import { PlayerChip, TimerBar, VoteProgress, allVoted } from '../components.jsx';
 import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
 import { MODE_LIST, modeOf } from '../modes/index.js';
 import { isMuted, setMuted, unlockAudio } from '../sound.js';
+
+const RESULTS_CHOICES = [5000, 10000, 15000, 20000];
+const VOTE_CHOICES = [0, 15000, 30000, 45000];
+const ROUNDS_CHOICES = [0, 10, 20, 30];
 
 export default function Host({ code }) {
   const connected = useConnected();
   const state = useGameState(code);
   const [fatal, setFatal] = useState(null);
   const [error, setError] = useState(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useOnConnect(async () => {
     const hostSecret = storage.get(`qdn:host:${code}`);
@@ -23,6 +28,11 @@ export default function Host({ code }) {
     setError(null);
     const res = await request(event, payload);
     if (!res.ok) setError(res.error);
+  }
+
+  function changeSettings(patch) {
+    storage.set('qdn:settings', { ...state.settings, ...patch });
+    act('host:settings', { settings: patch });
   }
 
   const kick = (player) => {
@@ -44,6 +54,8 @@ export default function Host({ code }) {
   if (!state) return <main className="page center muted">Chargement…</main>;
 
   const mode = modeOf(state);
+  const round = state.round?.number;
+  const inGame = ['question', 'revealing', 'results'].includes(state.phase);
   const endButton = (
     <button className="btn btn-ghost" onClick={() => act('host:end')}>
       Terminer
@@ -53,42 +65,80 @@ export default function Host({ code }) {
   return (
     <main className={`page host phase-${state.phase} mode-${mode.id}`} onPointerDown={unlockAudio}>
       {!connected && <div className="banner">Connexion perdue, reconnexion…</div>}
-      {mode.hasSound && state.phase !== 'lobby' && <SoundToggle />}
+      {inGame && <HostControls state={state} act={act} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />}
+      {state.paused && inGame && <div className="paused-banner">Pause</div>}
 
-      {state.phase === 'lobby' && <Lobby state={state} mode={mode} onStart={() => act('host:start')} onKick={kick} />}
+      {state.phase === 'lobby' && (
+        <Lobby state={state} mode={mode} onStart={() => act('host:start')} onKick={kick} onSettings={() => setSettingsOpen(true)} />
+      )}
 
       {state.phase === 'question' && (
         <div className="question">
           <mode.HostQuestion state={state} />
-          <VoteProgress state={state} />
+          <div className="vote-status">
+            <VoteProgress state={state} />
+            <TimerBar timer={state.voteTimer} state={state}>
+              {(s) => (state.waitingForPlayers ? 'En attente de joueurs connectés…' : `Fin du vote dans ${s} s`)}
+            </TimerBar>
+          </div>
           <div className="grid grid-host-small">
             {state.players.map((p) => {
               const voted = state.votedIds.includes(p.id);
               return <PlayerChip key={p.id} player={p} size={72} dim={!voted} badge={voted ? '✓' : null} onRemove={() => kick(p)} />;
             })}
           </div>
+          {state.settings.auto && !state.paused && (
+            <p className="auto-hint">
+              {state.waitingForPlayers ? 'Mode auto en attente : il faut au moins 2 joueurs connectés.' : 'Mode auto : révélation dès que tout le monde a voté.'}
+            </p>
+          )}
           <div className="actions">
             {endButton}
-            <button className={`btn btn-primary btn-xl ${allVoted(state) ? 'pulse' : ''}`} onClick={() => act('host:reveal')}>
-              Révéler
+            <button className={`btn btn-primary btn-xl ${allVoted(state) ? 'pulse' : ''}`} onClick={() => act('host:reveal', { round })}>
+              {state.settings.auto ? 'Révéler maintenant' : 'Révéler'}
             </button>
           </div>
+        </div>
+      )}
+
+      {state.phase === 'revealing' && (
+        <div className="results-screen">
+          <mode.HostReveal key={round} state={state} />
         </div>
       )}
 
       {state.phase === 'results' && (
         <div className="results-screen">
-          <mode.HostResults key={state.round.number} state={state} />
+          <mode.HostResults key={round} state={state} />
+          <TimerBar timer={state.nextTimer} state={state} small>
+            {(s) => (state.isLastRound ? `Fin de la partie dans ${s} s` : `Question suivante dans ${s} s`)}
+          </TimerBar>
+          {state.settings.auto && state.waitingForPlayers && <p className="auto-hint">Mode auto en attente : il faut au moins 2 joueurs connectés.</p>}
           <div className="actions">
-            {endButton}
-            <button className="btn btn-primary btn-xl" onClick={() => act('host:next')}>
-              Question suivante
-            </button>
+            {state.isLastRound ? (
+              <>
+                <button className="btn btn-ghost" onClick={() => act('host:next', { round })}>
+                  Encore une question
+                </button>
+                <button className="btn btn-primary btn-xl" onClick={() => act('host:end')}>
+                  Terminer la partie
+                </button>
+              </>
+            ) : (
+              <>
+                {endButton}
+                <button className="btn btn-primary btn-xl" onClick={() => act('host:next', { round })}>
+                  Question suivante
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
 
       {state.phase === 'ended' && <Ended state={state} mode={mode} onRestart={(m) => act('host:restart', { mode: m })} />}
+
+      {settingsOpen && <SettingsModal settings={state.settings} onChange={changeSettings} onClose={() => setSettingsOpen(false)} />}
 
       {error && (
         <div className="toast" onClick={() => setError(null)}>
@@ -99,20 +149,128 @@ export default function Host({ code }) {
   );
 }
 
-function SoundToggle() {
+function HostControls({ state, act, onSettings, onToggleAuto }) {
   const [muted, setMutedState] = useState(isMuted);
-  const toggle = () => {
+  const { auto, voteMs } = state.settings;
+  const toggleSound = () => {
     setMuted(!muted);
     setMutedState(!muted);
   };
   return (
-    <button className="sound-toggle" onClick={toggle} aria-pressed={!muted}>
-      Son : {muted ? 'coupé' : 'activé'}
-    </button>
+    <div className="host-controls">
+      <button className={`ctrl ${auto ? 'ctrl-on' : ''}`} onClick={onToggleAuto} aria-pressed={auto}>
+        Auto : {auto ? 'activé' : 'désactivé'}
+      </button>
+      {(auto || voteMs > 0) && (
+        <button className={`ctrl ${state.paused ? 'ctrl-warn' : ''}`} onClick={() => act(state.paused ? 'host:unpause' : 'host:pause')}>
+          {state.paused ? 'Reprendre' : 'Pause'}
+        </button>
+      )}
+      <button className="ctrl" onClick={onSettings}>
+        Réglages
+      </button>
+      <button className="ctrl" onClick={toggleSound} aria-pressed={!muted}>
+        Son : {muted ? 'coupé' : 'activé'}
+      </button>
+    </div>
   );
 }
 
-function Lobby({ state, mode, onStart, onKick }) {
+const seconds = (ms) => `${ms / 1000} s`;
+
+function settingsSummary(settings) {
+  return [
+    settings.auto ? `Auto (résultats ${seconds(settings.resultsMs)})` : 'Manuel',
+    settings.voteMs ? `vote ${seconds(settings.voteMs)}` : 'vote sans limite',
+    settings.maxRounds ? `${settings.maxRounds} questions` : 'questions illimitées',
+  ].join(' · ');
+}
+
+function Segmented({ label, hint, value, options, onChange, disabled }) {
+  return (
+    <div className={`setting ${disabled ? 'setting-disabled' : ''}`}>
+      <div className="setting-head">
+        <strong>{label}</strong>
+        {hint && <small>{hint}</small>}
+      </div>
+      <div className="segmented" role="radiogroup" aria-label={label}>
+        {options.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={value === o.value}
+            className={value === o.value ? 'is-selected' : ''}
+            onClick={() => onChange(o.value)}
+            disabled={disabled}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SettingsModal({ settings, onChange, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label="Réglages de la partie" onClick={(e) => e.stopPropagation()}>
+        <h2>Réglages de la partie</h2>
+        <div className="setting setting-switch">
+          <div className="setting-head">
+            <strong>Mode auto</strong>
+            <small>Révèle dès que tous les joueurs connectés ont voté, puis passe tout seul à la question suivante.</small>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={settings.auto}
+            className={`switch ${settings.auto ? 'is-on' : ''}`}
+            onClick={() => onChange({ auto: !settings.auto })}
+          >
+            <span />
+          </button>
+        </div>
+        <Segmented
+          label="Affichage des résultats"
+          hint="Temps avant la question suivante en mode auto."
+          value={settings.resultsMs}
+          options={RESULTS_CHOICES.map((v) => ({ value: v, label: seconds(v) }))}
+          onChange={(v) => onChange({ resultsMs: v })}
+          disabled={!settings.auto}
+        />
+        <Segmented
+          label="Minuteur de vote"
+          hint="À zéro, on révèle avec les votes reçus : ceux qui n’ont pas voté boivent."
+          value={settings.voteMs}
+          options={VOTE_CHOICES.map((v) => ({ value: v, label: v ? seconds(v) : 'Sans limite' }))}
+          onChange={(v) => onChange({ voteMs: v })}
+        />
+        <Segmented
+          label="Nombre de questions"
+          hint="En mode auto, la partie se termine toute seule après la dernière."
+          value={settings.maxRounds}
+          options={ROUNDS_CHOICES.map((v) => ({ value: v, label: v ? String(v) : 'Illimité' }))}
+          onChange={(v) => onChange({ maxRounds: v })}
+        />
+        <div className="actions">
+          <button className="btn btn-primary btn-xl" onClick={onClose}>
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Lobby({ state, mode, onStart, onKick, onSettings }) {
   const joinUrl = useJoinUrl(state.code);
   const [qr, setQr] = useState(null);
 
@@ -152,7 +310,12 @@ function Lobby({ state, mode, onStart, onKick }) {
             ))}
           </div>
         )}
-        <div className="actions">
+        <div className="actions lobby-actions">
+          <button className="settings-summary" onClick={onSettings}>
+            <span>Réglages</span>
+            <strong>{settingsSummary(state.settings)}</strong>
+            <em>Modifier</em>
+          </button>
           <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < 2}>
             {count < 2 ? 'Il faut au moins 2 joueurs' : 'Lancer la partie'}
           </button>

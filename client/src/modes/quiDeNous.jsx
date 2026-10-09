@@ -1,12 +1,72 @@
-import { Avatar, PieChart, PlayerChip } from '../components.jsx';
-import { colorFor } from '../lib.js';
+import { useEffect, useState } from 'react';
+import { Avatar, PieChart, PlayerChip, useRevealSound } from '../components.jsx';
+import { colorFor, serverNow, useRemaining } from '../lib.js';
+import { sounds } from '../sound.js';
 
 export const id = 'qui-de-nous';
 export const label = 'Qui de nous ?';
 export const tagline = 'Votez pour un joueur : le plus voté boit.';
 export const waitingText = 'En attente des autres…';
-export const revealDelayMs = 0;
-export const hasSound = false;
+
+// La révélation dure revealMs (server/modes.js) : « Attention… », puis 3, 2, 1 sur les 3 dernières secondes.
+const COUNTDOWN_MS = 3000;
+
+/** Les photos défilent comme une roulette qui ralentit pendant le compte à rebours. */
+function useRoulette(count, endsAt, state) {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    if (count < 2) return undefined;
+    let delay = 70;
+    let i = 0;
+    let id;
+    const step = () => {
+      if (serverNow(state) >= endsAt) return;
+      i = (i + 1) % count;
+      setIndex(i);
+      delay *= 1.13;
+      id = setTimeout(step, delay);
+    };
+    id = setTimeout(step, delay);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count, endsAt]);
+  return index;
+}
+
+export function HostReveal({ state }) {
+  const { reveal, round, players } = state;
+  const remaining = useRemaining({ endsAt: reveal.endsAt }, state, 100) ?? 0;
+  const count = remaining > COUNTDOWN_MS ? null : Math.max(1, Math.ceil(remaining / 1000));
+  const shown = players[useRoulette(players.length, reveal.endsAt, state) % Math.max(1, players.length)];
+
+  useEffect(() => {
+    const ms = reveal.endsAt - serverNow(state);
+    if (ms > 500) sounds.drumroll(ms);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    if (count) sounds.count(count);
+  }, [count]);
+
+  return (
+    <div className={`qdn-reveal ${count ? `shake-${count}` : ''}`}>
+      <p className="round">Question {round.number}</p>
+      <h2 className="results-question">{round.text}</h2>
+      <p className="announce">{count ? 'Résultat dans…' : 'Attention…'}</p>
+      <div className="roulette-row">
+        {shown && (
+          <div className="roulette">
+            <Avatar player={shown} size={200} className="roulette-avatar" />
+            <p className="roulette-name">{shown.name}</p>
+          </div>
+        )}
+        <p key={count ?? 0} className={`countdown ${count ? 'pop-in' : 'countdown-idle'}`}>
+          {count ?? '?'}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function HostQuestion({ state }) {
   return (
@@ -21,6 +81,7 @@ export function HostQuestion({ state }) {
 
 export function HostResults({ state }) {
   const { results } = state;
+  useRevealSound(state);
   const byId = new Map(state.players.map((p, i) => [p.id, { ...p, color: colorFor(i) }]));
   const top = results.topIds.map((pid) => byId.get(pid)).filter(Boolean);
   const drinkers = results.wrongVoterIds.map((pid) => byId.get(pid)).filter(Boolean);
@@ -45,7 +106,7 @@ export function HostResults({ state }) {
               <div className="winner-list">
                 {top.map((p) => (
                   <div key={p.id} className="winner-card zoom-in">
-                    <Avatar player={p} size={top.length > 1 ? 160 : 240} className="winner-avatar" />
+                    <Avatar player={p} size={top.length > 1 ? 140 : 190} className="winner-avatar" />
                     <p className="winner-name">{p.name}</p>
                   </div>
                 ))}
@@ -59,7 +120,7 @@ export function HostResults({ state }) {
 
         {slices.length > 0 && (
           <section className="chart">
-            <PieChart slices={slices} size={320} />
+            <PieChart slices={slices} size={270} />
             <ul className="legend">
               {slices.map((s, i) => (
                 <li key={s.id} className="fade-up" style={{ animationDelay: `${400 + i * 100}ms` }}>
@@ -79,7 +140,7 @@ export function HostResults({ state }) {
         <div className="drinkers-row">
           {drinkers.map((p, i) => (
             <div key={p.id} className="fade-up" style={{ animationDelay: `${900 + i * 80}ms` }}>
-              <PlayerChip player={p} size={72} badge={nonVoters.has(p.id) ? 'zzz' : null} />
+              <PlayerChip player={p} size={60} badge={nonVoters.has(p.id) ? 'zzz' : null} />
             </div>
           ))}
         </div>

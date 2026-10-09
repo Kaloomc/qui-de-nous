@@ -43,11 +43,32 @@ export function useOnConnect(callback) {
 export function useGameState(code) {
   const [state, setState] = useState(null);
   useEffect(() => {
-    const onState = (s) => s.code === code && setState(s);
+    // clockOffset : écart entre l'horloge du serveur et celle de cet appareil, pour synchroniser les animations.
+    const onState = (s) => s.code === code && setState({ ...s, clockOffset: s.serverTime - Date.now() });
     socket.on('state', onState);
     return () => socket.off('state', onState);
   }, [code]);
   return state;
+}
+
+export const serverNow = (state) => Date.now() + (state?.clockOffset ?? 0);
+
+/** Millisecondes restantes d'un minuteur serveur ({ endsAt } ou { remainingMs, paused }), rafraîchies régulièrement. */
+export function useRemaining(timer, state, intervalMs = 200) {
+  const compute = () => {
+    if (!timer) return null;
+    if (timer.paused) return timer.remainingMs;
+    return Math.max(0, timer.endsAt - serverNow(state));
+  };
+  const [remaining, setRemaining] = useState(compute);
+  useEffect(() => {
+    setRemaining(compute());
+    if (!timer || timer.paused) return undefined;
+    const id = setInterval(() => setRemaining(compute()), intervalMs);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timer?.endsAt, timer?.paused, timer?.remainingMs, state?.clockOffset]);
+  return remaining;
 }
 
 export const storage = {

@@ -1,4 +1,30 @@
-import { colorFor } from './lib.js';
+import { useEffect } from 'react';
+import { colorFor, serverNow, useRemaining } from './lib.js';
+import { sounds } from './sound.js';
+
+/** Joue le son de révélation quand les résultats apparaissent (pas si la TV est rechargée plus tard). */
+export function useRevealSound(state) {
+  useEffect(() => {
+    if (state.reveal && serverNow(state) - state.reveal.endsAt < 1500) sounds.reveal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+}
+
+/** Barre qui se vide pour un minuteur serveur. children(secondes restantes) donne le texte. */
+export function TimerBar({ timer, state, children, small = false }) {
+  const remaining = useRemaining(timer, state);
+  if (!timer || remaining == null) return null;
+  const fraction = timer.totalMs ? Math.min(1, remaining / timer.totalMs) : 0;
+  const seconds = Math.ceil(remaining / 1000);
+  return (
+    <div className={`timer ${small ? 'timer-small' : ''} ${timer.paused ? 'timer-paused' : ''} ${seconds <= 5 ? 'timer-low' : ''}`}>
+      <div className="timer-label">{timer.paused ? 'En pause' : children(seconds)}</div>
+      <div className="timer-track">
+        <div className="timer-fill" style={{ transform: `scaleX(${fraction})` }} />
+      </div>
+    </div>
+  );
+}
 
 export function Avatar({ player, size = 64, className = '' }) {
   const style = { width: size, height: size, fontSize: size * 0.45 };

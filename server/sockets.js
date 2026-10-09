@@ -1,7 +1,13 @@
 const room = (code) => `game:${code}`;
+const hostRoom = (code) => `game:${code}:host`;
 
 export function registerSockets(io, store) {
-  const broadcast = (game) => io.to(room(game.code)).emit('state', game.publicState());
+  // La TV et les téléphones ne reçoivent pas tout à fait le même état (résultats cachés aux joueurs pendant la révélation).
+  const broadcast = (game) => {
+    io.to(hostRoom(game.code)).emit('state', game.publicState(true));
+    io.to(room(game.code)).except(hostRoom(game.code)).emit('state', game.publicState(false));
+  };
+  store.onChange = broadcast;
 
   io.on('connection', (socket) => {
     const on = (event, fn) =>
@@ -20,16 +26,22 @@ export function registerSockets(io, store) {
     function detach() {
       const game = currentGame();
       if (!game) return;
-      if (socket.data.role === 'host') game.hostSockets.delete(socket.id);
-      if (socket.data.role === 'player') game.players.get(socket.data.playerId)?.sockets.delete(socket.id);
+      const { role, playerId } = socket.data;
       socket.leave(room(game.code));
+      socket.leave(hostRoom(game.code));
       socket.data = {};
+      if (role === 'host') game.hostSockets.delete(socket.id);
+      if (role === 'player') {
+        const player = game.players.get(playerId);
+        if (player) game.disconnectPlayer(player, socket.id);
+      }
       broadcast(game);
     }
 
     function attachHost(game) {
       detach();
       socket.join(room(game.code));
+      socket.join(hostRoom(game.code));
       socket.data = { code: game.code, role: 'host' };
       game.hostSockets.add(socket.id);
       game.touch();
@@ -39,12 +51,12 @@ export function registerSockets(io, store) {
       detach();
       socket.join(room(game.code));
       socket.data = { code: game.code, role: 'player', playerId: player.id };
-      player.sockets.add(socket.id);
+      game.connectPlayer(player, socket.id);
       game.touch();
     }
 
-    on('host:create', ({ mode }, ack) => {
-      const game = store.create(mode);
+    on('host:create', ({ mode, settings }, ack) => {
+      const game = store.create(mode, settings);
       attachHost(game);
       ack({ ok: true, code: game.code, hostSecret: game.hostSecret });
       broadcast(game);
@@ -61,10 +73,13 @@ export function registerSockets(io, store) {
 
     const hostActions = {
       'host:start': (game) => game.start(),
-      'host:next': (game) => game.nextQuestion(),
-      'host:reveal': (game) => game.reveal(),
+      'host:next': (game, { round }) => game.nextQuestion(Number.isInteger(round) ? round : undefined),
+      'host:reveal': (game, { round }) => game.reveal(Number.isInteger(round) ? round : undefined),
       'host:end': (game) => game.end(),
       'host:restart': (game, { mode }) => game.restart(mode),
+      'host:settings': (game, { settings }) => game.setSettings(settings),
+      'host:pause': (game) => game.pause(),
+      'host:unpause': (game) => game.resume(),
       'host:kick': (game, { playerId }) => {
         const player = game.players.get(playerId);
         if (!player) return 'Joueur inconnu.';

@@ -37,7 +37,41 @@ function tone(freq, { duration = 0.08, type = 'sine', volume = 0.15, delay = 0, 
   osc.stop(t0 + duration + 0.02);
 }
 
+let noiseBuffer = null;
+
+/** Petit coup de caisse claire : bruit blanc très court. */
+function snare(delay, volume) {
+  if (muted || !ctx || ctx.state !== 'running') return;
+  if (!noiseBuffer) {
+    noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  }
+  const t0 = ctx.currentTime + delay;
+  const src = ctx.createBufferSource();
+  const filter = ctx.createBiquadFilter();
+  const gain = ctx.createGain();
+  src.buffer = noiseBuffer;
+  filter.type = 'highpass';
+  filter.frequency.value = 1200;
+  gain.gain.setValueAtTime(volume, t0);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.045);
+  src.connect(filter).connect(gain).connect(ctx.destination);
+  src.start(t0);
+  src.stop(t0 + 0.05);
+}
+
 export const sounds = {
+  /** Roulement de tambour qui monte en intensité pendant durationMs. */
+  drumroll: (durationMs) => {
+    const hits = Math.floor(durationMs / 55);
+    for (let i = 0; i < hits; i++) snare((i * 55) / 1000, 0.05 + 0.25 * (i / hits));
+  },
+  count: (n) => tone(n === 1 ? 880 : 660, { duration: 0.12, type: 'square', volume: 0.08 }),
+  ding: () => {
+    tone(1318, { duration: 0.6, volume: 0.18 });
+    tone(1760, { duration: 0.5, volume: 0.1, delay: 0.05 });
+  },
   /** progress de 0 à 1 : le tic monte dans les aigus à mesure que le suspense grandit. */
   tick: (progress = 0) => tone(380 + 520 * progress, { duration: 0.05, type: 'triangle', volume: 0.22 }),
   heartbeat: () => {

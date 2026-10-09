@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Avatar } from '../components.jsx';
+import { Avatar, TimerBar } from '../components.jsx';
 import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect } from '../lib.js';
 import { modeOf } from '../modes/index.js';
 import { fileToSquareJpeg } from '../photo.js';
@@ -95,12 +95,20 @@ export default function Player({ code }) {
   else if (status === 'resuming' || !state || !me) content = <div className="center muted">Connexion à la partie…</div>;
   else if (state.phase === 'lobby') content = <Waiting me={me} state={state} mode={mode} onLeave={leave} />;
   else if (state.phase === 'question') {
-    content = currentVote ? (
-      <Voted state={state} mode={mode} choice={currentVote.choice} onChange={() => setMyVote(null)} />
-    ) : (
-      <mode.PlayerVote state={state} me={me} onVote={vote} />
+    content = (
+      <>
+        <TimerBar timer={state.voteTimer} state={state} small>
+          {(s) => `${s} s pour voter`}
+        </TimerBar>
+        {currentVote ? (
+          <Voted state={state} mode={mode} choice={currentVote.choice} onChange={() => setMyVote(null)} />
+        ) : (
+          <mode.PlayerVote state={state} me={me} onVote={vote} />
+        )}
+      </>
     );
-  } else if (state.phase === 'results') content = <Results key={round} state={state} mode={mode} me={me} />;
+  } else if (state.phase === 'revealing') content = <Suspense />;
+  else if (state.phase === 'results') content = <Verdict state={state} mode={mode} me={me} />;
   else content = <Ended onHome={() => navigate('/')} />;
 
   return (
@@ -219,29 +227,22 @@ function Voted({ state, mode, choice, onChange }) {
   );
 }
 
-/** Attend la fin de l'animation de la TV avant d'afficher le verdict, pour ne rien spoiler. */
-function Results({ state, mode, me }) {
-  const [ready, setReady] = useState(mode.revealDelayMs === 0);
-  useEffect(() => {
-    if (mode.revealDelayMs === 0) return undefined;
-    const timer = setTimeout(() => setReady(true), mode.revealDelayMs);
-    return () => clearTimeout(timer);
-  }, [mode]);
-
-  if (!ready) {
-    return (
-      <div className="center suspense">
-        <div className="suspense-dots" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
-        <h1>Suspense…</h1>
-        <p className="lead">Les yeux sur l’écran !</p>
+/** Pendant la révélation, le serveur ne donne pas encore les résultats aux téléphones : pas de spoiler. */
+function Suspense() {
+  return (
+    <div className="center suspense">
+      <div className="suspense-dots" aria-hidden="true">
+        <span />
+        <span />
+        <span />
       </div>
-    );
-  }
+      <h1>Les résultats arrivent…</h1>
+      <p className="lead">Les yeux sur l’écran !</p>
+    </div>
+  );
+}
 
+function Verdict({ state, mode, me }) {
   const { drinks, title, detail, extra } = mode.verdict(state, me);
   return (
     <div className={`verdict ${drinks ? 'verdict-drink' : 'verdict-safe'}`}>

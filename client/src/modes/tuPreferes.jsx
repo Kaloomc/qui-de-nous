@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { Confetti, PlayerChip } from '../components.jsx';
+import { Confetti, PlayerChip, useRevealSound } from '../components.jsx';
+import { serverNow } from '../lib.js';
 import { sounds } from '../sound.js';
 
 export const id = 'tu-preferes';
 export const label = 'Tu préfères ?';
 export const tagline = 'A ou B : la minorité boit.';
 export const waitingText = 'Suspense…';
-export const hasSound = true;
 
-const SUSPENSE_MS = 5200;
+// Découpage de la révélation (durée totale fixée par le serveur, revealMs dans server/modes.js) :
+// « Attention… » pendant ANNOUNCE_MS, puis la jauge oscille, puis une courte pause avant les résultats.
+const ANNOUNCE_MS = 1500;
+const SETTLE_MS = 300;
 const SWINGS = 6;
-// Les téléphones attendent la fin de l'animation de la TV pour ne rien spoiler.
-export const revealDelayMs = SUSPENSE_MS + 700;
 
 const pct = (n, total) => (total ? Math.round((n / total) * 100) : 0);
+const shareOfA = (results) => (results.totalVotes ? results.counts.a / results.totalVotes : 0.5);
 
 function OptionCard({ side, text, status, percent, compact }) {
   return (
@@ -45,25 +47,23 @@ export function HostQuestion({ state }) {
  * Jauge qui oscille entre A (gauche) et B (droite), de plus en plus lentement,
  * puis se pose sur la vraie répartition. Animée en requestAnimationFrame en
  * écrivant directement dans le DOM, sans re-render React, pour rester fluide.
+ * startIn : délai avant le début de l'oscillation (négatif si la TV a été rechargée en cours de route).
  */
-function Balance({ shareA, onDone }) {
+function Balance({ shareA, startIn = 0, duration = 0, animate = true }) {
   const fillRef = useRef(null);
   const needleRef = useRef(null);
   const rootRef = useRef(null);
-  const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
 
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const duration = reduced ? 400 : SUSPENSE_MS;
-    let raf;
-    let start = null;
-    let lastSign = 0;
-
     const draw = (pos) => {
       fillRef.current.style.transform = `scaleX(${pos})`;
       needleRef.current.style.transform = `translateX(${pos * 100}%)`;
     };
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!animate || reduced || duration <= 0) {
+      draw(shareA);
+      return undefined;
+    }
     const beat = () => {
       const el = rootRef.current;
       el.classList.remove('beat');
@@ -71,36 +71,31 @@ function Balance({ shareA, onDone }) {
       el.classList.add('beat');
     };
 
-    sounds.heartbeat();
+    const start = performance.now() + startIn;
+    let raf;
+    let lastSign = 0;
     const frame = (now) => {
-      start ??= now;
-      const t = Math.min(1, (now - start) / duration);
+      const t = Math.min(1, Math.max(0, (now - start) / duration));
       const remaining = 1 - t;
       // Centre qui glisse vers la vraie valeur, amplitude qui s'éteint, fréquence qui ralentit.
       const center = 0.5 + (shareA - 0.5) * t * t;
       const amplitude = 0.48 * remaining ** 1.4;
       const swing = Math.sin(2 * Math.PI * SWINGS * (1 - remaining * remaining));
-      const pos = t < 1 ? Math.min(0.98, Math.max(0.02, center + amplitude * swing)) : shareA;
-      draw(pos);
+      draw(t < 1 ? Math.min(0.98, Math.max(0.02, center + amplitude * swing)) : shareA);
 
       const sign = Math.sign(swing);
-      if (t < 1 && sign !== 0 && sign !== lastSign) {
+      if (t > 0 && t < 1 && sign !== 0 && sign !== lastSign) {
         if (lastSign !== 0) {
           sounds.tick(t);
           beat();
         }
         lastSign = sign;
       }
-
       if (t < 1) raf = requestAnimationFrame(frame);
-      else {
-        sounds.reveal();
-        onDoneRef.current();
-      }
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [shareA]);
+  }, [shareA, startIn, duration, animate]);
 
   return (
     <div ref={rootRef} className="balance">
@@ -110,6 +105,40 @@ function Balance({ shareA, onDone }) {
       <div ref={needleRef} className="balance-needle-rail">
         <span className="balance-needle" />
       </div>
+    </div>
+  );
+}
+
+/** Annonce + jauge à suspense. La TV seule reçoit les résultats à ce stade (les téléphones attendent). */
+export function HostReveal({ state }) {
+  const { round, reveal } = state;
+  const announceEnd = reveal.startedAt + ANNOUNCE_MS;
+  // Calculé une seule fois au montage : l'animation suit ensuite sa propre horloge.
+  const [timing] = useState(() => ({
+    startIn: announceEnd - serverNow(state),
+    duration: reveal.durationMs - ANNOUNCE_MS - SETTLE_MS,
+  }));
+  const [announcing, setAnnouncing] = useState(timing.startIn > 0);
+
+  useEffect(() => {
+    if (timing.startIn <= 0) return undefined;
+    sounds.heartbeat();
+    const id = setTimeout(() => setAnnouncing(false), timing.startIn);
+    return () => clearTimeout(id);
+  }, [timing]);
+
+  return (
+    <div className="tp tp-results is-suspense">
+      <p className="round">Question {round.number} · Tu préfères…</p>
+      <div className="duel">
+        <OptionCard side="a" text={round.a} compact />
+        <div className="duel-or">ou</div>
+        <OptionCard side="b" text={round.b} compact />
+      </div>
+      <Balance shareA={shareOfA(state.results)} startIn={timing.startIn} duration={timing.duration} />
+      <p key={announcing ? 'announce' : 'suspense'} className={announcing ? 'announce pop-in' : 'suspense-label'}>
+        {announcing ? 'Attention…' : 'Suspense…'}
+      </p>
     </div>
   );
 }
@@ -142,9 +171,8 @@ function Camp({ side, players, status, results }) {
 
 export function HostResults({ state }) {
   const { results, round } = state;
-  const [revealed, setRevealed] = useState(false);
   const { counts, totalVotes } = results;
-  const shareA = totalVotes ? counts.a / totalVotes : 0.5;
+  useRevealSound(state);
   const byId = new Map(state.players.map((p) => [p.id, p]));
   const campOf = (side) =>
     Object.entries(results.choices)
@@ -155,40 +183,34 @@ export function HostResults({ state }) {
   const votersDrinkOnTie = Object.keys(results.choices).some((pid) => results.drinkerIds.includes(pid));
 
   return (
-    <div className={`tp tp-results ${revealed ? 'is-revealed' : 'is-suspense'}`}>
+    <div className="tp tp-results is-revealed">
       <p className="round">Question {round.number} · Tu préfères…</p>
       <div className="duel">
-        <OptionCard side="a" text={round.a} compact status={revealed ? sideStatus(results, 'a') : null} percent={revealed ? pct(counts.a, totalVotes) : null} />
+        <OptionCard side="a" text={round.a} compact status={sideStatus(results, 'a')} percent={pct(counts.a, totalVotes)} />
         <div className="duel-or">ou</div>
-        <OptionCard side="b" text={round.b} compact status={revealed ? sideStatus(results, 'b') : null} percent={revealed ? pct(counts.b, totalVotes) : null} />
+        <OptionCard side="b" text={round.b} compact status={sideStatus(results, 'b')} percent={pct(counts.b, totalVotes)} />
       </div>
 
-      <Balance shareA={shareA} onDone={() => setRevealed(true)} />
+      <Balance shareA={shareOfA(results)} animate={false} />
 
-      {!revealed && <p className="suspense-label">Suspense…</p>}
-
-      {revealed && (
-        <>
-          {results.tie && (
-            <p className="tie-banner zoom-in">
-              {totalVotes === 0 ? 'Personne n’a voté : tout le monde boit !' : votersDrinkOnTie ? 'Égalité : tout le monde boit !' : 'Égalité, tout le monde est sauvé !'}
-            </p>
-          )}
-          <div className="camps">
-            <Camp side="a" players={campOf('a')} status={sideStatus(results, 'a')} results={results} />
-            <Camp side="b" players={campOf('b')} status={sideStatus(results, 'b')} results={results} />
+      {results.tie && (
+        <p className="tie-banner zoom-in">
+          {totalVotes === 0 ? 'Personne n’a voté : tout le monde boit !' : votersDrinkOnTie ? 'Égalité : tout le monde boit !' : 'Égalité, tout le monde est sauvé !'}
+        </p>
+      )}
+      <div className="camps">
+        <Camp side="a" players={campOf('a')} status={sideStatus(results, 'a')} results={results} />
+        <Camp side="b" players={campOf('b')} status={sideStatus(results, 'b')} results={results} />
+      </div>
+      {nonVoters.length > 0 && totalVotes > 0 && (
+        <div className="no-vote fade-up" style={{ animationDelay: '600ms' }}>
+          <span className="camp-tag camp-tag-lose">Pas voté : ils boivent</span>
+          <div className="camp-players">
+            {nonVoters.map((p) => (
+              <PlayerChip key={p.id} player={p} size={56} badge="zzz" />
+            ))}
           </div>
-          {nonVoters.length > 0 && totalVotes > 0 && (
-            <div className="no-vote fade-up" style={{ animationDelay: '600ms' }}>
-              <span className="camp-tag camp-tag-lose">Pas voté : ils boivent</span>
-              <div className="camp-players">
-                {nonVoters.map((p) => (
-                  <PlayerChip key={p.id} player={p} size={56} badge="zzz" />
-                ))}
-              </div>
-            </div>
-          )}
-        </>
+        </div>
       )}
     </div>
   );
