@@ -2,10 +2,17 @@
 
 Jeu de soirée en temps réel, façon Kahoot. Une question s'affiche sur la TV, chacun vote en secret depuis son téléphone… et les perdants boivent.
 
-Deux modes de jeu :
+## Les jeux
 
-- **Qui de nous ?** : « Qui est le plus susceptible d'envoyer un message à son ex à 3h du matin ? » Tout le monde vote pour un joueur, le plus voté boit.
-- **Tu préfères ?** : « Ne plus jamais manger de pizza **ou** ne plus jamais regarder de film ? » Chacun choisit A ou B, une jauge à suspense départage les camps, **la minorité boit**.
+Deux modes de jeu, au choix au moment de créer la partie :
+
+| | **Qui de nous ?** | **Tu préfères ?** |
+|---|---|---|
+| **La question** | « Qui est le plus susceptible de ghoster quelqu'un après un super rencard ? » | « Que tes potes lisent tous tes DM **ou** qu'ils fouillent toute ta galerie photo ? » |
+| **On vote pour** | Un joueur (photo + prénom) | A ou B |
+| **Qui boit** | Le plus voté, et ceux qui n'ont pas voté pour lui | La minorité |
+| **La révélation** | Le plus voté en grand + camembert des votes | Une jauge à suspense oscille entre A et B, puis les joueurs atterrissent dans leur camp |
+| **Contenu** | 150 questions | 150 dilemmes |
 
 ### Qui de nous ?
 
@@ -29,6 +36,7 @@ Deux modes de jeu :
 
 ## Sommaire
 
+- [Les jeux](#les-jeux)
 - [Fonctionnalités](#fonctionnalités)
 - [Démarrage rapide](#démarrage-rapide)
 - [Tutoriel pas à pas](#tutoriel-pas-à-pas)
@@ -39,6 +47,8 @@ Deux modes de jeu :
   - [5. Jouer à distance (sans même Wi-Fi)](#5-jouer-à-distance-sans-même-wi-fi)
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
 - [Règles du jeu](#règles-du-jeu)
+  - [Qui de nous ?](#qui-de-nous--2)
+  - [Tu préfères ?](#tu-préfères--1)
 - [Dépannage](#dépannage)
 - [Personnaliser les questions](#personnaliser-les-questions)
 - [Héberger en ligne (gratuit)](#héberger-en-ligne-gratuit)
@@ -56,7 +66,7 @@ Deux modes de jeu :
   - *Tu préfères ?* : une jauge oscille entre A et B, ralentit, hésite, puis se pose sur le vrai résultat (avec tic-tac sonore). Les photos des joueurs atterrissent ensuite dans leur camp, la majorité a droit à des confettis.
 - Chaque téléphone affiche clairement **« Tu bois ! »** ou **« Tu ne bois pas »**. En mode *Tu préfères ?*, il attend la fin de l'animation de la TV pour ne rien gâcher.
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
-- 85 questions et 90 dilemmes intégrés, tirés au hasard sans répétition.
+- 150 questions et 150 dilemmes pensés pour les soirées étudiantes, du plus chill au plus gênant, tirés au hasard sans répétition.
 - Aucun compte, aucune base de données : les parties vivent en mémoire et disparaissent toutes seules.
 
 ## Démarrage rapide
@@ -71,7 +81,7 @@ npm run build
 npm start
 ```
 
-Ouvre ensuite **http://localhost:3000** sur le PC branché à la TV et clique sur **Créer une partie**.
+Ouvre ensuite **http://localhost:3000** sur le PC branché à la TV, choisis le jeu (**Qui de nous ?** ou **Tu préfères ?**) et clique sur **Créer une partie**.
 
 ## Tutoriel pas à pas
 
@@ -226,29 +236,43 @@ Les règles sont des fonctions pures dans [`server/rules.js`](server/rules.js), 
 | `cloudflared est introuvable` | Installe-le (voir [étape 5](#5-jouer-à-distance-sans-même-wi-fi)), puis ouvre un nouveau terminal. |
 | « Partie introuvable » | Le serveur a redémarré : les parties sont en mémoire, il faut en recréer une. |
 | Le bouton Selfie ouvre la galerie | Certains navigateurs ignorent la demande de caméra ; prends la photo depuis l'appareil photo puis choisis-la dans la galerie. |
+| Pas de son pendant la jauge de *Tu préfères ?* | Le navigateur bloque le son tant qu'on n'a pas cliqué sur la page : clique une fois n'importe où sur l'écran de la TV. Vérifie aussi le bouton **Son** en haut à droite et le volume de la TV. |
+| Les téléphones affichent « Suspense… » quelques secondes | C'est voulu en mode *Tu préfères ?* : le verdict s'affiche à la fin de l'animation de la TV, pour ne rien gâcher. |
 | `npm: command not found` | Node.js n'est pas installé ou pas dans le PATH (voir [étape 1](#1-installer-nodejs)). |
 
 ## Personnaliser les questions
 
-**Qui de nous ?** : les questions sont dans [`server/questions.json`](server/questions.json), une par ligne :
+Les questions sont écrites pour des soirées entre potes de 18-25 ans. Chacune a un `niveau` d'intensité :
+
+| Niveau | Part | Esprit |
+|---|---|---|
+| `chill` | ~40 % | Drôle et léger, pour chauffer l'ambiance |
+| `epice` | ~40 % | Gênant, drague, ex, secrets avouables |
+| `hardcore` | ~20 % | Très gênant ou osé, toujours sur le ton de la blague |
+
+Pour l'instant, toutes les questions sont mélangées quel que soit le niveau. Le champ servira plus tard à choisir l'intensité de la soirée.
+
+**Qui de nous ?** (150 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
 
 ```json
 [
-  "Qui est le plus susceptible de s'endormir en pleine soirée ?",
-  "Qui est le plus susceptible de devenir célèbre ?"
+  { "niveau": "chill", "text": "Qui est le plus susceptible de rendre un devoir à 23h59 ?" },
+  { "niveau": "epice", "text": "Qui est le plus susceptible de ghoster quelqu'un après un super rencard ?" }
 ]
 ```
 
-**Tu préfères ?** : les dilemmes sont dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… » :
+**Tu préfères ?** (150 dilemmes) : dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… », lisible seule sur sa carte :
 
 ```json
 [
-  { "a": "Ne plus jamais pouvoir manger de pizza", "b": "Ne plus jamais pouvoir regarder de film" },
-  { "a": "Toujours dire ce que tu penses", "b": "Ne jamais pouvoir parler en public" }
+  { "niveau": "chill", "a": "Avoir toujours 2 % de batterie", "b": "Avoir toujours l'écran fissuré" },
+  { "niveau": "epice", "a": "Que tes potes lisent tous tes DM", "b": "Que tes potes fouillent toute ta galerie photo" }
 ]
 ```
 
-Ajoute, modifie ou supprime des lignes (attention aux virgules et aux guillemets), lance `npm test` pour vérifier que le fichier est valide, puis relance `npm start`. Pas besoin de rebuild.
+**Conseils** : une phrase qui se lit en 3 secondes sur la TV (120 caractères maximum, 75 par option de dilemme), une question qui désigne vraiment quelqu'un ou qui divise la salle, et deux options aussi tentantes ou aussi pénibles l'une que l'autre. Pas de moquerie sur l'origine, la religion, l'orientation, le genre, le physique ou la santé, pas de contenu sexuel explicite, et rien qui pousse à se mettre en danger.
+
+Ajoute, modifie ou supprime des lignes (attention aux virgules et aux guillemets), puis lance `npm test`. Il vérifie le format, les doublons, la longueur et la répartition des niveaux. Relance enfin `npm start`, sans rebuild.
 
 ## Héberger en ligne (gratuit)
 

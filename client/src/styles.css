@@ -450,6 +450,11 @@ button {
   margin: auto 0;
 }
 
+.question-text-long {
+  font-size: clamp(2rem, 4vw, 4rem);
+  max-width: 28ch;
+}
+
 .vote-progress {
   width: min(100%, 720px);
   display: flex;
@@ -935,6 +940,10 @@ button {
   font-weight: 800;
   line-height: 1.1;
   text-wrap: balance;
+}
+
+.option-text-long {
+  font-size: clamp(1.3rem, 2.5vw, 2.7rem);
 }
 
 .option-compact {

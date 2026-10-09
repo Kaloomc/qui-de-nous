@@ -20,7 +20,7 @@ function OptionCard({ side, text, status, percent, compact }) {
     <div className={`option option-${side} ${status ? `option-${status}` : ''} ${compact ? 'option-compact' : ''}`}>
       {status === 'win' && <Confetti />}
       <span className="option-letter">{side.toUpperCase()}</span>
-      <p className="option-text">{text}</p>
+      <p className={`option-text ${text.length > 45 ? 'option-text-long' : ''}`}>{text}</p>
       {percent != null && <p className="option-pct pop-in">{percent} %</p>}
     </div>
   );

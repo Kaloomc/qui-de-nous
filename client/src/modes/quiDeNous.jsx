@@ -12,7 +12,7 @@ export function HostQuestion({ state }) {
   return (
     <>
       <p className="round">Question {state.round.number}</p>
-      <h1 key={state.round.number} className="question-text slide-in">
+      <h1 key={state.round.number} className={`question-text slide-in ${state.round.text.length > 85 ? 'question-text-long' : ''}`}>
         {state.round.text}
       </h1>
     </>

@@ -7,7 +7,8 @@ const load = (file) => JSON.parse(readFileSync(new URL(file, import.meta.url), '
 // Le reste (lobby, joueurs, reconnexion, déroulement des tours) est commun.
 export const MODES = {
   'qui-de-nous': {
-    questions: load('./questions.json').map((text) => ({ text })),
+    // Accepte aussi l'ancien format (simple chaîne de caractères).
+    questions: load('./questions.json').map((q) => (typeof q === 'string' ? { text: q } : q)),
     isValidVote: (game, choice) => game.players.has(choice),
     computeResults: (playerIds, votes) => computeResults(playerIds, votes),
   },
