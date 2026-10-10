@@ -25,9 +25,9 @@ test('questions « Qui de nous ? » : au moins 400, bien formées, uniques, nive
   checkLevels(qs);
 });
 
-test('dilemmes « Tu préfères ? » : ~150, bien formés, uniques, niveaux répartis', () => {
+test('dilemmes « Tu préfères ? » : au moins 400, bien formés, uniques, niveaux répartis', () => {
   const qs = GAMES['tu-preferes'].questions;
-  assert.ok(qs.length >= 140 && qs.length <= 160, `${qs.length} dilemmes`);
+  assert.ok(qs.length >= 400, `${qs.length} dilemmes`);
   for (const q of qs) {
     assert.ok(typeof q.a === 'string' && q.a.trim(), JSON.stringify(q));
     assert.ok(typeof q.b === 'string' && q.b.trim(), JSON.stringify(q));
