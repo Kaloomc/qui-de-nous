@@ -145,14 +145,14 @@ export default function Host({ code }) {
             {(s) => `Réponse attendue : encore ${s} s`}
           </TimerBar>
           <TimerBar timer={state.nextTimer} state={state} small>
-            {(s) => (state.isLastRound ? `Fin de la partie dans ${s} s` : `Question suivante dans ${s} s`)}
+            {(s) => (state.isLastRound ? `Fin de la partie dans ${s} s` : `${mode.nextLabel ?? 'Question suivante'} dans ${s} s`)}
           </TimerBar>
           {state.settings.auto && state.waitingForPlayers && <p className="auto-hint">Mode auto en attente : il faut au moins 2 joueurs connectés.</p>}
           <div className="actions">
             {state.isLastRound ? (
               <>
                 <button className="btn btn-ghost" onClick={() => act('host:next', { round })}>
-                  Encore une question
+                  {mode.nextLabel ? 'Encore une manche' : 'Encore une question'}
                 </button>
                 <button className="btn btn-primary btn-xl" onClick={() => act('host:end')}>
                   Terminer la partie
@@ -162,7 +162,7 @@ export default function Host({ code }) {
               <>
                 {endButton}
                 <button className="btn btn-primary btn-xl" onClick={() => act('host:next', { round })}>
-                  Question suivante
+                  {mode.nextLabel ?? 'Question suivante'}
                 </button>
               </>
             )}

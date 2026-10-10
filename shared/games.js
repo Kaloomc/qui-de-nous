@@ -54,6 +54,16 @@ export const GAME_CATALOG = [
     minToStart: 3,
     available: true,
   },
+  {
+    id: 'patate',
+    name: 'Patate chaude',
+    icon: 'bomb',
+    tagline: 'Une bombe passe de téléphone en téléphone. Personne ne sait quand elle explose.',
+    rule: 'Celui qui l’a en main quand elle explose boit 2 gorgées.',
+    players: { min: 3, max: 20 },
+    minToStart: 3,
+    available: true,
+  },
 ];
 
 export const DEFAULT_GAME = 'qui-de-nous';

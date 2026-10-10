@@ -120,7 +120,7 @@ export default function Player({ code }) {
         )}
       </>
     );
-  } else if (state.phase === 'revealing') content = <Suspense />;
+  } else if (state.phase === 'revealing') content = mode.PlayerReveal ? <mode.PlayerReveal state={state} me={me} /> : <Suspense />;
   else if (state.phase === 'results' && mode.PlayerResults) {
     content = <mode.PlayerResults state={state} me={me} act={act} verdict={<Verdict state={state} mode={mode} me={me} />} />;
   } else if (state.phase === 'results') content = <Verdict state={state} mode={mode} me={me} />;

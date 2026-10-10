@@ -21,7 +21,7 @@ test('jeux disponibles : ils ont tous leurs règles, et toute règle correspond 
   for (const id of available) {
     const rules = GAMES[id];
     assert.ok(isPlayable(id));
-    assert.ok(rules.questions.length > 0);
+    assert.ok(rules.questions?.length > 0 || typeof rules.drawQuestion === 'function', `${id} : contenu`);
     for (const fn of ['isValidVote', 'computeResults', 'sipsOf']) assert.equal(typeof rules[fn], 'function', `${id}.${fn}`);
     assert.ok(rules.revealMs > 0);
   }

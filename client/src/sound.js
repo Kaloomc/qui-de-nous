@@ -61,7 +61,42 @@ function snare(delay, volume) {
   src.stop(t0 + 0.05);
 }
 
+/** Bruit blanc filtré (explosion, souffle, cliquet). */
+function noise({ duration = 0.3, volume = 0.3, delay = 0, type = 'lowpass', freq = 800, freqTo } = {}) {
+  if (muted || !ctx || ctx.state !== 'running') return;
+  const t0 = ctx.currentTime + delay;
+  const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * duration), ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource();
+  const filter = ctx.createBiquadFilter();
+  const gain = ctx.createGain();
+  src.buffer = buffer;
+  filter.type = type;
+  filter.frequency.setValueAtTime(freq, t0);
+  if (freqTo) filter.frequency.exponentialRampToValueAtTime(freqTo, t0 + duration);
+  gain.gain.setValueAtTime(volume, t0);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+  src.connect(filter).connect(gain).connect(ctx.destination);
+  src.start(t0);
+  src.stop(t0 + duration + 0.02);
+}
+
 export const sounds = {
+  /** Explosion : grosse basse + souffle qui s'étouffe. */
+  boom: () => {
+    tone(90, { duration: 0.9, volume: 0.6, slideTo: 30 });
+    noise({ duration: 1.4, volume: 0.7, freq: 2400, freqTo: 120 });
+  },
+  /** La bombe change de main. */
+  whoosh: () => noise({ duration: 0.35, volume: 0.25, type: 'bandpass', freq: 400, freqTo: 2600 }),
+  /** Cliquet de la roue (volume selon la vitesse). */
+  clack: (volume = 0.2) => noise({ duration: 0.03, volume, type: 'highpass', freq: 2500 }),
+  /** « FEU ! » : impact + crépitement. */
+  fire: () => {
+    tone(160, { duration: 0.35, type: 'sawtooth', volume: 0.25, slideTo: 60 });
+    noise({ duration: 0.6, volume: 0.4, type: 'bandpass', freq: 1800, freqTo: 300 });
+  },
   /** Roulement de tambour qui monte en intensité pendant durationMs. */
   drumroll: (durationMs) => {
     const hits = Math.floor(durationMs / 55);

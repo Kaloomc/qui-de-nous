@@ -2606,3 +2606,201 @@ button {
   justify-content: center;
   gap: 16px;
 }
+
+/* ---------- Patate chaude ---------- */
+
+.patate {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(10px, 2vh, 22px);
+}
+
+.patate-arena {
+  position: relative;
+  width: 100%;
+  height: min(74vh, 900px);
+}
+
+.patate-seat {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease;
+}
+
+.patate-seat.is-hot {
+  z-index: 2;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.patate-seat.is-hot .avatar,
+.avatar-hot {
+  box-shadow: 0 0 0 5px var(--red), 0 0 40px rgba(255, 77, 94, 0.7);
+}
+
+.patate-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: min(60%, 760px);
+}
+
+.patate-holder {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.patate-bomb .bomb {
+  width: clamp(150px, 26vh, 280px);
+  height: auto;
+  filter: drop-shadow(0 0 30px rgba(255, 77, 94, 0.45));
+}
+
+.bomb-body {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.bomb-fly {
+  position: absolute;
+  z-index: 3;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #4a3d7a, #1b1530 70%);
+  box-shadow: 0 0 0 3px var(--text), 0 0 24px var(--red);
+  animation: bomb-fly 0.5s cubic-bezier(0.3, 0.7, 0.4, 1) both;
+  pointer-events: none;
+}
+
+@keyframes bomb-fly {
+  from {
+    left: var(--fx);
+    top: var(--fy);
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1.6) rotate(180deg);
+  }
+  to {
+    left: var(--tx);
+    top: var(--ty);
+    transform: scale(0.4) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.patate-boom {
+  position: relative;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.boom-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: radial-gradient(circle, #fff 0%, #ffc93c 35%, #ff4d5e 70%, transparent 100%);
+  animation: boom-flash 1.1s ease-out both;
+  pointer-events: none;
+}
+
+@keyframes boom-flash {
+  from {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+.boom-shards {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.boom-shards span {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: var(--yellow);
+  animation: shard 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) 0.1s both;
+}
+
+.boom-shards span:nth-child(3n) {
+  background: var(--red);
+}
+
+.boom-shards span:nth-child(3n + 1) {
+  background: var(--pink);
+}
+
+@keyframes shard {
+  from {
+    transform: rotate(var(--a)) translateX(0) scale(1.4);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--a)) translateX(var(--d)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.boom-text {
+  position: relative;
+  z-index: 6;
+  font-size: clamp(6rem, 18vw, 16rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--yellow);
+  text-shadow: 0 0 40px var(--red), 0 8px 0 var(--red);
+  animation: zoom 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.4) both, shake 0.25s ease-in-out 0.7s 6;
+  --shake: 8px;
+}
+
+.boom-victim {
+  position: relative;
+  z-index: 6;
+  filter: grayscale(0.6) brightness(0.7);
+  animation: pop 0.5s 0.6s both;
+}
+
+.patate-hot {
+  margin: -24px -16px;
+  padding: 24px 16px;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 77, 94, 0.55), transparent 70%);
+}
+
+.patate-alert {
+  font-size: clamp(2rem, 10vw, 3rem);
+  font-weight: 800;
+  color: var(--yellow);
+  text-align: center;
+  text-shadow: 0 0 20px var(--red);
+  animation: heartbeat 0.9s ease-in-out infinite;
+}
+
+.patate-phone {
+  gap: 16px;
+  text-align: center;
+}
