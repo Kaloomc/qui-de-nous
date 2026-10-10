@@ -4,6 +4,7 @@ import imposteur from './imposteur.js';
 import patate from './patate.js';
 import quiDeNous from './quiDeNous.js';
 import quiMeConnait from './quiMeConnait.js';
+import roue from './roue.js';
 import tuPreferes from './tuPreferes.js';
 
 // Règles côté serveur de chaque jeu jouable : questions, validation d'un vote, résultats, gorgées, durée du suspense.
@@ -15,6 +16,7 @@ export const GAME_RULES = {
   [quiMeConnait.id]: quiMeConnait,
   [imposteur.id]: imposteur,
   [patate.id]: patate,
+  [roue.id]: roue,
 };
 
 /** Registre complet : métadonnées du catalogue + règles. */

@@ -64,6 +64,16 @@ export const GAME_CATALOG = [
     minToStart: 3,
     available: true,
   },
+  {
+    id: 'roue',
+    name: 'La Roue',
+    icon: 'wheel',
+    tagline: 'Une roue choisit la victime, une autre son défi. Gorgées, duos, votes, gages…',
+    rule: 'La roue décide de tout : celui qu’elle désigne fait le défi (ou boit).',
+    players: { min: 2, max: 20 },
+    minToStart: 2,
+    available: true,
+  },
 ];
 
 export const DEFAULT_GAME = 'qui-de-nous';

@@ -4,6 +4,7 @@ import * as imposteur from './imposteur.jsx';
 import * as patate from './patate.jsx';
 import * as quiDeNous from './quiDeNous.jsx';
 import * as quiMeConnait from './quiMeConnait.jsx';
+import * as roue from './roue.jsx';
 import * as tuPreferes from './tuPreferes.jsx';
 
 // Écrans de chaque jeu jouable : id, waitingText, HostQuestion, HostReveal (suspense), HostResults,
@@ -17,6 +18,7 @@ const VIEWS = {
   [quiMeConnait.id]: quiMeConnait,
   [imposteur.id]: imposteur,
   [patate.id]: patate,
+  [roue.id]: roue,
 };
 
 export const GAMES = GAME_CATALOG.map((game) => ({
