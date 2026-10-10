@@ -10,14 +10,16 @@
 
 Après **Créer une partie**, l'hôte choisit le jeu dans une grille de cartes. On peut changer de jeu entre deux parties sans que personne n'ait à rescanner le QR code.
 
-| | **Qui de nous ?** | **Tu préfères ?** | **Devine qui a écrit ça** | **Je n'ai jamais** |
-|---|---|---|---|---|
-| **Statut** | Disponible | Disponible | Bientôt | Bientôt |
-| **Le principe** | « Qui est le plus susceptible de ghoster quelqu'un après un super rencard ? » Tout le monde vote pour un joueur. | « Que tes potes lisent tous tes DM **ou** qu'ils fouillent toute ta galerie photo ? » Chacun choisit A ou B. | Chacun répond en secret, les autres devinent l'auteur. | Les secrets sortent, les verres se vident. |
-| **Qui boit** | Le plus voté, et ceux qui n'ont pas voté pour lui | La minorité | Ceux qui se trompent | Ceux qui l'ont déjà fait |
-| **La révélation** | Roulette des photos + 3-2-1, puis le plus voté en grand et un camembert des votes | Une jauge à suspense oscille entre A et B, puis les joueurs atterrissent dans leur camp | | |
-| **Joueurs conseillés** | 3 à 12 | 4 à 20 | 4 à 10 | 3 à 15 |
-| **Contenu** | 150 questions | 150 dilemmes | | |
+| Jeu | Le principe | Qui boit | Joueurs |
+|---|---|---|---|
+| **Qui de nous ?** | « Qui est le plus susceptible de… ? » Tout le monde vote pour un joueur. | Le plus voté, et ceux qui n'ont pas voté pour lui | 3 à 12 |
+| **Tu préfères ?** | Deux options impossibles, chacun choisit A ou B. | La minorité | 4 à 20 |
+| **Estimation** | Une question, un nombre : qui tape le plus près ? | Le plus éloigné (+ quelqu'un désigné par le plus proche) | 2 à 20 |
+| **Qui me connaît le mieux ?** | Un joueur répond en secret sur lui-même, les autres devinent. | Ceux qui se trompent | 3 à 20 |
+| **L'Imposteur** | Tout le monde a le même mot sauf un. Un indice chacun, puis on vote. | L'imposteur s'il est démasqué, sinon tout le groupe | 4 à 20 |
+| **Patate chaude** | Une bombe passe de téléphone en téléphone, mèche cachée. | Celui qui l'a quand elle explose | 3 à 20 |
+| **La Roue** | Une roue choisit un joueur, une deuxième son défi. | Selon le défi : gorgées, duo, vote, gage… | 2 à 20 |
+| **Réflexes** | La TV dit des mots qui ressemblent à « feu ». On tape seulement sur « FEU ». | Le plus lent, les faux départs, ceux qui ne tapent pas | 2 à 20 |
 
 Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur de gorgées et le podium de fin.
 
@@ -273,12 +275,50 @@ Les boutons **Révéler maintenant** et **Question suivante** restent toujours d
 - **Égalité parfaite** : tout le monde est sauvé. Pour que tout le monde boive à la place, remplace `onTie: 'nobody'` par `onTie: 'everyone'` dans [`server/games/tuPreferes.js`](server/games/tuPreferes.js).
 - **Pas voté à temps** : le retardataire compte comme minoritaire et boit, même en cas d'égalité.
 
+### Estimation
+
+- Chacun tape un nombre. Le **plus éloigné boit**, et le **plus proche désigne quelqu'un** qui trinque avec lui (20 s pour choisir).
+
+### Qui me connaît le mieux ?
+
+- Un joueur (la cible) répond en secret sur lui-même, les autres devinent sa réponse parmi 4 choix.
+- **Ceux qui se trompent boivent.** Personne n'a trouvé, ou tout le monde : la cible boit.
+
+### L'Imposteur
+
+- Chaque téléphone affiche un mot secret (touche pour le masquer). L'imposteur a un mot **proche** et ne sait pas que c'est lui.
+- La TV annonce l'ordre de parole : **2 tours d'indices**, ~10 s par joueur, bouton « Suivant » (automatique en mode auto).
+- **Vote** : l'imposteur est démasqué s'il est **seul** en tête (égalité = pas démasqué).
+- **Démasqué** : il boit, avec ceux qui ne l'ont pas désigné. **Dernière chance** : s'il trouve le mot des autres parmi 4 propositions, il est épargné et ceux qui l'ont démasqué boivent à sa place.
+- **Pas démasqué** : tout le groupe boit, sauf l'imposteur.
+
+### Patate chaude
+
+- La bombe explose au bout de **15 à 45 s** (personne ne sait quand). Le porteur tape un nom sur son téléphone pour la passer.
+- **Anti-renvoi** : impossible de la rendre à ceux qui l'ont passée lors des 2 dernières passes (assoupli à 3 joueurs pour que la bombe ne soit jamais coincée).
+- **Anti-blocage** : un porteur qui garde la bombe plus de 6 s (ou qui se déconnecte) la voit partir au hasard.
+- **Explosion** : le porteur boit **2 gorgées**. Le nombre de bombes explosées par joueur s'affiche à la fin.
+
+### La Roue
+
+- L'hôte lance la roue (toute seule en mode auto) : une première roue désigne un joueur, une deuxième tire son défi.
+- Types de défis : boire, **duo** (il choisit qui boit avec lui), **distribuer** (une gorgée par toucher), **tout le monde boit**, **échange de places**, **« tous ceux qui ont déjà… »** (chacun avoue sur son téléphone), **vote du groupe**, **gage** (fait, ou on boit).
+- Sans réponse au bout de 30 s : le duo boit seul, les gorgées non distribuées reviennent au distributeur, le gage se boit.
+
+### Réflexes (« Feu ! »)
+
+- La TV dit des mots à voix haute (synthèse vocale du navigateur, voix française) et les affiche en très gros, avec 0,8 à 2,5 s entre deux mots. Un seul « FEU » par manche, jamais en premier, pas toujours en dernier.
+- Au lancement, l'hôte clique sur **Activer le son** (les navigateurs l'exigent) et règle le volume. Sans voix française, les mots sont seulement affichés.
+- Boivent : le **dernier** à taper après « FEU », ceux qui tapent sur un **mauvais mot** (ou moins de 120 ms après « FEU » : c'est de l'anticipation) et ceux qui **ne tapent pas**. Un joueur déconnecté n'est pas puni.
+- Les temps sont mesurés **à la réception par le serveur** : on compare les joueurs entre eux, la latence de la TV est la même pour tous.
+
 ### Compteur de gorgées
 
 Chaque fois que le jeu dit « tu bois », ça compte une gorgée :
 
 - *Qui de nous ?* : 1 gorgée pour le plus voté (chaque ex æquo en cas d’égalité), 1 pour chaque joueur qui n’a pas voté pour lui. Le plus voté qui n’a pas voté pour lui-même… en prend 2.
 - *Tu préfères ?* : 1 gorgée par joueur de la minorité (et par non-votant).
+- Les autres jeux : 1 gorgée par perdant, sauf *Patate chaude* (2 pour celui qui a la bombe) et *La Roue* (le nombre indiqué par le défi).
 
 Le total s’affiche sous chaque joueur sur la TV pendant les questions, avec un « +1 · 4 au total » sur l’écran des résultats. Les gorgées ne sont ajoutées qu’à la fin du suspense, pour ne rien dévoiler. Un joueur retiré par l’hôte sort du classement, et le compteur repart à zéro quand on rejoue.
 
@@ -311,7 +351,7 @@ Les questions sont écrites pour des soirées entre potes de 18-25 ans. Chacune 
 | `epice` | ~40 % | Gênant, drague, ex, secrets avouables |
 | `hardcore` | ~20 % | Très gênant ou osé, toujours sur le ton de la blague |
 
-Pour l'instant, toutes les questions sont mélangées quel que soit le niveau. Le champ servira plus tard à choisir l'intensité de la soirée.
+Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélangés quel que soit le niveau. Le champ servira plus tard à choisir l'intensité de la soirée.
 
 **Qui de nous ?** (150 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
 
@@ -330,6 +370,18 @@ Pour l'instant, toutes les questions sont mélangées quel que soit le niveau. L
   { "niveau": "epice", "a": "Que tes potes lisent tous tes DM", "b": "Que tes potes fouillent toute ta galerie photo" }
 ]
 ```
+
+Les contenus des autres jeux sont dans [`server/content/`](server/content/) :
+
+| Fichier | Jeu | Format d'une entrée |
+|---|---|---|
+| `questions-estimation.json` | Estimation | `{ "question": "…", "reponse": 2007, "unite": "année" }` |
+| `questions-connait.json` | Qui me connaît le mieux ? | `{ "niveau": "chill", "question": "… {nom} … ?", "choix": ["A", "B", "C", "D"] }` (`{nom}` = la cible) |
+| `words-imposteur.json` | L'Imposteur | `{ "mot": "Netflix", "proche": "Prime Video", "categorie": "Streaming" }` : deux mots **proches mais différents** |
+| `defis-roue.json` | La Roue | `{ "texte": "Bois 2 gorgées.", "type": "boire", "n": 2, "niveau": "chill" }`, avec `type` parmi `boire`, `groupe`, `echange` (`n: 0`), `duo`, `distribuer`, `tous`, `vote`, `gage`, et `n` de 1 à 5 |
+| `words-feu.json` | Réflexes | `{ "pieges": ["FEUX", "BLEU", …], "neutres": ["PIZZA", …] }` en majuscules, sans « FEU » lui-même |
+
+Pour un défi de la roue adressé au joueur désigné (`boire`, `duo`, `distribuer`, `gage`), écris à la 2e personne : la TV affiche « Ana : bois 2 gorgées. ». Pour les autres, écris pour tout le groupe. Le nombre de gorgées dans le texte doit correspondre à `n`.
 
 **Conseils** : une phrase qui se lit en 3 secondes sur la TV (120 caractères maximum, 75 par option de dilemme), une question qui désigne vraiment quelqu'un ou qui divise la salle, et deux options aussi tentantes ou aussi pénibles l'une que l'autre. Pas de moquerie sur l'origine, la religion, l'orientation, le genre, le physique ou la santé, pas de contenu sexuel explicite, et rien qui pousse à se mettre en danger.
 
@@ -367,13 +419,16 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │   └── src/
 │       ├── pages/          Home (accueil), Host (écran TV : grille des jeux, lobby, partie), Player (téléphone)
 │       ├── games/          Un fichier par jeu : vues TV, suspense, vote, verdict
-│       │   ├── quiDeNous.jsx
-│       │   ├── tuPreferes.jsx   (dont la jauge de suspense en requestAnimationFrame)
+│       │   ├── quiDeNous.jsx, tuPreferes.jsx, estimation.jsx, quiMeConnait.jsx, imposteur.jsx
+│       │   ├── patate.jsx       Bombe SVG animée en requestAnimationFrame
+│       │   ├── roue.jsx         Roues SVG (rotation calée sur l'horloge du serveur, cliquet)
+│       │   ├── feu.jsx          Mots animés, flammes, gros bouton FEU
 │       │   └── index.js         Registre client : catalogue + écrans
 │       ├── icons.jsx       Logo Gorgée et illustrations des jeux (SVG maison)
 │       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, minuteurs
 │       ├── sips.jsx        Compteur de gorgées : classement, podium
 │       ├── sound.js        Sons synthétisés (WebAudio, aucun fichier audio)
+│       ├── speech.js       Voix de la TV pour Réflexes (Web Speech API)
 │       ├── lib.js          Socket.IO, navigation, stockage local
 │       └── photo.js        Recadrage et compression des photos
 ├── server/
@@ -381,8 +436,10 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │   ├── sockets.js          Événements temps réel (hôte, joueurs)
 │   ├── gameStore.js        État des parties : phases, choix du jeu, minuteurs, mode auto, pause, gorgées
 │   ├── games/              Registre serveur : un fichier par jeu (questions, votes, résultats, gorgées, durée du suspense)
-│   ├── rules.js            Règles des jeux (fonctions pures, testées)
+│   ├── rules.js, rules/    Règles des jeux (fonctions pures, testées)
+│   ├── content/            Contenus des jeux (questions, mots, défis) en JSON
 │   ├── *.test.js           Tests : règles, gorgées, questions, registre des jeux, déroulement (horloge simulée)
+│   ├── testClock.js        Horloge simulée et partie de test pour les tests du moteur
 │   ├── questions.json            Questions « Qui de nous ? »
 │   └── questionsPreferes.json    Dilemmes « Tu préfères ? »
 └── scripts/share.js        `npm run share` : serveur + tunnel Cloudflare
@@ -393,8 +450,8 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 ### Ajouter un jeu
 
 1. **Catalogue** : ajoute une entrée dans [`shared/games.js`](shared/games.js) (`id`, `name`, `icon`, `tagline`, `rule`, `players`, `available`). Avec `available: false`, la carte apparaît « Bientôt » dans la grille sans être jouable.
-2. **Règles** : écris-les en fonctions pures dans `server/rules.js` (avec leurs tests), puis crée `server/games/monJeu.js` sur le modèle des deux existants : `questions`, `isValidVote`, `computeResults`, `sipsOf`, `revealMs`. Déclare-le dans `server/games/index.js`.
-3. **Écrans** : crée `client/src/games/monJeu.jsx` avec les mêmes exports que les jeux existants (`HostQuestion`, `HostReveal`, `HostResults`, `PlayerVote`, `VoteSummary`, `verdict`), déclare-le dans `client/src/games/index.js`, et si besoin ajoute son illustration dans `client/src/icons.jsx`.
+2. **Règles** : écris-les en fonctions pures dans `server/rules/monJeu.js` (avec leurs tests), puis crée `server/games/monJeu.js` sur le modèle des jeux existants : `questions` (ou `drawQuestion`), `isValidVote`, `computeResults`, `sipsOf`, `revealMs`. Les jeux qui sortent du schéma « tout le monde vote » ont des crochets optionnels (`startRound`, `acceptsVotes`, `handleAction`, `hostAction`, `afterReveal`, `onPresenceChange`, `publicRound`… voir l'en-tête de `server/gameStore.js`). Les minuteurs propres au jeu s'appellent `g:…` et sont annulés automatiquement à la fin de la manche. Déclare le jeu dans `server/games/index.js`.
+3. **Écrans** : crée `client/src/games/monJeu.jsx` avec les mêmes exports que les jeux existants (`HostQuestion`, `HostReveal`, `HostResults`, `PlayerVote`, `VoteSummary`, `verdict`, ou `hostLayout`/`playerLayout = 'custom'` avec `PlayerRound` ; optionnels : `PlayerReveal`, `PlayerResults`, `EndStats`, `nextLabel`), déclare-le dans `client/src/games/index.js`, et si besoin ajoute son illustration dans `client/src/icons.jsx`.
 4. Passe `available` à `true`. `npm test` vérifie que chaque jeu disponible a bien ses règles.
 
 Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur de gorgées et le podium sont fournis.
@@ -402,7 +459,7 @@ Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur d
 
 **Déroulement d'une partie** : `picking (grille des jeux) → lobby → question → revealing → results → question… → ended`, puis retour à `lobby` (Rejouer) ou à `picking` (Changer de jeu), en gardant les joueurs. Le champ `mode` de la partie contient l'`id` du jeu. Le serveur porte tous les minuteurs et envoie aux écrans des horodatages (`reveal.startedAt/endsAt`, `voteTimer`, `nextTimer`) : la TV et les téléphones restent synchronisés même après un rechargement. Pendant `revealing`, seule la TV reçoit les résultats (pour animer le suspense), et les téléphones les reçoivent au passage à `results`. Les actions `reveal` et `next` portent le numéro de la question, ce qui permet d'ignorer les doublons.
 
-**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, sélecteur d'intensité (chill / épicé / hardcore), réveiller un joueur qui traîne.
+**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, sélecteur d'intensité (chill / épicé / hardcore) pour les questions et les défis de la roue, réveiller un joueur qui traîne.
 
 ## Licence
 
