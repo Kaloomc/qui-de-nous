@@ -13,9 +13,9 @@ function checkLevels(list) {
   assert.ok(share('hardcore') >= 0.12 && share('hardcore') <= 0.28, `hardcore ${share('hardcore')}`);
 }
 
-test('questions « Qui de nous ? » : ~150, bien formées, uniques, niveaux répartis', () => {
+test('questions « Qui de nous ? » : au moins 400, bien formées, uniques, niveaux répartis', () => {
   const qs = GAMES['qui-de-nous'].questions;
-  assert.ok(qs.length >= 140 && qs.length <= 160, `${qs.length} questions`);
+  assert.ok(qs.length >= 400, `${qs.length} questions`);
   for (const q of qs) {
     assert.match(q.text, /^Qui est le plus susceptible d(e |')/, q.text);
     assert.ok(q.text.endsWith(' ?'), q.text);
