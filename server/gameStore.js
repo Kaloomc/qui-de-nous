@@ -1,6 +1,6 @@
 import { randomBytes, randomInt } from 'node:crypto';
 import { GAMES, isGame, isPlayable } from './games/index.js';
-import { shuffle } from './rules.js';
+import { QuestionHistory } from './questionHistory.js';
 
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 export const CODE_LENGTH = 4;
@@ -79,6 +79,8 @@ export class Game {
     this.settings = { ...DEFAULT_SETTINGS };
     this.timers = {};
     this.pausedTimers = {};
+    // Questions déjà posées à ce groupe : survit à reset(), donc à « Rejouer » et « Changer de jeu ».
+    this.history = new QuestionHistory();
     this.reset();
     this.touch();
   }
@@ -87,7 +89,6 @@ export class Game {
     this.clearTimers();
     this.phase = this.mode ? 'lobby' : 'picking';
     this.paused = false;
-    this.questionPool = [];
     this.round = 0;
     this.question = null;
     this.votes = new Map();
@@ -321,9 +322,7 @@ export class Game {
 
   drawQuestion() {
     if (this.rules.drawQuestion) return this.rules.drawQuestion(this);
-    if (!this.rules.questions?.length) return null;
-    if (this.questionPool.length === 0) this.questionPool = shuffle(this.rules.questions);
-    return this.questionPool.pop();
+    return this.history.draw(this.mode, this.rules.questions);
   }
 
   vote(playerId, choice) {

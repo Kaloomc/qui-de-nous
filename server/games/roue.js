@@ -29,7 +29,8 @@ export default {
   // Le tirage se fait au moment de lancer la roue : pendant le suspense, la TV anime vers le résultat.
   computeResults(playerIds, _votes, game) {
     const ids = connectedIds(game);
-    const results = drawRoue(ids.length ? ids : playerIds, DEFIS, Math.random, game.lastRoueTarget);
+    const defi = game.history.draw(game.mode, DEFIS);
+    const results = drawRoue(ids.length ? ids : playerIds, DEFIS, Math.random, game.lastRoueTarget, defi);
     game.lastRoueTarget = results.targetId;
     return results;
   },

@@ -92,6 +92,15 @@ export const CONTENT = [
   },
 ];
 
+/** Quasi-doublons vérifiés à la main et conservés : ce sont bien deux questions différentes. */
+export const ALLOWED_NEAR = [
+  ['Quelle est la technique de drague {de_nom} ?', 'Quelle est la technique de drague {de_nom} sur les applis ?'],
+  [
+    'En quelle année la France a-t-elle gagné sa première Coupe du monde de football ?',
+    'En quelle année la France a-t-elle gagné sa deuxième Coupe du monde de football ?',
+  ],
+].map((pair) => pair.map(normalize).sort().join(' | '));
+
 /** Doublons exacts (après normalisation) et quasi-doublons d'une liste, selon la spécification du contenu. */
 export function findDuplicates(spec, list) {
   const exact = [];
@@ -107,7 +116,8 @@ export function findDuplicates(spec, list) {
     for (let i = 0; i < sets.length; i++) {
       if (sets[i].size < 3) continue;
       for (let j = i + 1; j < sets.length; j++) {
-        if (sets[j].size >= 3 && jaccard(sets[i], sets[j]) >= NEAR_THRESHOLD) near.push([i, j]);
+        if (sets[j].size < 3 || jaccard(sets[i], sets[j]) < NEAR_THRESHOLD) continue;
+        if (!ALLOWED_NEAR.includes([spec.near(list[i]), spec.near(list[j])].map(normalize).sort().join(' | '))) near.push([i, j]);
       }
     }
   }

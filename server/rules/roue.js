@@ -32,11 +32,12 @@ const pick = (list, rng) => list[Math.floor(rng() * list.length)];
 /**
  * Tire le joueur (jamais deux fois de suite le même s'il y a le choix) et le défi,
  * plus les cases affichées sur la deuxième roue (le défi tiré + des leurres variés).
+ * `chosenDefi` : défi déjà tiré par l'appelant (anti-répétition) ; sinon, tiré ici au hasard.
  */
-export function drawRoue(playerIds, defis, rng = Math.random, lastTargetId = null) {
+export function drawRoue(playerIds, defis, rng = Math.random, lastTargetId = null, chosenDefi = null) {
   const pool = playerIds.length > 1 ? playerIds.filter((id) => id !== lastTargetId) : playerIds;
   const targetId = pick(pool, rng);
-  const defi = pick(defis, rng);
+  const defi = chosenDefi ?? pick(defis, rng);
   const decoys = [];
   const others = defis.filter((d) => d !== defi);
   // Des leurres de types différents d'abord, pour une roue bien variée.
