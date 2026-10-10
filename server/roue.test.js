@@ -14,8 +14,8 @@ const act = (results, pid, action) => {
   return out.results;
 };
 
-test('défis : 60 à 80, bien formés, uniques, les 3 niveaux et tous les types présents', () => {
-  assert.ok(DEFIS.length >= 60 && DEFIS.length <= 80, `${DEFIS.length} défis`);
+test('défis : au moins 150, bien formés, uniques, les 3 niveaux et tous les types présents', () => {
+  assert.ok(DEFIS.length >= 150, `${DEFIS.length} défis`);
   for (const d of DEFIS) assert.ok(isValidDefi(d), JSON.stringify(d));
   assert.equal(new Set(DEFIS.map((d) => d.texte)).size, DEFIS.length);
   for (const level of LEVELS) assert.ok(DEFIS.some((d) => d.niveau === level), level);
