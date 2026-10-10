@@ -64,6 +64,65 @@ const ICONS = {
       <path d="M56 84 l4 -14 10 10 z" fill="#14102a" />
     </>
   ),
+  ruler: (
+    <>
+      <rect x="10" y="62" width="100" height="26" rx="8" fill="#ffc93c" />
+      {[22, 34, 46, 58, 70, 82, 94].map((x, i) => (
+        <rect key={x} x={x - 1.5} y="62" width="3" height={i % 2 ? 9 : 15} rx="1.5" fill="#14102a" />
+      ))}
+      <path d="M78 22 a12 12 0 0 1 12 12 c0 10 -12 22 -12 22 s-12 -12 -12 -22 a12 12 0 0 1 12 -12 z" fill="#ff4f8b" />
+      <circle cx="78" cy="34" r="5" fill="#fff" />
+      <text x="36" y="48" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="34" fill="#3ee0c5">?</text>
+    </>
+  ),
+  mirror: (
+    <>
+      <circle cx="60" cy="50" r="34" fill="#6c8bff" />
+      <circle cx="60" cy="50" r="26" fill="#14102a" />
+      <path d="M48 46 a8 8 0 0 1 16 0 c0 7 -8 8 -8 14 M56 68 v1" stroke="#ffc93c" strokeWidth="6" fill="none" strokeLinecap="round" />
+      <path d="M44 34 l8 -6" stroke="#fff" strokeWidth="4" strokeLinecap="round" opacity="0.7" />
+      <rect x="54" y="84" width="12" height="26" rx="6" fill="#6c8bff" />
+      <path d="M86 92 c0 -8 12 -8 12 0 c0 8 -12 16 -12 16 s-12 -8 -12 -16 c0 -8 12 -8 12 0" fill="#ff4f8b" transform="translate(4 -4)" />
+    </>
+  ),
+  mask: (
+    <>
+      <path d="M14 40 q46 -22 92 0 q2 34 -26 44 q-14 4 -20 -10 q-6 14 -20 10 q-28 -10 -26 -44 z" fill="#b46cff" />
+      <ellipse cx="40" cy="52" rx="11" ry="8" fill="#14102a" />
+      <ellipse cx="80" cy="52" rx="11" ry="8" fill="#14102a" />
+      <path d="M60 22 v-8 M44 26 l-4 -7 M76 26 l4 -7" stroke="#ffc93c" strokeWidth="5" strokeLinecap="round" />
+      <text x="60" y="112" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="30" fill="#3ee0c5">?</text>
+    </>
+  ),
+  bomb: (
+    <>
+      <circle cx="54" cy="70" r="34" fill="#2a2254" stroke="#fff8f0" strokeWidth="5" />
+      <rect x="62" y="30" width="20" height="14" rx="4" transform="rotate(35 72 37)" fill="#fff8f0" />
+      <path d="M78 30 q8 -14 20 -10" stroke="#ffc93c" strokeWidth="5" fill="none" strokeLinecap="round" />
+      <circle cx="100" cy="18" r="8" fill="#ff4f8b" className="icon-spark" />
+      <circle cx="100" cy="18" r="4" fill="#ffc93c" />
+      <path d="M38 60 a18 18 0 0 1 12 -12" stroke="#fff" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.6" />
+    </>
+  ),
+  wheel: (
+    <>
+      {['#ff4f8b', '#ffc93c', '#3ee0c5', '#6c8bff', '#ff8a3d', '#b46cff'].map((c, i) => {
+        const a0 = (i * Math.PI) / 3;
+        const a1 = ((i + 1) * Math.PI) / 3;
+        const p = (a) => `${60 + 46 * Math.cos(a)},${62 + 46 * Math.sin(a)}`;
+        return <path key={c} d={`M60 62 L${p(a0)} A46 46 0 0 1 ${p(a1)} Z`} fill={c} />;
+      })}
+      <circle cx="60" cy="62" r="10" fill="#fff8f0" />
+      <path d="M60 4 l10 16 h-20 z" fill="#fff8f0" />
+    </>
+  ),
+  flame: (
+    <>
+      <path d="M60 10 c6 18 30 28 30 58 a30 30 0 0 1 -60 0 c0 -16 10 -24 14 -34 c4 10 6 14 12 16 c-2 -16 -2 -28 4 -40 z" fill="#ff4f8b" />
+      <path d="M60 52 c4 10 16 16 16 30 a16 16 0 0 1 -32 0 c0 -10 8 -14 10 -22 c2 6 4 8 6 8 z" fill="#ffc93c" />
+      <text x="60" y="114" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="20" fill="#fff8f0">FEU !</text>
+    </>
+  ),
   shot: (
     <>
       <path d="M30 24 h60 l-9 78 a8 8 0 0 1 -8 7 h-26 a8 8 0 0 1 -8 -7 z" fill="none" stroke="#fff8f0" strokeWidth="6" strokeLinejoin="round" />

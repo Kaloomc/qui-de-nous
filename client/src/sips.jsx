@@ -18,6 +18,31 @@ export function ranking(state) {
   return rows.map((row) => ({ ...row, rank: 1 + rows.filter((r) => r.sips > row.sips).length }));
 }
 
+/** Classement de fin propre à un jeu (bombes explosées, bonnes réponses…), affiché sous le podium. */
+export function StatBoard({ state, title, valueOf, format, limit = 5 }) {
+  const rows = state.players
+    .map((p) => ({ player: p, value: valueOf(state.stats?.[p.id] ?? {}) }))
+    .filter((r) => r.value != null && r.value > 0)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, limit);
+  if (rows.length === 0) return null;
+  return (
+    <div className="stat-board fade-up" style={{ animationDelay: '2s' }}>
+      <h3>{title}</h3>
+      <ol className="ranking">
+        {rows.map((r, i) => (
+          <li key={r.player.id}>
+            <span className="ranking-rank">{i + 1}</span>
+            <Avatar player={r.player} size={36} />
+            <span className="ranking-name">{r.player.name}</span>
+            <span className="ranking-sips">{format(r.value)}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 const TITLES = { 1: 'Le plus assoiffé', 2: 'Dauphin', 3: 'Sur le podium' };
 
 export function Podium({ state }) {

@@ -26,8 +26,6 @@ export const SETTING_CHOICES = {
 
 export const DEFAULT_SETTINGS = { auto: false, resultsMs: 10000, voteMs: 0, maxRounds: 0 };
 
-const PAUSABLE = ['vote', 'next'];
-
 const realClock = {
   now: () => Date.now(),
   setTimeout: (fn, ms) => setTimeout(fn, ms),
@@ -56,10 +54,18 @@ export function sanitizeSettings(patch) {
 }
 
 /**
- * Une partie. Phases : picking (choix du jeu) → lobby → question → revealing → results → question… → ended.
+ * Une partie. Phases : picking (choix du jeu) → lobby → question (manche en cours) → revealing → results → … → ended.
  * `mode` est l'id du jeu en cours (voir shared/games.js) ; null tant que l'hôte n'a pas choisi.
  * Le serveur est la seule source de vérité : les minuteurs (vote, révélation,
  * question suivante) vivent ici, et `onChange` prévient les écrans quand l'un d'eux fait avancer la partie.
+ *
+ * Chaque jeu (server/games/*.js) peut ajouter des crochets optionnels pour sortir du schéma « tout le monde vote » :
+ *   drawQuestion(game), startRound(game), acceptsVotes(game), isValidVote(game, choice, playerId),
+ *   expectedVoters(game, players), handleAction(game, playerId, payload), hostAction(game, payload),
+ *   computeResults(playerIds, votes, game), afterReveal(game) → true si le résultat attend une action,
+ *   resolvePending(game), sipsOf(results), updateStats(stats, results, game), onPresenceChange(game),
+ *   publicRound(game, viewer).
+ * `game.roundData` est l'état privé de la manche, réservé au jeu.
  */
 export class Game {
   constructor(code, mode = null, { clock = realClock, onChange = () => {} } = {}) {
@@ -90,6 +96,9 @@ export class Game {
     this.waitingForPlayers = false;
     this.sips = new Map();
     this.roundSips = null;
+    this.roundData = {};
+    this.pending = false;
+    this.stats = new Map();
   }
 
   /** Ajoute les gorgées du tour au total, une seule fois, à la fin du suspense (jamais avant : pas de spoiler). */
@@ -97,10 +106,29 @@ export class Game {
     if (this.roundSips || !this.results) return;
     this.roundSips = {};
     for (const [id, n] of Object.entries(this.rules.sipsOf(this.results))) {
-      if (!this.players.has(id)) continue;
+      if (!this.players.has(id) || !(n > 0)) continue;
       this.roundSips[id] = n;
       this.sips.set(id, (this.sips.get(id) ?? 0) + n);
     }
+    if (this.rules.updateStats) {
+      const stats = Object.fromEntries([...this.players.keys()].map((id) => [id, this.stats.get(id) ?? {}]));
+      this.rules.updateStats(stats, this.results, this);
+      for (const [id, value] of Object.entries(stats)) if (this.players.has(id)) this.stats.set(id, value);
+    }
+  }
+
+  /** Résultat définitif : gorgées et statistiques comptées, le mode auto peut enchaîner. */
+  finalize() {
+    if (this.phase !== 'results' && this.phase !== 'revealing') return;
+    if (this.pending) this.rules.resolvePending?.(this);
+    this.pending = false;
+    this.cancel('pending');
+    this.applySips();
+    this.evaluate();
+  }
+
+  connectedPlayers() {
+    return [...this.players.values()].filter((p) => p.sockets.size > 0);
   }
 
   get rules() {
@@ -124,17 +152,18 @@ export class Game {
       fn();
       this.onChange(this);
     }, ms);
-    this.timers[name] = { id, endsAt: this.clock.now() + ms, total, fn };
+    this.timers[name] = { id, endsAt: this.clock.now() + ms, total, fn, pausable: false };
   }
 
   /** Comme schedule, mais gelé tant que la partie est en pause. */
-  schedulePausable(name, ms, fn) {
+  schedulePausable(name, ms, fn, total = ms) {
     if (this.paused) {
       this.cancel(name);
-      this.pausedTimers[name] = { remaining: ms, total: ms, fn };
+      this.pausedTimers[name] = { remaining: ms, total, fn };
     } else {
       delete this.pausedTimers[name];
-      this.schedule(name, ms, fn);
+      this.schedule(name, ms, fn, total);
+      this.timers[name].pausable = true;
     }
   }
 
@@ -188,12 +217,14 @@ export class Game {
   connectPlayer(player, socketId) {
     player.sockets.add(socketId);
     player.disconnectedAt = null;
+    this.rules?.onPresenceChange?.(this);
     this.evaluate();
   }
 
   disconnectPlayer(player, socketId) {
     player.sockets.delete(socketId);
     if (player.sockets.size === 0) player.disconnectedAt = this.clock.now();
+    this.rules?.onPresenceChange?.(this);
     this.evaluate();
   }
 
@@ -202,6 +233,8 @@ export class Game {
     this.sips.delete(playerId);
     this.votes.delete(playerId);
     for (const [voter, target] of this.votes) if (target === playerId) this.votes.delete(voter);
+    this.stats.delete(playerId);
+    this.rules?.onPresenceChange?.(this);
     this.evaluate();
   }
 
@@ -219,9 +252,37 @@ export class Game {
     );
   }
 
+  get votingOpen() {
+    return this.phase === 'question' && (this.rules.acceptsVotes ? this.rules.acceptsVotes(this) : true);
+  }
+
   allExpectedVoted() {
-    if (this.connectedCount() < 2) return false;
-    return this.expectedVoters().every((p) => this.votes.has(p.id));
+    if (this.connectedCount() < 2 || !this.votingOpen) return false;
+    const expected = this.rules.expectedVoters ? this.rules.expectedVoters(this, this.expectedVoters()) : this.expectedVoters();
+    return expected.length > 0 && expected.every((p) => this.votes.has(p.id));
+  }
+
+  /** Ouvre le vote plus tard dans la manche (jeux qui ont d'autres étapes avant, comme l'Imposteur). */
+  openVoting() {
+    if (this.settings.voteMs > 0) this.schedulePausable('vote', this.settings.voteMs, () => this.onVoteTimeout());
+    this.evaluate();
+  }
+
+  /** Action d'un joueur propre au jeu (passer la bombe, taper, deviner…). */
+  action(playerId, payload) {
+    if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
+    if (!this.rules?.handleAction) return 'Action inconnue.';
+    const error = this.rules.handleAction(this, playerId, payload ?? {});
+    if (!error) this.evaluate();
+    return error;
+  }
+
+  /** Action de l'hôte propre au jeu (« Suivant », « Lancer la roue »…). */
+  gameHostAction(payload) {
+    if (!this.rules?.hostAction) return 'Action inconnue.';
+    const error = this.rules.hostAction(this, payload ?? {});
+    if (!error) this.evaluate();
+    return error;
   }
 
   // ---------- Déroulement ----------
@@ -229,7 +290,8 @@ export class Game {
   start() {
     if (this.phase === 'picking') return 'Choisis d’abord un jeu.';
     if (this.phase !== 'lobby') return 'La partie a déjà commencé.';
-    if (this.players.size < 2) return 'Il faut au moins 2 joueurs.';
+    const min = this.rules.minToStart ?? 2;
+    if (this.players.size < min) return `Il faut au moins ${min} joueurs.`;
     return this.nextQuestion();
   }
 
@@ -238,25 +300,36 @@ export class Game {
     if (expectedRound != null && expectedRound !== this.round) return null;
     if (this.phase === 'revealing') return 'Patiente, la révélation est en cours.';
     if (this.phase !== 'lobby' && this.phase !== 'results') return 'Action impossible maintenant.';
-    this.cancel('next');
-    if (this.questionPool.length === 0) this.questionPool = shuffle(this.rules.questions);
-    this.question = this.questionPool.pop();
+    if (this.phase === 'results' && this.pending) this.finalize();
+    for (const name of Object.keys(this.timers)) if (name.startsWith('g:') || name === 'next') this.cancel(name);
+    for (const name of Object.keys(this.pausedTimers)) if (name.startsWith('g:')) delete this.pausedTimers[name];
+    this.question = this.drawQuestion();
     this.round += 1;
     this.votes = new Map();
     this.results = null;
     this.reveal_ = null;
     this.roundSips = null;
+    this.roundData = {};
+    this.pending = false;
     this.waitingForPlayers = false;
     this.phase = 'question';
-    if (this.settings.voteMs > 0) this.schedulePausable('vote', this.settings.voteMs, () => this.onVoteTimeout());
+    this.rules.startRound?.(this);
+    if (this.votingOpen && this.settings.voteMs > 0) this.schedulePausable('vote', this.settings.voteMs, () => this.onVoteTimeout());
     this.evaluate();
     return null;
   }
 
+  drawQuestion() {
+    if (this.rules.drawQuestion) return this.rules.drawQuestion(this);
+    if (!this.rules.questions?.length) return null;
+    if (this.questionPool.length === 0) this.questionPool = shuffle(this.rules.questions);
+    return this.questionPool.pop();
+  }
+
   vote(playerId, choice) {
-    if (this.phase !== 'question') return 'Le vote est fermé.';
+    if (!this.votingOpen) return 'Le vote est fermé.';
     if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
-    if (!this.rules.isValidVote(this, choice)) return 'Choix invalide.';
+    if (!this.rules.isValidVote(this, choice, playerId)) return 'Choix invalide.';
     this.votes.set(playerId, choice);
     this.evaluate();
     return null;
@@ -269,8 +342,9 @@ export class Game {
     this.cancel('vote');
     this.cancel('autoReveal');
     this.cancel('grace');
+    for (const name of Object.keys(this.timers)) if (name.startsWith('g:')) this.cancel(name);
     this.waitingForPlayers = false;
-    this.results = this.rules.computeResults([...this.players.keys()], this.votes);
+    this.results = this.rules.computeResults([...this.players.keys()], this.votes, this);
     const now = this.clock.now();
     this.reveal_ = { startedAt: now, endsAt: now + this.rules.revealMs, durationMs: this.rules.revealMs };
     this.phase = 'revealing';
@@ -280,9 +354,14 @@ export class Game {
 
   finishReveal() {
     if (this.phase !== 'revealing') return;
-    this.applySips();
     this.phase = 'results';
-    this.evaluate();
+    // Certains jeux attendent encore une action (dernière chance, désigner quelqu'un…) avant le verdict définitif.
+    if (this.rules.afterReveal?.(this)) {
+      this.pending = true;
+      this.evaluate();
+      return;
+    }
+    this.finalize();
   }
 
   onVoteTimeout() {
@@ -340,6 +419,7 @@ export class Game {
     }
 
     if (this.phase === 'results') {
+      if (this.pending) return;
       if (!this.settings.auto) {
         this.cancel('next');
         this.waitingForPlayers = false;
@@ -372,9 +452,8 @@ export class Game {
     if (this.paused) return null;
     this.paused = true;
     const now = this.clock.now();
-    for (const name of PAUSABLE) {
-      const timer = this.timers[name];
-      if (!timer) continue;
+    for (const [name, timer] of Object.entries(this.timers)) {
+      if (!timer.pausable) continue;
       const saved = { remaining: Math.max(0, timer.endsAt - now), total: timer.total, fn: timer.fn };
       this.cancel(name);
       this.pausedTimers[name] = saved;
@@ -397,7 +476,8 @@ export class Game {
   end() {
     if (this.phase === 'ended') return null;
     // Partie arrêtée en plein suspense : les gorgées de ce tour comptent quand même pour le podium.
-    if (this.phase === 'revealing') this.applySips();
+    if (this.phase === 'revealing') this.phase = 'results';
+    if (this.phase === 'results') this.finalize();
     this.clearTimers();
     this.paused = false;
     this.phase = 'ended';
@@ -437,9 +517,19 @@ export class Game {
     return null;
   }
 
-  /** forHost : la TV reçoit les résultats dès le début de la révélation (pour animer), les téléphones seulement à la fin. */
-  publicState(forHost = false) {
+  /**
+   * viewer : { host: true } pour la TV, { playerId } pour un téléphone (un booléen est accepté : true = TV).
+   * La TV reçoit les résultats dès le début de la révélation (pour animer), les téléphones seulement à la fin.
+   */
+  publicState(viewer = {}) {
+    if (typeof viewer === 'boolean') viewer = { host: viewer };
+    const forHost = !!viewer.host;
     const showResults = this.phase === 'results' || (this.phase === 'revealing' && forHost);
+    const inRound = this.phase === 'question' || this.phase === 'revealing' || this.phase === 'results' || this.phase === 'ended';
+    let round = null;
+    if (this.round > 0 && inRound) {
+      round = this.rules?.publicRound ? { number: this.round, ...this.rules.publicRound(this, viewer) } : { number: this.round, ...this.question };
+    }
     return {
       code: this.code,
       mode: this.mode,
@@ -456,7 +546,8 @@ export class Game {
         connected: p.sockets.size > 0,
         photoUrl: p.photo ? `/api/photo/${this.code}/${p.id}?v=${p.photoVersion}` : null,
       })),
-      round: this.question ? { number: this.round, ...this.question } : null,
+      round,
+      votingOpen: this.phase === 'question' && !!this.rules && this.votingOpen,
       votedIds: this.phase === 'question' ? [...this.votes.keys()] : [],
       voteTimer: this.phase === 'question' ? this.timerState('vote') : null,
       nextTimer: this.phase === 'results' ? this.timerState('next') : null,
@@ -464,6 +555,9 @@ export class Game {
       sips: Object.fromEntries(this.sips),
       roundSips: this.phase === 'results' || this.phase === 'ended' ? this.roundSips : null,
       results: showResults ? this.results : null,
+      pending: this.pending,
+      pendingTimer: this.pending ? this.timerState('pending') : null,
+      stats: Object.fromEntries(this.stats),
     };
   }
 }

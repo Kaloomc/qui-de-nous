@@ -70,6 +70,13 @@ export default function Player({ code }) {
     }
   }
 
+  /** Action propre au jeu (passer la bombe, taper, deviner…). Renvoie l'erreur éventuelle. */
+  async function act(action) {
+    const res = await request('player:action', { action });
+    if (!res.ok) setNotice(res.error);
+    return res.ok ? null : res.error;
+  }
+
   async function leave() {
     if (!window.confirm('Quitter la partie ?')) return;
     await request('player:leave');
@@ -98,7 +105,9 @@ export default function Player({ code }) {
   else if (state.phase === 'lobby' || state.phase === 'picking') {
     content = <Waiting me={me} state={state} mode={state.phase === 'picking' ? null : mode} onLeave={leave} />;
   }
-  else if (state.phase === 'question') {
+  else if (state.phase === 'question' && mode.playerLayout === 'custom') {
+    content = <mode.PlayerRound state={state} me={me} act={act} vote={vote} myVote={currentVote?.choice ?? null} />;
+  } else if (state.phase === 'question') {
     content = (
       <>
         <TimerBar timer={state.voteTimer} state={state} small>
@@ -112,7 +121,9 @@ export default function Player({ code }) {
       </>
     );
   } else if (state.phase === 'revealing') content = <Suspense />;
-  else if (state.phase === 'results') content = <Verdict state={state} mode={mode} me={me} />;
+  else if (state.phase === 'results' && mode.PlayerResults) {
+    content = <mode.PlayerResults state={state} me={me} act={act} verdict={<Verdict state={state} mode={mode} me={me} />} />;
+  } else if (state.phase === 'results') content = <Verdict state={state} mode={mode} me={me} />;
   else content = <Ended state={state} me={me} onHome={() => navigate('/')} />;
 
   return (

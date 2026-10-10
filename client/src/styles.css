@@ -2122,3 +2122,342 @@ button {
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ---------- Composants communs aux nouveaux jeux ---------- */
+
+.vote-option.is-selected {
+  background: var(--pink);
+}
+
+.vote-option:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.verdict-line {
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-weight: 700;
+}
+
+.verdict-line strong {
+  color: var(--yellow);
+}
+
+.verdict-line-good strong {
+  color: var(--green);
+}
+
+.verdict-line-bad strong {
+  color: var(--red);
+}
+
+.pulse-text {
+  animation: heartbeat 1.2s ease-in-out infinite;
+  color: var(--yellow);
+}
+
+.stat-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-board h3 {
+  font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+  color: var(--teal);
+}
+
+.unit-chip {
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(62, 224, 197, 0.15);
+  color: var(--teal);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+/* ---------- Estimation ---------- */
+
+.estimation {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(10px, 2vh, 22px);
+}
+
+.ruler {
+  position: relative;
+  width: calc(100% - 80px);
+  height: 300px;
+  margin: 10px 40px 0;
+}
+
+.ruler-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--teal), var(--yellow), var(--pink));
+}
+
+.ruler-marker {
+  position: absolute;
+  bottom: calc(76px + var(--level) * 74px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ruler-marker::after {
+  content: '';
+  width: 3px;
+  height: calc(10px + var(--level) * 74px);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.ruler-value {
+  font-weight: 800;
+  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  white-space: nowrap;
+}
+
+.marker-best .avatar {
+  border-color: var(--green);
+  box-shadow: 0 0 30px rgba(47, 209, 138, 0.7);
+}
+
+.marker-best .ruler-value {
+  background: var(--green);
+  color: var(--bg);
+}
+
+.marker-worst .avatar {
+  border-color: var(--red);
+  box-shadow: 0 0 30px rgba(255, 77, 94, 0.7);
+}
+
+.marker-worst .ruler-value {
+  background: var(--red);
+}
+
+.ruler-answer {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ruler-answer::before {
+  content: '';
+  width: 6px;
+  height: 80px;
+  margin-bottom: -2px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 20px #fff;
+}
+
+.ruler-answer-value {
+  padding: 4px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--bg);
+  font-weight: 800;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  white-space: nowrap;
+}
+
+.estimation-verdicts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.estimation-vote {
+  gap: 12px;
+}
+
+.estimate-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  min-height: 72px;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: var(--bg-2);
+  font-size: 2.4rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.estimate-display .muted {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.estimate-display small {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.keypad-key {
+  padding: 14px 0;
+  border: 0;
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.keypad-key:active {
+  background: var(--pink);
+  transform: scale(0.96);
+}
+
+/* ---------- Qui me connaît le mieux ? ---------- */
+
+.connait {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(10px, 2vh, 20px);
+}
+
+.connait-target {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+}
+
+.connait-label {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.connait-name {
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.choice-grid {
+  width: min(100%, 1300px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 1.5vw, 20px);
+}
+
+.choice-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: clamp(70px, 10vh, 110px);
+  padding: 12px 18px;
+  border-radius: 20px;
+  background: var(--card);
+  text-align: left;
+  transition: opacity 0.4s, box-shadow 0.4s, transform 0.4s;
+}
+
+.choice-card .option-letter {
+  background: var(--pink);
+}
+
+.choice-text {
+  flex: 1;
+  font-size: clamp(1.1rem, 1.9vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.choice-voters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  max-width: 45%;
+}
+
+.choice-correct {
+  box-shadow: 0 0 0 5px var(--green), 0 0 40px rgba(47, 209, 138, 0.5);
+  transform: scale(1.02);
+}
+
+.choice-correct .option-letter {
+  background: var(--green);
+  color: var(--bg);
+}
+
+.choice-wrong {
+  opacity: 0.45;
+}
+
+.answer-choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 76px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.answer-choice .option-letter {
+  background: var(--pink);
+}
+
+.answer-choice:active {
+  transform: scale(0.97);
+  background: var(--pink);
+}
+
+.answer-choice-static {
+  cursor: default;
+}
+
+.connait-question {
+  font-size: clamp(1.6rem, 3.2vw, 3rem);
+  max-width: 34ch;
+  margin: 0;
+}
+
+.connait .choice-card,
+.question .choice-card {
+  min-height: clamp(60px, 8vh, 90px);
+}

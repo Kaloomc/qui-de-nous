@@ -27,17 +27,15 @@ test('jeux disponibles : ils ont tous leurs règles, et toute règle correspond 
   }
 });
 
-test('jeux « Bientôt » : visibles dans le catalogue mais pas lançables', () => {
-  const soon = GAME_CATALOG.filter((g) => !g.available);
-  assert.ok(soon.length >= 2);
+test('jeux non disponibles ou inconnus : impossibles à lancer', () => {
   const game = new Game('SOON');
-  for (const g of soon) {
+  for (const g of GAME_CATALOG.filter((x) => !x.available)) {
     assert.equal(isPlayable(g.id), false);
     assert.equal(game.pickGame(g.id), 'Ce jeu arrive bientôt !');
-    assert.equal(new Game('X', g.id).phase, 'picking', 'création directe refusée');
   }
   assert.equal(game.pickGame('n-importe-quoi'), 'Jeu inconnu.');
   assert.equal(game.pickGame('__proto__'), 'Jeu inconnu.');
+  assert.equal(new Game('X', 'n-importe-quoi').phase, 'picking', 'création directe refusée');
   assert.equal(game.phase, 'picking');
   assert.equal(game.mode, null);
 });

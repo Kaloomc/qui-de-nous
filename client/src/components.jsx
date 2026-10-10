@@ -76,6 +76,25 @@ export function PlayerChip({ player, size = 72, dim = false, badge, caption, inl
   );
 }
 
+/** Grille de joueurs à toucher sur le téléphone (désigner, passer, voter…). */
+export function PlayerGrid({ players, onPick, me, disabledIds = [], selectedId = null }) {
+  return (
+    <div className="grid grid-vote">
+      {players.map((p) => (
+        <button
+          key={p.id}
+          className={`vote-option ${selectedId === p.id ? 'is-selected' : ''}`}
+          onClick={() => onPick(p.id)}
+          disabled={disabledIds.includes(p.id)}
+        >
+          <Avatar player={p} size={80} />
+          <span>{me && p.id === me.id ? `${p.name} (moi)` : p.name}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function VoteProgress({ state }) {
   const total = state.players.length;
   const done = state.votedIds.filter((id) => state.players.some((p) => p.id === id)).length;

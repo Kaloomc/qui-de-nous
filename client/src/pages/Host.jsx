@@ -25,6 +25,9 @@ export default function Host({ code }) {
     if (!res.ok) setFatal(res.error);
   });
 
+  /** Action propre au jeu en cours (« Suivant », « Lancer la roue »…). */
+  const gameAct = (action) => act('host:gameAction', { action });
+
   async function act(event, payload) {
     unlockAudio();
     setError(null);
@@ -83,7 +86,14 @@ export default function Host({ code }) {
         />
       )}
 
-      {state.phase === 'question' && (
+      {state.phase === 'question' && mode.hostLayout === 'custom' && (
+        <div className="question">
+          <mode.HostQuestion state={state} gameAct={gameAct} />
+          <div className="actions">{endButton}</div>
+        </div>
+      )}
+
+      {state.phase === 'question' && mode.hostLayout !== 'custom' && (
         <div className="question">
           <mode.HostQuestion state={state} />
           <div className="vote-status">
@@ -124,13 +134,16 @@ export default function Host({ code }) {
 
       {state.phase === 'revealing' && (
         <div className="results-screen">
-          <mode.HostReveal key={round} state={state} />
+          <mode.HostReveal key={round} state={state} gameAct={gameAct} />
         </div>
       )}
 
       {state.phase === 'results' && (
         <div className="results-screen">
-          <mode.HostResults key={round} state={state} />
+          <mode.HostResults key={round} state={state} gameAct={gameAct} />
+          <TimerBar timer={state.pendingTimer} state={state} small>
+            {(s) => `Réponse attendue : encore ${s} s`}
+          </TimerBar>
           <TimerBar timer={state.nextTimer} state={state} small>
             {(s) => (state.isLastRound ? `Fin de la partie dans ${s} s` : `Question suivante dans ${s} s`)}
           </TimerBar>
@@ -431,8 +444,8 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame }) {
             <strong>{settingsSummary(state.settings)}</strong>
             <em>Modifier</em>
           </button>
-          <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < 2}>
-            {count < 2 ? 'Il faut au moins 2 joueurs' : 'Lancer la partie'}
+          <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < (mode.minToStart ?? 2)}>
+            {count < (mode.minToStart ?? 2) ? `Il faut au moins ${mode.minToStart ?? 2} joueurs` : 'Lancer la partie'}
           </button>
         </div>
       </section>
@@ -454,6 +467,7 @@ function Ended({ state, mode, onRestart, onChangeGame }) {
         Merci d’avoir joué !
       </p>
       <Podium state={state} />
+      {mode.EndStats && <mode.EndStats state={state} />}
       <div className="actions">
         <button className="btn btn-ghost" onClick={() => navigate('/')}>
           Accueil

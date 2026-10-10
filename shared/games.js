@@ -1,6 +1,7 @@
 // Catalogue des jeux de Gorgée, partagé par le serveur et le client.
 // Pour ajouter un jeu : une entrée ici, ses règles dans server/games/, ses écrans dans client/src/games/.
-// `id` est la valeur du champ `mode` d'une partie.
+// `id` est la valeur du champ `mode` d'une partie. `players` = nombre conseillé (affiché),
+// `minToStart` = minimum pour lancer (vérifié par le serveur et le lobby).
 
 export const GAME_CATALOG = [
   {
@@ -10,6 +11,7 @@ export const GAME_CATALOG = [
     tagline: 'Qui est le plus susceptible de… ? Tout le monde vote pour quelqu’un.',
     rule: 'Le plus voté boit, et ceux qui n’ont pas voté comme lui aussi.',
     players: { min: 3, max: 12 },
+    minToStart: 2,
     available: true,
   },
   {
@@ -19,25 +21,38 @@ export const GAME_CATALOG = [
     tagline: 'Deux options impossibles, un seul choix. La salle se divise.',
     rule: 'La minorité boit. Égalité parfaite : tout le monde est sauvé.',
     players: { min: 4, max: 20 },
+    minToStart: 2,
     available: true,
   },
   {
-    id: 'devine-qui',
-    name: 'Devine qui a écrit ça',
-    icon: 'quill',
-    tagline: 'Chacun répond en secret, à vous de démasquer l’auteur.',
-    rule: 'Ceux qui se trompent d’auteur boivent.',
-    players: { min: 4, max: 10 },
-    available: false,
+    id: 'estimation',
+    name: 'Estimation',
+    icon: 'ruler',
+    tagline: 'Une question, un nombre. Qui tape le plus près ?',
+    rule: 'Le plus éloigné boit, et le plus proche désigne quelqu’un qui trinque avec lui.',
+    players: { min: 2, max: 20 },
+    minToStart: 2,
+    available: true,
   },
   {
-    id: 'je-nai-jamais',
-    name: 'Je n’ai jamais',
-    icon: 'shot',
-    tagline: 'Les secrets sortent, les verres se vident.',
-    rule: 'Ceux qui l’ont déjà fait boivent.',
-    players: { min: 3, max: 15 },
-    available: false,
+    id: 'qui-me-connait',
+    name: 'Qui me connaît le mieux ?',
+    icon: 'mirror',
+    tagline: 'Un joueur répond en secret sur lui-même, les autres devinent sa réponse.',
+    rule: 'Ceux qui se trompent boivent. Personne n’a trouvé, ou tout le monde : la cible boit.',
+    players: { min: 3, max: 20 },
+    minToStart: 3,
+    available: true,
+  },
+  {
+    id: 'imposteur',
+    name: 'L’Imposteur',
+    icon: 'mask',
+    tagline: 'Tout le monde a le même mot… sauf un. Un indice chacun, puis on démasque.',
+    rule: 'Imposteur démasqué : il boit. Sinon, tout le groupe boit à sa place.',
+    players: { min: 4, max: 20 },
+    minToStart: 3,
+    available: true,
   },
 ];
 

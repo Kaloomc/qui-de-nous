@@ -2,10 +2,15 @@ const room = (code) => `game:${code}`;
 const hostRoom = (code) => `game:${code}:host`;
 
 export function registerSockets(io, store) {
-  // La TV et les téléphones ne reçoivent pas tout à fait le même état (résultats cachés aux joueurs pendant la révélation).
+  // Chaque écran reçoit son propre état : la TV voit les résultats pendant le suspense (pour animer),
+  // et chaque téléphone ne voit que ses informations secrètes (le mot de l'Imposteur, par exemple).
   const broadcast = (game) => {
-    io.to(hostRoom(game.code)).emit('state', game.publicState(true));
-    io.to(room(game.code)).except(hostRoom(game.code)).emit('state', game.publicState(false));
+    io.to(hostRoom(game.code)).emit('state', game.publicState({ host: true }));
+    for (const player of game.players.values()) {
+      if (player.sockets.size === 0) continue;
+      const state = game.publicState({ playerId: player.id });
+      for (const id of player.sockets) io.to(id).emit('state', state);
+    }
   };
   store.onChange = broadcast;
 
@@ -79,6 +84,7 @@ export function registerSockets(io, store) {
       'host:restart': (game, { mode }) => game.restart(mode),
       'host:chooseGame': (game) => game.chooseGame(),
       'host:pickGame': (game, { mode }) => game.pickGame(mode),
+      'host:gameAction': (game, { action }) => game.gameHostAction(action),
       'host:settings': (game, { settings }) => game.setSettings(settings),
       'host:pause': (game) => game.pause(),
       'host:unpause': (game) => game.resume(),
@@ -128,6 +134,16 @@ export function registerSockets(io, store) {
       const game = currentGame();
       if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
       const error = game.vote(socket.data.playerId, choice);
+      if (error) return ack({ ok: false, error });
+      game.touch();
+      broadcast(game);
+      ack({ ok: true });
+    });
+
+    on('player:action', ({ action }, ack) => {
+      const game = currentGame();
+      if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
+      const error = game.action(socket.data.playerId, action);
       if (error) return ack({ ok: false, error });
       game.touch();
       broadcast(game);
