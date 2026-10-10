@@ -468,7 +468,10 @@ export class Game {
     this.paused = false;
     const saved = this.pausedTimers;
     this.pausedTimers = {};
-    for (const [name, timer] of Object.entries(saved)) this.schedule(name, timer.remaining, timer.fn, timer.total);
+    for (const [name, timer] of Object.entries(saved)) {
+      this.schedule(name, timer.remaining, timer.fn, timer.total);
+      this.timers[name].pausable = true;
+    }
     this.evaluate();
     return null;
   }

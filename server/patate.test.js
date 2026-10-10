@@ -88,11 +88,15 @@ test('déroulé avec le moteur : passes, anti-blocage, porteur déconnecté, exp
 });
 
 test('pause : la mèche est gelée', async () => {
-  const { game, tick } = await makeGame('patate', ['A', 'B', 'C'], { auto: true });
+  const { game, tick } = await makeGame('patate', ['A', 'B', 'C']);
   game.start();
   game.pause();
   tick(120000);
   assert.equal(game.phase, 'question');
+  game.resume();
+  game.pause();
+  tick(120000);
+  assert.equal(game.phase, 'question', 'une deuxième pause gèle aussi');
   game.resume();
   tick(45000);
   assert.notEqual(game.phase, 'question');
