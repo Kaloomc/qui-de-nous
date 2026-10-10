@@ -74,6 +74,16 @@ export const GAME_CATALOG = [
     minToStart: 2,
     available: true,
   },
+  {
+    id: 'feu',
+    name: 'Réflexes',
+    icon: 'flame',
+    tagline: 'La TV enchaîne les mots qui se ressemblent. Tape uniquement quand elle dit « FEU » !',
+    rule: 'Le plus lent boit, comme ceux qui tapent trop tôt ou pas du tout.',
+    players: { min: 2, max: 20 },
+    minToStart: 2,
+    available: true,
+  },
 ];
 
 export const DEFAULT_GAME = 'qui-de-nous';

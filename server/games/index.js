@@ -1,5 +1,6 @@
 import { DEFAULT_GAME, GAME_CATALOG } from '../../shared/games.js';
 import estimation from './estimation.js';
+import feu from './feu.js';
 import imposteur from './imposteur.js';
 import patate from './patate.js';
 import quiDeNous from './quiDeNous.js';
@@ -17,6 +18,7 @@ export const GAME_RULES = {
   [imposteur.id]: imposteur,
   [patate.id]: patate,
   [roue.id]: roue,
+  [feu.id]: feu,
 };
 
 /** Registre complet : métadonnées du catalogue + règles. */
