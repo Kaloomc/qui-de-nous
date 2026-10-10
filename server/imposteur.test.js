@@ -101,7 +101,7 @@ test('déroulé avec le moteur : mots secrets, tours de parole, vote, dernière 
   const imp = game.roundData.imposterId;
   for (const p of ps) game.vote(p.id, p.id === imp ? ps.find((q) => q.id !== imp).id : imp);
   assert.equal(game.vote(imp, imp), 'Choix invalide.', 'pas de vote pour soi');
-  game.reveal(1);
+  assert.equal(game.gameHostAction({ type: 'reveal' }), null, 'bouton Révéler de la TV');
   tick(game.rules.revealMs);
   assert.equal(game.results.unmasked, true);
   assert.equal(game.pending, true, 'dernière chance');

@@ -2461,3 +2461,148 @@ button {
 .question .choice-card {
   min-height: clamp(60px, 8vh, 90px);
 }
+
+/* ---------- L'Imposteur ---------- */
+
+.imposteur {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(10px, 2vh, 22px);
+}
+
+.speaking-order {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  max-width: 1100px;
+}
+
+.speaking-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.speaking-slot.is-done {
+  opacity: 0.35;
+}
+
+.speaking-slot.is-current {
+  transform: scale(1.08);
+  color: var(--yellow);
+}
+
+.speaking-slot.is-current .avatar {
+  box-shadow: 0 0 0 4px var(--yellow), 0 0 30px rgba(255, 201, 60, 0.5);
+}
+
+.speaker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.speaker-name {
+  font-size: clamp(2rem, 4.5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.secret-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 420px;
+  padding: 22px 16px;
+  border: 3px dashed var(--teal);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.secret-word strong {
+  font-size: clamp(2rem, 10vw, 3.2rem);
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.secret-word.is-hidden {
+  border-color: var(--muted);
+}
+
+.secret-label,
+.secret-hint {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.imposteur-phone {
+  gap: 18px;
+  text-align: center;
+}
+
+.your-turn {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--yellow);
+}
+
+.imposteur-reveal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 80px);
+}
+
+.avatar-caught {
+  border: 6px solid var(--red);
+  box-shadow: 0 0 50px rgba(255, 77, 94, 0.55);
+}
+
+.word-pair {
+  display: flex;
+  gap: 18px;
+}
+
+.word-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 28px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 3px solid var(--teal);
+}
+
+.word-card span {
+  color: var(--muted);
+}
+
+.word-card strong {
+  font-size: clamp(1.6rem, 3vw, 3rem);
+}
+
+.word-card-imposter {
+  border-color: var(--pink);
+}
+
+.last-chance-options,
+.vote-tally {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}

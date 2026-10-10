@@ -1,5 +1,6 @@
 import { DEFAULT_GAME, GAME_CATALOG } from '../../../shared/games.js';
 import * as estimation from './estimation.jsx';
+import * as imposteur from './imposteur.jsx';
 import * as quiDeNous from './quiDeNous.jsx';
 import * as quiMeConnait from './quiMeConnait.jsx';
 import * as tuPreferes from './tuPreferes.jsx';
@@ -12,6 +13,7 @@ const VIEWS = {
   [tuPreferes.id]: tuPreferes,
   [estimation.id]: estimation,
   [quiMeConnait.id]: quiMeConnait,
+  [imposteur.id]: imposteur,
 };
 
 export const GAMES = GAME_CATALOG.map((game) => ({

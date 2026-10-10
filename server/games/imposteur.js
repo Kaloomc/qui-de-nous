@@ -3,7 +3,7 @@ import { loadJson } from './load.js';
 
 const WORDS = loadJson('../content/words-imposteur.json');
 const WORDS_MS = 10000; // temps pour regarder son mot (mode auto)
-const TURN_MS = 12000; // temps de parole par joueur
+const TURN_MS = 10000; // temps de parole par joueur
 const LAST_CHANCE_MS = 20000;
 
 const data = (game) => game.roundData;
@@ -52,6 +52,7 @@ export default {
     if (game.phase !== 'question') return 'Aucune manche en cours.';
     const d = data(game);
     if (action.type === 'startSpeaking') return startSpeaking(game);
+    if (action.type === 'reveal') return d.step === 'voting' ? game.reveal(game.round) : 'Le vote n’a pas commencé.';
     if (action.type === 'nextTurn') {
       if (d.step !== 'speaking') return 'Ce n’est pas le moment des indices.';
       advanceTurn(game);
