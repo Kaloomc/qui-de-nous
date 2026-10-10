@@ -1,23 +1,19 @@
 import { useState } from 'react';
+import { GAMES } from '../games/index.js';
+import { GameIcon, Logo } from '../icons.jsx';
 import { CODE_LENGTH, navigate, request, storage, useConnected } from '../lib.js';
-import { DEFAULT_MODE, MODES, MODE_LIST } from '../modes/index.js';
 
 export default function Home() {
   const connected = useConnected();
   const [code, setCode] = useState('');
-  const [mode, setMode] = useState(() => (MODES[storage.get('qdn:lastMode')] ? storage.get('qdn:lastMode') : DEFAULT_MODE));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
-
-  function pickMode(id) {
-    setMode(id);
-    storage.set('qdn:lastMode', id);
-  }
 
   async function createGame() {
     setBusy(true);
     setError(null);
-    const res = await request('host:create', { mode, settings: storage.get('qdn:settings') });
+    // Pas de jeu ici : l'hôte le choisit ensuite dans la grille, sur la TV.
+    const res = await request('host:create', { settings: storage.get('qdn:settings') });
     setBusy(false);
     if (!res.ok) return setError(res.error);
     storage.set(`qdn:host:${res.code}`, res.hostSecret);
@@ -31,28 +27,19 @@ export default function Home() {
 
   return (
     <main className="page home">
-      <h1 className="logo">
-        Qui de <span>nous</span> ?
-      </h1>
-      <p className="tagline">Le jeu de soirée où vos amis votent… et où les perdants boivent.</p>
+      <Logo />
+      <p className="tagline">Le jeu de soirée qui fait boire tout le monde.</p>
 
       <div className="home-cards">
         <section className="card">
           <h2>Sur la TV ou le PC</h2>
-          <p>Choisis le jeu, crée la partie et affiche le QR code pour que tout le monde rejoigne.</p>
-          <div className="mode-picker" role="radiogroup" aria-label="Mode de jeu">
-            {MODE_LIST.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                role="radio"
-                aria-checked={mode === m.id}
-                className={`mode-option ${mode === m.id ? 'is-selected' : ''}`}
-                onClick={() => pickMode(m.id)}
-              >
-                <strong>{m.label}</strong>
-                <span>{m.tagline}</span>
-              </button>
+          <p>Crée la partie, choisis un jeu et affiche le QR code pour que tout le monde rejoigne.</p>
+          <div className="home-games" aria-hidden="true">
+            {GAMES.filter((g) => g.playable).map((g) => (
+              <span key={g.id} className="home-game">
+                <GameIcon icon={g.icon} size={34} />
+                {g.name}
+              </span>
             ))}
           </div>
           <button className="btn btn-primary btn-xl" onClick={createGame} disabled={!connected || busy}>

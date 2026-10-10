@@ -53,7 +53,7 @@ server.on('error', (err) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Qui de nous ? — serveur sur le port ${PORT}`);
+  console.log(`Gorgée — serveur sur le port ${PORT}`);
   if (fs.existsSync(DIST_DIR)) {
     console.log(`  Local : http://localhost:${PORT}`);
     for (const ip of lanAddresses()) console.log(`  Réseau : http://${ip}:${PORT}`);

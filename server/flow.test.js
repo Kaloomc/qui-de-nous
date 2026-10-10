@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game, TIMING } from './gameStore.js';
-import { MODES } from './modes.js';
+import { GAMES } from './games/index.js';
 
 /** Horloge simulée : les minuteurs ne s'exécutent que quand on avance le temps avec tick(). */
 class FakeClock {
@@ -33,7 +33,7 @@ class FakeClock {
   }
 }
 
-const QDN_REVEAL = MODES['qui-de-nous'].revealMs;
+const QDN_REVEAL = GAMES['qui-de-nous'].revealMs;
 
 function setup({ players = 3, settings = {}, mode = 'qui-de-nous' } = {}) {
   const clock = new FakeClock();
@@ -240,7 +240,7 @@ test('« Tu préfères ? » : même mécanique automatique', () => {
   clock.tick(TIMING.autoRevealDelayMs);
   assert.equal(game.phase, 'revealing');
   assert.equal(game.publicState(false).results, null);
-  clock.tick(MODES['tu-preferes'].revealMs);
+  clock.tick(GAMES['tu-preferes'].revealMs);
   assert.equal(game.phase, 'results');
   assert.deepEqual(game.results.drinkerIds, [ps[2].id]);
 });

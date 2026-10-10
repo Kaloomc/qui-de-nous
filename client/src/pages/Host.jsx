@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { PlayerChip, TimerBar, VoteProgress, allVoted } from '../components.jsx';
 import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
-import { MODE_LIST, modeOf } from '../modes/index.js';
+import { GAMES, gameById, gameOf, playersLabel } from '../games/index.js';
+import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
@@ -54,7 +55,7 @@ export default function Host({ code }) {
 
   if (!state) return <main className="page center muted">Chargement…</main>;
 
-  const mode = modeOf(state);
+  const mode = gameOf(state);
   const round = state.round?.number;
   const inGame = ['question', 'revealing', 'results'].includes(state.phase);
   const endButton = (
@@ -69,8 +70,17 @@ export default function Host({ code }) {
       {inGame && <HostControls state={state} act={act} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />}
       {state.paused && inGame && <div className="paused-banner">Pause</div>}
 
+      {state.phase === 'picking' && <GamePicker state={state} onPick={(id) => act('host:pickGame', { mode: id })} />}
+
       {state.phase === 'lobby' && (
-        <Lobby state={state} mode={mode} onStart={() => act('host:start')} onKick={kick} onSettings={() => setSettingsOpen(true)} />
+        <Lobby
+          state={state}
+          mode={mode}
+          onStart={() => act('host:start')}
+          onKick={kick}
+          onSettings={() => setSettingsOpen(true)}
+          onChangeGame={() => act('host:chooseGame')}
+        />
       )}
 
       {state.phase === 'question' && (
@@ -147,7 +157,9 @@ export default function Host({ code }) {
         </div>
       )}
 
-      {state.phase === 'ended' && <Ended state={state} mode={mode} onRestart={(m) => act('host:restart', { mode: m })} />}
+      {state.phase === 'ended' && (
+        <Ended state={state} mode={mode} onRestart={(m) => act('host:restart', { mode: m })} onChangeGame={() => act('host:chooseGame')} />
+      )}
 
       {settingsOpen && <SettingsModal settings={state.settings} onChange={changeSettings} onClose={() => setSettingsOpen(false)} />}
 
@@ -281,7 +293,103 @@ function SettingsModal({ settings, onChange, onClose }) {
   );
 }
 
-function Lobby({ state, mode, onStart, onKick, onSettings }) {
+/** Grille des jeux : grandes cartes, navigation au clavier (flèches + Entrée), à la souris ou au tactile. */
+function GamePicker({ state, onPick }) {
+  const gridRef = useRef(null);
+  const cardRefs = useRef({});
+  const count = state.players.length;
+
+  useEffect(() => {
+    const last = gameById(storage.get('qdn:lastMode'));
+    const first = last?.playable ? last : GAMES.find((g) => g.playable);
+    cardRefs.current[first.id]?.focus();
+  }, []);
+
+  // Écouté sur toute la page : les flèches marchent même si le focus a été perdu (clic à côté, carte « Bientôt »…).
+  useEffect(() => {
+    function onKeyDown(e) {
+      const columns = getComputedStyle(gridRef.current).gridTemplateColumns.split(' ').length;
+      const step = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: columns, ArrowUp: -columns }[e.key];
+      if (!step) return;
+      e.preventDefault();
+      const index = GAMES.findIndex((g) => cardRefs.current[g.id] === document.activeElement);
+      if (index < 0) {
+        cardRefs.current[GAMES.find((g) => g.playable).id]?.focus();
+        return;
+      }
+      let next = index + step;
+      // Les cartes « Bientôt » ne prennent pas le focus : on continue dans la même direction.
+      while (next >= 0 && next < GAMES.length && !GAMES[next].playable) next += Math.sign(step);
+      if (next >= 0 && next < GAMES.length) cardRefs.current[GAMES[next].id]?.focus();
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
+  function pick(game) {
+    storage.set('qdn:lastMode', game.id);
+    onPick(game.id);
+  }
+
+  return (
+    <div className="picker">
+      <Logo size="sm" />
+      <h2 className="picker-title">À quoi on joue ?</h2>
+      {count > 0 && (
+        <p className="lead">
+          {count} joueur{count > 1 ? 's' : ''} déjà dans la partie : personne n’a besoin de rescanner.
+        </p>
+      )}
+      <div ref={gridRef} className="game-grid">
+        {GAMES.map((g) => (
+          <button
+            key={g.id}
+            ref={(el) => {
+              cardRefs.current[g.id] = el;
+            }}
+            className={`game-card ${g.playable ? '' : 'is-locked'}`}
+            onClick={() => pick(g)}
+            disabled={!g.playable}
+            aria-label={g.playable ? `${g.name} : ${g.tagline}` : `${g.name} : bientôt disponible`}
+          >
+            {!g.playable && (
+              <span className="game-card-soon">
+                <LockIcon /> Bientôt
+              </span>
+            )}
+            <span className="game-card-art">
+              <GameIcon icon={g.icon} size={110} />
+            </span>
+            <strong className="game-card-name">{g.name}</strong>
+            <span className="game-card-tagline">{g.tagline}</span>
+            <span className="game-card-rule">{g.rule}</span>
+            <span className="game-card-players">{playersLabel(g)}</span>
+          </button>
+        ))}
+      </div>
+      <p className="picker-hint">Flèches pour choisir, Entrée pour valider.</p>
+    </div>
+  );
+}
+
+function GamePill({ game, onChange }) {
+  return (
+    <div className="game-pill">
+      <GameIcon icon={game.icon} size={56} />
+      <div className="game-pill-text">
+        <strong>{game.name}</strong>
+        <span>{game.rule}</span>
+      </div>
+      {onChange && (
+        <button className="ctrl" onClick={onChange}>
+          Changer de jeu
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame }) {
   const joinUrl = useJoinUrl(state.code);
   const [qr, setQr] = useState(null);
 
@@ -293,12 +401,8 @@ function Lobby({ state, mode, onStart, onKick, onSettings }) {
   return (
     <div className="lobby">
       <section className="lobby-join">
-        <h1 className="logo logo-sm">
-          Qui de <span>nous</span> ?
-        </h1>
-        <p className="mode-pill">
-          {mode.label} <span>· {mode.tagline}</span>
-        </p>
+        <Logo size="sm" />
+        <GamePill game={mode} onChange={onChangeGame} />
         <div className="qr">{qr && <img src={qr} alt={`QR code vers ${joinUrl}`} />}</div>
         <p className="join-hint">Scanne pour rejoindre, ou va sur</p>
         <p className="join-url">{joinUrl.replace(/^https?:\/\//, '').replace(/\/join\/.*$/, '')}</p>
@@ -308,7 +412,7 @@ function Lobby({ state, mode, onStart, onKick, onSettings }) {
 
       <section className="lobby-players">
         <h2>
-          {count} joueur{count > 1 ? 's' : ''}
+          {count} joueur{count > 1 ? 's' : ''} <span className="muted lobby-advice">· {playersLabel(mode)} conseillés</span>
         </h2>
         {count === 0 ? (
           <p className="muted big">En attente des joueurs…</p>
@@ -336,9 +440,8 @@ function Lobby({ state, mode, onStart, onKick, onSettings }) {
   );
 }
 
-function Ended({ state, mode, onRestart }) {
+function Ended({ state, mode, onRestart, onChangeGame }) {
   const n = state.round?.number ?? 0;
-  const others = MODE_LIST.filter((m) => m.id !== mode.id);
   useEffect(() => {
     const id = setTimeout(() => sounds.reveal(), 900);
     return () => clearTimeout(id);
@@ -347,7 +450,7 @@ function Ended({ state, mode, onRestart }) {
     <div className="center ended">
       <h1 className="logo logo-sm">Partie terminée</h1>
       <p className="lead">
-        {n > 0 ? `${n} question${n > 1 ? 's' : ''} jouée${n > 1 ? 's' : ''}. ` : ''}
+        {mode.name} · {n > 0 ? `${n} question${n > 1 ? 's' : ''} jouée${n > 1 ? 's' : ''}. ` : ''}
         Merci d’avoir joué !
       </p>
       <Podium state={state} />
@@ -355,11 +458,9 @@ function Ended({ state, mode, onRestart }) {
         <button className="btn btn-ghost" onClick={() => navigate('/')}>
           Accueil
         </button>
-        {others.map((m) => (
-          <button key={m.id} className="btn btn-secondary btn-xl" onClick={() => onRestart(m.id)}>
-            Changer de jeu : {m.label}
-          </button>
-        ))}
+        <button className="btn btn-secondary btn-xl" onClick={onChangeGame}>
+          Changer de jeu
+        </button>
         <button className="btn btn-primary btn-xl" onClick={() => onRestart(mode.id)}>
           Rejouer avec les mêmes joueurs
         </button>

@@ -1,4 +1,4 @@
-// Lance le serveur + un tunnel Cloudflare gratuit, puis affiche l'adresse publique.
+// Gorgée en mode « à distance » : lance le serveur + un tunnel Cloudflare gratuit, puis affiche l'adresse publique.
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 
@@ -39,8 +39,8 @@ const onOutput = (chunk) => {
   const match = URL_PATTERN.exec(chunk.toString());
   if (match && !announced) {
     announced = true;
-    const rule = '='.repeat(match[0].length + 4);
-    console.log(`\n${rule}\n  Ouvre cette adresse sur la TV / le PC :\n  ${match[0]}\n${rule}`);
+    const rule = '='.repeat(Math.max(match[0].length, 62) + 4);
+    console.log(`\n${rule}\n  Gorgée est en ligne ! Ouvre cette adresse sur la TV / le PC :\n  ${match[0]}\n${rule}`);
     console.log('Les joueurs scannent le QR code affiché, depuis n’importe quel réseau. Ctrl+C pour arrêter.\n');
   }
 };

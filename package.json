@@ -1,6 +1,7 @@
 {
-  "name": "qui-de-nous",
-  "version": "0.1.0",
+  "name": "gorgee",
+  "version": "0.2.0",
+  "description": "Gorgée : plateforme de jeux de soirée en temps réel (Qui de nous ?, Tu préfères ?…) sur la TV, avec les téléphones comme manettes.",
   "private": true,
   "type": "module",
   "engines": {

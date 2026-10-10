@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from './gameStore.js';
-import { MODES } from './modes.js';
+import { GAMES } from './games/index.js';
 import { computePreferesResults, computeResults, sipsPreferes, sipsQuiDeNous } from './rules.js';
 
 const votes = (entries) => new Map(Object.entries(entries));
@@ -63,7 +63,7 @@ function setup(mode = 'qui-de-nous') {
     return player;
   });
   game.start();
-  return { game, clock, ps, revealMs: MODES[mode].revealMs };
+  return { game, clock, ps, revealMs: GAMES[mode].revealMs };
 }
 
 test('les gorgées s’ajoutent à la fin du suspense, pas avant (pas de spoiler)', () => {

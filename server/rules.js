@@ -1,4 +1,4 @@
-// Règles du mode « Qui de nous ? ». Fonctions pures, testées dans rules.test.js.
+// Règles des jeux de Gorgée (« Qui de nous ? », « Tu préfères ? »). Fonctions pures, testées.
 
 export function computeResults(playerIds, votes) {
   const counts = Object.fromEntries(playerIds.map((id) => [id, 0]));

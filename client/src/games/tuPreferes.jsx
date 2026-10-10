@@ -5,11 +5,9 @@ import { sounds } from '../sound.js';
 import { roundCaption } from '../sips.jsx';
 
 export const id = 'tu-preferes';
-export const label = 'Tu préfères ?';
-export const tagline = 'A ou B : la minorité boit.';
 export const waitingText = 'Suspense…';
 
-// Découpage de la révélation (durée totale fixée par le serveur, revealMs dans server/modes.js) :
+// Découpage de la révélation (durée totale fixée par le serveur, revealMs dans server/games/tuPreferes.js) :
 // « Attention… » pendant ANNOUNCE_MS, puis la jauge oscille, puis une courte pause avant les résultats.
 const ANNOUNCE_MS = 1500;
 const SETTLE_MS = 300;

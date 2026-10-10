@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, TimerBar } from '../components.jsx';
 import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect } from '../lib.js';
-import { modeOf } from '../modes/index.js';
+import { gameOf } from '../games/index.js';
+import { GameIcon } from '../icons.jsx';
 import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
 
@@ -89,12 +90,14 @@ export default function Player({ code }) {
   }
 
   const me = state?.players.find((p) => p.id === identity?.playerId);
-  const mode = modeOf(state);
+  const mode = gameOf(state);
 
   let content;
   if (status === 'form') content = <JoinForm code={code} onJoin={join} notice={notice} />;
   else if (status === 'resuming' || !state || !me) content = <div className="center muted">Connexion à la partie…</div>;
-  else if (state.phase === 'lobby') content = <Waiting me={me} state={state} mode={mode} onLeave={leave} />;
+  else if (state.phase === 'lobby' || state.phase === 'picking') {
+    content = <Waiting me={me} state={state} mode={state.phase === 'picking' ? null : mode} onLeave={leave} />;
+  }
   else if (state.phase === 'question') {
     content = (
       <>
@@ -195,9 +198,17 @@ function Waiting({ me, state, mode, onLeave }) {
     <div className="center waiting">
       <Avatar player={me} size={160} className="bounce" />
       <h1>C’est bon, {me.name} !</h1>
-      <p className="mode-pill">
-        {mode.label} <span>· {mode.tagline}</span>
-      </p>
+      {mode ? (
+        <div className="game-pill game-pill-phone">
+          <GameIcon icon={mode.icon} size={48} />
+          <div className="game-pill-text">
+            <strong>{mode.name}</strong>
+            <span>{mode.rule}</span>
+          </div>
+        </div>
+      ) : (
+        <p className="mode-pill">L’hôte choisit le jeu…</p>
+      )}
       <p className="lead">
         {state.players.length} joueur{state.players.length > 1 ? 's' : ''} dans la partie.
         <br />

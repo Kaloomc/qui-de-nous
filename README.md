@@ -1,24 +1,32 @@
-# Qui de nous ?
+# Gorgée
 
-Jeu de soirée en temps réel, façon Kahoot. Une question s'affiche sur la TV, chacun vote en secret depuis son téléphone… et les perdants boivent.
+**Le jeu de soirée qui fait boire tout le monde.** Gorgée est une petite plateforme de jeux de soirée en temps réel, façon Kahoot : la TV (ou le PC) affiche le jeu, chacun joue en secret depuis son téléphone… et les perdants boivent.
+
+| Accueil | Choix du jeu |
+|---|---|
+| ![Accueil](docs/screenshots/accueil.png) | ![Grille des jeux](docs/screenshots/grille.png) |
 
 ## Les jeux
 
-Deux modes de jeu, au choix au moment de créer la partie :
+Après **Créer une partie**, l'hôte choisit le jeu dans une grille de cartes. On peut changer de jeu entre deux parties sans que personne n'ait à rescanner le QR code.
 
-| | **Qui de nous ?** | **Tu préfères ?** |
-|---|---|---|
-| **La question** | « Qui est le plus susceptible de ghoster quelqu'un après un super rencard ? » | « Que tes potes lisent tous tes DM **ou** qu'ils fouillent toute ta galerie photo ? » |
-| **On vote pour** | Un joueur (photo + prénom) | A ou B |
-| **Qui boit** | Le plus voté, et ceux qui n'ont pas voté pour lui | La minorité |
-| **La révélation** | Le plus voté en grand + camembert des votes | Une jauge à suspense oscille entre A et B, puis les joueurs atterrissent dans leur camp |
-| **Contenu** | 150 questions | 150 dilemmes |
+| | **Qui de nous ?** | **Tu préfères ?** | **Devine qui a écrit ça** | **Je n'ai jamais** |
+|---|---|---|---|---|
+| **Statut** | Disponible | Disponible | Bientôt | Bientôt |
+| **Le principe** | « Qui est le plus susceptible de ghoster quelqu'un après un super rencard ? » Tout le monde vote pour un joueur. | « Que tes potes lisent tous tes DM **ou** qu'ils fouillent toute ta galerie photo ? » Chacun choisit A ou B. | Chacun répond en secret, les autres devinent l'auteur. | Les secrets sortent, les verres se vident. |
+| **Qui boit** | Le plus voté, et ceux qui n'ont pas voté pour lui | La minorité | Ceux qui se trompent | Ceux qui l'ont déjà fait |
+| **La révélation** | Roulette des photos + 3-2-1, puis le plus voté en grand et un camembert des votes | Une jauge à suspense oscille entre A et B, puis les joueurs atterrissent dans leur camp | | |
+| **Joueurs conseillés** | 3 à 12 | 4 à 20 | 4 à 10 | 3 à 15 |
+| **Contenu** | 150 questions | 150 dilemmes | | |
+
+Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur de gorgées et le podium de fin.
 
 ### Qui de nous ?
 
 | Écran (TV / PC) | | |
 |---|---|---|
-| ![Lobby](docs/screenshots/ecran-lobby.png) | ![Question](docs/screenshots/ecran-question.png) | ![Résultats](docs/screenshots/ecran-resultats.png) |
+| ![Lobby](docs/screenshots/ecran-lobby.png) | ![Question](docs/screenshots/ecran-question.png) | ![Suspense](docs/screenshots/ecran-suspense.png) |
+| ![Résultats](docs/screenshots/ecran-resultats.png) | | |
 
 | Téléphone | | |
 |---|---|---|
@@ -34,6 +42,12 @@ Deux modes de jeu, au choix au moment de créer la partie :
 |---|---|---|
 | ![Vote](docs/screenshots/tp-tel-vote.png) | ![Suspense](docs/screenshots/tp-tel-suspense.png) | ![Verdict](docs/screenshots/tp-tel-verdict.png) |
 
+### Fin de partie
+
+| Podium (TV) | Classement (téléphone) |
+|---|---|
+| ![Podium](docs/screenshots/podium.png) | ![Fin de partie sur le téléphone](docs/screenshots/tel-fin.png) |
+
 ## Sommaire
 
 - [Les jeux](#les-jeux)
@@ -48,7 +62,7 @@ Deux modes de jeu, au choix au moment de créer la partie :
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
   - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
 - [Règles du jeu](#règles-du-jeu)
-  - [Qui de nous ?](#qui-de-nous--2)
+  - [Qui de nous ?](#qui-de-nous--1)
   - [Tu préfères ?](#tu-préfères--1)
 - [Dépannage](#dépannage)
 - [Personnaliser les questions](#personnaliser-les-questions)
@@ -58,7 +72,7 @@ Deux modes de jeu, au choix au moment de créer la partie :
 
 ## Fonctionnalités
 
-- **Deux modes de jeu** au choix à la création de la partie, et possibilité de changer de jeu à la fin sans que personne n'ait à rescanner.
+- **Plusieurs jeux dans une seule plateforme** : on choisit le jeu dans une grille de cartes (au clavier, à la souris ou au tactile), et on peut changer de jeu entre deux parties sans que personne n'ait à rescanner.
 - Un seul site : l'écran crée la partie, les téléphones la rejoignent en scannant un **QR code** (ou en tapant un code de 4 lettres).
 - Chaque joueur choisit son **prénom** et sa **photo** (selfie ou galerie, compressée automatiquement).
 - **Vote secret en temps réel** avec compteur « X / N ont voté » sur l'écran.
@@ -84,7 +98,9 @@ npm run build
 npm start
 ```
 
-Ouvre ensuite **http://localhost:3000** sur le PC branché à la TV, choisis le jeu (**Qui de nous ?** ou **Tu préfères ?**) et clique sur **Créer une partie**.
+Ouvre ensuite **http://localhost:3000** sur le PC branché à la TV, clique sur **Créer une partie**, puis choisis le jeu dans la grille.
+
+> Le dépôt s'appelle encore `qui-de-nous` sur GitHub : l'URL de clone et le nom du dossier changeront quand il sera renommé.
 
 ## Tutoriel pas à pas
 
@@ -140,12 +156,12 @@ npm start
 Le terminal affiche :
 
 ```
-Qui de nous ? — serveur sur le port 3000
+Gorgée — serveur sur le port 3000
   Local : http://localhost:3000
   Réseau : http://192.168.1.42:3000
 ```
 
-1. Sur le PC branché à la TV, ouvre **http://localhost:3000** et clique sur **Créer une partie**.
+1. Sur le PC branché à la TV, ouvre **http://localhost:3000**, clique sur **Créer une partie** et choisis un jeu.
 2. Les téléphones (connectés au **même Wi-Fi** que le PC) scannent le QR code. Le QR code utilise automatiquement l'adresse « Réseau » du PC.
 3. Pour arrêter le jeu : `Ctrl + C` dans le terminal.
 
@@ -176,10 +192,10 @@ npm run share
 Après quelques secondes, le terminal affiche :
 
 ```
-==========================================================
-  Ouvre cette adresse sur la TV / le PC :
+==================================================================
+  Gorgée est en ligne ! Ouvre cette adresse sur la TV / le PC :
   https://exemple-de-mots-aleatoires.trycloudflare.com
-==========================================================
+==================================================================
 ```
 
 1. Ouvre **cette adresse** (et pas `localhost`) sur la TV / le PC, puis crée la partie.
@@ -192,21 +208,23 @@ Après quelques secondes, le terminal affiche :
 
 **Sur l'écran (hôte)**
 
-1. Sur l'accueil, **choisis le jeu** (*Qui de nous ?* ou *Tu préfères ?*), puis **Créer une partie** : un QR code et un code de 4 lettres s'affichent. Le dernier jeu choisi est retenu pour la prochaine fois.
-2. Les joueurs apparaissent au fur et à mesure. Survole une photo et clique sur **×** pour retirer quelqu'un.
-3. Si tu veux que la partie tourne toute seule, clique sur **Réglages** et active le **mode auto** (voir [Réglages de la partie](#réglages-de-la-partie)).
-4. **Lancer la partie** (au moins 2 joueurs).
-5. La question s'affiche avec le compteur de votes. Clique sur **Révéler** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne. En mode auto, la révélation se lance toute seule.
-6. Quelques secondes de suspense, puis les résultats. Clique sur **Question suivante**, ou laisse le compte à rebours la lancer en mode auto. **Terminer** arrête la partie quand vous en avez assez.
-7. **Terminer** affiche le **podium** : les 3 joueurs qui ont bu le plus de gorgées (ex æquo sur la même marche), le reste du classement et le total de la soirée. Chaque téléphone affiche aussi sa place.
-8. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu (avec les mêmes réglages), et **Changer de jeu** passe à l'autre mode, sans que personne n'ait à rescanner.
+1. Sur l'accueil, clique sur **Créer une partie**.
+2. **Choisis le jeu** dans la grille : flèches + Entrée au clavier (pratique avec une télécommande ou un clavier sans fil), ou un clic sur la carte. Les cartes « Bientôt » ne sont pas encore jouables. Le dernier jeu choisi est présélectionné la fois suivante.
+3. Le lobby affiche le jeu choisi (avec un bouton **Changer de jeu**), un QR code et un code de 4 lettres.
+4. Les joueurs apparaissent au fur et à mesure. Survole une photo et clique sur **×** pour retirer quelqu'un.
+5. Si tu veux que la partie tourne toute seule, clique sur **Réglages** et active le **mode auto** (voir [Réglages de la partie](#réglages-de-la-partie)).
+6. **Lancer la partie** (au moins 2 joueurs).
+7. La question s'affiche avec le compteur de votes. Clique sur **Révéler** quand tout le monde a voté (le bouton pulse), ou avant si quelqu'un traîne. En mode auto, la révélation se lance toute seule.
+8. Quelques secondes de suspense, puis les résultats. Clique sur **Question suivante**, ou laisse le compte à rebours la lancer en mode auto. **Terminer** arrête la partie quand vous en avez assez.
+9. **Terminer** affiche le **podium** : les 3 joueurs qui ont bu le plus de gorgées (ex æquo sur la même marche), le reste du classement et le total de la soirée. Chaque téléphone affiche aussi sa place.
+10. Après la fin, **Rejouer avec les mêmes joueurs** relance le même jeu (avec les mêmes réglages), et **Changer de jeu** ramène à la grille des jeux. Les joueurs restent connectés : personne n'a à rescanner.
 
 Active le son de la TV pour le roulement de tambour, le tic-tac de la jauge et le « ding » de la révélation. Le bouton **Son** en haut à droite permet de le couper.
 
 **Sur le téléphone (joueur)**
 
 1. Scanne le QR code (ou va sur le site et tape le code).
-2. Entre ton prénom, prends un selfie (ou choisis une photo), puis **Rejoindre la partie**.
+2. Entre ton prénom, prends un selfie (ou choisis une photo), puis **Rejoindre la partie**. Le téléphone affiche le jeu choisi, ou « L'hôte choisit le jeu… » tant que la TV est sur la grille.
 3. À chaque question, touche la personne de ton choix (*Qui de nous ?*) ou le gros bouton **A** ou **B** (*Tu préfères ?*). Tu peux **changer ton vote** jusqu'à la révélation. Si un minuteur de vote est réglé, il s'affiche en haut de l'écran.
 4. Pendant le suspense, le téléphone affiche « Les résultats arrivent… ». Il devient ensuite **rouge (tu bois)** ou **vert (tu es épargné)**, en même temps que la TV, avec les gorgées du tour et ton total de la soirée.
 
@@ -252,7 +270,7 @@ Les boutons **Révéler maintenant** et **Question suivante** restent toujours d
 
 - Le camp qui a le plus de votes est **épargné**, **la minorité boit**.
 - **Tous du même côté** : personne ne boit.
-- **Égalité parfaite** : tout le monde est sauvé. Pour que tout le monde boive à la place, remplace `onTie: 'nobody'` par `onTie: 'everyone'` dans [`server/modes.js`](server/modes.js).
+- **Égalité parfaite** : tout le monde est sauvé. Pour que tout le monde boive à la place, remplace `onTie: 'nobody'` par `onTie: 'everyone'` dans [`server/games/tuPreferes.js`](server/games/tuPreferes.js).
 - **Pas voté à temps** : le retardataire compte comme minoritaire et boit, même en cas d'égalité.
 
 ### Compteur de gorgées
@@ -343,14 +361,17 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 **Stack** : Node.js, Express, Socket.IO, React, Vite. Aucune base de données.
 
 ```
+├── shared/
+│   └── games.js            Catalogue des jeux (nom, icône, accroche, règle, joueurs conseillés, disponible), partagé serveur/client
 ├── client/                 Site React (une seule app pour l'écran et les téléphones)
 │   └── src/
-│       ├── pages/          Home (accueil + choix du jeu), Host (écran TV), Player (téléphone)
-│       ├── modes/          Un fichier par jeu : vues TV, vue de vote, verdict
+│       ├── pages/          Home (accueil), Host (écran TV : grille des jeux, lobby, partie), Player (téléphone)
+│       ├── games/          Un fichier par jeu : vues TV, suspense, vote, verdict
 │       │   ├── quiDeNous.jsx
 │       │   ├── tuPreferes.jsx   (dont la jauge de suspense en requestAnimationFrame)
-│       │   └── index.js         Registre des modes
-│       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, progression des votes
+│       │   └── index.js         Registre client : catalogue + écrans
+│       ├── icons.jsx       Logo Gorgée et illustrations des jeux (SVG maison)
+│       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, minuteurs
 │       ├── sips.jsx        Compteur de gorgées : classement, podium
 │       ├── sound.js        Sons synthétisés (WebAudio, aucun fichier audio)
 │       ├── lib.js          Socket.IO, navigation, stockage local
@@ -358,11 +379,10 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 ├── server/
 │   ├── index.js            Serveur HTTP + fichiers statiques + photos
 │   ├── sockets.js          Événements temps réel (hôte, joueurs)
-│   ├── gameStore.js        État des parties en mémoire et déroulement : phases, minuteurs, mode auto, pause
-│   ├── flow.test.js        Tests du déroulement avec une horloge simulée
-│   ├── sips.test.js        Tests du compteur de gorgées
-│   ├── modes.js            Registre des modes : questions, validation des votes, règles
-│   ├── rules.js            Règles des deux jeux (fonctions pures, testées)
+│   ├── gameStore.js        État des parties : phases, choix du jeu, minuteurs, mode auto, pause, gorgées
+│   ├── games/              Registre serveur : un fichier par jeu (questions, votes, résultats, gorgées, durée du suspense)
+│   ├── rules.js            Règles des jeux (fonctions pures, testées)
+│   ├── *.test.js           Tests : règles, gorgées, questions, registre des jeux, déroulement (horloge simulée)
 │   ├── questions.json            Questions « Qui de nous ? »
 │   └── questionsPreferes.json    Dilemmes « Tu préfères ? »
 └── scripts/share.js        `npm run share` : serveur + tunnel Cloudflare
@@ -370,9 +390,17 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 
 **Fonctionnement** : le serveur garde l'état de chaque partie et le diffuse à tous les appareils à chaque changement. Les votes restent secrets jusqu'à la révélation. L'hôte et les joueurs reçoivent un identifiant secret, stocké dans le navigateur, qui leur permet de se reconnecter. Les parties inactives sont supprimées au bout de 6 heures.
 
-**Ajouter un jeu** : crée ses règles dans `server/rules.js`, déclare-le dans `server/modes.js` (questions, `isValidVote`, `computeResults`), puis crée `client/src/modes/monJeu.jsx` avec les mêmes exports que les deux modes existants et ajoute-le à `client/src/modes/index.js`. Le lobby, le QR code, la reconnexion et le déroulement des tours sont fournis.
+### Ajouter un jeu
 
-**Déroulement d'un tour** : `lobby → question → revealing → results → question… → ended`. Le serveur porte tous les minuteurs et envoie aux écrans des horodatages (`reveal.startedAt/endsAt`, `voteTimer`, `nextTimer`) : la TV et les téléphones restent synchronisés même après un rechargement. Pendant `revealing`, seule la TV reçoit les résultats (pour animer le suspense), et les téléphones les reçoivent au passage à `results`. Les actions `reveal` et `next` portent le numéro de la question, ce qui permet d'ignorer les doublons.
+1. **Catalogue** : ajoute une entrée dans [`shared/games.js`](shared/games.js) (`id`, `name`, `icon`, `tagline`, `rule`, `players`, `available`). Avec `available: false`, la carte apparaît « Bientôt » dans la grille sans être jouable.
+2. **Règles** : écris-les en fonctions pures dans `server/rules.js` (avec leurs tests), puis crée `server/games/monJeu.js` sur le modèle des deux existants : `questions`, `isValidVote`, `computeResults`, `sipsOf`, `revealMs`. Déclare-le dans `server/games/index.js`.
+3. **Écrans** : crée `client/src/games/monJeu.jsx` avec les mêmes exports que les jeux existants (`HostQuestion`, `HostReveal`, `HostResults`, `PlayerVote`, `VoteSummary`, `verdict`), déclare-le dans `client/src/games/index.js`, et si besoin ajoute son illustration dans `client/src/icons.jsx`.
+4. Passe `available` à `true`. `npm test` vérifie que chaque jeu disponible a bien ses règles.
+
+Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur de gorgées et le podium sont fournis.
+
+
+**Déroulement d'une partie** : `picking (grille des jeux) → lobby → question → revealing → results → question… → ended`, puis retour à `lobby` (Rejouer) ou à `picking` (Changer de jeu), en gardant les joueurs. Le champ `mode` de la partie contient l'`id` du jeu. Le serveur porte tous les minuteurs et envoie aux écrans des horodatages (`reveal.startedAt/endsAt`, `voteTimer`, `nextTimer`) : la TV et les téléphones restent synchronisés même après un rechargement. Pendant `revealing`, seule la TV reçoit les résultats (pour animer le suspense), et les téléphones les reçoivent au passage à `results`. Les actions `reveal` et `next` portent le numéro de la question, ce qui permet d'ignorer les doublons.
 
 **Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, sélecteur d'intensité (chill / épicé / hardcore), réveiller un joueur qui traîne.
 

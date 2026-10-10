@@ -5,11 +5,9 @@ import { sounds } from '../sound.js';
 import { roundCaption } from '../sips.jsx';
 
 export const id = 'qui-de-nous';
-export const label = 'Qui de nous ?';
-export const tagline = 'Votez pour un joueur : le plus voté boit.';
 export const waitingText = 'En attente des autres…';
 
-// La révélation dure revealMs (server/modes.js) : « Attention… », puis 3, 2, 1 sur les 3 dernières secondes.
+// La révélation dure revealMs (server/games/quiDeNous.js) : « Attention… », puis 3, 2, 1 sur les 3 dernières secondes.
 const COUNTDOWN_MS = 3000;
 
 /** Les photos défilent comme une roulette qui ralentit pendant le compte à rebours. */

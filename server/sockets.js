@@ -77,6 +77,8 @@ export function registerSockets(io, store) {
       'host:reveal': (game, { round }) => game.reveal(Number.isInteger(round) ? round : undefined),
       'host:end': (game) => game.end(),
       'host:restart': (game, { mode }) => game.restart(mode),
+      'host:chooseGame': (game) => game.chooseGame(),
+      'host:pickGame': (game, { mode }) => game.pickGame(mode),
       'host:settings': (game, { settings }) => game.setSettings(settings),
       'host:pause': (game) => game.pause(),
       'host:unpause': (game) => game.resume(),

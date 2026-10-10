@@ -1,5 +1,5 @@
 import { randomBytes, randomInt } from 'node:crypto';
-import { DEFAULT_MODE, MODES, isMode } from './modes.js';
+import { GAMES, isGame, isPlayable } from './games/index.js';
 import { shuffle } from './rules.js';
 
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -56,14 +56,15 @@ export function sanitizeSettings(patch) {
 }
 
 /**
- * Une partie. Phases : lobby → question → revealing → results → question… → ended.
+ * Une partie. Phases : picking (choix du jeu) → lobby → question → revealing → results → question… → ended.
+ * `mode` est l'id du jeu en cours (voir shared/games.js) ; null tant que l'hôte n'a pas choisi.
  * Le serveur est la seule source de vérité : les minuteurs (vote, révélation,
  * question suivante) vivent ici, et `onChange` prévient les écrans quand l'un d'eux fait avancer la partie.
  */
 export class Game {
-  constructor(code, mode = DEFAULT_MODE, { clock = realClock, onChange = () => {} } = {}) {
+  constructor(code, mode = null, { clock = realClock, onChange = () => {} } = {}) {
     this.code = code;
-    this.mode = isMode(mode) ? mode : DEFAULT_MODE;
+    this.mode = isPlayable(mode) ? mode : null;
     this.clock = clock;
     this.onChange = onChange;
     this.hostSecret = token();
@@ -78,7 +79,7 @@ export class Game {
 
   reset() {
     this.clearTimers();
-    this.phase = 'lobby';
+    this.phase = this.mode ? 'lobby' : 'picking';
     this.paused = false;
     this.questionPool = [];
     this.round = 0;
@@ -103,7 +104,7 @@ export class Game {
   }
 
   get rules() {
-    return MODES[this.mode];
+    return GAMES[this.mode];
   }
 
   touch() {
@@ -226,6 +227,7 @@ export class Game {
   // ---------- Déroulement ----------
 
   start() {
+    if (this.phase === 'picking') return 'Choisis d’abord un jeu.';
     if (this.phase !== 'lobby') return 'La partie a déjà commencé.';
     if (this.players.size < 2) return 'Il faut au moins 2 joueurs.';
     return this.nextQuestion();
@@ -404,7 +406,24 @@ export class Game {
 
   restart(mode = this.mode) {
     if (this.phase !== 'ended') return 'La partie n’est pas terminée.';
-    if (!isMode(mode)) return 'Mode de jeu inconnu.';
+    if (!isPlayable(mode)) return 'Ce jeu n’est pas disponible.';
+    this.mode = mode;
+    this.reset();
+    return null;
+  }
+
+  /** Retour à la grille des jeux, en gardant les joueurs et les réglages (depuis le lobby ou la fin de partie). */
+  chooseGame() {
+    if (!['picking', 'lobby', 'ended'].includes(this.phase)) return 'Termine la partie avant de changer de jeu.';
+    this.mode = null;
+    this.reset();
+    return null;
+  }
+
+  pickGame(mode) {
+    if (this.phase !== 'picking' && this.phase !== 'lobby') return 'Termine la partie avant de changer de jeu.';
+    if (!isGame(mode)) return 'Jeu inconnu.';
+    if (!isPlayable(mode)) return 'Ce jeu arrive bientôt !';
     this.mode = mode;
     this.reset();
     return null;

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { MODES } from './modes.js';
+import { GAMES } from './games/index.js';
 
 const NIVEAUX = ['chill', 'epice', 'hardcore'];
 const normalize = (s) => s.toLowerCase().replace(/[^a-zà-ÿ0-9]+/g, ' ').trim();
@@ -14,7 +14,7 @@ function checkLevels(list) {
 }
 
 test('questions « Qui de nous ? » : ~150, bien formées, uniques, niveaux répartis', () => {
-  const qs = MODES['qui-de-nous'].questions;
+  const qs = GAMES['qui-de-nous'].questions;
   assert.ok(qs.length >= 140 && qs.length <= 160, `${qs.length} questions`);
   for (const q of qs) {
     assert.match(q.text, /^Qui est le plus susceptible d(e |')/, q.text);
@@ -26,7 +26,7 @@ test('questions « Qui de nous ? » : ~150, bien formées, uniques, niveaux rép
 });
 
 test('dilemmes « Tu préfères ? » : ~150, bien formés, uniques, niveaux répartis', () => {
-  const qs = MODES['tu-preferes'].questions;
+  const qs = GAMES['tu-preferes'].questions;
   assert.ok(qs.length >= 140 && qs.length <= 160, `${qs.length} dilemmes`);
   for (const q of qs) {
     assert.ok(typeof q.a === 'string' && q.a.trim(), JSON.stringify(q));

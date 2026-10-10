@@ -1,0 +1,20 @@
+import { DEFAULT_GAME, GAME_CATALOG } from '../../shared/games.js';
+import quiDeNous from './quiDeNous.js';
+import tuPreferes from './tuPreferes.js';
+
+// Règles côté serveur de chaque jeu jouable : questions, validation d'un vote, résultats, gorgées, durée du suspense.
+// Le reste (lobby, joueurs, reconnexion, tours, mode auto) est commun à tous les jeux.
+export const GAME_RULES = {
+  [quiDeNous.id]: quiDeNous,
+  [tuPreferes.id]: tuPreferes,
+};
+
+/** Registre complet : métadonnées du catalogue + règles. */
+export const GAMES = Object.fromEntries(GAME_CATALOG.map((game) => [game.id, { ...game, ...GAME_RULES[game.id] }]));
+
+export { DEFAULT_GAME };
+
+export const isGame = (id) => typeof id === 'string' && Object.hasOwn(GAMES, id);
+
+/** Un jeu se lance s'il est marqué disponible ET que ses règles existent. */
+export const isPlayable = (id) => isGame(id) && GAMES[id].available && Object.hasOwn(GAME_RULES, id);
