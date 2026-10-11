@@ -184,3 +184,30 @@ export function PieChart({ slices, size = 340 }) {
     </svg>
   );
 }
+
+/** Choix exclusif en boutons (réglages de la partie, du mode soirée…). */
+export function Segmented({ label, hint, value, options, onChange, disabled }) {
+  return (
+    <div className={`setting ${disabled ? 'setting-disabled' : ''}`}>
+      <div className="setting-head">
+        <strong>{label}</strong>
+        {hint && <small>{hint}</small>}
+      </div>
+      <div className="segmented" role="radiogroup" aria-label={label}>
+        {options.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={value === o.value}
+            className={value === o.value ? 'is-selected' : ''}
+            onClick={() => onChange(o.value)}
+            disabled={disabled}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}

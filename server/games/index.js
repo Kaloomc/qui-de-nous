@@ -30,3 +30,6 @@ export const isGame = (id) => typeof id === 'string' && Object.hasOwn(GAMES, id)
 
 /** Un jeu se lance s'il est marqué disponible ET que ses règles existent. */
 export const isPlayable = (id) => isGame(id) && GAMES[id].available && Object.hasOwn(GAME_RULES, id);
+
+/** Jeux vus par le mode soirée (server/party.js) : métadonnées + `playable`. */
+export const partyGames = () => Object.values(GAMES).map((g) => ({ id: g.id, rhythm: g.rhythm, minToStart: g.minToStart, partyRounds: g.partyRounds, playable: isPlayable(g.id) }));

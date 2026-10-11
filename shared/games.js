@@ -2,6 +2,8 @@
 // Pour ajouter un jeu : une entrée ici, ses règles dans server/games/, ses écrans dans client/src/games/.
 // `id` est la valeur du champ `mode` d'une partie. `players` = nombre conseillé (affiché),
 // `minToStart` = minimum pour lancer (vérifié par le serveur et le lobby).
+// Mode soirée : `rhythm` (vote, rapide ou ambiance) sert à alterner les rythmes, `partyRounds` = [min, max] manches
+// d'affilée (3 à 5 par défaut).
 
 export const GAME_CATALOG = [
   {
@@ -12,6 +14,7 @@ export const GAME_CATALOG = [
     rule: 'Le plus voté boit, et ceux qui n’ont pas voté comme lui aussi.',
     players: { min: 3, max: 12 },
     minToStart: 2,
+    rhythm: 'vote',
     available: true,
   },
   {
@@ -22,6 +25,7 @@ export const GAME_CATALOG = [
     rule: 'La minorité boit. Égalité parfaite : tout le monde est sauvé.',
     players: { min: 4, max: 20 },
     minToStart: 2,
+    rhythm: 'vote',
     available: true,
   },
   {
@@ -32,6 +36,7 @@ export const GAME_CATALOG = [
     rule: 'Le plus éloigné boit, et le plus proche désigne quelqu’un qui trinque avec lui.',
     players: { min: 2, max: 20 },
     minToStart: 2,
+    rhythm: 'vote',
     available: true,
   },
   {
@@ -42,6 +47,7 @@ export const GAME_CATALOG = [
     rule: 'Ceux qui se trompent boivent. Personne n’a trouvé, ou tout le monde : la cible boit.',
     players: { min: 3, max: 20 },
     minToStart: 3,
+    rhythm: 'ambiance',
     available: true,
   },
   {
@@ -52,6 +58,8 @@ export const GAME_CATALOG = [
     rule: 'Imposteur démasqué : il boit. Sinon, tout le groupe boit à sa place.',
     players: { min: 4, max: 20 },
     minToStart: 3,
+    rhythm: 'ambiance',
+    partyRounds: [2, 3],
     available: true,
   },
   {
@@ -62,6 +70,7 @@ export const GAME_CATALOG = [
     rule: 'Celui qui l’a en main quand elle explose boit 2 gorgées.',
     players: { min: 3, max: 20 },
     minToStart: 3,
+    rhythm: 'rapide',
     available: true,
   },
   {
@@ -72,6 +81,7 @@ export const GAME_CATALOG = [
     rule: 'La roue décide de tout : celui qu’elle désigne fait le défi (ou boit).',
     players: { min: 2, max: 20 },
     minToStart: 2,
+    rhythm: 'rapide',
     available: true,
   },
   {
@@ -82,6 +92,7 @@ export const GAME_CATALOG = [
     rule: 'Le plus lent boit, comme ceux qui tapent trop tôt ou pas du tout.',
     players: { min: 2, max: 20 },
     minToStart: 2,
+    rhythm: 'rapide',
     available: true,
   },
 ];

@@ -78,9 +78,12 @@ export function registerSockets(io, store) {
 
     const hostActions = {
       'host:start': (game) => game.start(),
-      'host:next': (game, { round }) => game.nextQuestion(Number.isInteger(round) ? round : undefined),
+      'host:next': (game, { round }) => game.hostNext(Number.isInteger(round) ? round : undefined),
       'host:reveal': (game, { round }) => game.reveal(Number.isInteger(round) ? round : undefined),
-      'host:end': (game) => game.end(),
+      'host:end': (game) => (game.partyActive ? game.endParty() : game.end()),
+      'host:partyStart': (game, { durationMs, games }) => game.startParty({ durationMs, games }),
+      'host:partySkip': (game) => game.skipPartyGame(),
+      'host:partyEnd': (game) => game.endParty(),
       'host:restart': (game, { mode }) => game.restart(mode),
       'host:chooseGame': (game) => game.chooseGame(),
       'host:pickGame': (game, { mode }) => game.pickGame(mode),

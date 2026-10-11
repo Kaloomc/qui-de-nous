@@ -105,7 +105,9 @@ export default function Player({ code }) {
   else if (state.phase === 'lobby' || state.phase === 'picking') {
     content = <Waiting me={me} state={state} mode={state.phase === 'picking' ? null : mode} onLeave={leave} />;
   }
-  else if (state.phase === 'question' && mode.playerLayout === 'custom') {
+  else if (state.party?.lateIds.includes(me.id) && ['question', 'revealing', 'results'].includes(state.phase)) {
+    content = <Late me={me} mode={mode} />;
+  } else if (state.phase === 'question' && mode.playerLayout === 'custom') {
     content = <mode.PlayerRound state={state} me={me} act={act} vote={vote} myVote={currentVote?.choice ?? null} />;
   } else if (state.phase === 'question') {
     content = (
@@ -229,6 +231,24 @@ function Waiting({ me, state, mode, onLeave }) {
       <button className="btn btn-ghost small" onClick={onLeave}>
         Quitter la partie
       </button>
+    </div>
+  );
+}
+
+/** Arrivé en pleine manche du mode soirée : il joue dès la suivante. */
+function Late({ me, mode }) {
+  return (
+    <div className="center waiting">
+      <Avatar player={me} size={140} className="bounce" />
+      <h1>Bienvenue, {me.name} !</h1>
+      <div className="game-pill game-pill-phone">
+        <GameIcon icon={mode.icon} size={48} />
+        <div className="game-pill-text">
+          <strong>{mode.name}</strong>
+          <span>{mode.rule}</span>
+        </div>
+      </div>
+      <p className="lead">Une manche est en cours : tu joues dès la prochaine. Regarde l’écran en attendant.</p>
     </div>
   );
 }

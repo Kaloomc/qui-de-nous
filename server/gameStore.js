@@ -1,5 +1,6 @@
 import { randomBytes, randomInt } from 'node:crypto';
-import { GAMES, isGame, isPlayable } from './games/index.js';
+import { GAMES, isGame, isPlayable, partyGames } from './games/index.js';
+import { eligibleGames, PARTY_DURATIONS, pickNextBlock, TRANSITION_MS } from './party.js';
 import { QuestionHistory } from './questionHistory.js';
 import { TIMING } from './timing.js';
 
@@ -20,6 +21,10 @@ export const SETTING_CHOICES = {
 };
 
 export const DEFAULT_SETTINGS = { auto: false, resultsMs: 10000, voteMs: 0, maxRounds: 0 };
+/** Mode soirée sans minuteur de vote réglé : on en met un, pour qu'un joueur distrait ne bloque pas l'enchaînement. */
+const PARTY_VOTE_MS = 30000;
+const PARTY_MESSAGE = 'Le mode soirée est en cours : termine la soirée d’abord.';
+const LATE_MESSAGE = 'Tu joues dès la prochaine manche.';
 
 const realClock = {
   now: () => Date.now(),
@@ -79,6 +84,8 @@ export class Game {
     // Gorgées de toute la soirée, par joueur : survit aussi à reset(). Seule une nouvelle partie (nouveau QR code)
     // ou le bouton « Remettre les compteurs à zéro » de l'hôte les efface.
     this.partySips = new Map();
+    // Mode soirée (enchaînement automatique des jeux), null hors soirée. Voir startParty().
+    this.party = null;
     this.reset();
     this.touch();
   }
@@ -141,8 +148,13 @@ export class Game {
     this.evaluate();
   }
 
+  /** Joueurs connectés qui jouent la manche en cours (un retardataire du mode soirée attend la suivante). */
   connectedPlayers() {
-    return [...this.players.values()].filter((p) => p.sockets.size > 0);
+    return [...this.players.values()].filter((p) => p.sockets.size > 0 && !this.isLate(p.id));
+  }
+
+  isLate(playerId) {
+    return !!this.party?.late.has(playerId);
   }
 
   get rules() {
@@ -219,6 +231,8 @@ export class Game {
       while (this.players.has(id));
       player = { id, secret: token(), sockets: new Set(), disconnectedAt: null, photo: null, photoVersion: 0 };
       this.players.set(id, player);
+      // Arrivé en pleine manche du mode soirée : il joue à partir de la manche suivante.
+      if (this.partyActive && ['question', 'revealing', 'results'].includes(this.phase)) this.party.late.add(id);
     }
     player.name = cleanName;
     if (parsedPhoto) {
@@ -245,6 +259,7 @@ export class Game {
   removePlayer(playerId) {
     // Ses gorgées restent dans partySips (le total de la soirée reste cohérent), mais il sort du classement.
     this.players.delete(playerId);
+    this.party?.late.delete(playerId);
     this.votes.delete(playerId);
     for (const [voter, target] of this.votes) if (target === playerId) this.votes.delete(voter);
     this.stats.delete(playerId);
@@ -262,7 +277,7 @@ export class Game {
   expectedVoters() {
     const now = this.clock.now();
     return [...this.players.values()].filter(
-      (p) => p.sockets.size > 0 || (p.disconnectedAt != null && now - p.disconnectedAt < TIMING.disconnectGraceMs),
+      (p) => !this.isLate(p.id) && (p.sockets.size > 0 || (p.disconnectedAt != null && now - p.disconnectedAt < TIMING.disconnectGraceMs)),
     );
   }
 
@@ -285,6 +300,7 @@ export class Game {
   /** Action d'un joueur propre au jeu (passer la bombe, taper, deviner…). */
   action(playerId, payload) {
     if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
+    if (this.isLate(playerId)) return LATE_MESSAGE;
     if (!this.rules?.handleAction) return 'Action inconnue.';
     const error = this.rules.handleAction(this, playerId, payload ?? {});
     if (!error) this.evaluate();
@@ -302,6 +318,7 @@ export class Game {
   // ---------- Déroulement ----------
 
   start() {
+    if (this.partyActive) return PARTY_MESSAGE;
     if (this.phase === 'picking') return 'Choisis d’abord un jeu.';
     if (this.phase !== 'lobby') return 'La partie a déjà commencé.';
     const min = this.rules.minToStart ?? 2;
@@ -317,6 +334,7 @@ export class Game {
     if (this.phase === 'results' && this.pending) this.finalize();
     for (const name of Object.keys(this.timers)) if (name.startsWith('g:') || name === 'next') this.cancel(name);
     for (const name of Object.keys(this.pausedTimers)) if (name.startsWith('g:')) delete this.pausedTimers[name];
+    this.party?.late.clear();
     this.question = this.drawQuestion();
     this.round += 1;
     this.votes = new Map();
@@ -341,6 +359,7 @@ export class Game {
   vote(playerId, choice) {
     if (!this.votingOpen) return 'Le vote est fermé.';
     if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
+    if (this.isLate(playerId)) return LATE_MESSAGE;
     if (!this.rules.isValidVote(this, choice, playerId)) return 'Choix invalide.';
     this.votes.set(playerId, choice);
     this.evaluate();
@@ -356,7 +375,7 @@ export class Game {
     this.cancel('grace');
     for (const name of Object.keys(this.timers)) if (name.startsWith('g:')) this.cancel(name);
     this.waitingForPlayers = false;
-    this.results = this.rules.computeResults([...this.players.keys()], this.votes, this);
+    this.results = this.rules.computeResults([...this.players.keys()].filter((id) => !this.isLate(id)), this.votes, this);
     const now = this.clock.now();
     this.reveal_ = { startedAt: now, endsAt: now + this.rules.revealMs, durationMs: this.rules.revealMs };
     this.phase = 'revealing';
@@ -392,11 +411,13 @@ export class Game {
       this.waitingForPlayers = true;
       return;
     }
-    if (this.isLastRound) this.end();
+    if (this.partyActive) this.partyAfterRound();
+    else if (this.isLastRound) this.end();
     else this.nextQuestion();
   }
 
   get isLastRound() {
+    if (this.partyActive) return false;
     return this.settings.maxRounds > 0 && this.round >= this.settings.maxRounds;
   }
 
@@ -449,6 +470,11 @@ export class Game {
 
   setSettings(patch) {
     const clean = sanitizeSettings(patch);
+    // Mode soirée : le mode auto reste activé et le vote garde un minuteur.
+    if (this.partyActive) {
+      delete clean.auto;
+      if (clean.voteMs === 0) delete clean.voteMs;
+    }
     if (Object.keys(clean).length === 0) return 'Réglage invalide.';
     Object.assign(this.settings, clean);
     if ('voteMs' in clean && this.phase === 'question') {
@@ -463,6 +489,7 @@ export class Game {
   pause() {
     if (this.paused) return null;
     this.paused = true;
+    this.stopPartyClock();
     const now = this.clock.now();
     for (const [name, timer] of Object.entries(this.timers)) {
       if (!timer.pausable) continue;
@@ -478,6 +505,7 @@ export class Game {
   resume() {
     if (!this.paused) return null;
     this.paused = false;
+    if (this.partyActive) this.party.runningSince = this.clock.now();
     const saved = this.pausedTimers;
     this.pausedTimers = {};
     for (const [name, timer] of Object.entries(saved)) {
@@ -502,6 +530,7 @@ export class Game {
   restart(mode = this.mode) {
     if (this.phase !== 'ended') return 'La partie n’est pas terminée.';
     if (!isPlayable(mode)) return 'Ce jeu n’est pas disponible.';
+    this.party = null;
     this.mode = mode;
     this.reset();
     return null;
@@ -510,6 +539,8 @@ export class Game {
   /** Retour à la grille des jeux, en gardant les joueurs et les réglages (depuis le lobby ou la fin de partie). */
   chooseGame() {
     if (!['picking', 'lobby', 'ended'].includes(this.phase)) return 'Termine la partie avant de changer de jeu.';
+    if (this.partyActive) return PARTY_MESSAGE;
+    this.party = null;
     this.mode = null;
     this.reset();
     return null;
@@ -517,11 +548,168 @@ export class Game {
 
   pickGame(mode) {
     if (this.phase !== 'picking' && this.phase !== 'lobby') return 'Termine la partie avant de changer de jeu.';
+    if (this.partyActive) return PARTY_MESSAGE;
     if (!isGame(mode)) return 'Jeu inconnu.';
     if (!isPlayable(mode)) return 'Ce jeu arrive bientôt !';
     this.mode = mode;
     this.reset();
     return null;
+  }
+
+  // ---------- Mode soirée ----------
+  // Le serveur enchaîne les jeux : transition (5 s, phase lobby) → manches du jeu en mode auto → transition…
+  // Il n'interrompt jamais une manche : « Jeu suivant », « Terminer la soirée » et la fin du temps
+  // s'appliquent à la fin de la manche en cours.
+
+  get partyActive() {
+    return !!this.party && this.party.step !== 'over';
+  }
+
+  /** Lance la soirée : durée en ms (0 = sans fin, voir PARTY_DURATIONS) et ids des jeux cochés (tous par défaut). */
+  startParty({ durationMs, games } = {}) {
+    if (this.partyActive) return 'Le mode soirée est déjà lancé.';
+    if (!['picking', 'lobby', 'ended'].includes(this.phase)) return 'Termine la partie avant de lancer le mode soirée.';
+    if (!PARTY_DURATIONS.includes(durationMs)) return 'Durée invalide.';
+    const all = partyGames();
+    const included = all.filter((g) => !Array.isArray(games) || games.includes(g.id)).map((g) => g.id);
+    if (!eligibleGames(all, Infinity, included).length) return 'Coche au moins un jeu.';
+    if (!eligibleGames(all, this.connectedCount(), included).length) return 'Pas assez de joueurs connectés pour ces jeux.';
+    this.party = {
+      step: 'transition',
+      durationMs,
+      included,
+      history: [],
+      block: null,
+      elapsedMs: 0,
+      runningSince: this.clock.now(),
+      ending: false,
+      skipping: false,
+      late: new Set(),
+      saved: { auto: this.settings.auto, voteMs: this.settings.voteMs },
+    };
+    this.settings.auto = true;
+    if (this.settings.voteMs === 0) this.settings.voteMs = PARTY_VOTE_MS;
+    this.paused = false;
+    this.partyNextGame();
+    return null;
+  }
+
+  partyElapsed() {
+    const p = this.party;
+    return p.elapsedMs + (p.runningSince != null ? this.clock.now() - p.runningSince : 0);
+  }
+
+  get partyTimeUp() {
+    return this.party.durationMs > 0 && this.partyElapsed() >= this.party.durationMs;
+  }
+
+  stopPartyClock() {
+    const p = this.party;
+    if (!p || p.runningSince == null) return;
+    p.elapsedMs += this.clock.now() - p.runningSince;
+    p.runningSince = null;
+  }
+
+  /** Choisit le jeu suivant selon les joueurs connectés et affiche la transition ; sans jeu possible, on réessaie. */
+  partyNextGame() {
+    const p = this.party;
+    p.skipping = false;
+    const all = partyGames();
+    const block = pickNextBlock(eligibleGames(all, this.connectedCount(), p.included), p.history, Math.random, all);
+    const paused = this.paused;
+    if (block) {
+      p.block = block;
+      p.history.push(block.mode);
+      this.mode = block.mode;
+    }
+    this.reset();
+    this.paused = paused;
+    p.late.clear();
+    p.step = block ? 'transition' : 'waiting';
+    this.schedulePausable('party', block ? TRANSITION_MS : TIMING.retryMs, () => (block ? this.partyStartBlock() : this.partyNextGame()));
+  }
+
+  partyStartBlock() {
+    if (!this.partyActive || this.phase !== 'lobby') return;
+    if (this.party.ending || this.partyTimeUp) return this.finishParty();
+    // Quelqu'un est parti pendant la transition : on choisit un autre jeu.
+    if (this.connectedCount() < (this.rules.minToStart ?? 2)) return this.partyNextGame();
+    this.party.step = 'playing';
+    this.nextQuestion();
+  }
+
+  /** Fin d'une manche (minuteur des résultats ou bouton de l'hôte) : manche suivante, jeu suivant ou fin de soirée. */
+  partyAfterRound() {
+    const p = this.party;
+    this.cancel('next');
+    if (p.ending || this.partyTimeUp) return this.finishParty();
+    if (p.skipping || this.round >= p.block.rounds) return this.partyNextGame();
+    this.nextQuestion();
+  }
+
+  /** Bouton « Question suivante » de l'hôte : en mode soirée, il suit le programme. */
+  hostNext(expectedRound) {
+    if (!this.partyActive) return this.nextQuestion(expectedRound);
+    if (expectedRound != null && expectedRound !== this.round) return null;
+    if (this.phase === 'revealing') return 'Patiente, la révélation est en cours.';
+    if (this.phase !== 'results') return 'Action impossible maintenant.';
+    if (this.pending) this.finalize();
+    this.partyAfterRound();
+    return null;
+  }
+
+  /** Entre deux manches : tout de suite. Pendant une manche : dès qu'elle est finie. */
+  get betweenRounds() {
+    return this.phase === 'lobby' || (this.phase === 'results' && !this.pending);
+  }
+
+  skipPartyGame() {
+    if (!this.partyActive) return 'Le mode soirée n’est pas lancé.';
+    if (this.betweenRounds) this.partyNextGame();
+    else this.party.skipping = true;
+    return null;
+  }
+
+  /** « Terminer la soirée » : à la fin de la manche en cours ; un deuxième appui termine tout de suite. */
+  endParty() {
+    if (!this.partyActive) return this.end();
+    if (this.betweenRounds || this.party.ending) this.finishParty();
+    else this.party.ending = true;
+    return null;
+  }
+
+  finishParty() {
+    const p = this.party;
+    this.stopPartyClock();
+    this.end();
+    p.step = 'over';
+    p.late.clear();
+    Object.assign(this.settings, p.saved);
+  }
+
+  partyState() {
+    const p = this.party;
+    if (!p) return null;
+    const remaining = p.durationMs > 0 ? Math.max(0, p.durationMs - this.partyElapsed()) : null;
+    let clock = null;
+    if (remaining != null) {
+      clock = p.runningSince != null && p.step !== 'over'
+        ? { endsAt: this.clock.now() + remaining, totalMs: p.durationMs, paused: false }
+        : { remainingMs: remaining, totalMs: p.durationMs, paused: true };
+    }
+    return {
+      step: p.step,
+      durationMs: p.durationMs,
+      included: p.included,
+      gameNumber: p.history.length,
+      blockRounds: p.block?.rounds ?? 0,
+      ending: p.ending,
+      skipping: p.skipping,
+      timeUp: p.step !== 'over' && this.partyTimeUp,
+      lateIds: [...p.late],
+      clock,
+      transitionTimer: this.timerState('party'),
+    };
   }
 
   sipsOfPresent(map) {
@@ -579,6 +767,7 @@ export class Game {
       pending: this.pending,
       pendingTimer: this.pending ? this.timerState('pending') : null,
       stats: Object.fromEntries(this.stats),
+      party: this.partyState(),
     };
   }
 }

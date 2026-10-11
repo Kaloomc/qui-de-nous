@@ -63,6 +63,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - [5. Jouer à distance (sans même Wi-Fi)](#5-jouer-à-distance-sans-même-wi-fi)
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
   - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
+  - [Mode soirée](#mode-soirée)
 - [Règles du jeu](#règles-du-jeu)
   - [Qui de nous ?](#qui-de-nous--1)
   - [Tu préfères ?](#tu-préfères--1)
@@ -83,6 +84,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - *Tu préfères ?* : « Attention… », puis une jauge oscille entre A et B, ralentit, hésite et se pose sur le vrai résultat (avec tic-tac sonore). Les photos des joueurs atterrissent ensuite dans leur camp, et la majorité a droit à des confettis.
 - Chaque téléphone affiche **« Les résultats arrivent… »** pendant le suspense, puis **« Tu bois ! »** ou **« Tu ne bois pas »** au même moment que la TV : personne n'est spoilé.
 - **Mode auto** : la révélation se lance dès que tout le monde a voté, puis la question suivante arrive toute seule après un compte à rebours. Il propose aussi une pause, un minuteur de vote et un nombre de questions maximum (voir [Réglages de la partie](#réglages-de-la-partie)).
+- **Mode soirée** : un seul bouton, et Gorgée enchaîne les jeux tout seul pendant 30 min, 1 h, 2 h ou sans fin (voir [Mode soirée](#mode-soirée)).
 - **Compteur de gorgées** : chaque joueur voit son total sur la TV et sur son téléphone, et la partie se termine sur un **podium** des plus assoiffés.
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
 - 150 questions et 150 dilemmes pensés pour les soirées étudiantes, du plus chill au plus gênant, tirés au hasard sans répétition.
@@ -256,6 +258,18 @@ Les boutons **Révéler maintenant** et **Question suivante** restent toujours d
 - **Changer son vote** ne relance rien : chaque joueur ne compte qu'une fois.
 - Avec **moins de 2 joueurs connectés**, rien ne se déclenche tout seul : la TV affiche « en attente de joueurs ».
 - Si l'hôte clique au moment exact où un minuteur se termine, une seule révélation (ou une seule question suivante) a lieu.
+
+### Mode soirée
+
+La grosse carte **Mode soirée**, en tête de la grille des jeux, lance un enchaînement automatique : personne n'a besoin de toucher le PC.
+
+- **Réglages avant de lancer** : la **durée** (30 min, 1 h, 2 h ou sans fin) et les **jeux inclus** (tous cochés par défaut). Le mode auto est forcé pendant la soirée ; si le minuteur de vote est « Sans limite », il passe à 30 s pour qu'un joueur distrait ne bloque pas tout. Les réglages d'avant reviennent à la fin.
+- **Programme** : 3 à 5 manches par jeu (2 à 3 pour L'Imposteur, plus long), en alternant les rythmes : un jeu de vote (Qui de nous ?, Tu préfères ?, Estimation), puis un jeu rapide (Réflexes, La Roue, Patate chaude), puis un jeu d'ambiance (L'Imposteur, Qui me connaît le mieux ?). Dans chaque rythme, on prend le jeu joué il y a le plus longtemps, jamais deux fois le même d'affilée. Le jeu suivant est choisi au dernier moment selon le nombre de **joueurs connectés** : un jeu dont le minimum n'est pas atteint est sauté. S'il n'y a plus assez de monde pour aucun jeu, la TV affiche « En attente de joueurs… » et la soirée repart toute seule à leur retour.
+- **Transitions** : entre deux jeux, 5 secondes avec le nom du jeu, son icône, son accroche, le classement des gorgées de la soirée et un petit QR code pour les retardataires.
+- **Barre de la soirée** (en haut à gauche de la TV) : jeu en cours, manche, temps restant, et les boutons **Pause** (fige aussi le temps de la soirée), **Jeu suivant** et **Terminer la soirée**.
+- **Jamais de manche coupée** : la fin du temps, « Jeu suivant » et « Terminer la soirée » attendent la fin de la manche en cours. Un deuxième appui sur « Terminer maintenant » arrête tout de suite.
+- **Retardataires** : un joueur qui rejoint en pleine manche voit « tu joues dès la prochaine manche » et entre au tour suivant, sans boire pour la manche qu'il n'a pas jouée.
+- Tout est piloté par le serveur (`server/party.js` pour le programme, `Game.startParty` et suivantes dans `server/gameStore.js`) : l'hôte peut recharger sa page, les téléphones peuvent se reconnecter.
 
 ## Règles du jeu
 
@@ -459,7 +473,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 
 ### Ajouter un jeu
 
-1. **Catalogue** : ajoute une entrée dans [`shared/games.js`](shared/games.js) (`id`, `name`, `icon`, `tagline`, `rule`, `players`, `available`). Avec `available: false`, la carte apparaît « Bientôt » dans la grille sans être jouable.
+1. **Catalogue** : ajoute une entrée dans [`shared/games.js`](shared/games.js) (`id`, `name`, `icon`, `tagline`, `rule`, `players`, `available`, et pour le mode soirée `rhythm` : `vote`, `rapide` ou `ambiance`). Avec `available: false`, la carte apparaît « Bientôt » dans la grille sans être jouable.
 2. **Règles** : écris-les en fonctions pures dans `server/rules/monJeu.js` (avec leurs tests), puis crée `server/games/monJeu.js` sur le modèle des jeux existants : `questions` (ou `drawQuestion`), `isValidVote`, `computeResults`, `sipsOf`, `revealMs`. Les jeux qui sortent du schéma « tout le monde vote » ont des crochets optionnels (`startRound`, `acceptsVotes`, `handleAction`, `hostAction`, `afterReveal`, `onPresenceChange`, `publicRound`… voir l'en-tête de `server/gameStore.js`). Les minuteurs propres au jeu s'appellent `g:…` et sont annulés automatiquement à la fin de la manche. Déclare le jeu dans `server/games/index.js`.
 3. **Écrans** : crée `client/src/games/monJeu.jsx` avec les mêmes exports que les jeux existants (`HostQuestion`, `HostReveal`, `HostResults`, `PlayerVote`, `VoteSummary`, `verdict`, ou `hostLayout`/`playerLayout = 'custom'` avec `PlayerRound` ; optionnels : `PlayerReveal`, `PlayerResults`, `EndStats`, `nextLabel`), déclare-le dans `client/src/games/index.js`, et si besoin ajoute son illustration dans `client/src/icons.jsx`.
 4. Passe `available` à `true`. `npm test` vérifie que chaque jeu disponible a bien ses règles.

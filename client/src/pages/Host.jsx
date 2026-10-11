@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { PlayerChip, TimerBar, VoteProgress, allVoted } from '../components.jsx';
+import { PlayerChip, Segmented, TimerBar, VoteProgress, allVoted } from '../components.jsx';
 import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
 import { GAMES, gameById, gameOf, playersLabel } from '../games/index.js';
 import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
+import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
@@ -18,6 +19,7 @@ export default function Host({ code }) {
   const [fatal, setFatal] = useState(null);
   const [error, setError] = useState(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [partySetupOpen, setPartySetupOpen] = useState(false);
 
   useOnConnect(async () => {
     const hostSecret = storage.get(`qdn:host:${code}`);
@@ -34,6 +36,7 @@ export default function Host({ code }) {
     setError(null);
     const res = await request(event, payload);
     if (!res.ok) setError(res.error);
+    return res.ok;
   }
 
   function changeSettings(patch) {
@@ -62,7 +65,9 @@ export default function Host({ code }) {
   const mode = gameOf(state);
   const round = state.round?.number;
   const inGame = ['question', 'revealing', 'results'].includes(state.phase);
-  const endButton = (
+  // Mode soirée en cours : la barre de la soirée remplace « Terminer » et le bouton du mode auto.
+  const party = state.party && state.party.step !== 'over' ? state.party : null;
+  const endButton = party ? null : (
     <button className="btn btn-ghost" onClick={() => act('host:end')}>
       Terminer
     </button>
@@ -71,12 +76,24 @@ export default function Host({ code }) {
   return (
     <main className={`page host phase-${state.phase} mode-${mode.id}`} onPointerDown={unlockAudio}>
       {!connected && <div className="banner">Connexion perdue, reconnexion…</div>}
-      {inGame && <HostControls state={state} act={act} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />}
-      {state.paused && inGame && <div className="paused-banner">Pause</div>}
+      {party && <PartyBar state={state} act={act} />}
+      {inGame && (
+        <HostControls state={state} act={act} party={!!party} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />
+      )}
+      {state.paused && (inGame || party) && <div className="paused-banner">Pause</div>}
 
-      {state.phase === 'picking' && <GamePicker state={state} onPick={(id) => act('host:pickGame', { mode: id })} onResetSips={() => act('host:resetSips')} />}
+      {state.phase === 'picking' && (
+        <GamePicker
+          state={state}
+          onPick={(id) => act('host:pickGame', { mode: id })}
+          onParty={() => setPartySetupOpen(true)}
+          onResetSips={() => act('host:resetSips')}
+        />
+      )}
 
-      {state.phase === 'lobby' && (
+      {state.phase === 'lobby' && party && <PartyTransition state={state} />}
+
+      {state.phase === 'lobby' && !party && (
         <Lobby
           state={state}
           mode={mode}
@@ -146,7 +163,13 @@ export default function Host({ code }) {
             {(s) => `Réponse attendue : encore ${s} s`}
           </TimerBar>
           <TimerBar timer={state.nextTimer} state={state} small>
-            {(s) => (state.isLastRound ? `Fin de la partie dans ${s} s` : `${mode.nextLabel ?? 'Question suivante'} dans ${s} s`)}
+            {(s) =>
+              party
+                ? `${partyNextLabel(state, mode)} dans ${s} s`
+                : state.isLastRound
+                  ? `Fin de la partie dans ${s} s`
+                  : `${mode.nextLabel ?? 'Question suivante'} dans ${s} s`
+            }
           </TimerBar>
           {state.settings.auto && state.waitingForPlayers && <p className="auto-hint">Mode auto en attente : il faut au moins 2 joueurs connectés.</p>}
           <div className="actions">
@@ -175,6 +198,10 @@ export default function Host({ code }) {
         <Ended state={state} mode={mode} onRestart={(m) => act('host:restart', { mode: m })} onChangeGame={() => act('host:chooseGame')} />
       )}
 
+      {partySetupOpen && (
+        <PartySetupModal playerCount={state.players.filter((p) => p.connected).length} onStart={(options) => act('host:partyStart', options)} onClose={() => setPartySetupOpen(false)} />
+      )}
+
       {settingsOpen && <SettingsModal settings={state.settings} onChange={changeSettings} onClose={() => setSettingsOpen(false)} />}
 
       {error && (
@@ -186,7 +213,7 @@ export default function Host({ code }) {
   );
 }
 
-function HostControls({ state, act, onSettings, onToggleAuto }) {
+function HostControls({ state, act, party, onSettings, onToggleAuto }) {
   const [muted, setMutedState] = useState(isMuted);
   const { auto, voteMs } = state.settings;
   const toggleSound = () => {
@@ -195,10 +222,12 @@ function HostControls({ state, act, onSettings, onToggleAuto }) {
   };
   return (
     <div className="host-controls">
-      <button className={`ctrl ${auto ? 'ctrl-on' : ''}`} onClick={onToggleAuto} aria-pressed={auto}>
-        Auto : {auto ? 'activé' : 'désactivé'}
-      </button>
-      {(auto || voteMs > 0) && (
+      {!party && (
+        <button className={`ctrl ${auto ? 'ctrl-on' : ''}`} onClick={onToggleAuto} aria-pressed={auto}>
+          Auto : {auto ? 'activé' : 'désactivé'}
+        </button>
+      )}
+      {!party && (auto || voteMs > 0) && (
         <button className={`ctrl ${state.paused ? 'ctrl-warn' : ''}`} onClick={() => act(state.paused ? 'host:unpause' : 'host:pause')}>
           {state.paused ? 'Reprendre' : 'Pause'}
         </button>
@@ -221,32 +250,6 @@ function settingsSummary(settings) {
     settings.voteMs ? `vote ${seconds(settings.voteMs)}` : 'vote sans limite',
     settings.maxRounds ? `${settings.maxRounds} questions` : 'questions illimitées',
   ].join(' · ');
-}
-
-function Segmented({ label, hint, value, options, onChange, disabled }) {
-  return (
-    <div className={`setting ${disabled ? 'setting-disabled' : ''}`}>
-      <div className="setting-head">
-        <strong>{label}</strong>
-        {hint && <small>{hint}</small>}
-      </div>
-      <div className="segmented" role="radiogroup" aria-label={label}>
-        {options.map((o) => (
-          <button
-            key={o.value}
-            type="button"
-            role="radio"
-            aria-checked={value === o.value}
-            className={value === o.value ? 'is-selected' : ''}
-            onClick={() => onChange(o.value)}
-            disabled={disabled}
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
 }
 
 function SettingsModal({ settings, onChange, onClose }) {
@@ -308,7 +311,7 @@ function SettingsModal({ settings, onChange, onClose }) {
 }
 
 /** Grille des jeux : grandes cartes, navigation au clavier (flèches + Entrée), à la souris ou au tactile. */
-function GamePicker({ state, onPick, onResetSips }) {
+function GamePicker({ state, onPick, onParty, onResetSips }) {
   const gridRef = useRef(null);
   const cardRefs = useRef({});
   const count = state.players.length;
@@ -354,6 +357,7 @@ function GamePicker({ state, onPick, onResetSips }) {
           {count} joueur{count > 1 ? 's' : ''} déjà dans la partie : personne n’a besoin de rescanner.
         </p>
       )}
+      <PartyCard onClick={onParty} />
       <div ref={gridRef} className="game-grid">
         {GAMES.map((g) => (
           <button
@@ -464,7 +468,7 @@ function Ended({ state, mode, onRestart, onChangeGame }) {
   }, []);
   return (
     <div className="center ended">
-      <h1 className="logo logo-sm">Partie terminée</h1>
+      <h1 className="logo logo-sm">{state.party?.step === 'over' ? 'Soirée terminée' : 'Partie terminée'}</h1>
       <p className="lead">
         {mode.name} · {n > 0 ? `${n} question${n > 1 ? 's' : ''} jouée${n > 1 ? 's' : ''}. ` : ''}
         Merci d’avoir joué !
