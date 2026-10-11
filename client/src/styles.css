@@ -3300,3 +3300,36 @@ button {
   width: 100%;
   max-width: 420px;
 }
+
+.sips-game-part {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.party-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.party-board-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.party-board-top > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.party-board-top strong {
+  font-size: 1.4rem;
+}
+
+.party-board-top .podium-title {
+  color: var(--yellow);
+}

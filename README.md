@@ -322,7 +322,11 @@ Chaque fois que le jeu dit « tu bois », ça compte une gorgée :
 - *Tu préfères ?* : 1 gorgée par joueur de la minorité (et par non-votant).
 - Les autres jeux : 1 gorgée par perdant, sauf *Patate chaude* (2 pour celui qui a la bombe) et *La Roue* (le nombre indiqué par le défi).
 
-Le total s’affiche sous chaque joueur sur la TV pendant les questions, avec un « +1 · 4 au total » sur l’écran des résultats. Les gorgées ne sont ajoutées qu’à la fin du suspense, pour ne rien dévoiler. Un joueur retiré par l’hôte sort du classement, et le compteur repart à zéro quand on rejoue.
+Le compteur de gorgées vaut **pour toute la soirée** : il survit à « Rejouer », « Changer de jeu », à la fin d’un jeu et aux reconnexions. Il ne repart à zéro qu’avec une **nouvelle partie** (nouveau QR code) ou le bouton discret « Remettre les compteurs à zéro » sous la grille des jeux (avec confirmation).
+
+Le total de la soirée s’affiche sous chaque joueur sur la TV, avec un « +1 · 4 au total » sur l’écran des résultats. Le podium de fin de jeu montre le total de la soirée (et la part du jeu qui vient de finir), la grille des jeux un petit classement avec le plus assoiffé en avant, et chaque téléphone son propre total. Les gorgées ne sont ajoutées qu’à la fin du suspense, pour ne rien dévoiler. Un joueur retiré par l’hôte ou parti sort du classement, mais ses gorgées restent comptées.
+
+Côté code, tout passe par une seule méthode, `Game.drink(playerId, n)` dans [`server/gameStore.js`](server/gameStore.js) : chaque jeu décrit seulement qui boit combien (`sipsOf`), le moteur fait le compte.
 
 Les règles sont des fonctions pures dans [`server/rules.js`](server/rules.js), couvertes par `npm test`.
 

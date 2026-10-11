@@ -4,7 +4,7 @@ import { PlayerChip, TimerBar, VoteProgress, allVoted } from '../components.jsx'
 import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
 import { GAMES, gameById, gameOf, playersLabel } from '../games/index.js';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
-import { Podium, sipsLabel, totalSips } from '../sips.jsx';
+import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
 const RESULTS_CHOICES = [5000, 10000, 15000, 20000];
@@ -73,7 +73,7 @@ export default function Host({ code }) {
       {inGame && <HostControls state={state} act={act} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />}
       {state.paused && inGame && <div className="paused-banner">Pause</div>}
 
-      {state.phase === 'picking' && <GamePicker state={state} onPick={(id) => act('host:pickGame', { mode: id })} />}
+      {state.phase === 'picking' && <GamePicker state={state} onPick={(id) => act('host:pickGame', { mode: id })} onResetSips={() => act('host:resetSips')} />}
 
       {state.phase === 'lobby' && (
         <Lobby
@@ -307,7 +307,7 @@ function SettingsModal({ settings, onChange, onClose }) {
 }
 
 /** Grille des jeux : grandes cartes, navigation au clavier (flèches + Entrée), à la souris ou au tactile. */
-function GamePicker({ state, onPick }) {
+function GamePicker({ state, onPick, onResetSips }) {
   const gridRef = useRef(null);
   const cardRefs = useRef({});
   const count = state.players.length;
@@ -381,6 +381,7 @@ function GamePicker({ state, onPick }) {
         ))}
       </div>
       <p className="picker-hint">Flèches pour choisir, Entrée pour valider.</p>
+      <PartyBoard state={state} onReset={onResetSips} />
     </div>
   );
 }

@@ -71,7 +71,8 @@ test('changer de jeu en fin de partie garde les joueurs et les réglages, remet 
   assert.equal(game.players.size, 3, 'personne n’a à rescanner');
   assert.equal(game.settings.auto, true);
   assert.equal(game.round, 0);
-  assert.equal(game.sips.size, 0);
+  assert.equal(game.sips.size, 0, 'la part du jeu repart à zéro');
+  assert.ok(Object.keys(game.publicState().sips).length > 0, 'le total de la soirée est gardé');
 
   assert.equal(game.pickGame('tu-preferes'), null);
   assert.equal(game.start(), null);

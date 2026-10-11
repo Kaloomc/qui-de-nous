@@ -220,6 +220,7 @@ function Waiting({ me, state, mode, onLeave }) {
       ) : (
         <p className="mode-pill">L’hôte choisit le jeu…</p>
       )}
+      {totalSips(state, me.id) > 0 && <p className="verdict-sips">Ce soir : {sipsLabel(totalSips(state, me.id))}</p>}
       <p className="lead">
         {state.players.length} joueur{state.players.length > 1 ? 's' : ''} dans la partie.
         <br />
@@ -294,7 +295,7 @@ function Ended({ state, me, onHome }) {
         <div className="final-rank pop-in">
           <Avatar player={me} size={120} className={champion ? 'podium-champion' : ''} />
           <p className="final-rank-title">{champion ? 'Le plus assoiffé de la soirée !' : `${mine.rank === 1 ? '1er' : `${mine.rank}e`}${tied ? ' ex æquo' : ''} au classement`}</p>
-          <p className="lead">{sipsLabel(mine.sips)} au total</p>
+          <p className="lead">{sipsLabel(mine.sips)} ce soir</p>
         </div>
       )}
       <p className="lead">Merci d’avoir joué !</p>

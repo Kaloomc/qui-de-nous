@@ -79,7 +79,7 @@ test('les gorgées s’ajoutent à la fin du suspense, pas avant (pas de spoiler
   assert.deepEqual(game.publicState().roundSips, { [ps[1].id]: 1, [ps[2].id]: 1 });
 });
 
-test('cumul sur plusieurs tours, une seule fois par tour, joueur retiré effacé, remise à zéro quand on rejoue', () => {
+test('cumul sur plusieurs tours, une seule fois par tour, joueur retiré masqué, total gardé quand on rejoue', () => {
   const { game, clock, ps, revealMs } = setup('tu-preferes');
   for (let round = 1; round <= 3; round++) {
     game.vote(ps[0].id, 'a');
@@ -95,11 +95,83 @@ test('cumul sur plusieurs tours, une seule fois par tour, joueur retiré effacé
   assert.equal(game.publicState().roundSips[ps[2].id], 1);
 
   game.removePlayer(ps[2].id);
-  assert.deepEqual(game.publicState().sips, {});
+  assert.deepEqual(game.publicState().sips, {}, 'masqué du classement');
+  assert.equal(game.partySips.get(ps[2].id), 3, 'mais son total reste compté');
 
   game.end();
   game.restart();
+  assert.deepEqual(game.publicState().gameSips, {});
+});
+
+/** Joue une manche de « Tu préfères ? » où seul `loser` est dans la minorité. */
+function playPreferes(game, clock, ps, loser) {
+  game.start();
+  for (const p of ps) game.vote(p.id, p === loser ? 'b' : 'a');
+  game.reveal(game.round);
+  clock.tick(GAMES['tu-preferes'].revealMs);
+}
+
+test('compteur de la soirée : persiste après « Rejouer », « Changer de jeu » et une reconnexion', () => {
+  const { game, clock, ps } = setup('tu-preferes');
+  game.end();
+  game.restart();
+  playPreferes(game, clock, ps, ps[0]);
+  assert.equal(game.publicState().sips[ps[0].id], 1);
+
+  game.end();
+  assert.equal(game.restart(), null, 'Rejouer');
+  assert.equal(game.publicState().sips[ps[0].id], 1, 'après Rejouer');
+  assert.deepEqual(game.publicState().gameSips, {}, 'la part du jeu repart à zéro');
+
+  playPreferes(game, clock, ps, ps[0]);
+  game.end();
+  game.chooseGame();
+  assert.equal(game.publicState().sips[ps[0].id], 2, 'après Changer de jeu');
+  game.pickGame('qui-de-nous');
+  assert.equal(game.publicState().sips[ps[0].id], 2, 'dans le nouveau jeu');
+
+  game.disconnectPlayer(ps[0], 's0');
+  clock.tick(60000);
+  const { player } = game.upsertPlayer({ playerId: ps[0].id, secret: ps[0].secret, name: 'A' });
+  game.connectPlayer(player, 'retour');
+  assert.equal(game.publicState({ playerId: ps[0].id }).sips[ps[0].id], 2, 'après reconnexion');
+});
+
+test('compteur de la soirée : +1, +2 (« boit deux fois ») et +N (défi de la Roue) via une seule fonction', () => {
+  const { game, ps } = setup('qui-de-nous');
+  assert.equal(game.drink(ps[0].id), 1);
+  assert.equal(game.drink(ps[0].id, 2), 2);
+  assert.equal(game.drink(ps[0].id, 4), 4);
+  assert.equal(game.drink(ps[0].id, 0), 0, 'rien à boire');
+  assert.equal(game.drink(ps[0].id, -3), 0);
+  assert.equal(game.drink(ps[0].id, 1.5), 0);
+  assert.equal(game.drink('inconnu', 2), 0);
+  assert.equal(game.publicState().sips[ps[0].id], 7);
+
+  // « Qui de nous ? » : le plus voté qui a mal voté boit 2 fois, en une manche.
+  game.vote(ps[0].id, ps[1].id);
+  game.vote(ps[1].id, ps[2].id);
+  game.vote(ps[2].id, ps[1].id);
+  game.reveal(1);
+  game.finishReveal();
+  assert.equal(game.publicState().roundSips[ps[1].id], 2);
+  assert.equal(game.publicState().sips[ps[1].id], 2);
+});
+
+test('compteur de la soirée : remis à zéro par l’hôte ou par une nouvelle partie, pas avant', async () => {
+  const { game, clock, ps } = setup('tu-preferes');
+  game.end();
+  game.restart();
+  playPreferes(game, clock, ps, ps[1]);
+  assert.equal(game.publicState().sips[ps[1].id], 1);
+  assert.equal(game.resetPartySips(), null);
   assert.deepEqual(game.publicState().sips, {});
+  assert.deepEqual(game.publicState().gameSips, {});
+
+  const { GameStore } = await import('./gameStore.js');
+  const store = new GameStore({ clock });
+  const fresh = store.create('qui-de-nous');
+  assert.equal(fresh.partySips.size, 0, 'nouvelle partie, nouveau QR code : compteurs à zéro');
 });
 
 test('partie terminée en plein suspense : les gorgées du dernier tour comptent pour le podium', () => {

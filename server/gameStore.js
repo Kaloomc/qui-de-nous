@@ -81,6 +81,9 @@ export class Game {
     this.pausedTimers = {};
     // Questions déjà posées à ce groupe : survit à reset(), donc à « Rejouer » et « Changer de jeu ».
     this.history = new QuestionHistory();
+    // Gorgées de toute la soirée, par joueur : survit aussi à reset(). Seule une nouvelle partie (nouveau QR code)
+    // ou le bouton « Remettre les compteurs à zéro » de l'hôte les efface.
+    this.partySips = new Map();
     this.reset();
     this.touch();
   }
@@ -95,22 +98,37 @@ export class Game {
     this.results = null;
     this.reveal_ = null;
     this.waitingForPlayers = false;
-    this.sips = new Map();
+    this.sips = new Map(); // gorgées du jeu en cours
     this.roundSips = null;
     this.roundData = {};
     this.pending = false;
     this.stats = new Map();
   }
 
+  /**
+   * Seul point d'entrée du comptage : un joueur boit n gorgées (1 par défaut, 2 pour « boit deux fois »,
+   * le nombre du défi à la Roue…). Compte pour le jeu en cours et pour le total de la soirée.
+   */
+  drink(playerId, n = 1) {
+    if (!this.players.has(playerId) || !Number.isInteger(n) || n <= 0) return 0;
+    this.sips.set(playerId, (this.sips.get(playerId) ?? 0) + n);
+    this.partySips.set(playerId, (this.partySips.get(playerId) ?? 0) + n);
+    if (this.roundSips) this.roundSips[playerId] = (this.roundSips[playerId] ?? 0) + n;
+    return n;
+  }
+
+  /** Remet les compteurs de la soirée à zéro (bouton de l'hôte), sans toucher au tour en cours. */
+  resetPartySips() {
+    this.partySips = new Map();
+    this.sips = new Map();
+    return null;
+  }
+
   /** Ajoute les gorgées du tour au total, une seule fois, à la fin du suspense (jamais avant : pas de spoiler). */
   applySips() {
     if (this.roundSips || !this.results) return;
     this.roundSips = {};
-    for (const [id, n] of Object.entries(this.rules.sipsOf(this.results))) {
-      if (!this.players.has(id) || !(n > 0)) continue;
-      this.roundSips[id] = n;
-      this.sips.set(id, (this.sips.get(id) ?? 0) + n);
-    }
+    for (const [id, n] of Object.entries(this.rules.sipsOf(this.results))) this.drink(id, n);
     if (this.rules.updateStats) {
       const stats = Object.fromEntries([...this.players.keys()].map((id) => [id, this.stats.get(id) ?? {}]));
       this.rules.updateStats(stats, this.results, this);
@@ -230,8 +248,8 @@ export class Game {
   }
 
   removePlayer(playerId) {
+    // Ses gorgées restent dans partySips (le total de la soirée reste cohérent), mais il sort du classement.
     this.players.delete(playerId);
-    this.sips.delete(playerId);
     this.votes.delete(playerId);
     for (const [voter, target] of this.votes) if (target === playerId) this.votes.delete(voter);
     this.stats.delete(playerId);
@@ -511,6 +529,10 @@ export class Game {
     return null;
   }
 
+  sipsOfPresent(map) {
+    return Object.fromEntries([...map].filter(([id]) => this.players.has(id)));
+  }
+
   timerState(name) {
     const timer = this.timers[name];
     if (timer) return { endsAt: timer.endsAt, totalMs: timer.total, paused: false };
@@ -554,7 +576,9 @@ export class Game {
       voteTimer: this.phase === 'question' ? this.timerState('vote') : null,
       nextTimer: this.phase === 'results' ? this.timerState('next') : null,
       reveal: this.reveal_,
-      sips: Object.fromEntries(this.sips),
+      // Total de la soirée (tous jeux confondus) et part du jeu en cours, pour les joueurs encore là.
+      sips: this.sipsOfPresent(this.partySips),
+      gameSips: this.sipsOfPresent(this.sips),
       roundSips: this.phase === 'results' || this.phase === 'ended' ? this.roundSips : null,
       results: showResults ? this.results : null,
       pending: this.pending,

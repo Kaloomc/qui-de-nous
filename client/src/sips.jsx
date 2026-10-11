@@ -2,7 +2,11 @@ import { Avatar } from './components.jsx';
 
 export const sipsLabel = (n) => `${n} gorgée${n > 1 ? 's' : ''}`;
 
+/** Total de la soirée (tous jeux confondus) : le serveur le garde jusqu'à une nouvelle partie. */
 export const totalSips = (state, playerId) => state.sips?.[playerId] ?? 0;
+
+/** Part du jeu en cours dans ce total. */
+export const gameSipsOf = (state, playerId) => state.gameSips?.[playerId] ?? 0;
 
 /** Légende sous un joueur dans les résultats : « +2 · 5 au total » s'il a bu ce tour-ci. */
 export function roundCaption(state, playerId) {
@@ -43,6 +47,54 @@ export function StatBoard({ state, title, valueOf, format, limit = 5 }) {
   );
 }
 
+/** « dont 2 dans ce jeu », seulement si la soirée a commencé avant ce jeu. */
+function GamePart({ state, row }) {
+  const n = gameSipsOf(state, row.player.id);
+  return n !== row.sips ? <span className="sips-game-part">dont {n} dans ce jeu</span> : null;
+}
+
+/**
+ * Petit classement des gorgées de la soirée (grille des jeux) : photos, prénoms, totaux, le plus gros buveur en avant.
+ * onReset : bouton discret de l'hôte pour tout remettre à zéro (avec confirmation).
+ */
+export function PartyBoard({ state, onReset }) {
+  const rows = ranking(state).filter((r) => r.sips > 0);
+  if (rows.length === 0) return null;
+  const [top, ...others] = rows;
+  function reset() {
+    if (window.confirm('Remettre à zéro les gorgées de toute la soirée ?')) onReset();
+  }
+  return (
+    <div className="party-board fade-up">
+      <div className="party-board-top">
+        <Avatar player={top.player} size={64} className="podium-champion" />
+        <div>
+          <span className="podium-title">Le plus assoiffé de la soirée</span>
+          <strong>{top.player.name}</strong>
+          <span className="ranking-sips">{sipsLabel(top.sips)}</span>
+        </div>
+      </div>
+      {others.length > 0 && (
+        <ol className="ranking">
+          {others.map((r) => (
+            <li key={r.player.id}>
+              <span className="ranking-rank">{r.rank}</span>
+              <Avatar player={r.player} size={32} />
+              <span className="ranking-name">{r.player.name}</span>
+              <span className="ranking-sips">{r.sips}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      {onReset && (
+        <button className="btn btn-ghost small" onClick={reset}>
+          Remettre les compteurs à zéro
+        </button>
+      )}
+    </div>
+  );
+}
+
 const TITLES = { 1: 'Le plus assoiffé', 2: 'Dauphin', 3: 'Sur le podium' };
 
 export function Podium({ state }) {
@@ -71,6 +123,7 @@ export function Podium({ state }) {
                   />
                   <span className="podium-name">{r.player.name}</span>
                   <span className="podium-sips">{sipsLabel(r.sips)}</span>
+                  <GamePart state={state} row={r} />
                 </div>
               ))}
             </div>
@@ -89,6 +142,7 @@ export function Podium({ state }) {
               <Avatar player={r.player} size={36} />
               <span className="ranking-name">{r.player.name}</span>
               <span className="ranking-sips">{sipsLabel(r.sips)}</span>
+              <GamePart state={state} row={r} />
             </li>
           ))}
         </ol>

@@ -86,6 +86,7 @@ export function registerSockets(io, store) {
       'host:pickGame': (game, { mode }) => game.pickGame(mode),
       'host:gameAction': (game, { action }) => game.gameHostAction(action),
       'host:settings': (game, { settings }) => game.setSettings(settings),
+      'host:resetSips': (game) => game.resetPartySips(),
       'host:pause': (game) => game.pause(),
       'host:unpause': (game) => game.resume(),
       'host:kick': (game, { playerId }) => {
