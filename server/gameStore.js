@@ -1,6 +1,9 @@
 import { randomBytes, randomInt } from 'node:crypto';
 import { GAMES, isGame, isPlayable } from './games/index.js';
 import { QuestionHistory } from './questionHistory.js';
+import { TIMING } from './timing.js';
+
+export { TIMING };
 
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 export const CODE_LENGTH = 4;
@@ -9,14 +12,6 @@ const MAX_NAME_LENGTH = 20;
 const MAX_PHOTO_BYTES = 300 * 1024;
 const PHOTO_DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/;
 
-export const TIMING = {
-  /** Petit délai après le dernier vote, pour que la TV affiche « N / N » avant de révéler. */
-  autoRevealDelayMs: 1200,
-  /** Un joueur déconnecté est encore attendu pendant ce délai (rechargement de page, réseau qui saute). */
-  disconnectGraceMs: 5000,
-  /** Moins de 2 joueurs connectés quand un minuteur expire : on réessaie après ce délai. */
-  retryMs: 5000,
-};
 
 export const SETTING_CHOICES = {
   resultsMs: [5000, 10000, 15000, 20000],

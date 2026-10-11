@@ -1,5 +1,5 @@
 import { applyLastChance, checkClue, computeImposteur, NO_CLUE, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from '../rules/imposteur.js';
-import { TIMING } from '../gameStore.js';
+import { TIMING } from '../timing.js';
 import { loadJson } from './load.js';
 
 const WORDS = loadJson('../content/words-imposteur.json');
