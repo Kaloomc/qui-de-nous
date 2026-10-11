@@ -1,9 +1,10 @@
-import { applyLastChance, computeImposteur, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from '../rules/imposteur.js';
+import { applyLastChance, checkClue, computeImposteur, NO_CLUE, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from '../rules/imposteur.js';
+import { TIMING } from '../gameStore.js';
 import { loadJson } from './load.js';
 
 const WORDS = loadJson('../content/words-imposteur.json');
 const WORDS_MS = 10000; // temps pour regarder son mot (mode auto)
-const TURN_MS = 10000; // temps de parole par joueur
+const TURN_MS = 25000; // temps pour écrire son indice sur le téléphone
 const LAST_CHANCE_MS = 20000;
 
 const data = (game) => game.roundData;
@@ -18,12 +19,17 @@ function startSpeaking(game) {
   return null;
 }
 
-/** Passe au joueur suivant (en sautant les déconnectés), puis au vote après le dernier tour. */
+/**
+ * Passe au joueur suivant (en sautant les déconnectés), puis au vote après le dernier tour.
+ * Celui dont c'était le tour et qui n'a rien envoyé garde « — » comme indice.
+ */
 function advanceTurn(game) {
   const d = data(game);
   game.cancel('g:turn');
+  game.cancel('g:speakerGone');
+  if (d.turnIndex >= 0 && d.turnIndex < d.turns.length && d.clues[d.turnIndex] == null) d.clues[d.turnIndex] = NO_CLUE;
   let next = d.turnIndex + 1;
-  while (next < d.turns.length && !game.players.get(d.turns[next])?.sockets.size) next += 1;
+  while (next < d.turns.length && !game.players.get(d.turns[next])?.sockets.size) d.clues[next++] = NO_CLUE;
   d.turnIndex = next;
   if (next >= d.turns.length) {
     d.step = 'voting';
@@ -36,6 +42,22 @@ function advanceTurn(game) {
   });
 }
 
+const currentSpeaker = (game) => {
+  const d = data(game);
+  return d.step === 'speaking' ? d.turns[d.turnIndex] ?? null : null;
+};
+
+function submitClue(game, playerId, text) {
+  const d = data(game);
+  if (game.phase !== 'question' || d.step !== 'speaking') return 'Ce n’est pas le moment des indices.';
+  if (currentSpeaker(game) !== playerId) return 'Ce n’est pas ton tour.';
+  const { clue, error } = checkClue(text, d.words[playerId]);
+  if (error) return error;
+  d.clues[d.turnIndex] = clue;
+  advanceTurn(game);
+  return null;
+}
+
 export default {
   id: 'imposteur',
   questions: WORDS,
@@ -43,7 +65,7 @@ export default {
     const connected = game.connectedPlayers().map((p) => p.id);
     const ids = connected.length >= 3 ? connected : [...game.players.keys()];
     const setup = setupImposteur(ids, game.question);
-    Object.assign(game.roundData, setup, { step: 'words', turnIndex: -1, turns: speakingTurns(setup.order), options: null });
+    Object.assign(game.roundData, setup, { step: 'words', turnIndex: -1, turns: speakingTurns(setup.order), clues: [], options: null });
     if (game.settings.auto) game.schedulePausable('g:words', WORDS_MS, () => startSpeaking(game));
   },
   acceptsVotes: (game) => data(game).step === 'voting',
@@ -61,7 +83,7 @@ export default {
     if (action.type === 'skipToVote') {
       if (d.step === 'voting') return null;
       game.cancel('g:words');
-      d.turnIndex = d.turns.length - 1;
+      d.turnIndex = d.turns.length;
       d.step = 'speaking';
       advanceTurn(game);
       return null;
@@ -77,7 +99,22 @@ export default {
     game.schedule('pending', LAST_CHANCE_MS, () => game.finalize());
     return true;
   },
+  // Celui qui doit écrire son indice se déconnecte : on l'attend le temps d'un rechargement, puis on passe.
+  onPresenceChange(game) {
+    if (game.phase !== 'question') return;
+    const speakerId = currentSpeaker(game);
+    if (!speakerId) return;
+    const speaker = game.players.get(speakerId);
+    if (!speaker) advanceTurn(game);
+    else if (speaker.sockets.size > 0) game.cancel('g:speakerGone');
+    else if (!game.timers['g:speakerGone']) {
+      game.schedule('g:speakerGone', TIMING.disconnectGraceMs, () => {
+        if (currentSpeaker(game) === speaker.id && !speaker.sockets.size) advanceTurn(game);
+      });
+    }
+  },
   handleAction(game, playerId, action) {
+    if (action.type === 'clue') return submitClue(game, playerId, action.text);
     if (action.type !== 'guess') return 'Action inconnue.';
     if (game.phase !== 'results' || !game.pending) return 'Pas de dernière chance en cours.';
     if (playerId !== game.results.imposterId) return 'Seul l’imposteur peut tenter sa chance.';
@@ -99,7 +136,11 @@ export default {
       step: d.step,
       categorie: game.question?.categorie ?? null,
       order: d.order ?? [],
-      speakerId: d.step === 'speaking' ? d.turns[d.turnIndex] ?? null : null,
+      speakerId: currentSpeaker(game),
+      // Seuls les indices déjà envoyés (ou passés) partent vers les écrans.
+      clues: (d.clues ?? []).flatMap((text, i) =>
+        text == null ? [] : [{ playerId: d.turns[i], lap: Math.floor(i / d.order.length) + 1, text }],
+      ),
       turnNumber: d.turnIndex + 1,
       totalTurns: d.turns?.length ?? 0,
       turnTimer: game.timerState('g:turn'),

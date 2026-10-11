@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { applyLastChance, computeImposteur, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from './rules/imposteur.js';
+import { makeGame } from './testClock.js';
+import { applyLastChance, checkClue, computeImposteur, NO_CLUE, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from './rules/imposteur.js';
 
 const pair = { mot: 'Netflix', proche: 'Prime Video' };
 const ids = ['imp', 'b', 'c', 'd'];
@@ -139,6 +140,87 @@ test('mode auto : les indices démarrent et s’enchaînent tout seuls', async (
   tick(10000);
   assert.equal(game.roundData.step, 'speaking');
   game.disconnectPlayer(ps[2], 's2');
-  tick(12000 * 6);
+  tick(30000 * 6);
   assert.equal(game.roundData.step, 'voting', 'le joueur déconnecté est sauté');
+});
+
+test('indice écrit : nettoyé, un ou deux mots, 20 caractères max', () => {
+  assert.deepEqual(checkClue('  série   télé ', 'Netflix'), { clue: 'série télé' });
+  assert.ok(checkClue('', 'Netflix').error, 'vide');
+  assert.ok(checkClue('   ', 'Netflix').error, 'que des espaces');
+  assert.ok(checkClue(42, 'Netflix').error, 'pas du texte');
+  assert.ok(checkClue('un deux trois', 'Netflix').error, 'trois mots');
+  assert.ok(checkClue('anticonstitutionnellement', 'Netflix').error, 'trop long');
+  assert.deepEqual(checkClue('<b>chill</b>', 'Netflix'), { clue: '<b>chill</b>' }, 'texte brut, jamais interprété');
+});
+
+test('indice écrit : refusé s’il est (ou contient) son mot secret, majuscules et accents compris', () => {
+  assert.ok(checkClue('netflix', 'Netflix').error);
+  assert.ok(checkClue('NETFLIX!', 'Netflix').error);
+  assert.ok(checkClue('netflixeur', 'Netflix').error);
+  assert.ok(checkClue('fete', 'Fête').error);
+  assert.ok(checkClue('Uber eats', 'Uber Eats').error);
+  assert.ok(checkClue('uber', 'Uber Eats').error, 'un mot important du secret');
+  assert.deepEqual(checkClue('livraison', 'Uber Eats'), { clue: 'livraison' });
+  assert.deepEqual(checkClue('YouTube', 'Netflix'), { clue: 'YouTube' }, 'le mot des autres n’est pas interdit');
+});
+
+/** Lance une manche d'Imposteur et démarre les indices. */
+async function speakingGame(settings) {
+  const g = await makeGame('imposteur', ['A', 'B', 'C', 'D'], settings);
+  g.game.start();
+  g.game.gameHostAction({ type: 'startSpeaking' });
+  const speaker = () => g.game.publicState({ host: true }).round.speakerId;
+  const wordOf = (id) => g.game.roundData.words[id];
+  return { ...g, speaker, wordOf };
+}
+
+test('indice écrit : accepté, diffusé à l’envoi seulement, puis joueur suivant', async () => {
+  const { game, players, speaker, wordOf } = await speakingGame();
+  const first = speaker();
+  const other = players.find((p) => p.id !== first);
+  assert.equal(game.action(other.id, { type: 'clue', text: 'hop' }), 'Ce n’est pas ton tour.');
+  assert.deepEqual(game.publicState({ host: true }).round.clues, [], 'rien avant l’envoi');
+  assert.ok(game.action(first, { type: 'clue', text: '' }), 'indice vide refusé');
+  assert.ok(game.action(first, { type: 'clue', text: wordOf(first) }), 'son propre mot refusé');
+  assert.equal(speaker(), first, 'un refus ne fait pas passer le tour');
+  assert.equal(game.action(first, { type: 'clue', text: ' zzz ' }), null);
+  const view = game.publicState({ host: true });
+  assert.deepEqual(view.round.clues, [{ playerId: first, lap: 1, text: 'zzz' }]);
+  assert.notEqual(view.round.speakerId, first, 'joueur suivant');
+  assert.equal('imposterId' in view.round, false, 'jamais qui est l’imposteur');
+});
+
+test('indice écrit : temps écoulé = « — » ; en manuel l’hôte passe, en auto ça enchaîne', async () => {
+  const manual = await speakingGame();
+  const first = manual.speaker();
+  manual.tick(60000);
+  assert.equal(manual.speaker(), first, 'manuel : on attend le « Suivant » de l’hôte');
+  manual.game.gameHostAction({ type: 'nextTurn' });
+  assert.deepEqual(manual.game.publicState().round.clues, [{ playerId: first, lap: 1, text: NO_CLUE }]);
+
+  const auto = await speakingGame({ auto: true });
+  const a1 = auto.speaker();
+  auto.tick(25000);
+  assert.notEqual(auto.speaker(), a1);
+  assert.equal(auto.game.publicState().round.clues[0].text, NO_CLUE);
+});
+
+test('indice écrit : 2 tours puis le vote ; déconnexion pendant son tour = passé, reconnexion = état courant', async () => {
+  const { game, players, tick, speaker } = await speakingGame();
+  const first = speaker();
+  const p = players.find((x) => x.id === first);
+  game.disconnectPlayer(p, `s${players.indexOf(p)}`);
+  tick(1000);
+  assert.equal(speaker(), first, 'un rechargement de page ne fait pas perdre son tour');
+  tick(5000);
+  assert.notEqual(speaker(), first, 'déconnecté trop longtemps : passé');
+  game.connectPlayer(p, 'again');
+  assert.equal(game.publicState({ playerId: first }).round.clues[0].text, NO_CLUE);
+  assert.ok(game.publicState({ playerId: first }).round.myWord, 'il retrouve son mot');
+  for (let i = 0; i < 20 && game.roundData.step === 'speaking'; i++) game.action(speaker(), { type: 'clue', text: `indice${i}` });
+  assert.equal(game.roundData.step, 'voting');
+  const clues = game.publicState().round.clues;
+  assert.equal(clues.length, 8, '2 indices par joueur');
+  assert.equal(clues.filter((c) => c.lap === 2).length, 4);
 });

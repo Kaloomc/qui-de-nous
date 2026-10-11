@@ -3259,3 +3259,44 @@ button {
   font-size: 2.6rem;
   color: var(--muted);
 }
+
+.clue-board .speaking-slot {
+  max-width: 150px;
+}
+
+.speaking-slot.is-waiting .avatar {
+  opacity: 0.45;
+}
+
+.clue {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 1.35rem;
+  font-weight: 800;
+  word-break: break-word;
+}
+
+.clue-old {
+  background: none;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.clue-typing {
+  background: none;
+  color: var(--yellow);
+  font-size: 1rem;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.clue-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}

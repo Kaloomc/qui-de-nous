@@ -21,6 +21,38 @@ export function setupImposteur(playerIds, pair, rng = Math.random) {
 /** Tours de parole : l'ordre est parcouru SPEAKING_LAPS fois. */
 export const speakingTurns = (order, laps = SPEAKING_LAPS) => Array.from({ length: laps }, () => order).flat();
 
+export const CLUE_MAX_LENGTH = 20;
+export const CLUE_MAX_WORDS = 2;
+/** Indice d'un joueur qui n'a rien envoyé à temps (ou qui a été passé). */
+export const NO_CLUE = '—';
+
+/** Minuscules, sans accents ni ponctuation : « Uber Eats ! » → « ubereats ». */
+const normalize = (text) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+/**
+ * Valide l'indice écrit d'un joueur : { clue } nettoyé, ou { error } à afficher sur son téléphone.
+ * Refuse un indice vide, trop long, de plus de deux mots, ou qui contient son mot secret.
+ */
+export function checkClue(text, secret) {
+  const clue = typeof text === 'string' ? text.replace(/[\u0000-\u001f\u007f]/g, '').replace(/\s+/g, ' ').trim() : '';
+  if (!clue) return { error: 'Écris un indice avant d’envoyer.' };
+  if (clue.length > CLUE_MAX_LENGTH) return { error: `Trop long : ${CLUE_MAX_LENGTH} caractères maximum.` };
+  if (clue.split(' ').length > CLUE_MAX_WORDS) return { error: 'Un ou deux mots maximum.' };
+  const flat = normalize(clue).replace(/ /g, '');
+  if (!flat) return { error: 'Écris un vrai mot.' };
+  const word = normalize(secret ?? '');
+  // Le mot entier (« ubereats ») ou l'un de ses mots importants (« uber », « eats ») ne doit pas apparaître.
+  const forbidden = [word.replace(/ /g, ''), ...word.split(' ').filter((w) => w.length >= 4)].filter(Boolean);
+  if (forbidden.some((w) => flat.includes(w))) return { error: 'Ton indice ne peut pas contenir ton mot secret !' };
+  return { clue };
+}
+
 /**
  * Démasqué = l'imposteur est seul en tête des votes (égalité = pas démasqué).
  * On ne peut pas voter pour soi ; les non-votants comptent comme s'étant trompés.

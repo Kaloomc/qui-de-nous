@@ -8,23 +8,43 @@ export const waitingText = 'En attente des autres…';
 export const hostLayout = 'custom';
 export const playerLayout = 'custom';
 
+const CLUE_MAX_LENGTH = 20; // même limite que le serveur (server/rules/imposteur.js)
+
 const byIdOf = (state) => new Map(state.players.map((p) => [p.id, p]));
 
-function SpeakingOrder({ state }) {
+const currentLap = (round) =>
+  round.step === 'speaking' && round.order.length ? Math.floor((round.turnNumber - 1) / round.order.length) + 1 : null;
+
+/**
+ * Les joueurs dans l'ordre de parole, avec leurs indices écrits sous leur nom.
+ * L'indice du tour en cours apparaît en grand, celui du tour précédent reste visible en plus petit.
+ * Les indices sont affichés en texte brut (React échappe tout : pas de HTML interprété).
+ */
+function ClueBoard({ state, votedIds }) {
   const { round } = state;
   const byId = byIdOf(state);
-  const lap = round.order.length ? Math.floor((round.turnNumber - 1) / round.order.length) + 1 : 1;
+  const lap = currentLap(round);
+  const voted = votedIds ? new Set(votedIds) : null;
   return (
-    <div className="speaking-order">
-      {round.order.map((pid, i) => {
+    <div className="speaking-order clue-board">
+      {round.order.map((pid) => {
         const p = byId.get(pid);
         if (!p) return null;
         const current = pid === round.speakerId;
-        const done = round.step === 'speaking' && (lap > 1 || i < (round.turnNumber - 1) % round.order.length);
+        const clues = (round.clues ?? []).filter((c) => c.playerId === pid).sort((a, b) => b.lap - a.lap);
         return (
-          <div key={pid} className={`speaking-slot ${current ? 'is-current' : ''} ${done ? 'is-done' : ''}`}>
-            <Avatar player={p} size={current ? 72 : 52} />
+          <div key={pid} className={`speaking-slot ${current ? 'is-current' : ''} ${voted && !voted.has(pid) ? 'is-waiting' : ''}`}>
+            <div className="chip-avatar">
+              <Avatar player={p} size={current ? 72 : 56} />
+              {voted?.has(pid) && <span className="chip-badge">✓</span>}
+            </div>
             <span>{p.name}</span>
+            {current && <span className="clue clue-typing">écrit…</span>}
+            {clues.map((c) => (
+              <span key={c.lap} className={`clue ${lap && c.lap < lap ? 'clue-old' : ''} pop-in`}>
+                {c.text}
+              </span>
+            ))}
           </div>
         );
       })}
@@ -48,7 +68,7 @@ export function HostQuestion({ state, gameAct }) {
         <TimerBar timer={round.wordsTimer} state={state}>
           {(s) => `Les indices commencent dans ${s} s`}
         </TimerBar>
-        <SpeakingOrder state={state} />
+        <ClueBoard state={state} />
         <button className="btn btn-primary btn-xl" onClick={() => gameAct({ type: 'startSpeaking' })}>
           Lancer les indices
         </button>
@@ -64,15 +84,15 @@ export function HostQuestion({ state, gameAct }) {
         </p>
         {speaker && (
           <div key={round.turnNumber} className="speaker zoom-in">
-            <Avatar player={speaker} size={170} className="roulette-avatar" />
+            <Avatar player={speaker} size={120} className="roulette-avatar" />
             <p className="speaker-name">À toi, {speaker.name} !</p>
-            <p className="lead">Un indice sur ton mot, à voix haute. Ni trop précis, ni trop vague…</p>
+            <p className="lead">Écris ton indice sur ton téléphone. Ni trop précis, ni trop vague…</p>
           </div>
         )}
         <TimerBar timer={round.turnTimer} state={state}>
           {(s) => (s > 0 ? `${s} s` : 'Temps écoulé !')}
         </TimerBar>
-        <SpeakingOrder state={state} />
+        <ClueBoard state={state} />
         <div className="actions">
           <button className="btn btn-ghost" onClick={() => gameAct({ type: 'skipToVote' })}>
             Passer au vote
@@ -85,7 +105,6 @@ export function HostQuestion({ state, gameAct }) {
     );
   }
 
-  const voted = new Set(state.votedIds);
   return (
     <div className="imposteur">
       <p className="round">Manche {round.number} · Le vote</p>
@@ -94,11 +113,7 @@ export function HostQuestion({ state, gameAct }) {
       <TimerBar timer={state.voteTimer} state={state}>
         {(s) => `Fin du vote dans ${s} s`}
       </TimerBar>
-      <div className="grid grid-host-small">
-        {state.players.map((p) => (
-          <PlayerChip key={p.id} player={p} size={72} dim={!voted.has(p.id)} badge={voted.has(p.id) ? '✓' : null} />
-        ))}
-      </div>
+      <ClueBoard state={state} votedIds={state.votedIds} />
       <button className={`btn btn-primary btn-xl ${allVoted(state) ? 'pulse' : ''}`} onClick={() => gameAct({ type: 'reveal' })}>
         Révéler
       </button>
@@ -202,7 +217,7 @@ function SecretWord({ word }) {
   );
 }
 
-export function PlayerRound({ state, me, vote, myVote }) {
+export function PlayerRound({ state, me, act, vote, myVote }) {
   const { round } = state;
   const byId = byIdOf(state);
   if (!round.myWord) {
@@ -246,15 +261,49 @@ export function PlayerRound({ state, me, vote, myVote }) {
     <div className="center imposteur-phone">
       <SecretWord word={round.myWord} />
       {round.step === 'words' && <p className="lead">Retiens bien ton mot. Ne le montre à personne !</p>}
-      {round.step === 'speaking' && myTurn && (
-        <p className="your-turn pop-in">À toi ! Donne un indice à voix haute.</p>
-      )}
-      {round.step === 'speaking' && !myTurn && speaker && (
-        <p className="lead">
-          {speaker.name} donne son indice… écoute bien.
-        </p>
-      )}
+      {round.step === 'speaking' && myTurn && <ClueForm key={round.turnNumber} act={act} />}
+      {round.step === 'speaking' && !myTurn && speaker && <p className="lead">{speaker.name} écrit son indice…</p>}
     </div>
+  );
+}
+
+/** Champ de saisie de l'indice : un ou deux mots, vérifiés par le serveur (qui renvoie l'erreur à afficher). */
+function ClueForm({ act }) {
+  const [text, setText] = useState('');
+  const [error, setError] = useState(null);
+  const [sending, setSending] = useState(false);
+
+  async function submit(e) {
+    e.preventDefault();
+    const clue = text.replace(/\s+/g, ' ').trim();
+    if (!clue) return setError('Écris un indice avant d’envoyer.');
+    setSending(true);
+    const err = await act({ type: 'clue', text: clue });
+    setSending(false);
+    setError(err);
+  }
+
+  return (
+    <form className="clue-form pop-in" onSubmit={submit}>
+      <p className="your-turn">À toi ! Écris ton indice.</p>
+      <input
+        className="input"
+        autoFocus
+        enterKeyHint="send"
+        autoComplete="off"
+        maxLength={CLUE_MAX_LENGTH}
+        placeholder="Un ou deux mots"
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+          setError(null);
+        }}
+      />
+      {error && <p className="error">{error}</p>}
+      <button className="btn btn-primary btn-xl" disabled={sending}>
+        Envoyer
+      </button>
+    </form>
   );
 }
 

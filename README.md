@@ -287,7 +287,9 @@ Les boutons **Révéler maintenant** et **Question suivante** restent toujours d
 ### L'Imposteur
 
 - Chaque téléphone affiche un mot secret (touche pour le masquer). L'imposteur a un mot **proche** et ne sait pas que c'est lui.
-- La TV annonce l'ordre de parole : **2 tours d'indices**, ~10 s par joueur, bouton « Suivant » (automatique en mode auto).
+- La TV annonce l'ordre de parole : **2 tours d'indices**. À son tour, chaque joueur **écrit son indice sur son téléphone** (25 s) et il s'affiche **sous son nom sur la TV**. Les indices du tour précédent restent visibles en plus petit, pour comparer avant de voter.
+- Un indice fait **un ou deux mots** (20 caractères max). Il est refusé s'il est vide ou s'il contient son propre mot secret (majuscules et accents ignorés). Il est affiché en texte brut et n'est envoyé aux écrans qu'une fois validé.
+- Temps écoulé : l'indice devient « — ». En mode auto on passe au suivant, sinon l'hôte garde son bouton « Suivant ». Un joueur déconnecté pendant son tour est passé au bout de 5 s ; s'il revient, il retrouve son mot et les indices.
 - **Vote** : l'imposteur est démasqué s'il est **seul** en tête (égalité = pas démasqué).
 - **Démasqué** : il boit, avec ceux qui ne l'ont pas désigné. **Dernière chance** : s'il trouve le mot des autres parmi 4 propositions, il est épargné et ceux qui l'ont démasqué boivent à sa place.
 - **Pas démasqué** : tout le groupe boit, sauf l'imposteur.
