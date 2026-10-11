@@ -248,5 +248,11 @@
   { "question": "En quelle année s'est disputé le premier Mondial de rugby à XV ?", "reponse": 1987, "unite": "année" },
   { "question": "En quelle année Paris a-t-il accueilli les Jeux olympiques pour la première fois ?", "reponse": 1900, "unite": "année" },
   { "question": "Combien de médailles la France a-t-elle remportées aux JO de Paris 2024 ?", "reponse": 64, "unite": "médailles" },
-  { "question": "Combien d'équipes participent à la Coupe du monde de football 2026 ?", "reponse": 48, "unite": "équipes" }
+  { "question": "Combien d'équipes participent à la Coupe du monde de football 2026 ?", "reponse": 48, "unite": "équipes" },
+  { "question": "En quelle année la série « La Chronique des Bridgerton » est-elle sortie sur Netflix ?", "reponse": 2020, "unite": "année" },
+  { "question": "En quelle année la pilule contraceptive a-t-elle été autorisée en France ?", "reponse": 1967, "unite": "année" },
+  { "question": "En quelle année est sorti au cinéma le film « Cinquante nuances de Grey » ?", "reponse": 2015, "unite": "année" },
+  { "question": "En quelle année la série « Sex Education » est-elle sortie sur Netflix ?", "reponse": 2019, "unite": "année" },
+  { "question": "En quelle année est sorti le film « Dirty Dancing » ?", "reponse": 1987, "unite": "année" },
+  { "question": "En quelle année le site de rencontre Meetic a-t-il été lancé ?", "reponse": 2001, "unite": "année" }
 ]

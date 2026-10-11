@@ -68,7 +68,7 @@ export default function Home() {
 
       {error && <p className="error">{error}</p>}
       {!connected && <p className="muted">Connexion au serveur…</p>}
-      <p className="disclaimer">À consommer avec modération. L’eau compte aussi comme boisson.</p>
+      <p className="disclaimer">Jeu réservé aux 18 ans et plus, à consommer avec modération. L’eau compte aussi comme boisson.</p>
     </main>
   );
 }

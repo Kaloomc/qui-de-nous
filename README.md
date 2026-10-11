@@ -330,7 +330,7 @@ Côté code, tout passe par une seule méthode, `Game.drink(playerId, n)` dans [
 
 Les règles sont des fonctions pures dans [`server/rules.js`](server/rules.js), couvertes par `npm test`.
 
-À consommer avec modération : un verre d'eau compte aussi.
+Jeu réservé aux 18 ans et plus, à consommer avec modération : un verre d'eau compte aussi.
 
 ## Dépannage
 
@@ -353,13 +353,15 @@ Les questions sont écrites pour des soirées entre potes de 18-25 ans. Chacune 
 
 | Niveau | Part | Esprit |
 |---|---|---|
-| `chill` | ~40 % | Drôle et léger, pour chauffer l'ambiance |
-| `epice` | ~40 % | Gênant, drague, ex, secrets avouables |
-| `hardcore` | ~20 % | Très gênant ou osé, toujours sur le ton de la blague |
+| `chill` | ~30 % | Drôle et léger, pour chauffer l'ambiance |
+| `epice` | ~30 % | Gênant, drague, ex, secrets avouables |
+| `hardcore` | ~35 % | Osé : sexe, drague, plans d'un soir, sextos… en sous-entendus, jamais cru |
+
+Les questions osées restent entre adultes consentants et sur le ton du chambrage : pas de description explicite, rien qui implique un mineur, de la contrainte ou quelqu'un de trop ivre pour consentir, aucune moquerie sur l'origine, l'orientation, le genre, le physique ou la santé.
 
 Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélangés quel que soit le niveau. Le champ servira plus tard à choisir l'intensité de la soirée.
 
-**Qui de nous ?** (150 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
+**Qui de nous ?** (520 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
 
 ```json
 [
@@ -368,7 +370,7 @@ Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélan
 ]
 ```
 
-**Tu préfères ?** (150 dilemmes) : dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… », lisible seule sur sa carte :
+**Tu préfères ?** (500 dilemmes) : dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… », lisible seule sur sa carte :
 
 ```json
 [

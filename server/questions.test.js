@@ -8,9 +8,10 @@ const normalize = (s) => s.toLowerCase().replace(/[^a-zà-ÿ0-9]+/g, ' ').trim()
 function checkLevels(list) {
   for (const q of list) assert.ok(NIVEAUX.includes(q.niveau), `niveau invalide : ${JSON.stringify(q)}`);
   const share = (n) => list.filter((q) => q.niveau === n).length / list.length;
-  assert.ok(share('chill') >= 0.3 && share('chill') <= 0.5, `chill ${share('chill')}`);
-  assert.ok(share('epice') >= 0.3 && share('epice') <= 0.5, `épicé ${share('epice')}`);
-  assert.ok(share('hardcore') >= 0.12 && share('hardcore') <= 0.28, `hardcore ${share('hardcore')}`);
+  // Les questions osées (hardcore) sont plus nombreuses depuis les retours des testeurs, sans écraser le reste.
+  assert.ok(share('chill') >= 0.25 && share('chill') <= 0.5, `chill ${share('chill')}`);
+  assert.ok(share('epice') >= 0.25 && share('epice') <= 0.5, `épicé ${share('epice')}`);
+  assert.ok(share('hardcore') >= 0.12 && share('hardcore') <= 0.4, `hardcore ${share('hardcore')}`);
 }
 
 test('questions « Qui de nous ? » : au moins 400, bien formées, uniques, niveaux répartis', () => {
