@@ -45,8 +45,9 @@ test('programme : jeux cochés uniquement, un seul jeu coché se répète', () =
 // ---------- Moteur ----------
 
 const choiceFor = (game, players) => (game.mode === 'tu-preferes' ? 'a' : players[0].id);
+// À « Tu préfères ? », le premier joueur est seul dans son camp : quelqu'un boit à chaque manche.
 const voteAll = (game, players) => {
-  for (const p of players) if (!game.isLate(p.id)) game.vote(p.id, choiceFor(game, players));
+  for (const p of players) if (!game.isLate(p.id)) game.vote(p.id, p === players[0] && game.mode === 'tu-preferes' ? 'b' : choiceFor(game, players));
 };
 
 /** Joue une manche de vote jusqu'aux résultats, puis laisse passer le minuteur des résultats. */
