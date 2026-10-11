@@ -1,6 +1,7 @@
 import { randomBytes, randomInt } from 'node:crypto';
 import { GAMES, isGame, isPlayable, partyGames } from './games/index.js';
 import { eligibleGames, PARTY_DURATIONS, pickNextBlock, TRANSITION_MS } from './party.js';
+import { computeTrophies, recordRound, sipsRanking } from './recap.js';
 import { QuestionHistory } from './questionHistory.js';
 import { TIMING } from './timing.js';
 
@@ -84,6 +85,9 @@ export class Game {
     // Gorgées de toute la soirée, par joueur : survit aussi à reset(). Seule une nouvelle partie (nouveau QR code)
     // ou le bouton « Remettre les compteurs à zéro » de l'hôte les efface.
     this.partySips = new Map();
+    // Statistiques de la soirée pour les trophées du récap (server/recap.js), et jeux joués : survivent aussi à reset().
+    this.partyStats = new Map();
+    this.playedModes = new Set();
     // Mode soirée (enchaînement automatique des jeux), null hors soirée. Voir startParty().
     this.party = null;
     this.reset();
@@ -136,6 +140,8 @@ export class Game {
       this.rules.updateStats(stats, this.results, this);
       for (const [id, value] of Object.entries(stats)) if (this.players.has(id)) this.stats.set(id, value);
     }
+    recordRound(this.partyStats, this.mode, this.results, [...this.players.keys()]);
+    this.playedModes.add(this.mode);
   }
 
   /** Résultat définitif : gorgées et statistiques comptées, le mode auto peut enchaîner. */
@@ -524,6 +530,7 @@ export class Game {
     this.clearTimers();
     this.paused = false;
     this.phase = 'ended';
+    this.endedAt = this.clock.now();
     return null;
   }
 
@@ -712,6 +719,27 @@ export class Game {
     };
   }
 
+  /** Récap de la soirée : trophées, classement des gorgées et jeux joués (joueurs encore là uniquement). */
+  recap() {
+    const players = [...this.players.values()].map((p) => ({ id: p.id, name: p.name, photoUrl: this.photoUrl(p) }));
+    const sips = this.sipsOfPresent(this.partySips);
+    return {
+      code: this.code,
+      date: new Date(this.endedAt ?? this.clock.now()).toISOString(),
+      players,
+      trophies: computeTrophies(players, sips, this.partyStats),
+      ranking: sipsRanking(players, sips),
+      totalSips: Object.values(sips).reduce((a, b) => a + b, 0),
+      games: [...this.playedModes],
+      // Adresse du site imprimée sur l'image (si définie).
+      publicUrl: process.env.PUBLIC_URL || null,
+    };
+  }
+
+  photoUrl(p) {
+    return p.photo ? `/api/photo/${this.code}/${p.id}?v=${p.photoVersion}` : null;
+  }
+
   sipsOfPresent(map) {
     return Object.fromEntries([...map].filter(([id]) => this.players.has(id)));
   }
@@ -751,7 +779,7 @@ export class Game {
         id: p.id,
         name: p.name,
         connected: p.sockets.size > 0,
-        photoUrl: p.photo ? `/api/photo/${this.code}/${p.id}?v=${p.photoVersion}` : null,
+        photoUrl: this.photoUrl(p),
       })),
       round,
       votingOpen: this.phase === 'question' && !!this.rules && this.votingOpen,
@@ -768,6 +796,7 @@ export class Game {
       pendingTimer: this.pending ? this.timerState('pending') : null,
       stats: Object.fromEntries(this.stats),
       party: this.partyState(),
+      recap: this.phase === 'ended' ? this.recap() : null,
     };
   }
 }

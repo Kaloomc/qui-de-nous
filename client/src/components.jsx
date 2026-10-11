@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { colorFor, serverNow, useRemaining } from './lib.js';
+import { avatarColor } from './colors.js';
+import { serverNow, useRemaining } from './lib.js';
 import { sounds } from './sound.js';
 
 /** Joue le son de révélation quand les résultats apparaissent (pas si la TV est rechargée plus tard). */
@@ -32,16 +33,10 @@ export function Avatar({ player, size = 64, className = '' }) {
     return <img className={`avatar ${className}`} style={style} src={player.photoUrl} alt={player.name} draggable={false} />;
   }
   return (
-    <span className={`avatar avatar-fallback ${className}`} style={{ ...style, background: colorFor(hash(player?.name ?? '?')) }}>
+    <span className={`avatar avatar-fallback ${className}`} style={{ ...style, background: avatarColor(player?.name ?? '?') }}>
       {(player?.name ?? '?').charAt(0).toUpperCase()}
     </span>
   );
-}
-
-function hash(text) {
-  let h = 0;
-  for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  return h;
 }
 
 export function PlayerChip({ player, size = 72, dim = false, badge, caption, inline = false, onRemove }) {

@@ -29,6 +29,14 @@ app.get('/api/info', (_req, res) => {
   res.json({ lanIps: lanAddresses(), publicUrl: process.env.PUBLIC_URL || null });
 });
 
+// Récap de la soirée (QR code de la TV) : disponible tant que la partie existe, 6 h après la dernière activité au plus.
+app.get('/api/recap/:code', (req, res) => {
+  const game = store.get(req.params.code);
+  if (!game) return res.status(404).json({ error: 'Partie introuvable.' });
+  res.set('Cache-Control', 'no-store');
+  res.json(game.recap());
+});
+
 app.get('/api/photo/:code/:playerId', (req, res) => {
   const photo = store.get(req.params.code)?.players.get(req.params.playerId)?.photo;
   if (!photo) return res.sendStatus(404);

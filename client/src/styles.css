@@ -3506,3 +3506,179 @@ button {
     margin-bottom: 8px;
   }
 }
+
+/* ---------- Récap de fin de soirée ---------- */
+
+.recap-show,
+.host-recap,
+.recap-page,
+.host-recap .recap-preview {
+  width: 110px;
+}
+
+.player-recap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 2vh, 20px);
+  text-align: center;
+}
+
+.host-recap {
+  flex: 1;
+  width: 100%;
+}
+
+.recap-show h3 {
+  font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.trophy-grid {
+  width: min(100%, 1400px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(10px, 1.5vw, 20px);
+}
+
+.trophy-grid .trophy-card {
+  flex: 0 1 220px;
+  min-width: 140px;
+}
+
+.trophy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 3px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.trophy-card.is-revealed {
+  border-color: var(--yellow);
+  box-shadow: 0 12px 40px rgba(255, 201, 60, 0.18);
+}
+
+.trophy-card.is-teased .trophy-mystery {
+  background: var(--bg-2);
+  color: var(--muted);
+  animation: heartbeat 0.8s ease-in-out infinite;
+}
+
+.trophy-emoji {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.trophy-title {
+  color: var(--yellow);
+  font-weight: 800;
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
+}
+
+.trophy-name {
+  font-size: clamp(1.3rem, 1.8vw, 1.8rem);
+  line-height: 1.1;
+}
+
+.trophy-label {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.recap-ranking li.is-top {
+  background: rgba(255, 201, 60, 0.18);
+}
+
+.host-recap-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 48px);
+}
+
+.recap-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 24px;
+}
+
+.recap-share-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 340px;
+}
+
+.recap-preview {
+  width: 150px;
+  aspect-ratio: 9 / 16;
+  border-radius: 14px;
+  background: var(--bg-2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.recap-preview-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.recap-hide {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.recap-hide input {
+  accent-color: var(--pink);
+  width: 20px;
+  height: 20px;
+}
+
+.recap-qr {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 420px;
+  text-align: left;
+}
+
+.recap-qr img {
+  width: 150px;
+  height: 150px;
+  padding: 8px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.recap-page {
+  padding: 24px 16px 40px;
+}
+
+.host-recap .recap-preview {
+  width: 110px;
+}
+
+.player-recap {
+  width: 100%;
+  padding: 16px 0;
+}
+
+.player-recap h2 {
+  font-size: 1.4rem;
+}

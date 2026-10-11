@@ -2,6 +2,7 @@ import { CODE_LENGTH, usePath } from './lib.js';
 import Home from './pages/Home.jsx';
 import Host from './pages/Host.jsx';
 import Player from './pages/Player.jsx';
+import { RecapPage } from './recap.jsx';
 
 const codeRoute = (prefix) => new RegExp(`^/${prefix}/([A-Za-z]{${CODE_LENGTH}})/?$`);
 
@@ -18,6 +19,12 @@ export default function App() {
   if (join) {
     const code = join[1].toUpperCase();
     return <Player key={code} code={code} />;
+  }
+
+  const recap = codeRoute('recap').exec(path);
+  if (recap) {
+    const code = recap[1].toUpperCase();
+    return <RecapPage key={code} code={code} />;
   }
 
   return <Home />;

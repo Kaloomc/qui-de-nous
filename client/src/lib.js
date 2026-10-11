@@ -51,6 +51,14 @@ export function useGameState(code) {
   return state;
 }
 
+/** Même objet tant que le contenu ne change pas (le serveur renvoie tout l'état à chaque événement). */
+export function useStable(value) {
+  const ref = useRef({ key: null, value: null });
+  const key = JSON.stringify(value ?? null);
+  if (ref.current.key !== key) ref.current = { key, value };
+  return ref.current.value;
+}
+
 export const serverNow = (state) => Date.now() + (state?.clockOffset ?? 0);
 
 /** Millisecondes restantes d'un minuteur serveur ({ endsAt } ou { remainingMs, paused }), rafraîchies régulièrement. */
@@ -129,9 +137,4 @@ export function useJoinUrl(code) {
   return `${base}/join/${code}`;
 }
 
-const PALETTE = [
-  '#ff4f8b', '#ffc93c', '#3ee0c5', '#6c8bff', '#ff8a3d', '#b46cff', '#7ee05a', '#ff5a5a', '#3cc3ff', '#f78fd6',
-  '#d4e157', '#26a69a', '#ffab91', '#9575cd', '#4dd0e1', '#ffd54f', '#e57373', '#81c784', '#64b5f6', '#ba68c8',
-];
-
-export const colorFor = (index) => PALETTE[index % PALETTE.length];
+export { colorFor } from './colors.js';

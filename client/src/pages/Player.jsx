@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, TimerBar } from '../components.jsx';
-import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect } from '../lib.js';
+import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect, useStable } from '../lib.js';
 import { gameOf } from '../games/index.js';
 import { GameIcon } from '../icons.jsx';
+import { PlayerRecap } from '../recap.jsx';
 import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
 
@@ -308,9 +309,10 @@ function Ended({ state, me, onHome }) {
   const mine = me && rows.find((r) => r.player.id === me.id);
   const champion = mine && mine.rank === 1 && mine.sips > 0;
   const tied = mine && rows.filter((r) => r.rank === mine.rank).length > 1;
+  const recap = useStable(state.recap);
   return (
     <div className="center">
-      <h1>Partie terminée</h1>
+      <h1>{state.party?.step === 'over' ? 'Soirée terminée' : 'Partie terminée'}</h1>
       {mine && (
         <div className="final-rank pop-in">
           <Avatar player={me} size={120} className={champion ? 'podium-champion' : ''} />
@@ -319,6 +321,7 @@ function Ended({ state, me, onHome }) {
         </div>
       )}
       <p className="lead">Merci d’avoir joué !</p>
+      {recap && <PlayerRecap recap={recap} />}
       <button className="btn btn-primary btn-xl" onClick={onHome}>
         Accueil
       </button>

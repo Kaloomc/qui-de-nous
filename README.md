@@ -64,6 +64,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
   - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
   - [Mode soirée](#mode-soirée)
+  - [Récap de fin de soirée](#récap-de-fin-de-soirée)
 - [Règles du jeu](#règles-du-jeu)
   - [Qui de nous ?](#qui-de-nous--1)
   - [Tu préfères ?](#tu-préfères--1)
@@ -85,6 +86,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
 - Chaque téléphone affiche **« Les résultats arrivent… »** pendant le suspense, puis **« Tu bois ! »** ou **« Tu ne bois pas »** au même moment que la TV : personne n'est spoilé.
 - **Mode auto** : la révélation se lance dès que tout le monde a voté, puis la question suivante arrive toute seule après un compte à rebours. Il propose aussi une pause, un minuteur de vote et un nombre de questions maximum (voir [Réglages de la partie](#réglages-de-la-partie)).
 - **Mode soirée** : un seul bouton, et Gorgée enchaîne les jeux tout seul pendant 30 min, 1 h, 2 h ou sans fin (voir [Mode soirée](#mode-soirée)).
+- **Récap de fin de soirée** : trophées révélés un par un sur la TV, et une image au format story à partager (voir [Récap de fin de soirée](#récap-de-fin-de-soirée)).
 - **Compteur de gorgées** : chaque joueur voit son total sur la TV et sur son téléphone, et la partie se termine sur un **podium** des plus assoiffés.
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
 - 150 questions et 150 dilemmes pensés pour les soirées étudiantes, du plus chill au plus gênant, tirés au hasard sans répétition.
@@ -270,6 +272,17 @@ La grosse carte **Mode soirée**, en tête de la grille des jeux, lance un encha
 - **Jamais de manche coupée** : la fin du temps, « Jeu suivant » et « Terminer la soirée » attendent la fin de la manche en cours. Un deuxième appui sur « Terminer maintenant » arrête tout de suite.
 - **Retardataires** : un joueur qui rejoint en pleine manche voit « tu joues dès la prochaine manche » et entre au tour suivant, sans boire pour la manche qu'il n'a pas jouée.
 - Tout est piloté par le serveur (`server/party.js` pour le programme, `Game.startParty` et suivantes dans `server/gameStore.js`) : l'hôte peut recharger sa page, les téléphones peuvent se reconnecter.
+
+### Récap de fin de soirée
+
+À la fin du mode soirée, la TV enchaîne sur le **récap** ; après une partie classique, il est à un clic (« Récap de la soirée » sur l'écran de fin). Il couvre toute la soirée, tous jeux confondus.
+
+- **Trophées**, calculés par le serveur (`server/recap.js`) et révélés un par un avec suspense : le roi des gorgées, le plus accusé (Qui de nous ?), le plus mouton et le plus rebelle (Tu préfères ?), le meilleur menteur et le meilleur détective (L'Imposteur), le plus rapide (Réflexes), le plus précis (Estimation), le meilleur pote (Qui me connaît le mieux ?), les mains brûlantes (Patate chaude), le chouchou de la roue. Un trophée n'apparaît que si le jeu a été joué et que la valeur compte (par exemple au moins 2 votes reçus). Pour qu'un seul joueur ne rafle pas tout, un trophée peut aller à un autre joueur presque aussi bon qui n'en a pas encore ; la couronne du roi des gorgées, elle, va toujours au vrai premier.
+- **Image partageable** (1080×1920, format story) avec le logo, la date, les trophées, le classement des gorgées, le crédit et l'adresse du site (`PUBLIC_URL` si elle est définie). Elle est **dessinée sur l'appareil** (`client/src/recapImage.js`, canvas) : rien n'est envoyé à un serveur.
+  - Sur les **téléphones** : « Partager le récap » ouvre le partage natif (Instagram, Snap, WhatsApp…) ; sinon, l'image est téléchargée.
+  - Sur la **TV** : un bouton de téléchargement, et un **QR code** vers `/recap/CODE` pour que chacun ouvre le récap sur son téléphone, même sans être dans la partie.
+  - Une case **« Masquer les photos dans l'image »** remplace les photos par les initiales, et un rappel s'affiche : les photos des autres joueurs sont dans l'image, à partager avec leur accord.
+- **Durée** : le récap reste accessible tant que la partie existe. Les parties vivent en mémoire : elles disparaissent **6 h après la dernière activité**, ou au redémarrage du serveur. Pensez à enregistrer l'image avant.
 
 ## Règles du jeu
 
@@ -487,9 +500,11 @@ Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur d
 
 ## Crédit
 
-Gorgée est **Made by Kaloo**. Le crédit apparaît, petit et discret, en bas de l'accueil, en bas du lobby de la TV et sur l'image du récap de fin. Texte et lien se changent à un seul endroit : la constante `CREDIT` de `client/src/credit.jsx` (composant `<Credit />`).
+Gorgée est **Made by Kaloo**. Le crédit apparaît, petit et discret, en bas de l'accueil, en bas du lobby de la TV et sur l'image du récap de fin. Texte et lien se changent à un seul endroit : la constante `CREDIT` de `client/src/credit.js` (le composant `<Credit />` est dans `client/src/credit.jsx`).
 
-**À renseigner (`TODO`)** : `CREDIT.url` dans `client/src/credit.jsx`, l'adresse du profil GitHub ou du site. Tant qu'elle vaut `null`, le crédit reste du texte seul.
+**`TODO` à renseigner** :
+
+- `CREDIT.url` dans `client/src/credit.js` : l'adresse du profil GitHub ou du site. Tant qu'elle vaut `null`, le crédit reste du texte seul.
 
 ## Licence
 

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { PlayerChip, Segmented, TimerBar, VoteProgress, allVoted } from '../components.jsx';
-import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
+import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect, useStable } from '../lib.js';
 import { GAMES, gameById, gameOf, playersLabel } from '../games/index.js';
 import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
+import { HostRecap } from '../recap.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
@@ -462,10 +463,39 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame }) {
 
 function Ended({ state, mode, onRestart, onChangeGame }) {
   const n = state.round?.number ?? 0;
+  const recap = useStable(state.recap);
+  // Fin du mode soirée : le récap s'affiche directement. Sinon, il est à un clic (« Récap de la soirée »).
+  const [showRecap, setShowRecap] = useState(state.party?.step === 'over');
   useEffect(() => {
+    if (showRecap) return undefined;
     const id = setTimeout(() => sounds.reveal(), 900);
     return () => clearTimeout(id);
-  }, []);
+  }, [showRecap]);
+
+  if (showRecap && recap) {
+    return (
+      <HostRecap
+        recap={recap}
+        code={state.code}
+        actions={
+          <>
+            <button className="btn btn-ghost" onClick={() => navigate('/')}>
+              Accueil
+            </button>
+            {state.party?.step !== 'over' && (
+              <button className="btn btn-ghost" onClick={() => setShowRecap(false)}>
+                Retour au podium
+              </button>
+            )}
+            <button className="btn btn-secondary btn-xl" onClick={onChangeGame}>
+              Choisir un jeu
+            </button>
+          </>
+        }
+      />
+    );
+  }
+
   return (
     <div className="center ended">
       <h1 className="logo logo-sm">{state.party?.step === 'over' ? 'Soirée terminée' : 'Partie terminée'}</h1>
@@ -478,6 +508,9 @@ function Ended({ state, mode, onRestart, onChangeGame }) {
       <div className="actions">
         <button className="btn btn-ghost" onClick={() => navigate('/')}>
           Accueil
+        </button>
+        <button className="btn btn-ghost" onClick={() => setShowRecap(true)}>
+          Récap de la soirée
         </button>
         <button className="btn btn-secondary btn-xl" onClick={onChangeGame}>
           Changer de jeu
