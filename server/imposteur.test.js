@@ -1,9 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { makeGame } from './testClock.js';
+import { normalize } from '../scripts/check-content.js';
+import { readFileSync } from 'node:fs';
 import { applyLastChance, checkClue, computeImposteur, NO_CLUE, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from './rules/imposteur.js';
 
-const pair = { mot: 'Netflix', proche: 'Prime Video' };
+const WORDS = JSON.parse(readFileSync(new URL('./content/words-imposteur.json', import.meta.url), 'utf8'));
+
+const pair = { mot: 'Netflix', proche: 'YouTube' };
 const ids = ['imp', 'b', 'c', 'd'];
 const votes = (entries) => new Map(Object.entries(entries));
 const seq = (...values) => {
@@ -47,11 +51,11 @@ test('dernière chance : s’il trouve le mot, ceux qui l’ont démasqué boive
 });
 
 test('dernière chance : 4 propositions dont le bon mot, sans le mot de l’imposteur', () => {
-  const others = [{ mot: 'TikTok' }, { mot: 'Spotify' }, { mot: 'Netflix' }, { mot: 'Prime Video' }, { mot: 'Snapchat' }, { mot: 'Uber' }];
+  const others = [{ mot: 'TikTok' }, { mot: 'Spotify' }, { mot: 'Netflix' }, { mot: 'YouTube' }, { mot: 'Snapchat' }, { mot: 'Uber' }];
   const options = lastChanceOptions(pair, others, seq(0.2, 0.7, 0.4));
   assert.equal(options.length, 4);
   assert.ok(options.includes('Netflix'));
-  assert.ok(!options.includes('Prime Video'));
+  assert.ok(!options.includes('YouTube'));
   assert.equal(new Set(options).size, 4);
 });
 
@@ -223,4 +227,18 @@ test('indice écrit : 2 tours puis le vote ; déconnexion pendant son tour = pas
   const clues = game.publicState().round.clues;
   assert.equal(clues.length, 8, '2 indices par joueur');
   assert.equal(clues.filter((c) => c.lap === 2).length, 4);
+});
+
+test('paires de mots : au moins 200, sans doublon, deux mots vraiment différents', () => {
+  assert.ok(WORDS.length >= 200, `${WORDS.length} paires`);
+  const seen = new Set();
+  for (const { mot, proche } of WORDS) {
+    const [a, b] = [normalize(mot), normalize(proche)];
+    assert.notEqual(a, b, `mots identiques : ${mot} / ${proche}`);
+    // « Partiel / Partiels », « Breaking Bad / Breaking Bad 2 » : l'un contient l'autre, trop proche pour bluffer.
+    assert.ok(!a.includes(b) && !b.includes(a), `l'un contient l'autre : ${mot} / ${proche}`);
+    const key = [a, b].sort().join(' | ');
+    assert.ok(!seen.has(key), `paire en double : ${mot} / ${proche}`);
+    seen.add(key);
+  }
 });

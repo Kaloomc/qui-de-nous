@@ -379,13 +379,15 @@ Les contenus des autres jeux sont dans [`server/content/`](server/content/) :
 |---|---|---|
 | `questions-estimation.json` | Estimation | `{ "question": "…", "reponse": 2007, "unite": "année" }` |
 | `questions-connait.json` | Qui me connaît le mieux ? | `{ "niveau": "chill", "question": "… {nom} … ?", "choix": ["A", "B", "C", "D"] }` (`{nom}` = la cible) |
-| `words-imposteur.json` | L'Imposteur | `{ "mot": "Netflix", "proche": "Prime Video", "categorie": "Streaming" }` : deux mots **proches mais différents** |
+| `words-imposteur.json` | L'Imposteur | `{ "mot": "Netflix", "proche": "YouTube", "categorie": "Applis" }` : deux mots de la **même grande catégorie mais clairement différents** (voir ci-dessous) |
 | `defis-roue.json` | La Roue | `{ "texte": "Bois 2 gorgées.", "type": "boire", "n": 2, "niveau": "chill" }`, avec `type` parmi `boire`, `groupe`, `echange` (`n: 0`), `duo`, `distribuer`, `tous`, `vote`, `gage`, et `n` de 1 à 5 |
 | `words-feu.json` | Réflexes | `{ "pieges": ["FEUX", "BLEU", …], "neutres": ["PIZZA", …] }` en majuscules, sans « FEU » lui-même |
 
 Pour un défi de la roue adressé au joueur désigné (`boire`, `duo`, `distribuer`, `gage`), écris à la 2e personne : la TV affiche « Ana : bois 2 gorgées. ». Pour les autres, écris pour tout le groupe. Le nombre de gorgées dans le texte doit correspondre à `n`.
 
 **Conseils** : une phrase qui se lit en 3 secondes sur la TV (120 caractères maximum, 75 par option de dilemme), une question qui désigne vraiment quelqu'un ou qui divise la salle, et deux options aussi tentantes ou aussi pénibles l'une que l'autre. Pas de moquerie sur l'origine, la religion, l'orientation, le genre, le physique ou la santé, pas de contenu sexuel explicite, et rien qui pousse à se mettre en danger.
+
+**Bien choisir une paire de l'Imposteur.** On doit pouvoir donner un indice vrai pour un mot qui ne colle pas parfaitement à l'autre, tout en laissant l'imposteur comprendre vaguement de quoi on parle. Le bon écart : Netflix / YouTube, Fortnite / Minecraft, Vodka / Bière, Coachella / Disneyland, Squeezie / Cyprien, Tinder / Uber Eats, Plage / Montagne. Trop proches (à éviter) : Netflix / Prime Video, Vodka / Gin, TikTok / Reels, deux versions du même produit ou deux objets interchangeables. Le test refuse les paires en double et les mots identiques ou dont l'un contient l'autre.
 
 Ajoute, modifie ou supprime des lignes (attention aux virgules et aux guillemets), puis lance `npm test`. Il vérifie le format, les doublons, la longueur et la répartition des niveaux. Relance enfin `npm start`, sans rebuild.
 

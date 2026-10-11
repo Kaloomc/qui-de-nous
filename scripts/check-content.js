@@ -71,7 +71,7 @@ export const CONTENT = [
   {
     id: 'imposteur',
     file: 'content/words-imposteur.json',
-    target: 250,
+    target: 200,
     entries: (d) => d,
     key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | '),
   },
