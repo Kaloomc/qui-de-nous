@@ -471,6 +471,12 @@ Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur d
 
 **Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, sélecteur d'intensité (chill / épicé / hardcore) pour les questions et les défis de la roue, réveiller un joueur qui traîne.
 
+## Crédit
+
+Gorgée est **Made by Kaloo**. Le crédit apparaît, petit et discret, en bas de l'accueil, en bas du lobby de la TV et sur l'image du récap de fin. Texte et lien se changent à un seul endroit : la constante `CREDIT` de `client/src/credit.jsx` (composant `<Credit />`).
+
+**À renseigner (`TODO`)** : `CREDIT.url` dans `client/src/credit.jsx`, l'adresse du profil GitHub ou du site. Tant qu'elle vaut `null`, le crédit reste du texte seul.
+
 ## Licence
 
 [MIT](LICENSE)

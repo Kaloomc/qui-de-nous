@@ -3,6 +3,7 @@ import QRCode from 'qrcode';
 import { PlayerChip, TimerBar, VoteProgress, allVoted } from '../components.jsx';
 import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect } from '../lib.js';
 import { GAMES, gameById, gameOf, playersLabel } from '../games/index.js';
+import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
@@ -422,6 +423,7 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame }) {
         <p className="join-url">{joinUrl.replace(/^https?:\/\//, '').replace(/\/join\/.*$/, '')}</p>
         <p className="join-hint">avec le code</p>
         <p className="join-code">{state.code}</p>
+        <Credit />
       </section>
 
       <section className="lobby-players">

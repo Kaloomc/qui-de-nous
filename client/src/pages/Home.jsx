@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { GAMES } from '../games/index.js';
+import { Credit } from '../credit.jsx';
 import { GameIcon, Logo } from '../icons.jsx';
 import { CODE_LENGTH, navigate, request, storage, useConnected } from '../lib.js';
 
@@ -69,6 +70,7 @@ export default function Home() {
       {error && <p className="error">{error}</p>}
       {!connected && <p className="muted">Connexion au serveur…</p>}
       <p className="disclaimer">Jeu réservé aux 18 ans et plus, à consommer avec modération. L’eau compte aussi comme boisson.</p>
+      <Credit />
     </main>
   );
 }
