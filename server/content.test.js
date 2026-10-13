@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CONTENT, findDuplicates, loadContent } from '../scripts/check-content.js';
+import { CONTENT, bannedWord, findDuplicates, loadContent } from '../scripts/check-content.js';
 import { isValidDefi } from './rules/roue.js';
 import { FEU } from './rules/feu.js';
 
@@ -36,5 +36,13 @@ for (const spec of CONTENT) {
     const show = (pairs) => pairs.map(([i, j]) => `${JSON.stringify(list[i])} ~ ${JSON.stringify(list[j])}`).join('\n');
     assert.equal(exact.length, 0, `doublons :\n${show(exact)}`);
     assert.equal(near.length, 0, `quasi-doublons (node scripts/check-content.js) :\n${show(near)}`);
+  });
+
+  test(`contenu ${spec.file} : aucune référence de niche ni situation de bureau`, () => {
+    const hits = loadContent(spec)
+      .map((entry) => [bannedWord(entry), entry])
+      .filter(([word]) => word);
+    // Faux positif ? Ajoute le texte dans ALLOWED_WORDS (scripts/check-content.js).
+    assert.equal(hits.length, 0, hits.map(([w, e]) => `[${w}] ${JSON.stringify(e)}`).join('\n'));
   });
 }

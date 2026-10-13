@@ -70,6 +70,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - [Tu préfères ?](#tu-préfères--1)
 - [Dépannage](#dépannage)
 - [Personnaliser les questions](#personnaliser-les-questions)
+  - [Ajouter des questions : checklist qualité](#ajouter-des-questions--checklist-qualité)
 - [Héberger en ligne (gratuit)](#héberger-en-ligne-gratuit)
 - [Développement](#développement)
 - [Licence](#licence)
@@ -430,6 +431,25 @@ Pour un défi de la roue adressé au joueur désigné (`boire`, `duo`, `distribu
 **Bien choisir une paire de l'Imposteur.** On doit pouvoir donner un indice vrai pour un mot qui ne colle pas parfaitement à l'autre, tout en laissant l'imposteur comprendre vaguement de quoi on parle. Le bon écart : Netflix / YouTube, Fortnite / Minecraft, Vodka / Bière, Coachella / Disneyland, Squeezie / Cyprien, Tinder / Uber Eats, Plage / Montagne. Trop proches (à éviter) : Netflix / Prime Video, Vodka / Gin, TikTok / Reels, deux versions du même produit ou deux objets interchangeables. Le test refuse les paires en double et les mots identiques ou dont l'un contient l'autre.
 
 Ajoute, modifie ou supprime des lignes (attention aux virgules et aux guillemets), puis lance `npm test`. Il vérifie le format, les doublons, la longueur et la répartition des niveaux. Relance enfin `npm start`, sans rebuild.
+
+### Ajouter des questions : checklist qualité
+
+Une bonne question fait penser tout de suite à quelqu'un du groupe (« ahah c'est lui ! ») ou lance une dispute amicale. Avant d'ajouter une entrée, vérifie qu'elle est :
+
+- [ ] **Universelle** : n'importe quel groupe de 18-25 ans peut répondre, sans connaître un jeu, un streamer, une appli spécialisée ou un métier. Références OK : Insta, TikTok, Snap, YouTube, WhatsApp, Netflix, Uber Eats, applis de rencontre, soirées, ex, coloc, fac, vacances, argent, bouffe, retards, mensonges.
+- [ ] **Désignante** : on imagine clairement une personne plus que les autres.
+- [ ] **Concrète et courte** : un seul comportement, compris en 3 secondes sur la TV.
+- [ ] **Réaliste** : quelque chose qu'un ami pourrait vraiment faire.
+- [ ] **Qui fait réagir** : rire, chambrage ou petite gêne, sans méchanceté.
+
+À éviter, les 4 défauts :
+
+1. **Niche** : Steam, Twitch, Discord, Reddit, « lore », speedrun, crypto, LinkedIn, vocabulaire de jeux vidéo ou de streamers.
+2. **Boulot / bureau** : mails, stagiaire, alternance, réunions, open space, patron, collègues, impôts. Tout le monde n'a pas de bureau.
+3. **Absurde** : scénario farfelu (post-it mystère sur le front, accent espagnol après un week-end à Barcelone) qui ne fait penser à personne.
+4. **Cliché bateau** : pâtes en fin de mois, story « bonne nuit »… Tout le monde se reconnaît, donc le vote ne départage personne.
+
+`npm test` refuse toute entrée qui contient un mot de la liste `BANNED_WORDS` (niche et boulot) dans [`scripts/check-content.js`](scripts/check-content.js). Pour un faux positif vérifié (« serveur » au sens de serveur de café, par exemple), ajoute le texte exact dans `ALLOWED_WORDS`, juste en dessous.
 
 ## Héberger en ligne (gratuit)
 

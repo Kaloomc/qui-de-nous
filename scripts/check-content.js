@@ -116,6 +116,8 @@ export const BANNED_WORDS = [
 /** Faux positifs vérifiés à la main (texte exact de l'entrée, ou d'un mot de l'Imposteur). */
 export const ALLOWED_WORDS = [
   'Qui est le plus susceptible de tomber amoureux du serveur parce qu\'il a souri ?',
+  'Mal parler aux serveurs',
+  'En quelle année le premier e-mail a-t-il été envoyé ?',
 ].map(normalize);
 
 const bannedRe = new RegExp(`\\b(${BANNED_WORDS.join('|')})s?\\b`);
