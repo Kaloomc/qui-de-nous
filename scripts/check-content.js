@@ -101,6 +101,35 @@ export const ALLOWED_NEAR = [
   ],
 ].map((pair) => pair.map(normalize).sort().join(' | '));
 
+/**
+ * Mots de niche (univers que tout le monde ne connaît pas) ou de boulot (tout le monde n'a pas de bureau) :
+ * une entrée qui en contient un est refusée, sauf si elle est dans ALLOWED_WORDS. Écrits normalisés (sans accents),
+ * le pluriel en « s » est accepté.
+ */
+export const BANNED_WORDS = [
+  'steam', 'discord', 'twitch', 'reddit', 'github', 'lore', 'stream', 'streamer', 'speedrun', 'rage quit', 'serveur',
+  'mail', 'email', 'stagiaire', 'stage', 'alternance', 'cdi', 'cdd', 'open space', 'reunion', 'bureau', 'boss',
+  'patron', 'collegue', 'n 1', 'linkedin', 'impot', 'crypto', 'bitcoin', 'bourse', 'excel', 'teams', 'slack',
+  'afterwork', 'boulot', 'badge', 'cv', 'entretien', 'ticket resto', 'salaire', 'manager', 'bereal',
+];
+
+/** Faux positifs vérifiés à la main (texte exact de l'entrée, ou d'un mot de l'Imposteur). */
+export const ALLOWED_WORDS = [
+  'Qui est le plus susceptible de tomber amoureux du serveur parce qu\'il a souri ?',
+].map(normalize);
+
+const bannedRe = new RegExp(`\\b(${BANNED_WORDS.join('|')})s?\\b`);
+
+/** Premier mot interdit trouvé dans une entrée (tous ses textes), ou null. */
+export function bannedWord(entry) {
+  const texts = (typeof entry === 'string' ? [entry] : Object.values(entry).flat()).filter((v) => typeof v === 'string');
+  for (const t of texts.map(normalize)) {
+    const m = !ALLOWED_WORDS.includes(t) && t.match(bannedRe);
+    if (m) return m[1];
+  }
+  return null;
+}
+
 /** Doublons exacts (après normalisation) et quasi-doublons d'une liste, selon la spécification du contenu. */
 export function findDuplicates(spec, list) {
   const exact = [];
