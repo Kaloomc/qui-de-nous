@@ -66,11 +66,19 @@ function decodeAll() {
   }
 }
 
+let current = null;
 function playRecorded(text) {
   const ctx = audioContext();
   const buffer = recorded.get(voiceFile(text));
   if (!ctx || ctx.state !== 'running' || !(buffer instanceof AudioBuffer)) return false;
+  // Deux mots très rapprochés : le nouveau coupe l'ancien, comme la synthèse.
+  try {
+    current?.stop();
+  } catch {
+    /* déjà fini */
+  }
   const source = ctx.createBufferSource();
+  current = source;
   const gain = ctx.createGain();
   source.buffer = buffer;
   gain.gain.value = getVolume();
@@ -110,12 +118,25 @@ export function unlockSpeech() {
   window.speechSynthesis.speak(u);
 }
 
-export function speak(text) {
-  if (isMuted()) return;
-  if (playRecorded(text)) return;
-  if (!supported || !voice) return;
+/**
+ * Dit un mot. onStart est appelé quand la voix commence vraiment (début du son enregistré, ou onstart de la
+ * synthèse) ; sans voix (son coupé, aucune voix), tout de suite : c'est alors l'affichage qui fait foi.
+ */
+export function speak(text, { onStart } = {}) {
+  if (isMuted()) return onStart?.();
+  if (playRecorded(text)) return onStart?.();
+  if (!supported || !voice) return onStart?.();
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text.toLowerCase());
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    onStart?.();
+  };
+  u.onstart = start;
+  // Certains navigateurs n'envoient jamais onstart : on ne bloque pas la mesure pour autant.
+  setTimeout(start, 600);
   u.voice = voice;
   u.lang = voice.lang;
   u.rate = 1.05;

@@ -1,10 +1,12 @@
-import { buildSequence, computeFeu, isFalseStart, REACT_WINDOW_MS, sipsFeu } from '../rules/feu.js';
+import { buildSequence, computeFeu, REACT_WINDOW_MS, sipsFeu } from '../rules/feu.js';
 import { loadJson } from './load.js';
 
 const WORDS = loadJson('../content/words-feu.json');
 const AUTO_START_MS = 4000;
-/** Tout le monde a tapé après « FEU » : on coupe la fin de la séquence. */
+/** Tout le monde a tapé (ou tout le monde a tiré trop tôt) : on n'attend pas la fin de la fenêtre. */
 const ALL_TAPPED_MS = 900;
+/** La TV signale le vrai début du « FEU » (voix lancée) ; au-delà de ce délai, on garde l'heure d'envoi du mot. */
+const SPOKEN_MAX_DELAY_MS = 2000;
 
 const data = (game) => game.roundData;
 const stillHere = (game, ids) => ids.filter((id) => game.players.get(id)?.sockets.size);
@@ -22,32 +24,41 @@ function emit(game, i) {
   const d = data(game);
   d.index = i;
   d.emittedAt[i] = game.clock.now();
-  if (i === d.seq.feuIndex) d.feuAt = d.emittedAt[i];
-  if (i + 1 < d.seq.words.length) game.schedulePausable('g:word', d.seq.gaps[i + 1], () => emit(game, i + 1));
-  if (d.feuAt != null && !game.timers['g:end'] && !game.pausedTimers['g:end']) {
-    // Fin de manche : la fenêtre de réaction après « FEU », ou le dernier mot si la séquence continue plus longtemps.
-    game.schedulePausable('g:end', REACT_WINDOW_MS, () => endWhenDone(game));
+  if (i === d.seq.feuIndex) {
+    // « FEU » termine la séquence : il reste juste la fenêtre de réaction. En attendant le signal de la TV,
+    // on part de l'heure d'envoi.
+    d.feuAt = d.emittedAt[i];
+    game.schedulePausable('g:end', REACT_WINDOW_MS, () => game.reveal(game.round));
+  } else {
+    game.schedulePausable('g:word', d.seq.gaps[i + 1], () => emit(game, i + 1));
   }
   checkAllTapped(game);
 }
 
-function endWhenDone(game) {
+/** La TV a commencé à dire « FEU » : c'est le vrai départ, les temps sont mesurés à partir d'ici. */
+function feuSpoken(game, index) {
   const d = data(game);
-  if (d.index + 1 < d.seq.words.length) {
-    // Encore des mots à dire : on finira juste après le dernier.
-    const remaining = d.seq.gaps.slice(d.index + 1).reduce((a, b) => a + b, 0);
-    game.schedulePausable('g:end', remaining + 600, () => game.reveal(game.round));
-    return;
-  }
-  game.reveal(game.round);
+  if (d.step !== 'running' || index !== d.seq.feuIndex || d.index !== index || d.feuSpoken) return null;
+  const now = game.clock.now();
+  if (now - d.emittedAt[index] > SPOKEN_MAX_DELAY_MS) return null;
+  d.feuSpoken = true;
+  d.feuAt = now;
+  if (!d.allTapped) game.schedulePausable('g:end', REACT_WINDOW_MS, () => game.reveal(game.round));
+  return null;
 }
+
+/** Touché pendant un mot piège (ou avant le premier mot) : faux départ, visible tout de suite. */
+const tappedEarly = (d, id) => d.taps[id] && d.taps[id].index < d.seq.feuIndex;
 
 function checkAllTapped(game) {
   const d = data(game);
-  if (d.feuAt == null || d.allTapped) return;
-  const waiting = stillHere(game, d.participants).filter((id) => !d.taps[id]);
-  if (waiting.length > 0) return;
+  if (d.allTapped || d.step !== 'running') return;
+  const present = stillHere(game, d.participants);
+  if (present.length === 0 || present.some((id) => !d.taps[id])) return;
+  // Avant « FEU », tout le monde a déjà tiré : la manche est annulée, inutile d'aller au bout.
+  if (d.feuAt == null && !present.every((id) => tappedEarly(d, id))) return;
   d.allTapped = true;
+  game.cancel('g:word');
   game.schedulePausable('g:end', ALL_TAPPED_MS, () => game.reveal(game.round));
 }
 
@@ -56,12 +67,17 @@ export default {
   drawQuestion: () => null,
   startRound(game) {
     const participants = game.connectedPlayers().map((p) => p.id);
+    // Jamais deux manches de suite avec le même nombre de mots avant « FEU ».
+    const seq = buildSequence(WORDS, Math.random, game.lastFeuTraps);
+    game.lastFeuTraps = seq.feuIndex;
     Object.assign(game.roundData, {
       step: 'ready',
-      seq: buildSequence(WORDS),
+      seq,
       index: -1,
       emittedAt: [],
       feuAt: null,
+      feuSpoken: false,
+      allTapped: false,
       taps: {},
       participants: participants.length ? participants : [...game.players.keys()],
     });
@@ -70,9 +86,10 @@ export default {
   acceptsVotes: () => false,
   isValidVote: () => false,
   hostAction(game, action) {
-    if (action.type !== 'start') return 'Action inconnue.';
     if (game.phase !== 'question') return 'Aucune manche en cours.';
-    return begin(game);
+    if (action.type === 'start') return begin(game);
+    if (action.type === 'spoken') return feuSpoken(game, action.index);
+    return 'Action inconnue.';
   },
   handleAction(game, playerId, action) {
     if (action.type !== 'tap') return 'Action inconnue.';
@@ -104,13 +121,16 @@ export default {
       index: running ? d.index : null,
       word: running && d.index >= 0 ? d.seq.words[d.index] : null,
       tappedIds: Object.keys(d.taps ?? {}),
+      // Faux départs en direct (« X a tiré trop tôt ! ») : ça ne dit rien de la position du « FEU ».
+      falseStartIds: running ? Object.keys(d.taps ?? {}).filter((id) => tappedEarly(d, id)) : [],
+      feuSpoken: running && !!d.feuSpoken,
       startTimer: game.timerState('g:start'),
     };
     const tap = viewer.playerId && d.taps?.[viewer.playerId];
     if (viewer.playerId) {
       round.playing = d.participants?.includes(viewer.playerId) ?? false;
       // Le faux départ se voit tout de suite ; le temps exact, seulement aux résultats.
-      round.myTap = tap ? { early: isFalseStart(tap, d.seq.feuIndex, d.feuAt) } : null;
+      round.myTap = tap ? { early: tappedEarly(d, viewer.playerId) } : null;
     }
     return round;
   },

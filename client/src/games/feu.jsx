@@ -62,12 +62,73 @@ function SoundSetup() {
   );
 }
 
-function WordStage({ round }) {
+/** Décor de duel (désert, soleil, deux cowboys en silhouette), derrière l'écran « Prêts ? » et les mots. */
+function DuelScene({ dim = false }) {
+  return (
+    <svg className={`duel-scene ${dim ? 'is-dim' : ''}`} viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="duel-sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ffc93c" />
+          <stop offset="100%" stopColor="#ff7a59" />
+        </radialGradient>
+      </defs>
+      <circle cx="800" cy="450" r="120" fill="url(#duel-sun)" opacity="0.8" />
+      <path d="M0 470 Q 300 420 620 455 T 1600 440 V 600 H 0 Z" fill="#2a1d4f" />
+      <path d="M0 520 Q 400 480 820 510 T 1600 500 V 600 H 0 Z" fill="#1f1640" />
+      <g fill="#120c26">
+        <path d="M280 470 h70 v-100 c0 -20 -10 -30 -35 -30 c-25 0 -35 10 -35 30 Z" />
+        <circle cx="315" cy="322" r="20" />
+        <path d="M268 305 h94 l-14 -8 h-14 l-6 -26 h-26 l-6 26 h-14 Z" />
+        <path d="M350 380 l48 -10 v10 l-48 12 Z" />
+        <path d="M1320 470 h-70 v-100 c0 -20 10 -30 35 -30 c25 0 35 10 35 30 Z" />
+        <circle cx="1285" cy="322" r="20" />
+        <path d="M1332 305 h-94 l14 -8 h14 l6 -26 h26 l6 26 h14 Z" />
+        <path d="M1250 380 l-48 -10 v10 l48 12 Z" />
+        <path d="M120 470 v-90 h16 v40 h18 v-60 h16 v110 Z" />
+        <path d="M1460 470 v-70 h14 v30 h16 v-46 h14 v86 Z" />
+      </g>
+    </svg>
+  );
+}
+
+/** « X a tiré trop tôt ! » : les faux départs s'affichent sur la TV dès qu'ils arrivent. */
+function FalseStarts({ state }) {
+  const byId = byIdOf(state);
+  const ids = state.round.falseStartIds ?? [];
+  if (ids.length === 0) return null;
+  return (
+    <div className="feu-busted-list">
+      {ids.map((pid) => {
+        const p = byId.get(pid);
+        return p ? (
+          <div key={pid} className="feu-busted">
+            <Avatar player={p} size={56} />
+            <span>
+              <strong>{p.name}</strong> a tiré trop tôt !
+            </span>
+          </div>
+        ) : null;
+      })}
+    </div>
+  );
+}
+
+function WordStage({ round, gameAct }) {
   const isFeu = round.word === FEU;
+  // Le flash et les flammes du « FEU » ne partent qu'une fois la voix lancée : aucun indice avant.
+  const [feuLive, setFeuLive] = useState(false);
   useEffect(() => {
+    setFeuLive(false);
     if (!round.word) return;
-    speak(isFeu ? 'Feu !' : round.word);
-    if (isFeu) sounds.fire();
+    speak(isFeu ? 'Feu !' : round.word, {
+      onStart: isFeu
+        ? () => {
+            setFeuLive(true);
+            sounds.fire();
+            gameAct({ type: 'spoken', index: round.index });
+          }
+        : undefined,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round.index]);
 
@@ -80,7 +141,7 @@ function WordStage({ round }) {
   }
   return (
     <div className="feu-stage">
-      {isFeu && (
+      {isFeu && feuLive && (
         <>
           <div key={`flash-${round.index}`} className="feu-flash" aria-hidden="true" />
           <div className="feu-flames" aria-hidden="true">
@@ -92,8 +153,8 @@ function WordStage({ round }) {
       )}
       <p
         key={round.index}
-        className={`feu-word ${isFeu ? 'fx-feu' : EFFECTS[round.index % EFFECTS.length]}`}
-        style={isFeu ? undefined : { color: WORD_COLORS[(round.index * 3) % WORD_COLORS.length] }}
+        className={`feu-word ${isFeu && feuLive ? 'fx-feu' : EFFECTS[round.index % EFFECTS.length]}`}
+        style={isFeu && feuLive ? undefined : { color: WORD_COLORS[(round.index * 3) % WORD_COLORS.length] }}
       >
         {round.word}
       </p>
@@ -105,12 +166,13 @@ export function HostQuestion({ state, gameAct }) {
   const { round } = state;
   if (round.step === 'ready') {
     return (
-      <div className="feu">
+      <div className="feu feu-duel">
+        <DuelScene />
         <p className="round">Manche {round.number} · Réflexes</p>
         <h1 className="question-text slide-in">
-          Tape sur ton téléphone uniquement quand j’entends… <span className="feu-inline">FEU</span>
+          Prêts ? Dégainez seulement quand j’entends… <span className="feu-inline">FEU</span>
         </h1>
-        <p className="lead">Méfie-toi de « feuille », « bleu », « fou »… Le plus lent boit, et ceux qui tapent trop tôt aussi.</p>
+        <p className="lead">Méfie-toi de « feuille », « fichier », « fou »… Tirer trop tôt fait boire, le plus lent aussi.</p>
         <SoundSetup />
         <TimerBar timer={round.startTimer} state={state}>
           {(s) => `C’est parti dans ${s} s`}
@@ -129,10 +191,12 @@ export function HostQuestion({ state, gameAct }) {
   }
   const total = state.players.filter((p) => p.connected).length;
   return (
-    <div className="feu feu-running">
-      <WordStage round={round} />
+    <div className="feu feu-running feu-duel">
+      <DuelScene dim />
+      <WordStage round={round} gameAct={gameAct} />
+      <FalseStarts state={state} />
       <p className="muted">
-        {round.tappedIds.length} / {total} ont tapé
+        {round.tappedIds.length} / {total} ont tiré
       </p>
     </div>
   );
@@ -177,6 +241,7 @@ export function HostResults({ state }) {
               <span className="ranking-name">{p.name}</span>
               <span className="feu-ms">{r.ms} ms</span>
               {last && <span className="feu-tag">le plus lent</span>}
+              {i === 0 && !last && <span className="feu-tag feu-tag-win">le plus rapide</span>}
             </li>
           );
         })}
@@ -190,7 +255,11 @@ export function HostResults({ state }) {
         </div>
       )}
       <p className="verdict-line fade-up" style={{ animationDelay: '900ms' }}>
-        {losers.length ? (
+        {results.allFalseStart ? (
+          <>
+            Tout le monde a tiré trop tôt ! Chacun boit pour son faux départ, et <strong>on rejoue</strong>.
+          </>
+        ) : losers.length ? (
           <>
             Boivent : <strong>{losers.map((p) => p.name).join(', ')}</strong>
           </>
@@ -218,8 +287,8 @@ export function PlayerRound({ state, me, act }) {
   if (round.myTap) {
     return (
       <div className={`verdict ${round.myTap.early ? 'verdict-drink' : 'verdict-safe'}`}>
-        <p className="verdict-title zoom-in">{round.myTap.early ? 'Faux départ !' : 'Tapé !'}</p>
-        <p className="verdict-detail">{round.myTap.early ? 'Ce n’était pas « feu »…' : 'Résultats sur la TV.'}</p>
+        <p className="verdict-title zoom-in">{round.myTap.early ? 'Raté !' : 'Tapé !'}</p>
+        <p className="verdict-detail">{round.myTap.early ? 'Tu as tiré trop tôt : ce n’était pas « feu »… Tu bois.' : 'Résultats sur la TV.'}</p>
       </div>
     );
   }
@@ -237,7 +306,7 @@ export function PlayerRound({ state, me, act }) {
       }}
     >
       <span>{ready ? 'FEU' : 'Attention…'}</span>
-      <small>{ready ? 'Seulement quand la TV dit « feu » !' : 'Pose ton doigt, pas trop près'}</small>
+      <small>{ready ? 'Seulement au vrai « feu » !' : 'Pose ton doigt, pas trop près'}</small>
     </button>
   );
 }
@@ -259,7 +328,10 @@ export function PlayerReveal() {
 export function verdict(state, me) {
   const { results } = state;
   const falseStart = results.falseStarts.find((f) => f.id === me.id);
-  if (falseStart) return { drinks: true, title: 'Faux départ !', detail: falseStart.word ? `Tu as tapé sur « ${falseStart.word} ».` : 'Tu as tapé trop tôt.' };
+  if (falseStart) {
+    const detail = falseStart.word && falseStart.word !== FEU ? `Tu as tiré sur « ${falseStart.word} ».` : 'Tu as tiré trop tôt.';
+    return { drinks: true, title: 'Raté !', detail: results.allFalseStart ? `${detail} Tout le monde aussi : on rejoue !` : detail };
+  }
   if (results.missed.includes(me.id)) return { drinks: true, title: 'Tu bois !', detail: 'Tu n’as pas tapé.' };
   const rank = results.ranking.findIndex((r) => r.id === me.id);
   if (rank < 0) return { drinks: false, title: 'Pas joué', detail: 'Tu joues à la prochaine manche.' };

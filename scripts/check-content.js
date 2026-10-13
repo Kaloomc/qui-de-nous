@@ -86,7 +86,7 @@ export const CONTENT = [
   {
     id: 'feu',
     file: 'content/words-feu.json',
-    target: 100,
+    target: 150,
     entries: (d) => [...d.pieges, ...d.neutres],
     key: (w) => normalize(w),
   },

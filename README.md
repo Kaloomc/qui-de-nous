@@ -336,10 +336,13 @@ La grosse carte **Mode soirée**, en tête de la grille des jeux, lance un encha
 
 ### Réflexes (« Feu ! »)
 
-- La TV dit des mots à voix haute et les affiche en très gros, avec 0,8 à 2,5 s entre deux mots. Un seul « FEU » par manche, jamais en premier, pas toujours en dernier.
-- **Mots** : une seule syllabe, pour corser le jeu. 8 sur 10 sont des pièges qui sonnent comme « feu » (PEU, BLEU, FEUILLE, FLEUR, FOOT, FOU…), les autres sont neutres (CHAT, BIÈRE, ROCK…) pour casser le rythme. Les homophones (FEUX) sont interdits : impossible de les distinguer à l'oreille.
-- **Voix** : des fichiers enregistrés (`client/public/voix/`, moins de 1 Mo), générés une seule fois avec [ElevenLabs](https://elevenlabs.io) (voix « George »), avec la même intonation pour tous les mots, « FEU » compris, pour qu'on ne le reconnaisse pas au ton. La TV les précharge et les joue sans délai ; pas besoin d'internet pendant la partie. Si un fichier manque, la synthèse vocale du navigateur prend le relais.
-- Au lancement, l'hôte clique sur **Activer le son** (les navigateurs l'exigent) et règle le volume. Sans voix du tout, les mots sont seulement affichés.
+Un duel de cowboys, inspiré du principe d'« Imbroglio au Far West » : on attend « FEU », la voix dit plein de mots qui lui ressemblent.
+
+- La TV dit des mots un par un, à voix haute et en très gros, avec des **pauses imprévisibles** : 0,5 à 3 s, parfois deux mots enchaînés très vite, parfois un long silence de 4 à 5 s. Aucun rythme à suivre.
+- Ce sont surtout des **pièges** qui sonnent comme « feu » (feuille, fichier, fou, peu, bleu…), avec quelques mots neutres. Puis, à un moment aléatoire (après 2 à 12 mots, jamais au même endroit deux manches de suite), la voix dit **« FEU ! »**, et la manche s'arrête là : 3 secondes pour tirer.
+- **Tirer avant le « FEU »** (sur un piège, ou même avant le premier mot) = faux départ : le téléphone affiche « Raté ! », la TV affiche le joueur aussitôt, et il boit. Si tout le monde tire trop tôt, chacun boit une fois et on rejoue.
+- **Après le « FEU »** : le plus rapide gagne, le plus lent boit, ceux qui n'ont pas tiré aussi. Seul le premier appui compte. Le temps part du **vrai début de la voix** (signalé par la TV), mesuré à la réception par le serveur, avec une petite marge de latence.
+- **Voix** : des fichiers enregistrés (`client/public/voix/`), générés une seule fois avec [ElevenLabs](https://elevenlabs.io) (voix « George »), avec la même intonation pour tous les mots, « FEU » compris : aucun indice au ton. La TV les précharge et les joue sans délai, sans internet. Si un fichier manque, la synthèse vocale du navigateur prend le relais ; sans voix française, l'hôte est prévenu et les mots sont seulement affichés. Au lancement, l'hôte clique sur **Activer le son** (les navigateurs l'exigent) et règle le volume.
 
 **Ajouter des mots à Réflexes** : ajoute-les dans `server/content/words-feu.json` (une syllabe, en majuscules), puis génère leur voix : mets ta clé dans `.env` (`ELEVENLABS_API_KEY=…`, jamais commité) et lance `npm run voices`. Seuls les mots sans fichier sont générés (`-- --force` pour tout refaire), avec les mêmes réglages (`scripts/voices.js`) ; le silence est coupé et le volume harmonisé avec ffmpeg. `npm test` signale un mot sans voix.
 - Boivent : le **dernier** à taper après « FEU », ceux qui tapent sur un **mauvais mot** (ou moins de 120 ms après « FEU » : c'est de l'anticipation) et ceux qui **ne tapent pas**. Un joueur déconnecté n'est pas puni.

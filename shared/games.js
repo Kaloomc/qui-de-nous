@@ -88,7 +88,7 @@ export const GAME_CATALOG = [
     id: 'feu',
     name: 'Réflexes',
     icon: 'flame',
-    tagline: 'La TV enchaîne les mots qui se ressemblent. Tape uniquement quand elle dit « FEU » !',
+    tagline: 'Duel de cowboys : la voix dit des mots qui ressemblent à « feu ». Dégaine seulement au vrai « FEU » !',
     rule: 'Le plus lent boit, comme ceux qui tapent trop tôt ou pas du tout.',
     players: { min: 2, max: 20 },
     minToStart: 2,
