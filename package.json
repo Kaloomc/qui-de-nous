@@ -12,6 +12,7 @@
     "build": "vite build",
     "start": "node server/index.js",
     "share": "node scripts/share.js",
+    "voices": "node scripts/voices.js",
     "test": "node --test server/*.test.js"
   },
   "dependencies": {

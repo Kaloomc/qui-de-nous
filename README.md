@@ -336,8 +336,12 @@ La grosse carte **Mode soirée**, en tête de la grille des jeux, lance un encha
 
 ### Réflexes (« Feu ! »)
 
-- La TV dit des mots à voix haute (synthèse vocale du navigateur, voix française) et les affiche en très gros, avec 0,8 à 2,5 s entre deux mots. Un seul « FEU » par manche, jamais en premier, pas toujours en dernier.
-- Au lancement, l'hôte clique sur **Activer le son** (les navigateurs l'exigent) et règle le volume. Sans voix française, les mots sont seulement affichés.
+- La TV dit des mots à voix haute et les affiche en très gros, avec 0,8 à 2,5 s entre deux mots. Un seul « FEU » par manche, jamais en premier, pas toujours en dernier.
+- **Mots** : une seule syllabe, pour corser le jeu. 8 sur 10 sont des pièges qui sonnent comme « feu » (PEU, BLEU, FEUILLE, FLEUR, FOOT, FOU…), les autres sont neutres (CHAT, BIÈRE, ROCK…) pour casser le rythme. Les homophones (FEUX) sont interdits : impossible de les distinguer à l'oreille.
+- **Voix** : des fichiers enregistrés (`client/public/voix/`, moins de 1 Mo), générés une seule fois avec [ElevenLabs](https://elevenlabs.io) (voix « George »), avec la même intonation pour tous les mots, « FEU » compris, pour qu'on ne le reconnaisse pas au ton. La TV les précharge et les joue sans délai ; pas besoin d'internet pendant la partie. Si un fichier manque, la synthèse vocale du navigateur prend le relais.
+- Au lancement, l'hôte clique sur **Activer le son** (les navigateurs l'exigent) et règle le volume. Sans voix du tout, les mots sont seulement affichés.
+
+**Ajouter des mots à Réflexes** : ajoute-les dans `server/content/words-feu.json` (une syllabe, en majuscules), puis génère leur voix : mets ta clé dans `.env` (`ELEVENLABS_API_KEY=…`, jamais commité) et lance `npm run voices`. Seuls les mots sans fichier sont générés (`-- --force` pour tout refaire), avec les mêmes réglages (`scripts/voices.js`) ; le silence est coupé et le volume harmonisé avec ffmpeg. `npm test` signale un mot sans voix.
 - Boivent : le **dernier** à taper après « FEU », ceux qui tapent sur un **mauvais mot** (ou moins de 120 ms après « FEU » : c'est de l'anticipation) et ceux qui **ne tapent pas**. Un joueur déconnecté n'est pas puni.
 - Les temps sont mesurés **à la réception par le serveur** : on compare les joueurs entre eux, la latence de la TV est la même pour tous.
 
@@ -515,6 +519,8 @@ Gorgée est **Made by Kaloo**. Le crédit apparaît, petit et discret, en bas de
 **`TODO` à renseigner** :
 
 - `CREDIT.url` dans `client/src/credit.js` : l'adresse du profil GitHub ou du site. Tant qu'elle vaut `null`, le crédit reste du texte seul.
+
+Voix de Réflexes générées avec [ElevenLabs](https://elevenlabs.io).
 
 ## Licence
 

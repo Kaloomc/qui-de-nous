@@ -9,12 +9,14 @@ export const GAP_MAX_MS = 2500;
 export const MIN_REACTION_MS = 120;
 /** Temps laissé pour taper après « FEU ». */
 export const REACT_WINDOW_MS = 3000;
+/** Part des mots pièges (le reste : mots neutres, pour casser le rythme). */
+export const PIEGE_RATE = 0.8;
 
 const between = (min, max, rng) => min + Math.floor(rng() * (max - min + 1));
 
 /**
  * Séquence de 4 à 10 mots, avec un seul « FEU », jamais en premier et pas toujours en dernier.
- * Surtout des mots pièges, quelques neutres, jamais deux fois le même mot d'affilée.
+ * Surtout des mots pièges (80 %), quelques neutres, jamais deux fois le même mot d'affilée.
  * gaps[i] = délai avant le mot i.
  */
 export function buildSequence({ pieges, neutres }, rng = Math.random) {
@@ -26,7 +28,7 @@ export function buildSequence({ pieges, neutres }, rng = Math.random) {
       words.push(FEU);
       continue;
     }
-    const pool = rng() < 0.7 ? pieges : neutres;
+    const pool = rng() < PIEGE_RATE ? pieges : neutres;
     let word;
     do word = pool[Math.floor(rng() * pool.length)];
     while (pool.length > 1 && word === words[i - 1]);

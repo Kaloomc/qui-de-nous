@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Avatar, PlayerChip, TimerBar } from '../components.jsx';
 import { StatBoard } from '../sips.jsx';
 import { sounds, unlockAudio } from '../sound.js';
-import { getVolume, isSpeechUnlocked, setVolume, speak, unlockSpeech, useSpeechStatus } from '../speech.js';
+import { getVolume, isSpeechUnlocked, preloadVoices, setVolume, speak, unlockSpeech, useSpeechStatus } from '../speech.js';
 
 export const id = 'feu';
 export const waitingText = 'Doigt prêt…';
@@ -22,6 +22,9 @@ function SoundSetup() {
   const status = useSpeechStatus();
   const [on, setOn] = useState(isSpeechUnlocked);
   const [volume, setVol] = useState(getVolume);
+  useEffect(() => {
+    preloadVoices();
+  }, []);
   function activate() {
     unlockAudio();
     unlockSpeech();
@@ -35,7 +38,7 @@ function SoundSetup() {
           Activer le son
         </button>
       )}
-      {status === 'ok' && on && <p className="feu-sound-ok">Voix française prête</p>}
+      {status === 'ok' && on && <p className="feu-sound-ok">Voix prête</p>}
       {status === 'none' && <p className="feu-sound-warn">Pas de voix française sur ce navigateur : les mots seront seulement affichés.</p>}
       {status === 'ok' && (
         <label className="feu-volume">

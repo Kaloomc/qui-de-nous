@@ -1,9 +1,15 @@
-// Voix de la TV (Web Speech API du navigateur), pour « Réflexes ». Aucune dépendance, aucun fichier audio.
+// Voix de la TV pour « Réflexes ». D'abord les voix enregistrées (client/public/voix/, générées une fois avec
+// ElevenLabs par scripts/voices.js), préchargées et jouées en WebAudio pour partir pile à l'heure ;
+// à défaut (fichier manquant, chargement raté), la synthèse vocale du navigateur (Web Speech API).
 import { useEffect, useState } from 'react';
+import { VOICE_DIR, voiceFile } from '../../shared/voices.js';
 import { storage } from './lib.js';
-import { isMuted } from './sound.js';
+import { audioContext, isMuted } from './sound.js';
 
 const supported = typeof window !== 'undefined' && 'speechSynthesis' in window;
+/** Fichiers des voix enregistrées (ArrayBuffer, puis AudioBuffer une fois le son débloqué). */
+const recorded = new Map();
+let recordedReady = false;
 let voice = null;
 /** 'unknown' tant que les voix chargent, puis 'ok' (voix française trouvée) ou 'none' (affichage seul). */
 let status = supported ? 'unknown' : 'none';
@@ -15,12 +21,62 @@ function setStatus(next) {
   listeners.forEach((fn) => fn(next));
 }
 
+// Voix du navigateur : gardée en secours même quand les voix enregistrées sont là.
 function pickVoice() {
   const voices = window.speechSynthesis.getVoices();
   if (!voices.length) return;
   const fr = voices.filter((v) => v.lang?.toLowerCase().startsWith('fr'));
   voice = fr.find((v) => v.lang.toLowerCase() === 'fr-fr' && v.localService) ?? fr.find((v) => v.lang.toLowerCase() === 'fr-fr') ?? fr[0] ?? null;
-  setStatus(voice ? 'ok' : 'none');
+  if (!recordedReady) setStatus(voice ? 'ok' : 'none');
+}
+
+let loading = null;
+/** Précharge toutes les voix enregistrées (moins de 1 Mo). Appelé à l'ouverture de Réflexes sur la TV. */
+export function preloadVoices() {
+  loading ??= fetch(`${VOICE_DIR}/manifest.json`)
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then(({ files }) =>
+      Promise.all(
+        files.map((file) =>
+          fetch(`${VOICE_DIR}/${file}`)
+            .then((r) => (r.ok ? r.arrayBuffer() : null))
+            .then((data) => data && recorded.set(file, data))
+            .catch(() => {}),
+        ),
+      ),
+    )
+    .then(() => {
+      if (recorded.size === 0) return;
+      recordedReady = true;
+      setStatus('ok');
+      decodeAll();
+    })
+    .catch(() => {});
+  return loading;
+}
+
+/** Décode les fichiers dès que le contexte audio existe (il faut un clic de l'hôte). */
+function decodeAll() {
+  const ctx = audioContext();
+  if (!ctx) return;
+  for (const [file, data] of recorded) {
+    if (!(data instanceof ArrayBuffer)) continue;
+    recorded.set(file, null);
+    ctx.decodeAudioData(data).then((buffer) => recorded.set(file, buffer), () => recorded.delete(file));
+  }
+}
+
+function playRecorded(text) {
+  const ctx = audioContext();
+  const buffer = recorded.get(voiceFile(text));
+  if (!ctx || ctx.state !== 'running' || !(buffer instanceof AudioBuffer)) return false;
+  const source = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  source.buffer = buffer;
+  gain.gain.value = getVolume();
+  source.connect(gain).connect(ctx.destination);
+  source.start();
+  return true;
 }
 
 if (supported) {
@@ -46,15 +102,18 @@ export const isSpeechUnlocked = () => unlocked;
 
 /** À appeler dans un clic de l'hôte : les navigateurs bloquent la voix tant que personne n'a cliqué. */
 export function unlockSpeech() {
+  unlocked = true;
+  decodeAll();
   if (!supported) return;
   const u = new SpeechSynthesisUtterance(' ');
   u.volume = 0;
   window.speechSynthesis.speak(u);
-  unlocked = true;
 }
 
 export function speak(text) {
-  if (!supported || status !== 'ok' || isMuted()) return;
+  if (isMuted()) return;
+  if (playRecorded(text)) return;
+  if (!supported || !voice) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text.toLowerCase());
   u.voice = voice;

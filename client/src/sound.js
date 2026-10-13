@@ -16,6 +16,9 @@ export function unlockAudio() {
 
 export const isMuted = () => muted;
 
+/** Contexte audio (null tant que personne n'a cliqué) : sert aussi aux voix enregistrées de Réflexes. */
+export const audioContext = () => ctx;
+
 export function setMuted(value) {
   muted = value;
   storage.set('qdn:muted', value);

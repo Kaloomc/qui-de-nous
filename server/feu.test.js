@@ -10,8 +10,11 @@ const FEU_AT = 10000;
 
 test('mots : beaucoup de pièges qui ressemblent à « feu », des neutres, jamais « FEU » lui-même', () => {
   assert.ok(WORDS.pieges.length >= 30 && WORDS.neutres.length >= 15);
-  for (const w of ['FEUX', 'PEU', 'BLEU', 'JEU', 'FOU', 'FOND', 'FEUILLE', 'FOUILLE', 'FLEUR', 'FLEUVE', 'FEUTRE', 'FOULE', 'FÈVE']) assert.ok(WORDS.pieges.includes(w), w);
-  assert.ok(![...WORDS.pieges, ...WORDS.neutres].includes(FEU));
+  for (const w of ['PEU', 'BLEU', 'JEU', 'FOU', 'FOOT', 'FEUILLE', 'FLEUR', 'FLEUVE', 'FEUTRE', 'FOULE', 'FÈVE']) assert.ok(WORDS.pieges.includes(w), w);
+  // Homophones de « feu » interdits : impossible de les distinguer à l'oreille.
+  for (const w of [FEU, 'FEUX', 'FEUE']) assert.ok(![...WORDS.pieges, ...WORDS.neutres].includes(w), w);
+  // Un seul mot court par entrée (une syllabe à l'oral) : pas d'espace, pas de mots à rallonge.
+  for (const w of [...WORDS.pieges, ...WORDS.neutres]) assert.ok(!/\s/.test(w) && w.length <= 7, w);
 });
 
 test('séquences : 4 à 10 mots, un seul FEU jamais en premier, pas toujours en dernier, pas de mot répété d’affilée', () => {
@@ -90,4 +93,17 @@ test('mode auto : départ tout seul ; un joueur déconnecté ne bloque pas et n�
   tick(game.rules.revealMs);
   assert.equal(game.results.missed.includes(players[2].id), false);
   assert.equal(game.results.missed.length, 2);
+});
+
+test('voix enregistrées : chaque mot (et « FEU », « PRÊTS ? ») a son fichier, listé dans le manifeste', async () => {
+  const fs = await import('node:fs');
+  const { VOICE_EXTRAS, voiceFile } = await import('../shared/voices.js');
+  const dir = new URL('../client/public/voix/', import.meta.url);
+  const { files } = JSON.parse(fs.readFileSync(new URL('manifest.json', dir), 'utf8'));
+  for (const word of [...VOICE_EXTRAS, ...WORDS.pieges, ...WORDS.neutres]) {
+    const file = voiceFile(word);
+    assert.ok(files.includes(file) && fs.existsSync(new URL(file, dir)), `voix manquante pour ${word} : lance npm run voices`);
+  }
+  assert.equal(voiceFile('Feu !'), 'feu.mp3');
+  assert.equal(voiceFile('ŒUF'), 'oeuf.mp3');
 });
