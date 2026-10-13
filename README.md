@@ -89,7 +89,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
 - **Récap de fin de soirée** : trophées révélés un par un sur la TV, et une image au format story à partager (voir [Récap de fin de soirée](#récap-de-fin-de-soirée)).
 - **Compteur de gorgées** : chaque joueur voit son total sur la TV et sur son téléphone, et la partie se termine sur un **podium** des plus assoiffés.
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
-- 150 questions et 150 dilemmes pensés pour les soirées étudiantes, du plus chill au plus gênant, tirés au hasard sans répétition.
+- 520 questions et 500 dilemmes pensés pour les soirées étudiantes, du plus chill au plus osé, tirés au hasard sans répétition (et des centaines de mots, défis et questions chiffrées pour les autres jeux).
 - Aucun compte, aucune base de données : les parties vivent en mémoire et disparaissent toutes seules.
 
 ## Démarrage rapide
@@ -464,18 +464,26 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │       ├── icons.jsx       Logo Gorgée et illustrations des jeux (SVG maison)
 │       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, minuteurs
 │       ├── sips.jsx        Compteur de gorgées : classement, podium
+│       ├── party.jsx       Mode soirée : carte, réglages, barre de l'hôte, transitions
+│       ├── recap.jsx       Récap de fin de soirée : trophées, partage, page /recap/CODE
+│       ├── recapImage.js   Image story du récap (canvas, générée sur l'appareil)
+│       ├── credit.js, credit.jsx   Crédit « Made by Kaloo » (constante + composant)
+│       ├── colors.js       Couleurs des joueurs sans photo
 │       ├── sound.js        Sons synthétisés (WebAudio, aucun fichier audio)
 │       ├── speech.js       Voix de la TV pour Réflexes (Web Speech API)
 │       ├── lib.js          Socket.IO, navigation, stockage local
 │       └── photo.js        Recadrage et compression des photos
 ├── server/
-│   ├── index.js            Serveur HTTP + fichiers statiques + photos
+│   ├── index.js            Serveur HTTP + fichiers statiques + photos + /api/recap/CODE
 │   ├── sockets.js          Événements temps réel (hôte, joueurs)
-│   ├── gameStore.js        État des parties : phases, choix du jeu, minuteurs, mode auto, pause, gorgées
+│   ├── gameStore.js        État des parties : phases, choix du jeu, minuteurs, mode auto, pause, gorgées, mode soirée
+│   ├── party.js            Mode soirée : composition du programme (alternance des rythmes, minimums de joueurs)
+│   ├── recap.js            Statistiques de la soirée et trophées du récap
+│   ├── timing.js           Délais du moteur (grâce de déconnexion, réessai)
 │   ├── games/              Registre serveur : un fichier par jeu (questions, votes, résultats, gorgées, durée du suspense)
 │   ├── rules.js, rules/    Règles des jeux (fonctions pures, testées)
 │   ├── content/            Contenus des jeux (questions, mots, défis) en JSON
-│   ├── *.test.js           Tests : règles, gorgées, questions, registre des jeux, déroulement (horloge simulée)
+│   ├── *.test.js           Tests : règles, gorgées, questions, registre des jeux, déroulement, mode soirée, trophées, image du récap (horloge simulée)
 │   ├── testClock.js        Horloge simulée et partie de test pour les tests du moteur
 │   ├── questions.json            Questions « Qui de nous ? »
 │   └── questionsPreferes.json    Dilemmes « Tu préfères ? »
@@ -491,12 +499,14 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 3. **Écrans** : crée `client/src/games/monJeu.jsx` avec les mêmes exports que les jeux existants (`HostQuestion`, `HostReveal`, `HostResults`, `PlayerVote`, `VoteSummary`, `verdict`, ou `hostLayout`/`playerLayout = 'custom'` avec `PlayerRound` ; optionnels : `PlayerReveal`, `PlayerResults`, `EndStats`, `nextLabel`), déclare-le dans `client/src/games/index.js`, et si besoin ajoute son illustration dans `client/src/icons.jsx`.
 4. Passe `available` à `true`. `npm test` vérifie que chaque jeu disponible a bien ses règles.
 
-Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur de gorgées et le podium sont fournis.
+Le lobby, le QR code, la reconnexion, le mode auto, les minuteurs, le compteur de gorgées, le podium, le mode soirée et le récap sont fournis (pour le mode soirée, pense au champ `rhythm` ; pour un trophée, ajoute le cas du jeu dans `recordRound` et une entrée dans `TROPHIES` de `server/recap.js`).
 
 
 **Déroulement d'une partie** : `picking (grille des jeux) → lobby → question → revealing → results → question… → ended`, puis retour à `lobby` (Rejouer) ou à `picking` (Changer de jeu), en gardant les joueurs. Le champ `mode` de la partie contient l'`id` du jeu. Le serveur porte tous les minuteurs et envoie aux écrans des horodatages (`reveal.startedAt/endsAt`, `voteTimer`, `nextTimer`) : la TV et les téléphones restent synchronisés même après un rechargement. Pendant `revealing`, seule la TV reçoit les résultats (pour animer le suspense), et les téléphones les reçoivent au passage à `results`. Les actions `reveal` et `next` portent le numéro de la question, ce qui permet d'ignorer les doublons.
 
-**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, sélecteur d'intensité (chill / épicé / hardcore) pour les questions et les défis de la roue, réveiller un joueur qui traîne.
+**Mode soirée et récap** : en soirée, le serveur garde `party` (programme, jeu en cours, temps restant, retardataires) et repasse par `lobby` entre deux jeux pour la transition. En fin de partie, `recap` (trophées, classement, jeux joués) est envoyé aux écrans et reste disponible sur `/api/recap/CODE` tant que la partie existe.
+
+**Idées pour la suite** : paquets de questions thématiques, questions perso de l'hôte, police hébergée avec l'application (affichage identique sans internet), aperçu des prochains jeux du mode soirée, récap conservé après un redémarrage du serveur, réveiller un joueur qui traîne.
 
 ## Crédit
 
