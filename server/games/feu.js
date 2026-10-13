@@ -1,4 +1,4 @@
-import { buildSequence, computeFeu, REACT_WINDOW_MS, sipsFeu } from '../rules/feu.js';
+import { buildSequence, computeFeu, REACT_WINDOW_MS, RECENT_ROUNDS, sipsFeu } from '../rules/feu.js';
 import { loadJson } from './load.js';
 
 const WORDS = loadJson('../content/words-feu.json');
@@ -68,8 +68,11 @@ export default {
   startRound(game) {
     const participants = game.connectedPlayers().map((p) => p.id);
     // Jamais deux manches de suite avec le même nombre de mots avant « FEU ».
-    const seq = buildSequence(WORDS, Math.random, game.lastFeuTraps);
+    // Ni les mots des dernières manches (gardés d'une partie à l'autre, comme l'historique des questions).
+    game.recentFeuWords ??= [];
+    const seq = buildSequence(WORDS, Math.random, game.lastFeuTraps, game.recentFeuWords.flat());
     game.lastFeuTraps = seq.feuIndex;
+    game.recentFeuWords = [...game.recentFeuWords, seq.words.slice(0, -1)].slice(-RECENT_ROUNDS);
     Object.assign(game.roundData, {
       step: 'ready',
       seq,

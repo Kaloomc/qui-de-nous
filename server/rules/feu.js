@@ -5,10 +5,13 @@ export const FEU = 'FEU';
 export const MIN_TRAPS = 2;
 export const MAX_TRAPS = 12;
 /**
- * Pauses avant chaque mot, sans aucune cadence : surtout entre 0,5 et 3 s, parfois deux mots enchaînés très vite,
- * parfois un long silence pour faire craquer les impatients. La pause avant « FEU » suit la même loi (aucun indice).
+ * Pauses avant chaque mot (d'un début de mot au suivant), sans aucune cadence : surtout entre 1,2 et 3 s,
+ * parfois deux mots enchaînés vite, parfois un long silence pour faire craquer les impatients.
+ * Le plus court laisse toujours finir le mot d'avant (0,75 s au plus). La pause avant « FEU » suit la même loi.
  */
-export const GAPS = { normal: [500, 3000], quick: [300, 450], long: [4000, 5000], quickRate: 0.15, longRate: 0.12 };
+export const GAPS = { normal: [1200, 3000], quick: [900, 1100], long: [4000, 5000], quickRate: 0.15, longRate: 0.12 };
+/** Un mot dit dans une des dernières manches n'est pas repris tout de suite. */
+export const RECENT_ROUNDS = 5;
 /** Marge de latence : un toucher reçu plus tôt que ça avant le vrai début du « FEU » est un faux départ. */
 export const LATENCY_MARGIN_MS = 150;
 /** Temps laissé pour taper après « FEU ». */
@@ -26,20 +29,21 @@ export function drawGap(rng = Math.random) {
 }
 
 /**
- * Séquence d'une manche : 2 à 12 mots (surtout des pièges, quelques neutres, jamais deux fois le même d'affilée),
- * puis « FEU », qui termine la séquence. previousTraps : nombre de mots avant « FEU » à la manche précédente,
- * jamais repris deux fois de suite. gaps[i] = pause avant le mot i.
+ * Séquence d'une manche : 2 à 12 mots (surtout des pièges, quelques neutres, jamais deux fois le même dans la manche,
+ * et pas ceux des manches récentes tant qu'il en reste), puis « FEU », qui termine la séquence.
+ * previousTraps : nombre de mots avant « FEU » à la manche précédente, jamais repris deux fois de suite.
+ * recent : mots déjà dits récemment. gaps[i] = pause avant le mot i.
  */
-export function buildSequence({ pieges, neutres }, rng = Math.random, previousTraps = null) {
+export function buildSequence({ pieges, neutres }, rng = Math.random, previousTraps = null, recent = []) {
   let traps = between(MIN_TRAPS, MAX_TRAPS, rng);
   if (traps === previousTraps) traps = traps < MAX_TRAPS ? traps + 1 : MIN_TRAPS;
   const words = [];
+  const avoid = new Set(recent);
   for (let i = 0; i < traps; i++) {
-    const pool = rng() < PIEGE_RATE ? pieges : neutres;
-    let k = Math.floor(rng() * pool.length);
-    // Jamais deux fois le même mot d'affilée : on prend le suivant (pas de nouveau tirage, donc pas de boucle).
-    if (pool.length > 1 && pool[k] === words[i - 1]) k = (k + 1) % pool.length;
-    words.push(pool[k]);
+    const list = rng() < PIEGE_RATE ? pieges : neutres;
+    const fresh = list.filter((w) => !avoid.has(w) && !words.includes(w));
+    const pool = fresh.length ? fresh : list.filter((w) => !words.includes(w));
+    words.push(pool[Math.floor(rng() * pool.length)]);
   }
   words.push(FEU);
   return { words, feuIndex: traps, gaps: words.map(() => drawGap(rng)) };

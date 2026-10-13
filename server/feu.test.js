@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildSequence, computeFeu, drawGap, FEU, GAPS, LATENCY_MARGIN_MS, MAX_TRAPS, MIN_TRAPS, sipsFeu } from './rules/feu.js';
+import { buildSequence, computeFeu, drawGap, FEU, GAPS, LATENCY_MARGIN_MS, MAX_TRAPS, MIN_TRAPS, RECENT_ROUNDS, sipsFeu } from './rules/feu.js';
 import { loadJson } from './games/load.js';
 import { makeGame } from './testClock.js';
 
@@ -27,7 +27,7 @@ test('séquence : « FEU » termine la séquence, jamais en premier, position va
     assert.equal(s.words.filter((w) => w === FEU).length, 1);
     assert.ok(s.feuIndex >= MIN_TRAPS && s.feuIndex <= MAX_TRAPS);
     assert.notEqual(s.feuIndex, previous);
-    for (let j = 1; j < s.feuIndex; j++) assert.notEqual(s.words[j], s.words[j - 1]);
+    assert.equal(new Set(s.words).size, s.words.length, 'jamais deux fois le même mot dans une manche');
     positions.add(s.feuIndex);
     previous = s.feuIndex;
   }
@@ -39,6 +39,8 @@ test('séquence : « FEU » termine la séquence, jamais en premier, position va
 test('pauses : dans la plage prévue, sans cadence (rapides, normales et longs silences)', () => {
   const gaps = Array.from({ length: 3000 }, () => drawGap());
   for (const g of gaps) assert.ok(g >= GAPS.quick[0] && g <= GAPS.long[1], String(g));
+  // Le plus court laisse finir le mot le plus long (0,73 s) : les mots ne se coupent pas.
+  assert.ok(GAPS.quick[0] >= 900);
   assert.ok(gaps.some((g) => g <= GAPS.quick[1]), 'deux mots enchaînés très vite');
   assert.ok(gaps.some((g) => g >= GAPS.long[0]), 'longs silences');
   assert.ok(new Set(gaps).size > 500, 'aucun motif répétitif');
@@ -151,6 +153,20 @@ test('moteur : deux manches de suite n’ont jamais le même nombre de mots avan
     previous = game.roundData.seq.feuIndex;
   }
   assert.ok(players && tick);
+});
+
+test('mots : pas de répétition d’une manche à l’autre (dernières manches)', async () => {
+  const { game } = await makeGame('feu', ['A', 'B']);
+  const seen = [];
+  for (let i = 0; i < 12; i++) {
+    game.start();
+    const words = game.roundData.seq.words.slice(0, -1);
+    const recent = seen.slice(-RECENT_ROUNDS).flat();
+    for (const w of words) assert.ok(!recent.includes(w), `${w} déjà dit dans les ${RECENT_ROUNDS} dernières manches`);
+    seen.push(words);
+    game.end();
+    game.restart('feu');
+  }
 });
 
 test('mode auto : départ tout seul ; un joueur déconnecté ne bloque pas et n’est pas puni', async () => {

@@ -338,7 +338,7 @@ La grosse carte **Mode soirée**, en tête de la grille des jeux, lance un encha
 
 Un duel de cowboys, inspiré du principe d'« Imbroglio au Far West » : on attend « FEU », la voix dit plein de mots qui lui ressemblent.
 
-- La TV dit des mots un par un, à voix haute et en très gros, avec des **pauses imprévisibles** : 0,5 à 3 s, parfois deux mots enchaînés très vite, parfois un long silence de 4 à 5 s. Aucun rythme à suivre.
+- La TV dit des mots un par un, à voix haute et en très gros, avec des **pauses imprévisibles** : 1,2 à 3 s, parfois deux mots enchaînés vite (environ 1 s, le temps que le mot d'avant finisse), parfois un long silence de 4 à 5 s. Aucun rythme à suivre. Jamais deux fois le même mot dans une manche, ni un mot des 5 dernières manches.
 - Ce sont surtout des **pièges** qui sonnent comme « feu » (feuille, fichier, fou, peu, bleu…), avec quelques mots neutres. Puis, à un moment aléatoire (après 2 à 12 mots, jamais au même endroit deux manches de suite), la voix dit **« FEU ! »**, et la manche s'arrête là : 3 secondes pour tirer.
 - **Tirer avant le « FEU »** (sur un piège, ou même avant le premier mot) = faux départ : le téléphone affiche « Raté ! », la TV affiche le joueur aussitôt, et il boit. Si tout le monde tire trop tôt, chacun boit une fois et on rejoue.
 - **Après le « FEU »** : le plus rapide gagne, le plus lent boit, ceux qui n'ont pas tiré aussi. Seul le premier appui compte. Le temps part du **vrai début de la voix** (signalé par la TV), mesuré à la réception par le serveur, avec une petite marge de latence.
