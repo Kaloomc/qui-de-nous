@@ -6,6 +6,7 @@ import { GameIcon } from '../icons.jsx';
 import { PlayerRecap } from '../recap.jsx';
 import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
+import { AdultConfirm } from '../adult.jsx';
 
 export default function Player({ code }) {
   const connected = useConnected();
@@ -110,6 +111,18 @@ export default function Player({ code }) {
   let content;
   if (status === 'form') content = <JoinForm code={code} onJoin={join} notice={notice} />;
   else if (status === 'resuming' || !state || !me) content = <div className="center muted">Connexion à la partie…</div>;
+  else if (state.adult?.gate || state.adult?.pending) {
+    content = (
+      <AdultConfirm
+        state={state}
+        request={request}
+        onRemoved={() => {
+          storage.remove(identityKey);
+          setFatal('Cette partie est en mode 18+ : tu ne l’as pas rejointe. Pas de souci !');
+        }}
+      />
+    );
+  }
   else if (state.phase === 'lobby' || state.phase === 'picking') {
     content = <Waiting me={me} state={state} mode={state.phase === 'picking' ? null : mode} onLeave={leave} />;
   }

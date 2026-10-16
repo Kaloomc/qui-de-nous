@@ -110,6 +110,9 @@ export function registerSockets(io, store) {
       'host:gameAction': (game, { action }) => game.gameHostAction(action),
       'host:settings': (game, { settings }) => game.setSettings(settings),
       'host:resetSips': (game) => game.resetPartySips(),
+      'host:adultRequest': (game) => game.requestAdult(),
+      'host:adultCancel': (game) => game.cancelAdult(),
+      'host:adultOff': (game) => game.disableAdult(),
       'host:pause': (game) => game.pause(),
       'host:unpause': (game) => game.resume(),
       'host:kick': (game, { playerId }) => {
@@ -177,6 +180,19 @@ export function registerSockets(io, store) {
       game.touch();
       broadcast(game);
       ack({ ok: true });
+    });
+
+    // Mode 18+ : « oui » ou « non » du joueur, sur son téléphone. Un « non » une fois le mode actif : il ne rejoint pas.
+    on('player:adultAnswer', ({ yes }, ack) => {
+      const game = currentGame();
+      if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
+      const { playerId } = socket.data;
+      const { error, removed } = game.answerAdult(playerId, yes);
+      if (error) return ack({ ok: false, error });
+      if (removed) detach();
+      game.touch();
+      broadcast(game);
+      ack({ ok: true, removed: !!removed });
     });
 
     on('player:leave', (_, ack) => {

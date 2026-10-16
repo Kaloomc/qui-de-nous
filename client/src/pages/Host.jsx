@@ -7,6 +7,7 @@ import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
+import { AdultButton, AdultGateModal, AdultOffButton } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
@@ -89,6 +90,8 @@ export default function Host({ code }) {
         <HostControls state={state} act={act} party={!!party} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />
       )}
       {state.paused && (inGame || party) && <div className="paused-banner">Pause</div>}
+      <AdultOffButton state={state} act={act} />
+      <AdultGateModal state={state} act={act} onKick={kick} />
 
       {state.phase === 'picking' && (
         <GamePicker
@@ -96,6 +99,7 @@ export default function Host({ code }) {
           onPick={(id) => act('host:pickGame', { mode: id })}
           onParty={() => setPartySetupOpen(true)}
           onResetSips={() => act('host:resetSips')}
+          adultSlot={<AdultButton state={state} act={act} />}
         />
       )}
 
@@ -109,6 +113,7 @@ export default function Host({ code }) {
           onKick={kick}
           onSettings={() => setSettingsOpen(true)}
           onChangeGame={() => act('host:chooseGame')}
+          adultSlot={<AdultButton state={state} act={act} />}
         />
       )}
 
@@ -319,7 +324,7 @@ function SettingsModal({ settings, onChange, onClose }) {
 }
 
 /** Grille des jeux : grandes cartes, navigation au clavier (flèches + Entrée), à la souris ou au tactile. */
-function GamePicker({ state, onPick, onParty, onResetSips }) {
+function GamePicker({ state, onPick, onParty, onResetSips, adultSlot }) {
   const gridRef = useRef(null);
   const cardRefs = useRef({});
   const count = state.players.length;
@@ -394,6 +399,7 @@ function GamePicker({ state, onPick, onParty, onResetSips }) {
         ))}
       </div>
       <p className="picker-hint">Flèches pour choisir, Entrée pour valider.</p>
+      {adultSlot}
       <PartyBoard state={state} onReset={onResetSips} />
     </div>
   );
@@ -416,7 +422,7 @@ function GamePill({ game, onChange }) {
   );
 }
 
-function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame }) {
+function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSlot }) {
   const joinUrl = useJoinUrl(state.code);
   const [qr, setQr] = useState(null);
 
@@ -459,6 +465,7 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame }) {
             <strong>{settingsSummary(state.settings)}</strong>
             <em>Modifier</em>
           </button>
+          {adultSlot}
           <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < (mode.minToStart ?? 2)}>
             {count < (mode.minToStart ?? 2) ? `Il faut au moins ${mode.minToStart ?? 2} joueurs` : 'Lancer la partie'}
           </button>

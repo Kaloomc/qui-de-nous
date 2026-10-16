@@ -27,6 +27,7 @@ export const DEFAULT_SETTINGS = { auto: false, resultsMs: 10000, voteMs: 0, maxR
 const PARTY_VOTE_MS = 30000;
 const PARTY_MESSAGE = 'Le mode soirée est en cours : termine la soirée d’abord.';
 const LATE_MESSAGE = 'Tu joues dès la prochaine manche.';
+const ADULT_PENDING_MESSAGE = 'Le mode 18+ attend la confirmation de tous les joueurs : attends-les, retire ceux qui bloquent ou annule.';
 
 const realClock = {
   now: () => Date.now(),
@@ -95,6 +96,9 @@ export class Game {
     this.playedModes = new Set();
     // Mode soirée (enchaînement automatique des jeux), null hors soirée. Voir startParty().
     this.party = null;
+    // Mode 18+ : actif seulement quand chaque joueur connecté a confirmé sur son téléphone (voir requestAdult()).
+    // Mémoire de la partie uniquement : rien n'est gardé une fois la partie supprimée.
+    this.adult = { active: false, pending: false, confirmed: new Set(), refused: new Set(), changedAt: 0 };
     this.reset();
     this.touch();
   }
@@ -165,8 +169,96 @@ export class Game {
     return [...this.players.values()].filter((p) => p.sockets.size > 0 && !this.isLate(p.id));
   }
 
+  /** Hors de la manche : retardataire du mode soirée, ou joueur qui n'a pas (encore) confirmé le mode 18+. */
   isLate(playerId) {
-    return !!this.party?.late.has(playerId);
+    return !!this.party?.late.has(playerId) || !this.adultAllowed(playerId);
+  }
+
+  // ---------- Mode 18+ ----------
+
+  get adultActive() {
+    return this.adult.active;
+  }
+
+  /** Ce joueur peut voir le contenu de la partie : mode normal, ou mode 18+ qu'il a confirmé. */
+  adultAllowed(playerId) {
+    return !this.adult.active || this.adult.confirmed.has(playerId);
+  }
+
+  /** Joueurs connectés qui empêchent l'activation (pas encore répondu, ou « non »). */
+  adultBlockers() {
+    return [...this.players.values()].filter((p) => p.sockets.size > 0 && !this.adult.confirmed.has(p.id));
+  }
+
+  /** L'hôte demande le mode 18+ : chaque joueur connecté doit confirmer sur son téléphone. */
+  requestAdult() {
+    if (this.adult.active) return 'Le mode 18+ est déjà activé.';
+    if (!['picking', 'lobby', 'ended'].includes(this.phase) || this.partyActive) return 'Active le mode 18+ entre deux parties (grille des jeux ou lobby).';
+    if (this.connectedCount() === 0) return 'Il faut au moins un joueur connecté.';
+    this.adult = { ...this.adult, pending: true, confirmed: new Set(), refused: new Set() };
+    this.checkAdult();
+    return null;
+  }
+
+  cancelAdult() {
+    this.adult.pending = false;
+    this.adult.refused.clear();
+    return null;
+  }
+
+  /** Retour au mode normal, à tout moment. Une manche en cours (contenu 18+) est abandonnée. */
+  disableAdult() {
+    const wasActive = this.adult.active;
+    this.adult = { active: false, pending: false, confirmed: new Set(), refused: new Set(), changedAt: wasActive ? this.clock.now() : this.adult.changedAt };
+    if (wasActive && ['question', 'revealing', 'results'].includes(this.phase)) {
+      if (this.partyActive) this.partyNextGame();
+      else this.reset();
+    }
+    return null;
+  }
+
+  /**
+   * Réponse d'un joueur (pendant la demande, ou à son arrivée si le mode est déjà actif).
+   * Un « non » une fois le mode actif : il ne rejoint pas la partie (removed: true).
+   */
+  answerAdult(playerId, yes) {
+    if (!this.players.has(playerId)) return { error: 'Tu n’es plus dans la partie.' };
+    if (typeof yes !== 'boolean') return { error: 'Réponse invalide.' };
+    if (!this.adult.pending && !this.adult.active) return { error: 'Rien à confirmer.' };
+    if (yes) {
+      this.adult.confirmed.add(playerId);
+      this.adult.refused.delete(playerId);
+    } else {
+      this.adult.confirmed.delete(playerId);
+      this.adult.refused.add(playerId);
+      if (this.adult.active) {
+        this.removePlayer(playerId);
+        return { removed: true };
+      }
+    }
+    this.checkAdult();
+    this.evaluate();
+    return {};
+  }
+
+  /** Active le mode dès que tous les joueurs connectés ont confirmé. */
+  checkAdult() {
+    if (!this.adult.pending || this.connectedCount() === 0 || this.adultBlockers().length > 0) return;
+    this.adult.pending = false;
+    this.adult.active = true;
+    this.adult.refused.clear();
+    this.adult.changedAt = this.clock.now();
+  }
+
+  adultState(viewer) {
+    const a = this.adult;
+    if (viewer.host) {
+      return { active: a.active, pending: a.pending, confirmedIds: [...a.confirmed], refusedIds: [...a.refused], changedAt: a.changedAt };
+    }
+    const id = viewer.playerId;
+    const answer = a.confirmed.has(id) ? 'yes' : a.refused.has(id) ? 'no' : null;
+    // Un joueur qui n'a pas confirmé ne sait même pas que le thème est actif : il voit seulement la question de l'âge.
+    return { active: a.active && answer === 'yes', pending: a.pending, gate: a.active && answer !== 'yes', answer, changedAt: a.changedAt };
   }
 
   get rules() {
@@ -271,6 +363,7 @@ export class Game {
   connectPlayer(player, socketId) {
     player.sockets.add(socketId);
     player.disconnectedAt = null;
+    this.checkAdult();
     this.rules?.onPresenceChange?.(this);
     this.evaluate();
   }
@@ -278,6 +371,8 @@ export class Game {
   disconnectPlayer(player, socketId) {
     player.sockets.delete(socketId);
     if (player.sockets.size === 0) player.disconnectedAt = this.clock.now();
+    // Celui qui bloquait la demande du mode 18+ est parti : les autres peuvent l'activer.
+    this.checkAdult();
     this.rules?.onPresenceChange?.(this);
     this.evaluate();
   }
@@ -289,6 +384,9 @@ export class Game {
     this.votes.delete(playerId);
     for (const [voter, target] of this.votes) if (target === playerId) this.votes.delete(voter);
     this.stats.delete(playerId);
+    this.adult.confirmed.delete(playerId);
+    this.adult.refused.delete(playerId);
+    this.checkAdult();
     this.rules?.onPresenceChange?.(this);
     this.evaluate();
   }
@@ -345,6 +443,7 @@ export class Game {
 
   start() {
     if (this.partyActive) return PARTY_MESSAGE;
+    if (this.adult.pending) return ADULT_PENDING_MESSAGE;
     if (this.phase === 'picking') return 'Choisis d’abord un jeu.';
     if (this.phase !== 'lobby') return 'La partie a déjà commencé.';
     const min = this.rules.minToStart ?? 2;
@@ -597,6 +696,7 @@ export class Game {
   /** Lance la soirée : durée en ms (0 = sans fin, voir PARTY_DURATIONS) et ids des jeux cochés (tous par défaut). */
   startParty({ durationMs, games } = {}) {
     if (this.partyActive) return 'Le mode soirée est déjà lancé.';
+    if (this.adult.pending) return ADULT_PENDING_MESSAGE;
     if (!['picking', 'lobby', 'ended'].includes(this.phase)) return 'Termine la partie avant de lancer le mode soirée.';
     if (!PARTY_DURATIONS.includes(durationMs)) return 'Durée invalide.';
     const all = partyGames();
@@ -781,10 +881,12 @@ export class Game {
   publicState(viewer = {}) {
     if (typeof viewer === 'boolean') viewer = { host: viewer };
     const forHost = !!viewer.host;
-    const showResults = this.phase === 'results' || (this.phase === 'revealing' && forHost);
+    // Joueur pas (encore) d'accord pour le mode 18+ : aucun contenu de la manche ne lui est envoyé.
+    const hidden = !forHost && !this.adultAllowed(viewer.playerId);
+    const showResults = !hidden && (this.phase === 'results' || (this.phase === 'revealing' && forHost));
     const inRound = this.phase === 'question' || this.phase === 'revealing' || this.phase === 'results' || this.phase === 'ended';
     let round = null;
-    if (this.round > 0 && inRound) {
+    if (this.round > 0 && inRound && !hidden) {
       round = this.rules?.publicRound ? { number: this.round, ...this.rules.publicRound(this, viewer) } : { number: this.round, ...this.question };
     }
     return {
@@ -819,6 +921,7 @@ export class Game {
       pendingTimer: this.pending ? this.timerState('pending') : null,
       stats: Object.fromEntries(this.stats),
       party: this.partyState(),
+      adult: this.adultState(viewer),
       recap: this.phase === 'ended' ? this.recap() : null,
     };
   }
