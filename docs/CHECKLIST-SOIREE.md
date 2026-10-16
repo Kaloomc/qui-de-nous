@@ -8,6 +8,7 @@
 - [ ] Test complet avec **3 téléphones** (au moins un iPhone et un Android) : rejoindre par QR code, photo (selfie **et** galerie), une manche de chaque jeu, couper le Wi-Fi d'un téléphone 10 s puis le rallumer (il doit reprendre sa place).
 - [ ] Sur le PC de la TV : lancer **Réflexes** et vérifier que la voix sort (cliquer une fois sur la page avant), et que le son passe bien par la **TV en HDMI** (et pas par le PC).
 - [ ] Désactiver la mise en veille du PC de la TV (et l'économiseur d'écran).
+- [ ] Fermer les autres serveurs de développement du PC. Sous Windows, si un autre programme écoute déjà sur le port 3000, Gorgée peut démarrer sans erreur alors que les téléphones tombent sur l'autre programme : vérifier que `http://localhost:3000` affiche bien Gorgée, sinon lancer sur un autre port (`$env:PORT=3001; npm start`).
 - [ ] Faire le test **sur le réseau de la soirée** si possible (box, Wi-Fi de la salle, partage de connexion).
 - [ ] Charger les téléphones, prévoir une multiprise près de la TV.
 
