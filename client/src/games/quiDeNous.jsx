@@ -82,7 +82,7 @@ export function HostQuestion({ state }) {
 export function HostResults({ state }) {
   const { results } = state;
   useRevealSound(state);
-  const byId = new Map(state.players.map((p, i) => [p.id, { ...p, color: colorFor(i) }]));
+  const byId = new Map(state.players.map((p, i) => [p.id, { ...p, color: colorFor(i, state.adult?.active) }]));
   const top = results.topIds.map((pid) => byId.get(pid)).filter(Boolean);
   const drinkers = results.wrongVoterIds.map((pid) => byId.get(pid)).filter(Boolean);
   const nonVoters = new Set(results.nonVoterIds);

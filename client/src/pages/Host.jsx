@@ -7,7 +7,7 @@ import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
-import { AdultButton, AdultGateModal, AdultOffButton } from '../adult.jsx';
+import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
 
@@ -83,13 +83,14 @@ export default function Host({ code }) {
   );
 
   return (
-    <main className={`page host phase-${state.phase} mode-${mode.id}`} onPointerDown={unlockAudio}>
+    <main className={`page host phase-${state.phase} mode-${mode.id} ${state.adult?.active ? 'adult-on' : ''}`} onPointerDown={unlockAudio}>
       {!connected && <div className="banner">Connexion perdue, reconnexion…</div>}
       {party && <PartyBar state={state} act={act} />}
       {inGame && (
         <HostControls state={state} act={act} party={!!party} onSettings={() => setSettingsOpen(true)} onToggleAuto={() => changeSettings({ auto: !state.settings.auto })} />
       )}
       {state.paused && (inGame || party) && <div className="paused-banner">Pause</div>}
+      <AdultTheme active={!!state.adult?.active} />
       <AdultOffButton state={state} act={act} />
       <AdultGateModal state={state} act={act} onKick={kick} />
 

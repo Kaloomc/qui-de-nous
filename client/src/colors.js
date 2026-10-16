@@ -4,7 +4,10 @@ const PALETTE = [
   '#d4e157', '#26a69a', '#ffab91', '#9575cd', '#4dd0e1', '#ffd54f', '#e57373', '#81c784', '#64b5f6', '#ba68c8',
 ];
 
-export const colorFor = (index) => PALETTE[index % PALETTE.length];
+/** Mode 18+ : rouges, roses et gris, alternés pour que deux parts voisines du camembert restent distinctes. */
+const ADULT_PALETTE = ['#e3173a', '#9a9499', '#ff8a96', '#5c585e', '#b3122a', '#d9d4d6', '#7a0a1e', '#ffc2c8', '#3f3b3e', '#ff4d5e'];
+
+export const colorFor = (index, adult = false) => (adult ? ADULT_PALETTE[index % ADULT_PALETTE.length] : PALETTE[index % PALETTE.length]);
 
 /** Couleur fixe d'un joueur sans photo, d'après son prénom. */
 export function avatarColor(name = '?') {

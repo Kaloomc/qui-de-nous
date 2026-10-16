@@ -7,7 +7,10 @@ export const RECAP_WIDTH = 1080;
 export const RECAP_HEIGHT = 1920;
 export const MAX_TROPHIES_IN_IMAGE = 6;
 
-const COLORS = { bg: '#14102a', bg2: '#2d1f63', card: 'rgba(255, 255, 255, 0.06)', text: '#fff8f0', muted: '#b3a9d6', pink: '#ff4f8b', yellow: '#ffc93c' };
+const NORMAL_COLORS = { bg: '#14102a', bg2: '#2d1f63', card: 'rgba(255, 255, 255, 0.06)', text: '#fff8f0', muted: '#b3a9d6', pink: '#ff4f8b', yellow: '#ffc93c' };
+/** Mode 18+ : mêmes éléments, ambiance noir, gris et rouge. */
+const ADULT_COLORS = { bg: '#070405', bg2: '#4a0a16', card: 'rgba(227, 23, 58, 0.08)', text: '#f7f1f1', muted: '#b3a6a9', pink: '#ff2d4a', yellow: '#ffb3bc' };
+let COLORS = NORMAL_COLORS;
 const FONT = "'Baloo 2', system-ui, sans-serif";
 const font = (size, weight = 700) => `${weight} ${size}px ${FONT}`;
 
@@ -67,6 +70,7 @@ function text(ctx, value, x, y, { size, weight = 700, color = COLORS.text, align
  * Renvoie ce qui a été dessiné (nombre de trophées et de lignes du classement).
  */
 export function drawRecap(ctx, recap, { images = {}, hidePhotos = false, publicUrl = null } = {}) {
+  COLORS = recap.adult ? ADULT_COLORS : NORMAL_COLORS;
   const W = RECAP_WIDTH;
   const H = RECAP_HEIGHT;
   const players = Object.fromEntries(recap.players.map((p) => [p.id, p]));

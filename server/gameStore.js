@@ -853,6 +853,8 @@ export class Game {
       ranking: sipsRanking(players, sips),
       totalSips: Object.values(sips).reduce((a, b) => a + b, 0),
       games: [...this.playedModes],
+      // Thème sombre de l'image partageable (jamais de texte explicite dedans : les trophées restent neutres).
+      adult: this.adult.active,
       // Adresse du site imprimée sur l'image (si définie).
       publicUrl: process.env.PUBLIC_URL || null,
     };

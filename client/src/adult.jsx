@@ -1,7 +1,55 @@
 // Mode 18+ côté écrans : bouton de l'hôte, écran d'attente des confirmations (TV), question de l'âge (téléphone).
 // Le serveur décide de tout (server/gameStore.js, requestAdult) : le mode ne s'active que si chaque joueur connecté a dit oui.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Avatar } from './components.jsx';
+import { sounds } from './sound.js';
+
+const TRANSITION_MS = 2600;
+/** Le thème bascule au milieu de la transition, quand l'écran est noir. */
+const SWITCH_AT_MS = 1100;
+
+const applyTheme = (on) => {
+  if (on) document.documentElement.dataset.theme = 'after-dark';
+  else delete document.documentElement.dataset.theme;
+};
+
+/**
+ * Thème « after-dark » piloté par l'état de la partie : la TV et tous les téléphones basculent ensemble.
+ * À l'arrivée sur la page (reconnexion), le bon thème est posé sans animation ; ensuite, chaque changement
+ * passe par la transition (écran noir, battement rouge, « 18+ »).
+ */
+export function AdultTheme({ active }) {
+  const [transition, setTransition] = useState(null);
+  const previous = useRef(null);
+
+  useEffect(() => {
+    const changed = previous.current !== null && previous.current !== active;
+    previous.current = active;
+    if (!changed) {
+      applyTheme(active);
+      return undefined;
+    }
+    setTransition(active ? 'on' : 'off');
+    if (active) sounds.heartbeat();
+    const flip = setTimeout(() => applyTheme(active), SWITCH_AT_MS);
+    const done = setTimeout(() => setTransition(null), TRANSITION_MS);
+    return () => {
+      clearTimeout(flip);
+      clearTimeout(done);
+      applyTheme(active);
+    };
+  }, [active]);
+
+  // En quittant la partie (accueil, autre partie), on revient au thème normal.
+  useEffect(() => () => applyTheme(false), []);
+
+  if (!transition) return null;
+  return (
+    <div className={`adult-transition adult-transition-${transition}`} aria-hidden="true">
+      <span className="adult-transition-mark">{transition === 'on' ? '18+' : 'Mode normal'}</span>
+    </div>
+  );
+}
 
 /** Bouton discret de l'hôte (grille des jeux, lobby) : lance la demande de confirmation. */
 export function AdultButton({ state, act }) {

@@ -3968,3 +3968,180 @@ button {
   font-weight: 700;
   color: var(--green);
 }
+
+/* ---------- Thème « after-dark » (mode 18+) ----------
+   Activé par <html data-theme="after-dark">, piloté par l'état de la partie (client/src/adult.jsx).
+   Même structure que le thème normal : seules les couleurs, fonds, lueurs et liserés changent.
+   « Tu bois » = rouge vif, « tu ne bois pas » = blanc / gris clair : jamais deux rouges à confondre. */
+
+:root[data-theme='after-dark'] {
+  --bg: #0b0809;
+  --bg-2: #1b1517;
+  --card: #211a1c;
+  --text: #f7f1f1;
+  --muted: #b3a6a9;
+  --pink: #e3173a;
+  --yellow: #ffb3bc;
+  --teal: #c9c2c4;
+  --red: #ff2d4a;
+  --green: #f4f1f1;
+  --opt-a: #c8102e;
+  --opt-b: #6f6b72;
+}
+
+:root[data-theme='after-dark'] body {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(200, 16, 46, 0.32), transparent 70%) fixed,
+    radial-gradient(ellipse 70% 45% at 50% 115%, rgba(110, 0, 20, 0.4), transparent 70%) fixed,
+    radial-gradient(circle at 50% 50%, #161012 0%, #050304 100%) fixed;
+}
+
+/* Vignettage et grain très léger, sans gêner les clics. */
+:root[data-theme='after-dark'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 220px rgba(0, 0, 0, 0.85);
+  background-image: repeating-radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px);
+}
+
+:root[data-theme='after-dark'] #root {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme='after-dark'] .btn-primary {
+  background: linear-gradient(135deg, #e3173a, #7a0a1e);
+  box-shadow: 0 0 28px rgba(227, 23, 58, 0.55);
+}
+
+:root[data-theme='after-dark'] .game-card,
+:root[data-theme='after-dark'] .modal,
+:root[data-theme='after-dark'] .settings-summary,
+:root[data-theme='after-dark'] .game-pill,
+:root[data-theme='after-dark'] .chip-avatar .avatar {
+  border-color: rgba(227, 23, 58, 0.55);
+}
+
+:root[data-theme='after-dark'] .game-card,
+:root[data-theme='after-dark'] .modal {
+  border: 1px solid rgba(227, 23, 58, 0.45);
+  box-shadow: 0 0 40px rgba(227, 23, 58, 0.12), 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+:root[data-theme='after-dark'] .modal-backdrop {
+  background: rgba(5, 2, 3, 0.8);
+}
+
+:root[data-theme='after-dark'] .verdict-drink {
+  background: linear-gradient(160deg, #ff2d4a, #6e0718);
+}
+
+:root[data-theme='after-dark'] .verdict-safe {
+  background: linear-gradient(160deg, #f7f3f3, #a9a2a4);
+  color: #140e10;
+}
+
+:root[data-theme='after-dark'] .option-a,
+:root[data-theme='after-dark'] .tp-choice-a {
+  background: linear-gradient(150deg, #e3173a, #6e0718);
+}
+
+:root[data-theme='after-dark'] .option-b,
+:root[data-theme='after-dark'] .tp-choice-b {
+  background: linear-gradient(150deg, #85808a, #2b282d);
+}
+
+:root[data-theme='after-dark'] .bomb-fly {
+  background: radial-gradient(circle at 35% 35%, #4a2a30, #140b0d 70%);
+}
+
+/* ---------- Transition d'entrée / de sortie du mode 18+ ---------- */
+
+.adult-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: #000;
+  animation: adult-veil 2.6s ease-in-out both;
+}
+
+.adult-transition-mark {
+  color: #ff2d4a;
+  font-size: clamp(5rem, 22vmin, 16rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 40px rgba(255, 45, 74, 0.9), 0 0 120px rgba(200, 16, 46, 0.7);
+  animation: adult-beat 2.6s ease-in-out both;
+}
+
+.adult-transition-off .adult-transition-mark {
+  color: #fff8f0;
+  font-size: clamp(2rem, 8vmin, 5rem);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.35);
+}
+
+.adult-transition::before {
+  content: '';
+  position: absolute;
+  width: 60vmin;
+  height: 60vmin;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(227, 23, 58, 0.55), transparent 65%);
+  animation: adult-pulse 2.6s ease-in-out both;
+}
+
+.adult-transition-off::before {
+  background: radial-gradient(circle, rgba(255, 79, 139, 0.35), transparent 65%);
+}
+
+@keyframes adult-veil {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes adult-pulse {
+  0%, 20% { transform: scale(0.3); opacity: 0; }
+  32% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(0.8); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+  80% { transform: scale(1.4); opacity: 0.4; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes adult-beat {
+  0%, 30% { transform: scale(0.6); opacity: 0; }
+  45% { transform: scale(1.08); opacity: 1; }
+  52% { transform: scale(0.96); }
+  60% { transform: scale(1.04); }
+  80% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adult-transition,
+  .adult-transition::before,
+  .adult-transition-mark {
+    animation: adult-veil 1.2s linear both;
+  }
+}
+
+/* Place du bouton « Repasser en mode normal » (fixé en haut à gauche) au-dessus du logo et des titres. */
+.page.host.adult-on {
+  padding-top: 64px;
+}
+
+:root[data-theme='after-dark'] .verdict-safe .muted {
+  color: rgba(20, 14, 16, 0.7);
+}
+
+:root[data-theme='after-dark'] .verdict-safe .verdict-sips {
+  background: rgba(20, 14, 16, 0.1);
+}

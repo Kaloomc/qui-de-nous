@@ -6,7 +6,7 @@ import { GameIcon } from '../icons.jsx';
 import { PlayerRecap } from '../recap.jsx';
 import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
-import { AdultConfirm } from '../adult.jsx';
+import { AdultConfirm, AdultTheme } from '../adult.jsx';
 
 export default function Player({ code }) {
   const connected = useConnected();
@@ -151,6 +151,7 @@ export default function Player({ code }) {
 
   return (
     <main className="page player">
+      {state && <AdultTheme active={!!state.adult?.active} />}
       {!connected && <div className="banner">Connexion perdue, reconnexion…</div>}
       {status === 'joined' && notice && (
         <div className="toast" onClick={() => setNotice(null)}>
