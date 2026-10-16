@@ -372,8 +372,9 @@ Jeu réservé aux 18 ans et plus, à consommer avec modération : un verre d'eau
 | Problème | Solution |
 |---|---|
 | Le téléphone n'arrive pas à ouvrir la page (même Wi-Fi) | Le pare-feu du PC bloque peut-être le port : `sudo ufw allow 3000` (Linux) ou autorise Node.js dans le pare-feu Windows. Certains Wi-Fi (invités, écoles, hôtels) isolent les appareils : utilise alors `npm run share`. |
-| Le QR code affiche une mauvaise adresse IP | Le PC a plusieurs cartes réseau. Force l'adresse : `PUBLIC_URL=http://192.168.1.42:3000 npm start`. |
-| `Le port 3000 est déjà utilisé` | Le jeu tourne déjà dans un autre terminal. Arrête-le, ou change de port : `PORT=3001 npm start`. |
+| Le QR code affiche une mauvaise adresse IP | Le PC a plusieurs cartes réseau. Force l'adresse : `PUBLIC_URL=http://192.168.1.42:3000 npm start` (macOS / Linux) ou `$env:PUBLIC_URL="http://192.168.1.42:3000"; npm start` (Windows PowerShell). |
+| `Le port 3000 est déjà utilisé` | Le jeu tourne déjà dans un autre terminal. Arrête-le, ou change de port : `PORT=3001 npm start` (macOS / Linux) ou `$env:PORT=3001; npm start` (Windows PowerShell). |
+| Le serveur s'est arrêté en pleine soirée | Relance `npm start` : les joueurs devront recréer une partie (elles sont en mémoire). Pour une relance automatique, lance le serveur avec [pm2](https://pm2.keymetrics.io) : `npm install -g pm2`, puis `pm2 start server/index.js --name gorgee` (`pm2 logs gorgee` pour voir les erreurs, `pm2 stop gorgee` pour arrêter). |
 | `cloudflared est introuvable` | Installe-le (voir [étape 5](#5-jouer-à-distance-sans-même-wi-fi)), puis ouvre un nouveau terminal. |
 | « Partie introuvable » | Le serveur a redémarré : les parties sont en mémoire, il faut en recréer une. |
 | Le bouton Selfie ouvre la galerie | Certains navigateurs ignorent la demande de caméra ; prends la photo depuis l'appareil photo puis choisis-la dans la galerie. |
