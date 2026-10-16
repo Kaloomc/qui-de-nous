@@ -14,6 +14,8 @@ export function formatNumber(value, unite) {
 }
 
 const unitLabel = (unite) => (unite && unite !== 'année' ? ` ${unite}` : '');
+/** Photos affichées au maximum pour une même réponse sur la règle, puis « +N ». */
+const GROUP_MAX = 5;
 
 export function HostQuestion({ state }) {
   const { round } = state;
@@ -52,16 +54,23 @@ function Ruler({ state, showAnswer }) {
   }
   const pos = (v) => 4 + ((f(v) - min) / (max - min)) * 92;
 
+  // Même réponse = un seul repère : les photos se serrent côte à côte, la valeur n'est écrite qu'une fois.
+  const groups = [];
+  for (const e of entries.sort((a, b) => a.value - b.value)) {
+    if (groups.at(-1)?.value === e.value) groups.at(-1).players.push(e.player);
+    else groups.push({ value: e.value, players: [e.player] });
+  }
   const lastAtLevel = [];
-  const markers = entries
-    .sort((a, b) => a.value - b.value)
-    .map((e) => {
-      const x = pos(e.value);
-      let level = 0;
-      while (level < 2 && lastAtLevel[level] != null && x - lastAtLevel[level] < 6) level += 1;
-      lastAtLevel[level] = x;
-      return { ...e, x, level };
-    });
+  const markers = groups.map((g) => {
+    const x = pos(g.value);
+    const shown = Math.min(g.players.length, GROUP_MAX);
+    // Un groupe est plus large qu'une photo seule : il faut plus de place avant de le poser sur la même ligne.
+    const width = 6 + (shown - 1) * 1.6;
+    let level = 0;
+    while (level < 2 && lastAtLevel[level] != null && x - lastAtLevel[level] < width) level += 1;
+    lastAtLevel[level] = x + (shown - 1) * 0.8;
+    return { ...g, x, level };
+  });
 
   const tag = (pid) => {
     if (!showAnswer) return '';
@@ -73,16 +82,28 @@ function Ruler({ state, showAnswer }) {
   return (
     <div className="ruler">
       <div className="ruler-line" />
-      {markers.map((m, i) => (
-        <div
-          key={m.player.id}
-          className={`ruler-marker land ${tag(m.player.id)}`}
-          style={{ left: `${m.x}%`, '--level': m.level, animationDelay: `${300 + i * 180}ms` }}
-        >
-          <Avatar player={m.player} size={64} />
-          <span className="ruler-value">{formatNumber(m.value, round.unite)}</span>
-        </div>
-      ))}
+      {markers.map((m, i) => {
+        const size = m.players.length === 1 ? 64 : m.players.length <= 3 ? 56 : 48;
+        const hidden = m.players.length - GROUP_MAX;
+        return (
+          <div
+            key={m.players[0].id}
+            className={`ruler-marker land ${tag(m.players[0].id)}`}
+            style={{ left: `${m.x}%`, '--level': m.level, animationDelay: `${300 + i * 180}ms` }}
+          >
+            <div className="ruler-avatars">
+              {m.players.slice(0, GROUP_MAX).map((p) => (
+                <Avatar key={p.id} player={p} size={size} />
+              ))}
+              {hidden > 0 && <span className="ruler-more">+{hidden}</span>}
+            </div>
+            <span className="ruler-value">
+              {formatNumber(m.value, round.unite)}
+              {m.players.length > 1 && <small> ×{m.players.length}</small>}
+            </span>
+          </div>
+        );
+      })}
       {showAnswer && (
         <div className="ruler-answer zoom-in" style={{ left: `${pos(results.answer)}%` }}>
           <span className="ruler-answer-value">

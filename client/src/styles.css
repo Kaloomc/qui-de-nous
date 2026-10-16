@@ -2211,7 +2211,7 @@ button {
 .ruler {
   position: relative;
   width: calc(100% - 80px);
-  height: 300px;
+  height: 330px;
   margin: 10px 40px 0;
 }
 
@@ -2227,7 +2227,8 @@ button {
 
 .ruler-marker {
   position: absolute;
-  bottom: calc(76px + var(--level) * 74px);
+  /* La tige (::after) grandit avec le niveau : le repère ne doit pas être remonté une deuxième fois. */
+  bottom: 76px;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -2240,6 +2241,32 @@ button {
   width: 3px;
   height: calc(10px + var(--level) * 74px);
   background: rgba(255, 255, 255, 0.4);
+}
+
+.ruler-avatars {
+  display: flex;
+  align-items: center;
+}
+
+/* Photos d'une même réponse : serrées les unes sur les autres. */
+.ruler-avatars > * + * {
+  margin-left: -18px;
+}
+
+.ruler-more {
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+  background: var(--bg-2);
+  font-weight: 800;
+}
+
+.ruler-value small {
+  opacity: 0.7;
 }
 
 .ruler-value {
