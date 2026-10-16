@@ -37,6 +37,21 @@ test('une erreur dans un minuteur ne fait pas tomber le serveur', () => {
   assert.equal(errors.length, 1);
 });
 
+test('joueur arrivé pendant les résultats : il n’apparaît pas parmi les joueurs de la manche', () => {
+  const clock = { now: () => 0, setTimeout: () => 0, clearTimeout: () => {} };
+  const game = new Game('TEST', 'qui-de-nous', { clock });
+  const ids = ['A', 'B', 'C'].map((name) => game.upsertPlayer({ name }).player.id);
+  ids.forEach((id, i) => game.connectPlayer(game.players.get(id), `s${i}`));
+  game.start();
+  game.vote(ids[0], ids[1]);
+  game.reveal();
+  game.finishReveal();
+  const late = game.upsertPlayer({ name: 'Retard' }).player;
+  const state = game.publicState({ playerId: late.id });
+  assert.deepEqual(state.roundPlayerIds, ids);
+  assert.ok(!state.roundPlayerIds.includes(late.id));
+});
+
 test('Estimation : le plus proche parti pendant le suspense ne casse pas les statistiques', () => {
   assert.doesNotThrow(() => GAMES.estimation.updateStats({}, { closestIds: ['parti'] }));
 });

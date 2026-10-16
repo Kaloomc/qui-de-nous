@@ -9,6 +9,7 @@ export const waitingText = 'En attente des autres…';
 
 // La révélation dure revealMs (server/games/quiDeNous.js) : « Attention… », puis 3, 2, 1 sur les 3 dernières secondes.
 const COUNTDOWN_MS = 3000;
+const LEGEND_MAX = 8;
 
 /** Les photos défilent comme une roulette qui ralentit pendant le compte à rebours. */
 function useRoulette(count, endsAt, state) {
@@ -121,7 +122,7 @@ export function HostResults({ state }) {
           <section className="chart">
             <PieChart slices={slices} size={270} />
             <ul className="legend">
-              {slices.map((s, i) => (
+              {slices.slice(0, LEGEND_MAX).map((s, i) => (
                 <li key={s.id} className="fade-up" style={{ animationDelay: `${400 + i * 100}ms` }}>
                   <span className="swatch" style={{ background: s.color }} />
                   <Avatar player={s.player} size={40} />
@@ -129,6 +130,13 @@ export function HostResults({ state }) {
                   <span className="legend-value">{s.value}</span>
                 </li>
               ))}
+              {/* À 20-30 joueurs, la liste complète sortirait de l'écran de la TV. */}
+              {slices.length > LEGEND_MAX && (
+                <li className="fade-up muted" style={{ animationDelay: `${400 + LEGEND_MAX * 100}ms` }}>
+                  + {slices.length - LEGEND_MAX} autres
+                  <span className="legend-value">{slices.slice(LEGEND_MAX).reduce((n, s) => n + s.value, 0)}</span>
+                </li>
+              )}
             </ul>
           </section>
         )}

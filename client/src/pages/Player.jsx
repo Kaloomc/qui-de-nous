@@ -295,7 +295,11 @@ function Suspense() {
 }
 
 function Verdict({ state, mode, me }) {
-  const { drinks, title, detail, extra } = mode.verdict(state, me);
+  // Arrivé après la révélation : il n'a pas joué cette manche (sinon il lirait « Bien vu, tu as voté comme la majorité »).
+  const playedRound = !state.roundPlayerIds || state.roundPlayerIds.includes(me.id);
+  const { drinks, title, detail, extra } = playedRound
+    ? mode.verdict(state, me)
+    : { drinks: false, title: 'Pas joué', detail: 'Tu joues dès la prochaine manche.' };
   const roundSips = state.roundSips?.[me.id] ?? 0;
   return (
     <div className={`verdict ${drinks ? 'verdict-drink' : 'verdict-safe'}`}>

@@ -1738,6 +1738,9 @@ button {
   width: 100%;
   height: 46px;
   margin: 8px 0;
+  /* Le rail de l'aiguille, décalé par translateX, dépassait à droite : barre de défilement horizontale sur la TV. */
+  overflow-x: clip;
+  overflow-clip-margin: 12px;
 }
 
 .balance-track {
@@ -3511,9 +3514,13 @@ button {
 
 .recap-show,
 .host-recap,
-.recap-page,
-.host-recap .recap-preview {
-  width: 110px;
+.recap-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 3vh, 32px);
+  text-align: center;
 }
 
 .player-recap {

@@ -107,6 +107,7 @@ export class Game {
     this.question = null;
     this.votes = new Map();
     this.results = null;
+    this.roundPlayerIds = null;
     this.reveal_ = null;
     this.waitingForPlayers = false;
     this.sips = new Map(); // gorgées du jeu en cours
@@ -400,7 +401,9 @@ export class Game {
     this.cancel('grace');
     for (const name of Object.keys(this.timers)) if (name.startsWith('g:')) this.cancel(name);
     this.waitingForPlayers = false;
-    this.results = this.rules.computeResults([...this.players.keys()].filter((id) => !this.isLate(id)), this.votes, this);
+    // Joueurs de la manche : un joueur arrivé pendant les résultats n'a ni bu ni été sauvé.
+    this.roundPlayerIds = [...this.players.keys()].filter((id) => !this.isLate(id));
+    this.results = this.rules.computeResults(this.roundPlayerIds, this.votes, this);
     const now = this.clock.now();
     this.reveal_ = { startedAt: now, endsAt: now + this.rules.revealMs, durationMs: this.rules.revealMs };
     this.phase = 'revealing';
@@ -811,6 +814,7 @@ export class Game {
       gameSips: this.sipsOfPresent(this.sips),
       roundSips: this.phase === 'results' || this.phase === 'ended' ? this.roundSips : null,
       results: showResults ? this.results : null,
+      roundPlayerIds: showResults ? this.roundPlayerIds : null,
       pending: this.pending,
       pendingTimer: this.pending ? this.timerState('pending') : null,
       stats: Object.fromEntries(this.stats),

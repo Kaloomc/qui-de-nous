@@ -96,6 +96,7 @@ export function PartyBoard({ state, onReset }) {
 }
 
 const TITLES = { 1: 'Le plus assoiffé', 2: 'Dauphin', 3: 'Sur le podium' };
+const PODIUM_STEP_MAX = 4;
 
 export function Podium({ state }) {
   const rows = ranking(state);
@@ -114,7 +115,8 @@ export function Podium({ state }) {
         {steps.map(({ rank, rows: atRank }) => (
           <div key={rank} className={`podium-step podium-${rank}`} style={{ '--delay': `${(3 - rank) * 450}ms` }}>
             <div className="podium-players">
-              {atRank.map((r) => (
+              {/* Beaucoup d'ex æquo (grand groupe, peu de manches) : la marche déborderait de la TV. */}
+              {atRank.slice(0, PODIUM_STEP_MAX).map((r) => (
                 <div key={r.player.id} className="podium-player">
                   <Avatar
                     player={r.player}
@@ -126,6 +128,12 @@ export function Podium({ state }) {
                   <GamePart state={state} row={r} />
                 </div>
               ))}
+              {atRank.length > PODIUM_STEP_MAX && (
+                <div className="podium-player podium-more">
+                  <span className="podium-name">+ {atRank.length - PODIUM_STEP_MAX}</span>
+                  <span className="podium-sips">ex æquo</span>
+                </div>
+              )}
             </div>
             <div className="podium-block">
               <span className="podium-rank">{rank}</span>
