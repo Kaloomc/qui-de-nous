@@ -5,12 +5,38 @@ export const CODE_LENGTH = 4;
 
 export const socket = io({ transports: ['websocket', 'polling'] });
 
+// Retour sur l'appli après un passage en arrière-plan (téléphone verrouillé, autre appli) : on se reconnecte tout de suite.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && !socket.connected) socket.connect();
+  });
+}
+
+/** `timeout: true` dans la réponse : le serveur n'a pas répondu à temps (réseau lent), ce n'est pas un refus. */
 export function request(event, payload = {}, timeout = 8000) {
   return new Promise((resolve) => {
     socket.timeout(timeout).emit(event, payload, (err, res) => {
-      resolve(err ? { ok: false, error: 'Pas de réponse du serveur.' } : res);
+      resolve(err ? { ok: false, error: 'Pas de réponse du serveur.', timeout: true } : res);
     });
   });
+}
+
+/** Garde l'écran allumé tant que `active` est vrai (si le navigateur le permet), et le redemande au retour sur la page. */
+export function useWakeLock(active = true) {
+  useEffect(() => {
+    if (!active || !navigator.wakeLock) return undefined;
+    let lock = null;
+    const acquire = () => {
+      if (document.visibilityState !== 'visible' || (lock && !lock.released)) return;
+      navigator.wakeLock.request('screen').then((l) => (lock = l)).catch(() => {});
+    };
+    acquire();
+    document.addEventListener('visibilitychange', acquire);
+    return () => {
+      document.removeEventListener('visibilitychange', acquire);
+      lock?.release().catch(() => {});
+    };
+  }, [active]);
 }
 
 export function useConnected() {

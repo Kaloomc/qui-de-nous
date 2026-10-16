@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, TimerBar } from '../components.jsx';
-import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect, useStable } from '../lib.js';
+import { navigate, request, socket, storage, useConnected, useGameState, useOnConnect, useStable, useWakeLock } from '../lib.js';
 import { gameOf } from '../games/index.js';
 import { GameIcon } from '../icons.jsx';
 import { PlayerRecap } from '../recap.jsx';
@@ -24,10 +24,17 @@ export default function Player({ code }) {
     setNotice(message);
   }
 
-  useOnConnect(async () => {
+  useWakeLock(status === 'joined');
+
+  useOnConnect(async function resume() {
     const saved = storage.get(identityKey);
     if (!saved) return;
     const res = await request('player:resume', { code, ...saved });
+    // Réseau lent : on réessaie, surtout sans oublier le joueur (il perdrait sa place et ses gorgées).
+    if (res.timeout) {
+      setTimeout(() => socket.connected && resume(), 2000);
+      return;
+    }
     if (res.ok) {
       setStatus('joined');
       setMyVote(res.myVote ? { round: res.round, choice: res.myVote } : null);

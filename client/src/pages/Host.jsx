@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { PlayerChip, Segmented, TimerBar, VoteProgress, allVoted } from '../components.jsx';
-import { navigate, request, storage, useConnected, useGameState, useJoinUrl, useOnConnect, useStable } from '../lib.js';
+import { navigate, request, socket, storage, useConnected, useGameState, useJoinUrl, useOnConnect, useStable, useWakeLock } from '../lib.js';
 import { GAMES, gameById, gameOf, playersLabel } from '../games/index.js';
 import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
@@ -22,11 +22,18 @@ export default function Host({ code }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [partySetupOpen, setPartySetupOpen] = useState(false);
 
-  useOnConnect(async () => {
+  useWakeLock();
+
+  useOnConnect(async function resume() {
     const hostSecret = storage.get(`qdn:host:${code}`);
     if (!hostSecret) return setFatal('Cet appareil n’est pas l’hôte de cette partie.');
     const res = await request('host:resume', { code, hostSecret });
-    if (!res.ok) setFatal(res.error);
+    // Réseau lent : on réessaie au lieu de bloquer la TV sur un écran d'erreur.
+    if (res.timeout) {
+      setTimeout(() => socket.connected && resume(), 2000);
+      return;
+    }
+    setFatal(res.ok ? null : res.error);
   });
 
   /** Action propre au jeu en cours (« Suivant », « Lancer la roue »…). */
