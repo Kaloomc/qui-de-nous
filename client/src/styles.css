@@ -250,6 +250,18 @@ button {
   letter-spacing: 0.04em;
 }
 
+.app-version {
+  position: fixed;
+  left: 8px;
+  bottom: 4px;
+  z-index: 5;
+  font-size: 0.7rem;
+  color: var(--muted);
+  opacity: 0.4;
+  pointer-events: none;
+  user-select: none;
+}
+
 .credit a {
   color: inherit;
   text-decoration: none;
