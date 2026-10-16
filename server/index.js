@@ -9,6 +9,10 @@ import { GameStore } from './gameStore.js';
 import { registerSockets } from './sockets.js';
 
 const PORT = Number(process.env.PORT) || 3000;
+
+// Une erreur imprévue ne doit pas couper la soirée : on la logue et le serveur continue.
+process.on('uncaughtException', (err) => console.error('[erreur non gérée]', err));
+process.on('unhandledRejection', (err) => console.error('[promesse rejetée]', err));
 const DIST_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 const VIRTUAL_IFACE = /^(docker|br-|veth|virbr|vbox|vmnet|lo|tun|tap|utun|zt|tailscale)/i;
 

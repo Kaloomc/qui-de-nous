@@ -1,7 +1,27 @@
 const room = (code) => `game:${code}`;
 const hostRoom = (code) => `game:${code}:host`;
 
+const JOIN_FAILURES_MAX = 10;
+const JOIN_FAILURES_WINDOW_MS = 60 * 1000;
+
 export function registerSockets(io, store) {
+  // Codes faux tentés par appareil (derrière cloudflared, la vraie adresse est dans l'en-tête).
+  const joinFailures = new Map();
+  const clientIp = (socket) =>
+    socket.handshake.headers['cf-connecting-ip'] || String(socket.handshake.headers['x-forwarded-for'] ?? '').split(',')[0].trim() || socket.handshake.address;
+  const tooManyFailures = (ip) => {
+    const entry = joinFailures.get(ip);
+    if (entry && Date.now() - entry.since > JOIN_FAILURES_WINDOW_MS) joinFailures.delete(ip);
+    return (joinFailures.get(ip)?.count ?? 0) >= JOIN_FAILURES_MAX;
+  };
+  const recordFailure = (ip) => {
+    const entry = joinFailures.get(ip) ?? { count: 0, since: Date.now() };
+    entry.count += 1;
+    joinFailures.set(ip, entry);
+    // ponytail: purge naïve, suffisante pour quelques dizaines d'appareils.
+    if (joinFailures.size > 1000) joinFailures.clear();
+  };
+
   // Chaque écran reçoit son propre état : la TV voit les résultats pendant le suspense (pour animer),
   // et chaque téléphone ne voit que ses informations secrètes (le mot de l'Imposteur, par exemple).
   const broadcast = (game) => {
@@ -114,8 +134,13 @@ export function registerSockets(io, store) {
     }
 
     on('player:join', ({ code, playerId, secret, name, photo }, ack) => {
+      const ip = clientIp(socket);
+      if (tooManyFailures(ip)) return ack({ ok: false, error: 'Trop de codes essayés : réessaie dans une minute.' });
       const game = store.get(code);
-      if (!game) return ack({ ok: false, error: 'Partie introuvable. Vérifie le code.' });
+      if (!game) {
+        recordFailure(ip);
+        return ack({ ok: false, error: 'Partie introuvable. Vérifie le code.' });
+      }
       if (game.phase === 'ended') return ack({ ok: false, error: 'Cette partie est terminée.' });
       const { player, error } = game.upsertPlayer({ playerId, secret, name, photo });
       if (error) return ack({ ok: false, error });

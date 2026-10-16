@@ -11,6 +11,7 @@ const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 export const CODE_LENGTH = 4;
 const GAME_TTL_MS = 6 * 60 * 60 * 1000;
 const MAX_NAME_LENGTH = 20;
+export const MAX_PLAYERS = 50;
 const MAX_PHOTO_BYTES = 300 * 1024;
 const PHOTO_DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/;
 
@@ -41,6 +42,10 @@ function parsePhoto(dataUrl) {
   if (!match) return null;
   const data = Buffer.from(match[2], 'base64');
   if (data.length === 0 || data.length > MAX_PHOTO_BYTES) return null;
+  // Vrai type du fichier (signature), pas seulement l'en-tête de la data URL.
+  const signature = { 'image/jpeg': [0xff, 0xd8, 0xff], 'image/png': [0x89, 0x50, 0x4e, 0x47], 'image/webp': [0x52, 0x49, 0x46, 0x46] }[match[1]];
+  if (!signature.every((byte, i) => data[i] === byte)) return null;
+  if (match[1] === 'image/webp' && data.toString('latin1', 8, 12) !== 'WEBP') return null;
   return { mime: match[1], data };
 }
 
@@ -181,8 +186,17 @@ export class Game {
     this.cancel(name);
     const id = this.clock.setTimeout(() => {
       delete this.timers[name];
-      fn();
-      this.onChange(this);
+      // Une erreur dans un minuteur ne doit jamais faire tomber le serveur.
+      try {
+        fn();
+      } catch (err) {
+        console.error(`[minuteur ${name}] partie ${this.code}`, err);
+      }
+      try {
+        this.onChange(this);
+      } catch (err) {
+        console.error(`[diffusion] partie ${this.code}`, err);
+      }
     }, ms);
     this.timers[name] = { id, endsAt: this.clock.now() + ms, total, fn, pausable: false };
   }
@@ -225,13 +239,18 @@ export class Game {
   }
 
   upsertPlayer({ playerId, secret, name, photo }) {
-    const cleanName = typeof name === 'string' ? name.trim().replace(/\s+/g, ' ').slice(0, MAX_NAME_LENGTH) : '';
+    // Caractères de contrôle et d'inversion de sens retirés (ils cassent l'affichage sur la TV).
+    const cleanName =
+      typeof name === 'string'
+        ? name.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, '').trim().replace(/\s+/g, ' ').slice(0, MAX_NAME_LENGTH)
+        : '';
     if (!cleanName) return { error: 'Choisis un prénom.' };
     const parsedPhoto = photo ? parsePhoto(photo) : null;
     if (photo && !parsedPhoto) return { error: 'Photo invalide ou trop lourde.' };
 
     let player = this.findPlayer(playerId, secret);
     if (!player) {
+      if (this.players.size >= MAX_PLAYERS) return { error: `La partie est complète (${MAX_PLAYERS} joueurs maximum).` };
       let id;
       do id = token().slice(0, 8);
       while (this.players.has(id));

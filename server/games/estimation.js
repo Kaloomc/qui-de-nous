@@ -26,7 +26,7 @@ export default {
   },
   sipsOf: sipsEstimation,
   updateStats(stats, results) {
-    for (const id of results.closestIds) stats[id].closest = (stats[id].closest ?? 0) + 1;
+    for (const id of results.closestIds) if (stats[id]) stats[id].closest = (stats[id].closest ?? 0) + 1;
   },
   // « Attention… », les estimations tombent sur la règle, puis la bonne réponse.
   revealMs: 5000,
