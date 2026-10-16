@@ -16,6 +16,8 @@ export function formatNumber(value, unite) {
 const unitLabel = (unite) => (unite && unite !== 'année' ? ` ${unite}` : '');
 /** Photos affichées au maximum pour une même réponse sur la règle, puis « +N ». */
 const GROUP_MAX = 5;
+/** Photos en grand par camp du face-à-face des résultats, puis « +N ». */
+const DUEL_MAX = 4;
 
 export function HostQuestion({ state }) {
   const { round } = state;
@@ -128,6 +130,35 @@ export function HostReveal({ state }) {
   );
 }
 
+/** Un camp du face-à-face (plus proche / plus loin) : grandes photos, prénom et réponse. */
+function DuelSide({ kind, label, players, state, delay }) {
+  const shown = players.slice(0, DUEL_MAX);
+  // Plafonné à la hauteur de l'écran : sur un PC en 1280×720, la règle et les boutons doivent rester visibles.
+  const h = window.innerHeight;
+  const size = Math.min(shown.length === 1 ? 240 : shown.length === 2 ? 180 : 130, Math.round(h * (h >= 900 ? 0.21 : 0.15)));
+  const values = new Set(players.map((p) => state.results.values[p.id]));
+  return (
+    <section className={`duel-side duel-${kind} zoom-in`} style={{ animationDelay: `${delay}ms` }}>
+      <p className="winner-label">{label}</p>
+      <div className="winner-list">
+        {shown.map((p) => (
+          <div key={p.id} className="winner-card">
+            <Avatar player={p} size={size} className="winner-avatar" />
+            <p className="winner-name">{p.name}</p>
+          </div>
+        ))}
+        {players.length > DUEL_MAX && <p className="winner-name duel-more">+{players.length - DUEL_MAX}</p>}
+      </div>
+      {values.size === 1 && (
+        <p className="winner-votes">
+          {formatNumber(state.results.values[players[0].id], state.round.unite)}
+          {unitLabel(state.round.unite)}
+        </p>
+      )}
+    </section>
+  );
+}
+
 export function HostResults({ state }) {
   const { results, round } = state;
   useRevealSound(state);
@@ -143,17 +174,22 @@ export function HostResults({ state }) {
       <p className="round">Question {round.number} · Estimation</p>
       <h2 className="results-question">{round.question}</h2>
       <Ruler state={state} showAnswer />
-      <div className="estimation-verdicts fade-up" style={{ animationDelay: '600ms' }}>
+      {/* La TV est grande : le plus proche et le plus loin en photo, en grand. */}
+      <div className="estimation-duel">
         {closest && (
-          <p className="verdict-line verdict-line-good">
-            {results.exactIds.length ? 'Dans le mille' : 'Le plus proche'} : <strong>{closest}</strong>
-          </p>
+          <DuelSide
+            kind="good"
+            label={results.exactIds.length ? 'Dans le mille !' : 'Le plus proche'}
+            players={results.closestIds.map((pid) => byId.get(pid)).filter(Boolean)}
+            state={state}
+            delay={600}
+          />
         )}
         {furthest && (
-          <p className="verdict-line verdict-line-bad">
-            Le plus loin : <strong>{furthest}</strong> boit !
-          </p>
+          <DuelSide kind="bad" label="Le plus loin · boit !" players={results.furthestIds.map((pid) => byId.get(pid)).filter(Boolean)} state={state} delay={1100} />
         )}
+      </div>
+      <div className="estimation-verdicts fade-up" style={{ animationDelay: '1400ms' }}>
         {!furthest && Object.keys(results.values).length > 1 && <p className="verdict-line">Tout le monde à égalité : personne n’est le plus loin.</p>}
         {state.pending && chooser && (
           <p className="verdict-line pulse-text">

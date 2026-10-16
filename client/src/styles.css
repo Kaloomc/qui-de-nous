@@ -2211,7 +2211,7 @@ button {
 .ruler {
   position: relative;
   width: calc(100% - 80px);
-  height: 330px;
+  height: clamp(270px, 31vh, 330px);
   margin: 10px 40px 0;
 }
 
@@ -2324,6 +2324,56 @@ button {
   font-weight: 800;
   font-size: clamp(1.2rem, 2vw, 2rem);
   white-space: nowrap;
+}
+
+.estimation-duel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(32px, 8vw, 160px);
+}
+
+.duel-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Textes du face-à-face réduits sur un écran peu haut (PC en 1280×720). */
+.duel-side .winner-label {
+  font-size: clamp(1.1rem, min(2.4vw, 4vh), 2.4rem);
+}
+
+.duel-side .winner-name {
+  font-size: clamp(1.3rem, min(3.2vw, 5vh), 3.2rem);
+}
+
+.duel-side .winner-votes {
+  font-size: clamp(1rem, min(2vw, 3.2vh), 2rem);
+}
+
+.duel-good .winner-label {
+  color: var(--green);
+}
+
+.duel-good .winner-avatar {
+  border-color: var(--green);
+  box-shadow: 0 0 60px rgba(47, 209, 138, 0.55);
+}
+
+.duel-bad .winner-label {
+  color: var(--red);
+}
+
+.duel-bad .winner-avatar {
+  border-color: var(--red);
+  box-shadow: 0 0 60px rgba(255, 77, 94, 0.55);
+}
+
+.duel-more {
+  align-self: center;
 }
 
 .estimation-verdicts {
