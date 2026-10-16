@@ -111,3 +111,64 @@ test('mode 18+ : persiste quand on change de jeu ou qu’on rejoue', () => {
   game.pickGame('roue');
   assert.equal(game.adultActive, true);
 });
+
+// ---------- Étanchéité entre le mode normal et le mode 18+ ----------
+
+const WITH_ADULT_CONTENT = ['qui-de-nous', 'tu-preferes', 'qui-me-connait', 'imposteur'];
+const activate = (game, ids) => {
+  game.requestAdult();
+  ids.forEach((id) => game.answerAdult(id, true));
+};
+
+test('mode normal : jamais une question 18+, sur des centaines de tirages', () => {
+  for (const mode of WITH_ADULT_CONTENT) {
+    const { game } = setup(['Ana', 'Ben', 'Chloé'], mode);
+    for (let i = 0; i < 600; i++) assert.notEqual(game.drawQuestion()?.adulte, true, `${mode} : contenu 18+ en mode normal`);
+  }
+  const { game } = setup(['Ana', 'Ben', 'Chloé'], 'roue');
+  for (let i = 0; i < 300; i++) assert.notEqual(game.rules.computeResults([...game.players.keys()], new Map(), game).defi.adulte, true);
+});
+
+test('mode 18+ : uniquement le contenu 18+ des jeux qui en ont, le contenu normal pour les autres', () => {
+  for (const mode of WITH_ADULT_CONTENT) {
+    const { game, ids } = setup(['Ana', 'Ben', 'Chloé'], mode);
+    activate(game, ids);
+    for (let i = 0; i < 200; i++) assert.equal(game.drawQuestion()?.adulte, true, `${mode} : contenu normal en mode 18+`);
+  }
+  const roue = setup(['Ana', 'Ben', 'Chloé'], 'roue');
+  activate(roue.game, roue.ids);
+  for (let i = 0; i < 100; i++) assert.equal(roue.game.rules.computeResults(roue.ids, new Map(), roue.game).defi.adulte, true);
+  const estimation = setup(['Ana', 'Ben'], 'estimation');
+  activate(estimation.game, estimation.ids);
+  assert.ok(estimation.game.drawQuestion().question, 'Estimation garde son contenu normal');
+});
+
+test('mode 18+ : anti-répétition propre au contenu 18+ (toute la liste avant de revoir une question)', () => {
+  const { game, ids } = setup(['Ana', 'Ben', 'Chloé']);
+  activate(game, ids);
+  const total = game.rules.adultQuestions.length;
+  const seen = new Set();
+  for (let i = 0; i < total; i++) seen.add(game.drawQuestion().text);
+  assert.equal(seen.size, total);
+});
+
+test('mode soirée en 18+ : les manches tirent le contenu 18+ ; retour au normal = plus aucun contenu 18+', () => {
+  const { game, ids } = setup(['Ana', 'Ben', 'Chloé', 'Dan']);
+  activate(game, ids);
+  game.chooseGame();
+  assert.equal(game.startParty({ durationMs: 0, games: ['qui-de-nous', 'tu-preferes'] }), null);
+  game.partyStartBlock();
+  assert.equal(game.phase, 'question');
+  assert.equal(game.question.adulte, true);
+  game.disableAdult();
+  assert.equal(game.adultActive, false);
+  game.partyStartBlock();
+  assert.notEqual(game.question?.adulte, true);
+});
+
+test('thème 18+ jamais envoyé sans activation validée', () => {
+  const { game, ids } = setup(['Ana', 'Ben']);
+  game.requestAdult();
+  game.answerAdult(ids[0], true);
+  for (const viewer of [{ host: true }, { playerId: ids[0] }, { playerId: ids[1] }]) assert.equal(game.publicState(viewer).adult.active, false);
+});

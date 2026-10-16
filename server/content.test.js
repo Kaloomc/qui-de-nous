@@ -31,12 +31,25 @@ for (const spec of CONTENT) {
     assert.doesNotThrow(() => JSON.parse(readFileSync(new URL(spec.file, import.meta.url), 'utf8')));
     const list = loadContent(spec);
     assert.ok(list.length >= spec.target, `${list.length} / ${spec.target}`);
-    for (const entry of list) assert.ok(FORMATS[spec.id](entry), `format invalide : ${JSON.stringify(entry)}`);
+    for (const entry of list) assert.ok(FORMATS[spec.format ?? spec.id](entry), `format invalide : ${JSON.stringify(entry)}`);
+    // Le contenu 18+ est marqué comme tel, et seulement lui.
+    for (const entry of list) assert.equal(typeof entry === 'object' && entry.adulte === true, !!spec.adult, `champ « adulte » : ${JSON.stringify(entry)}`);
     const { exact, near } = findDuplicates(spec, list);
     const show = (pairs) => pairs.map(([i, j]) => `${JSON.stringify(list[i])} ~ ${JSON.stringify(list[j])}`).join('\n');
     assert.equal(exact.length, 0, `doublons :\n${show(exact)}`);
     assert.equal(near.length, 0, `quasi-doublons (node scripts/check-content.js) :\n${show(near)}`);
   });
+
+  if (spec.adult) {
+    test(`contenu ${spec.file} : aucun doublon ni quasi-doublon avec le contenu normal du jeu`, () => {
+      const normalSpec = CONTENT.find((s) => s.id === spec.format);
+      const normal = loadContent(normalSpec);
+      const both = [...normal, ...loadContent(spec)];
+      const { exact, near } = findDuplicates(normalSpec, both);
+      const crossing = [...exact, ...near].filter(([i, j]) => i < normal.length && j >= normal.length);
+      assert.equal(crossing.length, 0, crossing.map(([i, j]) => `${JSON.stringify(both[i])} ~ ${JSON.stringify(both[j])}`).join('\n'));
+    });
+  }
 
   test(`contenu ${spec.file} : aucune référence de niche ni situation de bureau`, () => {
     const hits = loadContent(spec)

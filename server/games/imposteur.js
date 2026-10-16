@@ -3,6 +3,7 @@ import { TIMING } from '../timing.js';
 import { loadJson } from './load.js';
 
 const WORDS = loadJson('../content/words-imposteur.json');
+const ADULT_WORDS = loadJson('../content/imposteur-18plus.json');
 const WORDS_MS = 10000; // temps pour regarder son mot (mode auto)
 const TURN_MS = 25000; // temps pour écrire son indice sur le téléphone
 const LAST_CHANCE_MS = 20000;
@@ -61,6 +62,8 @@ function submitClue(game, playerId, text) {
 export default {
   id: 'imposteur',
   questions: WORDS,
+  // Mode 18+ seulement (voir Game.contentPool).
+  adultQuestions: ADULT_WORDS,
   startRound(game) {
     const connected = game.connectedPlayers().map((p) => p.id);
     const ids = connected.length >= 3 ? connected : [...game.players.keys()];
@@ -95,7 +98,7 @@ export default {
   afterReveal(game) {
     const imposter = game.players.get(game.results.imposterId);
     if (!game.results.unmasked || !imposter?.sockets.size) return false;
-    data(game).options = lastChanceOptions(game.question, WORDS);
+    data(game).options = lastChanceOptions(game.question, game.contentPool(WORDS, ADULT_WORDS).list);
     game.schedule('pending', LAST_CHANCE_MS, () => game.finalize());
     return true;
   },

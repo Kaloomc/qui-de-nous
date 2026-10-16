@@ -478,7 +478,16 @@ export class Game {
 
   drawQuestion() {
     if (this.rules.drawQuestion) return this.rules.drawQuestion(this);
-    return this.history.draw(this.mode, this.rules.questions);
+    const { key, list } = this.contentPool();
+    return this.history.draw(key, list);
+  }
+
+  /**
+   * Contenu à tirer pour le jeu en cours : le contenu 18+ uniquement si le mode est actif et que le jeu en a,
+   * avec son propre historique anti-répétition. Jamais l'un à la place de l'autre.
+   */
+  contentPool(normal = this.rules.questions, adult = this.rules.adultQuestions) {
+    return this.adult.active && adult?.length ? { key: `${this.mode}:18+`, list: adult } : { key: this.mode, list: normal };
   }
 
   vote(playerId, choice) {

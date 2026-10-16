@@ -2,6 +2,8 @@ import { applyRoueAction, drawRoue, isInteractive, isRoueComplete, isValidDefi, 
 import { loadJson } from './load.js';
 
 const DEFIS = loadJson('../content/defis-roue.json').filter(isValidDefi);
+// Mode 18+ seulement : jamais de défi qui oblige à se dénuder, toucher, embrasser ou envoyer une photo.
+const ADULT_DEFIS = loadJson('../content/roue-18plus.json').filter(isValidDefi);
 const AUTO_SPIN_MS = 2500;
 const ACTION_MS = 30000;
 
@@ -15,6 +17,7 @@ function finishIfComplete(game) {
 export default {
   id: 'roue',
   defis: DEFIS,
+  adultDefis: ADULT_DEFIS,
   drawQuestion: () => null,
   startRound(game) {
     if (game.settings.auto) game.schedulePausable('g:auto', AUTO_SPIN_MS, () => game.reveal(game.round));
@@ -29,8 +32,9 @@ export default {
   // Le tirage se fait au moment de lancer la roue : pendant le suspense, la TV anime vers le résultat.
   computeResults(playerIds, _votes, game) {
     const ids = connectedIds(game);
-    const defi = game.history.draw(game.mode, DEFIS);
-    const results = drawRoue(ids.length ? ids : playerIds, DEFIS, Math.random, game.lastRoueTarget, defi);
+    const { key, list } = game.contentPool(DEFIS, ADULT_DEFIS);
+    const defi = game.history.draw(key, list);
+    const results = drawRoue(ids.length ? ids : playerIds, list, Math.random, game.lastRoueTarget, defi);
     game.lastRoueTarget = results.targetId;
     return results;
   },

@@ -4,6 +4,8 @@ import { loadJson } from './load.js';
 export default {
   id: 'qui-me-connait',
   questions: loadJson('../content/questions-connait.json'),
+  // Mode 18+ seulement (voir Game.contentPool).
+  adultQuestions: loadJson('../content/connait-18plus.json'),
   // Chaque joueur connecté devient la cible à tour de rôle.
   startRound(game) {
     const connected = game.connectedPlayers().map((p) => p.id);
