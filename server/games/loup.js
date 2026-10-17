@@ -7,11 +7,13 @@
 // de rôle vivant. Un rôle absent de la composition ou dont le joueur est mort (donc révélé) est sauté ; un rôle vivant mais absent ou sans pouvoir se joue avec un délai aléatoire proche de celui d'un
 // joueur qui joue : on ne peut pas deviner qu'un rôle est mort à la vitesse à laquelle la nuit avance.
 import * as L from '../rules/loup.js';
+import { gateMs, textMs } from '../narrationTiming.js';
 import { recommendedComposition, validateComposition } from '../rules/loup.js';
 
 export const LOUP_TIMING = {
-  sleepMs: 4000, // « le village s'endort » (rythme de la narration)
-  announceMs: 6500, // une annonce de l'aube ou du vote (roulement de tambour, photo, rôle)
+  // Les durées qui suivent démarrent APRÈS la voix : une phase attend l'accusé « phrase terminée » de la TV (voir go()).
+  sleepMs: 1200, // pause après « le village s'endort »
+  announceBeatMs: 1500, // pause après la voix d'une annonce (roulement de tambour, photo, rôle)
   doneBeatMs: 1500, // pause après la dernière action d'une phase de nuit
   readBeatMs: 4000, // idem pour la Voyante et l'Ours : le temps de lire ce qu'ils viennent d'apprendre
   voteBeatMs: 1500, // pause après le dernier vote
@@ -44,22 +46,42 @@ function snapshot(game, ids) {
 
 /**
  * Passe à une nouvelle phase : identifiant unique, `next` ne s'exécute que si la phase est toujours la courante.
- * `ms` est le garde-fou (ou la durée d'une annonce) ; `soon()` avance plus tôt quand tout le monde a agi.
+ * `clips` : phrases du narrateur à dire en entrant dans la phase ([{ id, after }], publiées à la TV dans `round.narration`).
+ * La phase reste « en narration » jusqu'à l'accusé de la TV (`narrated`), ou jusqu'à la durée des clips + 2 s si l'accusé
+ * n'arrive pas ; ensuite seulement démarrent `ms` (garde-fou ou pause avant la suite) et les actions de nuit.
+ * `soon()` avance plus tôt quand tout le monde a agi.
  */
-function go(game, stage, ms, next, extra = {}) {
+function go(game, stage, ms, next, extra = {}, clips = []) {
   const d = data(game);
   d.seq += 1;
-  Object.assign(d, { stage, phaseId: `${game.roundId}:${d.seq}`, advance: next, soonFor: null, ...extra });
-  const id = d.phaseId;
+  const id = `${game.roundId}:${d.seq}`;
+  const spoken = timing(game).narrate !== false && clips.length > 0;
+  const narration = spoken ? { phaseId: id, clips: clips.map((c) => ({ id: c.id, after: c.after ?? 0, ms: textMs(c.id) })) } : null;
+  Object.assign(d, { stage, phaseId: id, advance: next, soonFor: null, soonWait: null, narration, narrating: spoken, ...extra });
   game.cancel('g:phase');
   game.cancel('g:soon');
-  game.schedulePausable('g:phase', ms, () => data(game).phaseId === id && next());
+  game.cancel('g:gate');
+  let opened = false;
+  d.open = () => {
+    if (opened || data(game).phaseId !== id) return;
+    opened = true;
+    d.narrating = false;
+    game.cancel('g:gate');
+    game.schedulePausable('g:phase', ms, () => data(game).phaseId === id && next());
+    if (d.soonWait != null) soon(game, d.soonWait);
+  };
+  if (spoken) game.schedulePausable('g:gate', gateMs(clips), d.open);
+  else d.open();
 }
 
 /** Termine la phase courante dans `ms` (une seule fois par phase) : tout le monde a agi, ou le rôle est absent. */
 function soon(game, ms) {
   const d = data(game);
   if (d.soonFor === d.phaseId) return;
+  if (d.narrating) {
+    d.soonWait ??= ms; // la voix passe d'abord
+    return;
+  }
   d.soonFor = d.phaseId;
   const id = d.phaseId;
   const next = d.advance;
@@ -74,12 +96,13 @@ function over(game) {
   const d = data(game);
   game.cancel('g:phase');
   d.stage = 'over';
+  d.narration = { phaseId: `${game.roundId}:win`, clips: [{ id: `win_${d.eng.winner}`, after: 0, ms: textMs(`win_${d.eng.winner}`) }] };
   game.reveal(game.roundId);
   return d;
 }
 
 function startDeal(game) {
-  go(game, 'deal', timing(game).dealSafetyMs, () => startNight(game), { acked: {} });
+  go(game, 'deal', timing(game).dealSafetyMs, () => startNight(game), { acked: {} }, [{ id: 'intro' }, { id: 'deal' }]);
 }
 
 function startNight(game) {
@@ -89,7 +112,8 @@ function startNight(game) {
   d.index = -1;
   d.wolfVotes = {};
   d.done = {};
-  go(game, 'sleep', timing(game).sleepMs, () => nextNightPhase(game), { phase: null });
+  d.lastNight = null;
+  go(game, 'sleep', timing(game).sleepMs, () => nextNightPhase(game), { phase: null }, [{ id: 'sleep' }]);
 }
 
 function nextNightPhase(game) {
@@ -115,7 +139,10 @@ function nextNightPhase(game) {
   }
   d.able = actors.filter((id) => present(game, id));
   const t = timing(game);
-  go(game, 'night', t.nightSafetyMs, () => endNightPhase(game), { phase, phaseRole: role });
+  // La phase précédente se rendort, puis celle-ci se réveille (rien n'est dit pour un rôle sauté).
+  const clips = [...(d.lastNight ? [{ id: `sleep_${d.lastNight}` }] : []), { id: `wake_${phase}` }];
+  d.lastNight = phase;
+  go(game, 'night', t.nightSafetyMs, () => endNightPhase(game), { phase, phaseRole: role }, clips);
   if (!d.able.length) soon(game, between(game, t.absentMinMs, t.absentMaxMs));
 }
 
@@ -155,7 +182,7 @@ function nightAction(d, role, playerId, a) {
 }
 
 /** Annonce les nouveaux événements un par un (mort, chagrin, gorgées…), puis enchaîne. `quiet` : « aucune victime » si rien. */
-function announce(game, status, after, quiet = false) {
+function announce(game, status, after, quiet = false, dawn = false) {
   const d = data(game);
   const e = d.eng;
   const fresh = e.events.slice(d.mark);
@@ -198,9 +225,30 @@ function announce(game, status, after, quiet = false) {
   if (!items.length) return next();
   const step = (i) => {
     for (const { id, n } of drinks[i]) game.drink(id, n);
-    go(game, 'announce', timing(game).announceMs, () => (i + 1 < items.length ? step(i + 1) : next()), { announce: { items: items.slice(0, i + 1), i, deaths: items.filter((it) => it.type === 'death').length } });
+    const deaths = items.filter((it) => it.type === 'death').length;
+    const clips = itemClips(items[i], { first: i === 0 && dawn, firstDeath: items.findIndex((it) => it.type === 'death') === i, deaths, lastNight: d.lastNight });
+    if (i === 0 && dawn) d.lastNight = null;
+    go(game, 'announce', timing(game).announceBeatMs, () => (i + 1 < items.length ? step(i + 1) : next()), { announce: { items: items.slice(0, i + 1), i, deaths } }, clips);
   };
   step(0);
+}
+
+/** Phrases du narrateur pour une annonce : jamais de prénom, le rôle est dit quand il apparaît à l'écran (après le roulement de tambour). */
+export function itemClips(item, { first, firstDeath, deaths, lastNight }) {
+  const clips = [];
+  if (first) clips.push(...(lastNight ? [{ id: `sleep_${lastNight}` }] : []), { id: 'dawn' });
+  if (item.type === 'none') clips.push({ id: 'no_victim' });
+  else if (item.type === 'novote') clips.push({ id: 'novote' });
+  else if (item.type === 'gorgees') clips.push({ id: 'gorgee' });
+  else if (item.type === 'idiot') clips.push({ id: 'idiot' });
+  else if (item.type === 'death') {
+    if (item.cause === 'chagrin') clips.push({ id: 'grief' });
+    else if (item.cause === 'chasseur') clips.push({ id: 'hunter_hit' });
+    else if (item.cause === 'vote') clips.push({ id: 'vote_result' });
+    else if (item.cause === 'nuit' && firstDeath) clips.push({ id: deaths > 1 ? 'victim_many' : 'victim_one' });
+    if (item.role) clips.push({ id: `role_${item.role}`, after: 3600 });
+  }
+  return clips;
 }
 
 /** Version publique d'un événement : la cause d'une mort de nuit (loups ou poison) n'est jamais révélée. */
@@ -213,13 +261,13 @@ function publicEvent(ev) {
 function startDawn(game) {
   const d = data(game);
   const status = L.dawn(d.eng);
-  announce(game, status, () => startDebate(game), true);
+  announce(game, status, () => startDebate(game), true, true);
 }
 
 function startHunter(game, after) {
   const d = data(game);
   const hunter = d.eng.awaitingHunter;
-  go(game, 'hunter', timing(game).hunterSafetyMs, () => resolveHunter(game, hunter, null, after), { hunter, after });
+  go(game, 'hunter', timing(game).hunterSafetyMs, () => resolveHunter(game, hunter, null, after), { hunter, after }, [{ id: 'hunter_fire' }]);
 }
 
 function resolveHunter(game, hunter, target, after) {
@@ -231,7 +279,7 @@ function resolveHunter(game, hunter, target, after) {
 }
 
 function startDebate(game) {
-  go(game, 'debate', timing(game).debateSafetyMs, () => startVote(game, null), { votes: {}, debate: true, ready: {} });
+  go(game, 'debate', timing(game).debateSafetyMs, () => startVote(game, null), { votes: {}, debate: true, ready: {} }, [{ id: 'debate_start' }]);
   debateProgress(game);
 }
 
@@ -246,7 +294,7 @@ function startVote(game, only) {
   const d = data(game);
   d.votes = {};
   d.only = only;
-  go(game, 'vote', timing(game).voteSafetyMs, () => endVote(game, only), { voting: true });
+  go(game, 'vote', timing(game).voteSafetyMs, () => endVote(game, only), { voting: true }, [{ id: only ? 'tie' : 'vote_start' }]);
   voteProgress(game);
 }
 
@@ -311,7 +359,7 @@ function screenOf(game, d, playerId, role, alive) {
   if (d.stage === 'deal') return { kind: d.acked[playerId] ? 'waiting' : 'role' };
   if (d.stage === 'night') {
     const actor = d.phase === 'loups' ? alive && role === 'loup' : alive && role === roleOfPhase(d.phase) && L.actorOf(e, role) === playerId;
-    if (!actor) return { kind: 'sleep' };
+    if (!actor || d.narrating) return { kind: 'sleep' };
     if (d.phase === 'ivrogne') return { kind: 'drink' };
     if (d.phase === 'loups') return { kind: 'act', phase: 'loups', options: living.filter((id) => !L.isWolf(e, id)), wolfVotes: d.wolfVotes, mine: d.wolfVotes[playerId] ?? null };
     if (d.done[playerId]) return { kind: 'done' };
@@ -395,6 +443,11 @@ export default {
       entry.hidden = !entry.hidden;
       return null;
     }
+    // Accusé de la TV : la phrase de cette phase est terminée, la phase peut démarrer.
+    if (action.type === 'narrated') {
+      if (d.narrating && action.phaseId === d.phaseId) d.open();
+      return null;
+    }
     if (action.type === 'skipDebate' && d.stage === 'debate') {
       startVote(game, null);
       return null;
@@ -427,6 +480,7 @@ export default {
       if (e.order.every((id) => d.acked[id] || !present(game, id))) startNight(game);
       return null;
     }
+    if (d.stage === 'night' && d.narrating && (action.type === 'wolfVote' || action.type === 'night')) return 'Pas encore.';
     if (d.stage === 'night' && action.type === 'wolfVote') {
       if (d.phase !== 'loups' || !alive || role !== 'loup') return 'Pas maintenant.';
       if (!L.isAlive(e, action.target) || L.isWolf(e, action.target)) return 'Cible invalide.';
@@ -535,6 +589,8 @@ export default {
         idiotOut: !!e.idiotOut[id],
         connected: !!game.players.get(id)?.sockets.size,
       })),
+      // Phrases à dire à la TV (publiques : le rôle d'un mort et la phase de nuit sont déjà affichés) ; jamais envoyé aux téléphones.
+      narration: viewer.playerId ? null : d.narration ?? null,
       announce: d.stage === 'announce' ? d.announce : null,
       votedIds: d.stage === 'vote' ? Object.keys(d.votes) : [],
       tie: d.tie ?? null,

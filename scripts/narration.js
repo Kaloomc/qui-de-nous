@@ -11,6 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, clean, readEnv, requireKey, synthesize } from './lib/elevenlabs.js';
+import { writeDurations } from './narration-durations.js';
 import { allClips, characters, clipHash, planClips } from './lib/narration-plan.js';
 
 /** Voix plus expressive que Réflexes (un narrateur, pas un mot isolé) ; graine fixe pour retrouver la même intonation. */
@@ -62,6 +63,7 @@ async function main() {
     console.log(`✓ ${clip.file}  ${clip.text.slice(0, 60)}`);
   }
   console.log(`${todo.length} clip(s) généré(s).`);
+  writeDurations();
 }
 
 main().catch((err) => {

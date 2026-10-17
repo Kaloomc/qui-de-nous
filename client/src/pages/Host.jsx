@@ -7,7 +7,7 @@ import { Credit } from '../credit.jsx';
 import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
-import { preloadNarration } from '../narrator.js';
+import { preloadNarration, teardownGame } from '../narrator.js';
 import { LoupSetup } from '../games/loupSetup.jsx';
 import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
@@ -29,6 +29,7 @@ export default function Host({ code }) {
   // Loup-Garou : la voix du narrateur se précharge dès le lobby (aucune latence pendant la partie).
   useEffect(() => {
     if (state?.mode === 'loup') preloadNarration();
+    else teardownGame(); // autre jeu : la voix en cours s'arrête et la file est vidée
   }, [state?.mode]);
 
   useOnConnect(async function resume() {

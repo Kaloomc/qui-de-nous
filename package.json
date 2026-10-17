@@ -14,6 +14,7 @@
     "share": "node scripts/share.js",
     "voices": "node scripts/voices.js",
     "narration": "node scripts/narration.js",
+    "narration:durations": "node scripts/narration-durations.js",
     "loupsim": "node scripts/loup-sim.js",
     "test": "node --test server/*.test.js"
   },

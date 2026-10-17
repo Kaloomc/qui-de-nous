@@ -5,12 +5,13 @@ import { useEffect, useState } from 'react';
 import { NARRATION_DIR } from '../../shared/narration.js';
 import { storage } from './lib.js';
 import { audioContext, isMuted } from './sound.js';
+import { createNarrationQueue } from './narrationQueue.js';
 
 /** id → variantes (ArrayBuffer chargé, puis AudioBuffer décodé quand le son est débloqué). */
 const clips = new Map();
 const lastVariant = new Map();
 let loading = null;
-let status = 'unknown'; // 'unknown' | 'ok' | 'none'
+let status = 'unknown'; // 'unknown' | 'loading' | 'ok' | 'none'
 const listeners = new Set();
 const setStatus = (next) => {
   status = next;
@@ -19,6 +20,7 @@ const setStatus = (next) => {
 
 /** Précharge tous les clips (une fois). Appelé quand l'hôte ouvre le Loup-Garou : aucune latence pendant la partie. */
 export function preloadNarration() {
+  if (!loading) setStatus('loading');
   loading ??= fetch(`${NARRATION_DIR}/manifest.json`)
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error('pas de manifest'))))
     .then(({ clips: files }) =>
@@ -63,23 +65,12 @@ export const setNarratorVolume = (value) => storage.set('loup:volume', value);
 
 // ---------- File de lecture ----------
 
-const queue = [];
-let playing = false;
-let session = null;
+let current = null; // phrase en cours de lecture (pour l'arrêter proprement)
 
-/** Nouvelle partie / nouveau jeu : on oublie ce qui attendait. */
-export function setNarrationSession(token) {
-  if (session === token) return;
-  session = token;
-  queue.length = 0;
-}
-
-async function playNext() {
-  if (playing) return;
-  const id = queue.shift();
-  if (!id) return;
-  playing = true;
-  try {
+/** Lecteur WebAudio : résolu à la fin de la phrase. Sans clip, son coupé ou verrouillé : le texte reste à l'écran `ms` (durée de lecture). */
+const player = {
+  async play(id, ms, sleep) {
+    await preloadNarration(); // aucun clip ne part avant la fin du préchargement
     const list = clips.get(id);
     const ctx = audioContext();
     if (list?.length && ctx && ctx.state === 'running' && !isMuted()) {
@@ -94,29 +85,66 @@ async function playNext() {
         source.buffer = buffer;
         gain.gain.value = getNarratorVolume();
         source.connect(gain).connect(ctx.destination);
-        // Garde-fou : si le son se bloque (onglet en arrière-plan…), la file ne reste pas coincée.
+        current = source;
+        // Garde-fou : si le son se bloque (onglet en arrière-plan…), la file ne reste pas coincée (durée du clip + 1,5 s).
         await new Promise((resolve) => {
           source.onended = resolve;
-          setTimeout(resolve, buffer.duration * 1000 + 1500);
+          sleep(buffer.duration * 1000 + 1500).then(resolve);
           source.start();
         });
+        if (current === source) current = null;
+        return;
       }
     }
-  } finally {
-    playing = false;
-    playNext();
-  }
+    await sleep(ms);
+  },
+  pause: () => audioContext()?.suspend?.(),
+  resume: () => audioContext()?.resume?.(),
+  stop() {
+    try {
+      current?.stop();
+    } catch {
+      // déjà terminée
+    }
+    current = null;
+  },
+};
+const queue = createNarrationQueue(player);
+
+let session = null;
+let lastPhase = null;
+
+/** Nouvelle partie / nouveau jeu : on arrête la phrase en cours et on oublie ce qui attendait. */
+export function setNarrationSession(token) {
+  if (session === token) return;
+  session = token;
+  lastPhase = null;
+  queue.reset();
 }
 
-/** Dit une phrase (variante au hasard) après `delayMs`. Une file trop longue est raccourcie : mieux vaut sauter que raconter en retard. */
+/** Quitter le Loup-Garou (changement de jeu, fin de soirée) : audio arrêté, file vidée. */
+export function teardownGame() {
+  session = null;
+  lastPhase = null;
+  queue.reset();
+}
+
+/** Pause de l'hôte : l'audio et les délais se figent, la reprise repart là où on en était. */
+export const setNarrationPaused = (paused) => queue.setPaused(paused);
+
+/**
+ * Dit les phrases d'une phase (publiées par le serveur dans `round.narration`) ; `onDone` est appelé quand la dernière est
+ * terminée (accusé au serveur). Une phase déjà reçue est ignorée. Rien n'est coupé : la phase suivante attend son tour.
+ */
+export function narrate(narration, onDone) {
+  if (!narration || narration.phaseId === lastPhase) return;
+  lastPhase = narration.phaseId;
+  queue.enqueue(narration.clips, onDone);
+}
+
+/** Dit une phrase isolée (sans accusé), après `delayMs`. */
 export function say(id, delayMs = 0) {
-  const token = session;
-  setTimeout(() => {
-    if (token !== session) return;
-    if (queue.length >= 3) queue.shift();
-    queue.push(id);
-    playNext();
-  }, delayMs);
+  queue.enqueue([{ id, after: delayMs, ms: 2000 }]);
 }
 
 /** État pour l'interface : 'none' (aucun clip : texte seul), 'locked' (cliquer pour activer), 'ok'. */
@@ -132,5 +160,5 @@ export function useNarratorStatus() {
       clearInterval(id);
     };
   }, []);
-  return value === 'none' ? 'none' : locked ? 'locked' : value;
+  return value === 'none' || value === 'loading' ? value : locked ? 'locked' : value;
 }

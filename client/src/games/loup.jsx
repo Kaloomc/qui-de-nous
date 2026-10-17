@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Avatar, PlayerGrid } from '../components.jsx';
 import { sipsLabel } from '../sips.jsx';
 import { sounds, unlockAudio } from '../sound.js';
-import { getNarratorVolume, preloadNarration, say, setNarrationSession, setNarratorVolume, useNarratorStatus } from '../narrator.js';
+import { getNarratorVolume, narrate, preloadNarration, say, setNarrationPaused, setNarrationSession, setNarratorVolume, useNarratorStatus } from '../narrator.js';
 import { CAMP_NAME, PHASE_LABEL, ROLE_INFO, roleIcon } from './loupRoles.js';
 
 export const id = 'loup';
@@ -52,70 +52,35 @@ function Village({ round, marked = [] }) {
 // ---------- TV ----------
 
 /**
- * Narrateur : une phrase par événement, sans prénom (la photo et le prénom s'affichent pendant le roulement de tambour,
- * puis le rôle). Les clips partent dans une file ; sans clip ou sans son, seul le texte reste à l'écran.
+ * Narrateur : le serveur décide des phrases de chaque phase (`round.narration`, sans prénom : la photo et le prénom s'affichent
+ * pendant le roulement de tambour, puis le rôle). Elles partent dans une seule file, jamais coupées ; quand la dernière est
+ * terminée, la TV envoie l'accusé `narrated` et le serveur lance la phase. Sans clip ou sans son, le texte reste à l'écran
+ * pendant une durée de lecture estimée.
  */
-function useLoupNarration(state) {
-  const round = state.round;
-  const done = useRef(new Set());
-  const lastNight = useRef(null);
-  const once = (key, fn) => {
-    if (done.current.has(key)) return;
-    done.current.add(key);
-    fn();
-  };
+function useLoupNarration(state, gameAct) {
+  const narration = state.round?.narration;
   useEffect(() => {
     preloadNarration();
   }, []);
   useEffect(() => {
     setNarrationSession(state.roundId);
-    if (round.stage === 'night') {
-      once(round.phaseId, () => {
-        if (lastNight.current && lastNight.current !== round.phase) say(`sleep_${lastNight.current}`);
-        say(`wake_${round.phase}`);
-        lastNight.current = round.phase;
-      });
-      return;
-    }
-    if (lastNight.current)
-      once(`end-${round.phaseId}`, () => {
-        say(`sleep_${lastNight.current}`);
-        lastNight.current = null;
-      });
-    if (round.stage === 'deal') once(round.phaseId, () => (say('intro'), say('deal')));
-    else if (round.stage === 'sleep') once(round.phaseId, () => say('sleep'));
-    else if (round.stage === 'announce')
-      once(round.phaseId, () => {
-        const { items, i, deaths } = round.announce;
-        const item = items[i];
-        const afterVote = !!round.voteResult;
-        const firstDeath = items.findIndex((it) => it.type === 'death') === i;
-        if (i === 0 && !afterVote) say('dawn');
-        if (item.type === 'none') say('no_victim');
-        else if (item.type === 'novote') say('novote');
-        else if (item.type === 'gorgees') say('gorgee');
-        else if (item.type === 'idiot') say('idiot');
-        else if (item.type === 'death') {
-          if (item.cause === 'chagrin') say('grief');
-          else if (item.cause === 'chasseur') say('hunter_hit');
-          else if (item.cause === 'vote') say('vote_result');
-          else if (item.cause === 'nuit' && firstDeath) say(deaths > 1 ? 'victim_many' : 'victim_one');
-          // Le rôle est annoncé quand il apparaît à l'écran (après le roulement de tambour).
-          if (item.role) say(`role_${item.role}`, 3600);
-        }
-      });
-    else if (round.stage === 'hunter') once(round.phaseId, () => say('hunter_fire'));
-    else if (round.stage === 'debate') once(round.phaseId, () => say('debate_start'));
-    else if (round.stage === 'vote') once(round.phaseId, () => say(round.tie ? 'tie' : 'vote_start'));
+  }, [state.roundId]);
+  useEffect(() => {
+    setNarrationPaused(!!state.paused);
+  }, [state.paused]);
+  useEffect(() => {
+    if (!narration) return;
+    const ack = gameAct && !narration.phaseId.endsWith(':win') ? () => gameAct({ type: 'narrated', phaseId: narration.phaseId }) : undefined;
+    narrate(narration, ack);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [round.phaseId, round.stage]);
-
+  }, [narration?.phaseId]);
 }
 
 /** Activation de la voix (clic de l'hôte : les navigateurs bloquent le son avant) et volume ; avertit si aucun clip n'est disponible. */
 function NarratorControls() {
   const status = useNarratorStatus();
   const [volume, setVolume] = useState(getNarratorVolume);
+  if (status === 'loading') return <p className="muted small loup-narrator">Chargement de la voix du narrateur…</p>;
   if (status === 'none') return <p className="muted small loup-narrator">Voix du narrateur indisponible : texte seul.</p>;
   if (status === 'locked')
     return (
@@ -233,7 +198,7 @@ function LastWordsBoard({ round, gameAct }) {
 export function HostQuestion({ state, gameAct }) {
   const round = state.round;
   useNightTheme(round);
-  useLoupNarration(state);
+  useLoupNarration(state, gameAct);
   let body;
   if (round.stage === 'deal') {
     body = (
@@ -312,8 +277,8 @@ export function HostReveal({ state }) {
   const winner = results?.winner;
   useEffect(() => {
     sounds.reveal?.();
-    say(`win_${winner}`);
   }, [winner]);
+  useLoupNarration(state);
   return (
     <div className="loup loup-end">
       <p className="round">Loup-Garou</p>

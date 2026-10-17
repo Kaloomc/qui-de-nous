@@ -9,7 +9,7 @@ import { GameStore } from './gameStore.js';
 import { registerSockets } from './sockets.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const FAST = { sleepMs: 30, announceMs: 50, doneBeatMs: 20, readBeatMs: 30, voteBeatMs: 20, absentMinMs: 40, absentMaxMs: 90, dealSafetyMs: 400, nightSafetyMs: 400, hunterSafetyMs: 200, debateSafetyMs: 300, voteSafetyMs: 300, tribunalMs: 200 };
+const FAST = { sleepMs: 30, announceBeatMs: 50, narrate: false, doneBeatMs: 20, readBeatMs: 30, voteBeatMs: 20, absentMinMs: 40, absentMaxMs: 90, dealSafetyMs: 400, nightSafetyMs: 400, hunterSafetyMs: 200, debateSafetyMs: 300, voteSafetyMs: 300, tribunalMs: 200 };
 const SLOW = { ...FAST, dealSafetyMs: 60000 };
 
 async function startServer() {
@@ -129,7 +129,7 @@ function assertNoLeak(msg, eng, viewerId) {
   if (me.lover) assert.ok(eng.lovers.includes(viewerId));
 }
 
-test('partie complète à 8 joueurs : une victoire, le Tribunal, rien ne fuit, nuits de durée constante', async () => {
+test('partie complète à 8 joueurs : une victoire, le Tribunal, rien ne fuit, phases de nuit seulement pour les rôles vivants', async () => {
   const ctx = await setup(8);
   try {
     assert.ok((await ctx.tv.emit('host:start')).ok);
@@ -140,18 +140,15 @@ test('partie complète à 8 joueurs : une victoire, le Tribunal, rien ne fuit, n
     // Rien de secret ni pour la TV ni pour les téléphones.
     for (const m of ctx.tv.log) assertNoLeak(m, eng, null);
     for (const p of ctx.players) for (const m of p.log) assertNoLeak(m, eng, p.id);
-    // Nuits : les phases de tous les rôles présents se jouent chaque nuit, même pour un rôle mort (on ne devine rien à la
+    // Nuits : phases sautées pour les rôles absents ou morts ; la vue privée a la même taille pour tous les vivants (rien ne se devine à la
     // vitesse de la nuit), et la vue privée a la même taille pour tous les vivants.
     const sizes = new Map();
-    const seenPhases = new Map();
-    for (const m of ctx.tv.log) if (m.round?.stage === 'night') seenPhases.set(m.round.night, new Set([...(seenPhases.get(m.round.night) ?? []), m.round.phase]));
-    const roles = new Set(Object.values(eng.roles));
-    for (const [night, phases] of seenPhases) {
-      if (night < 2 || night === eng.night) continue; // la dernière nuit peut avoir été interrompue
-      for (const phase of ['loups', 'voyante', 'sorciere', 'salvateur', 'ours']) {
-        const role = phase === 'loups' ? 'loup' : phase;
-        if (roles.has(role)) assert.ok(phases.has(phase), `nuit ${night} : la phase ${phase} a été sautée`);
-      }
+    // Une phase de nuit n'est jouée que pour un rôle de la composition dont un joueur est encore en vie.
+    for (const m of ctx.tv.log) {
+      if (m.round?.stage !== 'night' || !m.round.phase) continue;
+      const role = m.round.phase === 'loups' ? 'loup' : m.round.phase;
+      const holders = Object.keys(eng.roles).filter((id) => eng.roles[id] === role);
+      assert.ok(holders.some((id) => m.round.circle.find((c) => c.id === id)?.alive), `nuit ${m.round.night} : phase ${m.round.phase} jouée pour un rôle absent ou mort`);
     }
     for (const p of ctx.players)
       for (const m of p.log) {
