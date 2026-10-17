@@ -7,6 +7,7 @@ import { PlayerRecap } from '../recap.jsx';
 import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
 import { AdultConfirm, AdultTheme } from '../adult.jsx';
+import { currentVoteOf, roundKey } from '../vote.js';
 
 export default function Player({ code }) {
   const connected = useConnected();
@@ -38,7 +39,7 @@ export default function Player({ code }) {
     }
     if (res.ok) {
       setStatus('joined');
-      setMyVote(res.myVote ? { round: res.round, choice: res.myVote } : null);
+      setMyVote(res.myVote ? { round: res.roundId, choice: res.myVote } : null);
     } else if (res.gone) {
       storage.remove(identityKey);
       setFatal('Cette partie n’existe plus.');
@@ -53,8 +54,9 @@ export default function Player({ code }) {
     return () => socket.off('kicked', onKicked);
   }, []);
 
-  const round = state?.round?.number ?? null;
-  const currentVote = myVote && myVote.round === round ? myVote : null;
+  // Vote rattaché à l'identifiant unique de la manche (voir vote.js) : jamais repris d'une manche ou d'un jeu précédent.
+  const roundId = roundKey(state);
+  const currentVote = currentVoteOf(myVote, state);
 
   async function join(name, photo) {
     const res = await request('player:join', { code, ...(identity ?? {}), name, photo });
@@ -71,8 +73,8 @@ export default function Player({ code }) {
 
   async function vote(choice) {
     const previous = myVote;
-    setMyVote({ round, choice });
-    const res = await request('player:vote', { choice });
+    setMyVote({ round: roundId, choice });
+    const res = await request('player:vote', { choice, roundId });
     if (!res.ok) {
       setMyVote(previous);
       setNotice(res.error);
@@ -81,7 +83,7 @@ export default function Player({ code }) {
 
   /** Action propre au jeu (passer la bombe, taper, deviner…). Renvoie l'erreur éventuelle. */
   async function act(action) {
-    const res = await request('player:action', { action });
+    const res = await request('player:action', { action, roundId });
     if (!res.ok) setNotice(res.error);
     return res.ok ? null : res.error;
   }
@@ -129,7 +131,7 @@ export default function Player({ code }) {
   else if (state.party?.lateIds.includes(me.id) && ['question', 'revealing', 'results'].includes(state.phase)) {
     content = <Late me={me} mode={mode} />;
   } else if (state.phase === 'question' && mode.playerLayout === 'custom') {
-    content = <mode.PlayerRound state={state} me={me} act={act} vote={vote} myVote={currentVote?.choice ?? null} />;
+    content = <mode.PlayerRound key={roundId} state={state} me={me} act={act} vote={vote} myVote={currentVote?.choice ?? null} />;
   } else if (state.phase === 'question') {
     content = (
       <>
@@ -139,7 +141,7 @@ export default function Player({ code }) {
         {currentVote ? (
           <Voted state={state} mode={mode} choice={currentVote.choice} onChange={() => setMyVote(null)} />
         ) : (
-          <mode.PlayerVote state={state} me={me} onVote={vote} />
+          <mode.PlayerVote key={roundId} state={state} me={me} onVote={vote} />
         )}
       </>
     );

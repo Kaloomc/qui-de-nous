@@ -64,7 +64,7 @@ function play(game, tick, n) {
   assert.equal(game.start(), null);
   for (let i = 0; i < n; i++) {
     asked.push(game.question);
-    game.reveal(game.round);
+    game.reveal(game.roundId);
     tick(game.rules.revealMs);
     if (i < n - 1) assert.equal(game.nextQuestion(), null);
   }
@@ -108,7 +108,7 @@ test('La Roue : pas deux fois le même défi avant d’avoir fait le tour', asyn
   const defis = [];
   game.start();
   for (let i = 0; i < 60; i++) {
-    game.reveal(game.round);
+    game.reveal(game.roundId);
     tick(game.rules.revealMs);
     defis.push(game.results.defi);
     game.finalize();

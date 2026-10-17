@@ -28,7 +28,7 @@ function emit(game, i) {
     // « FEU » termine la séquence : il reste juste la fenêtre de réaction. En attendant le signal de la TV,
     // on part de l'heure d'envoi.
     d.feuAt = d.emittedAt[i];
-    game.schedulePausable('g:end', REACT_WINDOW_MS, () => game.reveal(game.round));
+    game.schedulePausable('g:end', REACT_WINDOW_MS, () => game.reveal(game.roundId));
   } else {
     game.schedulePausable('g:word', d.seq.gaps[i + 1], () => emit(game, i + 1));
   }
@@ -43,7 +43,7 @@ function feuSpoken(game, index) {
   if (now - d.emittedAt[index] > SPOKEN_MAX_DELAY_MS) return null;
   d.feuSpoken = true;
   d.feuAt = now;
-  if (!d.allTapped) game.schedulePausable('g:end', REACT_WINDOW_MS, () => game.reveal(game.round));
+  if (!d.allTapped) game.schedulePausable('g:end', REACT_WINDOW_MS, () => game.reveal(game.roundId));
   return null;
 }
 
@@ -59,7 +59,7 @@ function checkAllTapped(game) {
   if (d.feuAt == null && !present.every((id) => tappedEarly(d, id))) return;
   d.allTapped = true;
   game.cancel('g:word');
-  game.schedulePausable('g:end', ALL_TAPPED_MS, () => game.reveal(game.round));
+  game.schedulePausable('g:end', ALL_TAPPED_MS, () => game.reveal(game.roundId));
 }
 
 export default {

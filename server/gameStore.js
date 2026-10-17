@@ -27,6 +27,7 @@ export const DEFAULT_SETTINGS = { auto: false, resultsMs: 10000, voteMs: 0, maxR
 const PARTY_VOTE_MS = 30000;
 const PARTY_MESSAGE = 'Le mode soirée est en cours : termine la soirée d’abord.';
 const LATE_MESSAGE = 'Tu joues dès la prochaine manche.';
+const STALE_MESSAGE = 'Cette manche est terminée.';
 const ADULT_PENDING_MESSAGE = 'Le mode 18+ attend la confirmation de tous les joueurs : attends-les, retire ceux qui bloquent ou annule.';
 
 const realClock = {
@@ -99,12 +100,20 @@ export class Game {
     // Mode 18+ : actif seulement quand chaque joueur connecté a confirmé sur son téléphone (voir requestAdult()).
     // Mémoire de la partie uniquement : rien n'est gardé une fois la partie supprimée.
     this.adult = { active: false, pending: false, confirmed: new Set(), refused: new Set(), changedAt: 0 };
+    // Identifiant unique de manche, jamais réutilisé dans la partie (le numéro de manche, lui, repart à 1 à chaque jeu).
+    // Les votes, actions et boutons de l'hôte le renvoient : un événement d'une manche passée est ignoré.
+    this.roundSeq = 0;
+    // Session de jeu : change à chaque reset() (changement de jeu, rejouer…). Un minuteur d'une session passée ne fait rien.
+    this.session = 0;
     this.reset();
     this.touch();
   }
 
+  /** Point unique de démontage d'un jeu : tous ses minuteurs sont annulés et sa session invalidée. */
   reset() {
     this.clearTimers();
+    this.session += 1;
+    this.roundId = null;
     this.phase = this.mode ? 'lobby' : 'picking';
     this.paused = false;
     this.round = 0;
@@ -277,7 +286,9 @@ export class Game {
 
   schedule(name, ms, fn, total = ms) {
     this.cancel(name);
+    const session = this.session;
     const id = this.clock.setTimeout(() => {
+      if (this.timers[name]?.id !== id || session !== this.session) return; // annulé, ou jeu quitté entre-temps
       delete this.timers[name];
       // Une erreur dans un minuteur ne doit jamais faire tomber le serveur.
       try {
@@ -422,7 +433,8 @@ export class Game {
   }
 
   /** Action d'un joueur propre au jeu (passer la bombe, taper, deviner…). */
-  action(playerId, payload) {
+  action(playerId, payload, roundId) {
+    if (roundId !== undefined && roundId !== this.roundId) return STALE_MESSAGE;
     if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
     if (this.isLate(playerId)) return LATE_MESSAGE;
     if (!this.rules?.handleAction) return 'Action inconnue.';
@@ -432,7 +444,8 @@ export class Game {
   }
 
   /** Action de l'hôte propre au jeu (« Suivant », « Lancer la roue »…). */
-  gameHostAction(payload) {
+  gameHostAction(payload, roundId) {
+    if (roundId !== undefined && roundId !== this.roundId) return null; // clic en retard sur une manche passée : ignoré
     if (!this.rules?.hostAction) return 'Action inconnue.';
     const error = this.rules.hostAction(this, payload ?? {});
     if (!error) this.evaluate();
@@ -453,7 +466,7 @@ export class Game {
 
   /** expectedRound : numéro de la question que l'appelant croit terminer ; sert à ignorer les doublons. */
   nextQuestion(expectedRound) {
-    if (expectedRound != null && expectedRound !== this.round) return null;
+    if (expectedRound != null && expectedRound !== this.roundId) return null;
     if (this.phase === 'revealing') return 'Patiente, la révélation est en cours.';
     if (this.phase !== 'lobby' && this.phase !== 'results') return 'Action impossible maintenant.';
     if (this.phase === 'results' && this.pending) this.finalize();
@@ -462,6 +475,8 @@ export class Game {
     this.party?.late.clear();
     this.question = this.drawQuestion();
     this.round += 1;
+    this.roundSeq += 1;
+    this.roundId = this.roundSeq;
     this.votes = new Map();
     this.results = null;
     this.reveal_ = null;
@@ -490,7 +505,9 @@ export class Game {
     return this.adult.active && adult?.length ? { key: `${this.mode}:18+`, list: adult } : { key: this.mode, list: normal };
   }
 
-  vote(playerId, choice) {
+  /** roundId : manche pour laquelle le téléphone vote ; un vote d'une manche passée est refusé. */
+  vote(playerId, choice, roundId) {
+    if (roundId !== undefined && roundId !== this.roundId) return STALE_MESSAGE;
     if (!this.votingOpen) return 'Le vote est fermé.';
     if (!this.players.has(playerId)) return 'Tu n’es plus dans la partie.';
     if (this.isLate(playerId)) return LATE_MESSAGE;
@@ -501,7 +518,7 @@ export class Game {
   }
 
   reveal(expectedRound) {
-    if (expectedRound != null && expectedRound !== this.round) return null;
+    if (expectedRound != null && expectedRound !== this.roundId) return null;
     if (this.phase === 'revealing' || this.phase === 'results') return null;
     if (this.phase !== 'question') return 'Aucune question en cours.';
     this.cancel('vote');
@@ -788,7 +805,7 @@ export class Game {
   /** Bouton « Question suivante » de l'hôte : en mode soirée, il suit le programme. */
   hostNext(expectedRound) {
     if (!this.partyActive) return this.nextQuestion(expectedRound);
-    if (expectedRound != null && expectedRound !== this.round) return null;
+    if (expectedRound != null && expectedRound !== this.roundId) return null;
     if (this.phase === 'revealing') return 'Patiente, la révélation est en cours.';
     if (this.phase !== 'results') return 'Action impossible maintenant.';
     if (this.pending) this.finalize();
@@ -904,6 +921,7 @@ export class Game {
       code: this.code,
       mode: this.mode,
       phase: this.phase,
+      roundId: this.roundId,
       serverTime: this.clock.now(),
       settings: { ...this.settings },
       paused: this.paused,

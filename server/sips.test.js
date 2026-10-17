@@ -71,7 +71,7 @@ test('les gorgées s’ajoutent à la fin du suspense, pas avant (pas de spoiler
   game.vote(ps[0].id, ps[1].id);
   game.vote(ps[1].id, ps[1].id);
   game.vote(ps[2].id, ps[0].id);
-  game.reveal(1);
+  game.reveal(game.roundId);
   assert.deepEqual(game.publicState(true).sips, {}, 'pendant la révélation : rien');
   assert.equal(game.publicState(true).roundSips, null);
   clock.tick(revealMs);
@@ -107,7 +107,7 @@ test('cumul sur plusieurs tours, une seule fois par tour, joueur retiré masqué
 function playPreferes(game, clock, ps, loser) {
   game.start();
   for (const p of ps) game.vote(p.id, p === loser ? 'b' : 'a');
-  game.reveal(game.round);
+  game.reveal(game.roundId);
   clock.tick(GAMES['tu-preferes'].revealMs);
 }
 
@@ -152,7 +152,7 @@ test('compteur de la soirée : +1, +2 (« boit deux fois ») et +N (défi de la 
   game.vote(ps[0].id, ps[1].id);
   game.vote(ps[1].id, ps[2].id);
   game.vote(ps[2].id, ps[1].id);
-  game.reveal(1);
+  game.reveal(game.roundId);
   game.finishReveal();
   assert.equal(game.publicState().roundSips[ps[1].id], 2);
   assert.equal(game.publicState().sips[ps[1].id], 2);
@@ -179,7 +179,7 @@ test('partie terminée en plein suspense : les gorgées du dernier tour comptent
   game.vote(ps[0].id, 'a');
   game.vote(ps[1].id, 'b');
   game.vote(ps[2].id, 'b');
-  game.reveal(1);
+  game.reveal(game.roundId);
   game.end();
   assert.deepEqual(game.publicState().sips, { [ps[0].id]: 1 });
 });

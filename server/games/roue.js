@@ -20,14 +20,14 @@ export default {
   adultDefis: ADULT_DEFIS,
   drawQuestion: () => null,
   startRound(game) {
-    if (game.settings.auto) game.schedulePausable('g:auto', AUTO_SPIN_MS, () => game.reveal(game.round));
+    if (game.settings.auto) game.schedulePausable('g:auto', AUTO_SPIN_MS, () => game.reveal(game.roundId));
   },
   acceptsVotes: () => false,
   isValidVote: () => false,
   hostAction(game, action) {
     if (action.type !== 'spin') return 'Action inconnue.';
     if (game.phase !== 'question') return 'La roue tourne déjà.';
-    return game.reveal(game.round);
+    return game.reveal(game.roundId);
   },
   // Le tirage se fait au moment de lancer la roue : pendant le suspense, la TV anime vers le résultat.
   computeResults(playerIds, _votes, game) {

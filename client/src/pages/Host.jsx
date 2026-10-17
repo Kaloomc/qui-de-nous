@@ -38,7 +38,7 @@ export default function Host({ code }) {
   });
 
   /** Action propre au jeu en cours (« Suivant », « Lancer la roue »…). */
-  const gameAct = (action) => act('host:gameAction', { action });
+  const gameAct = (action) => act('host:gameAction', { action, roundId: state?.roundId });
 
   async function act(event, payload) {
     unlockAudio();
@@ -157,7 +157,7 @@ export default function Host({ code }) {
           )}
           <div className="actions">
             {endButton}
-            <button className={`btn btn-primary btn-xl ${allVoted(state) ? 'pulse' : ''}`} onClick={() => act('host:reveal', { round })}>
+            <button className={`btn btn-primary btn-xl ${allVoted(state) ? 'pulse' : ''}`} onClick={() => act('host:reveal', { roundId: state.roundId })}>
               {state.settings.auto ? 'Révéler maintenant' : 'Révéler'}
             </button>
           </div>
@@ -166,13 +166,13 @@ export default function Host({ code }) {
 
       {state.phase === 'revealing' && (
         <div className="results-screen">
-          <mode.HostReveal key={round} state={state} gameAct={gameAct} />
+          <mode.HostReveal key={state.roundId} state={state} gameAct={gameAct} />
         </div>
       )}
 
       {state.phase === 'results' && (
         <div className="results-screen">
-          <mode.HostResults key={round} state={state} gameAct={gameAct} />
+          <mode.HostResults key={state.roundId} state={state} gameAct={gameAct} />
           <TimerBar timer={state.pendingTimer} state={state} small>
             {(s) => `Réponse attendue : encore ${s} s`}
           </TimerBar>
@@ -189,7 +189,7 @@ export default function Host({ code }) {
           <div className="actions">
             {state.isLastRound ? (
               <>
-                <button className="btn btn-ghost" onClick={() => act('host:next', { round })}>
+                <button className="btn btn-ghost" onClick={() => act('host:next', { roundId: state.roundId })}>
                   {mode.nextLabel ? 'Encore une manche' : 'Encore une question'}
                 </button>
                 <button className="btn btn-primary btn-xl" onClick={() => act('host:end')}>
@@ -199,7 +199,7 @@ export default function Host({ code }) {
             ) : (
               <>
                 {endButton}
-                <button className="btn btn-primary btn-xl" onClick={() => act('host:next', { round })}>
+                <button className="btn btn-primary btn-xl" onClick={() => act('host:next', { roundId: state.roundId })}>
                   {mode.nextLabel ?? 'Question suivante'}
                 </button>
               </>
@@ -333,7 +333,10 @@ function GamePicker({ state, onPick, onParty, onResetSips, adultSlot }) {
   useEffect(() => {
     const last = gameById(storage.get('qdn:lastMode'));
     const first = last?.playable ? last : GAMES.find((g) => g.playable);
-    cardRefs.current[first.id]?.focus();
+    // Sans preventScroll, focus() faisait défiler la page jusqu'à la carte du dernier jeu (souvent en 2e ligne) :
+    // la grille sautait sous la souris et le clic suivant tombait sur une autre carte (L'Imposteur, en haut à gauche).
+    window.scrollTo(0, 0);
+    cardRefs.current[first.id]?.focus({ preventScroll: true });
   }, []);
 
   // Écouté sur toute la page : les flèches marchent même si le focus a été perdu (clic à côté, carte « Bientôt »…).
@@ -357,9 +360,14 @@ function GamePicker({ state, onPick, onParty, onResetSips, adultSlot }) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  function pick(game) {
+  // Un choix à la fois : les cartes restent bloquées jusqu'à la réponse du serveur (qui, lui, applique le dernier choix).
+  const [picking, setPicking] = useState(false);
+  async function pick(game) {
+    if (picking) return;
     storage.set('qdn:lastMode', game.id);
-    onPick(game.id);
+    setPicking(true);
+    await onPick(game.id);
+    setPicking(false);
   }
 
   return (
@@ -381,7 +389,7 @@ function GamePicker({ state, onPick, onParty, onResetSips, adultSlot }) {
             }}
             className={`game-card ${g.playable ? '' : 'is-locked'}`}
             onClick={() => pick(g)}
-            disabled={!g.playable}
+            disabled={!g.playable || picking}
             aria-label={g.playable ? `${g.name} : ${g.tagline}` : `${g.name} : bientôt disponible`}
           >
             {!g.playable && (

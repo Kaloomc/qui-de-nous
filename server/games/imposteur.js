@@ -77,7 +77,7 @@ export default {
     if (game.phase !== 'question') return 'Aucune manche en cours.';
     const d = data(game);
     if (action.type === 'startSpeaking') return startSpeaking(game);
-    if (action.type === 'reveal') return d.step === 'voting' ? game.reveal(game.round) : 'Le vote n’a pas commencé.';
+    if (action.type === 'reveal') return d.step === 'voting' ? game.reveal(game.roundId) : 'Le vote n’a pas commencé.';
     if (action.type === 'nextTurn') {
       if (d.step !== 'speaking') return 'Ce n’est pas le moment des indices.';
       advanceTurn(game);

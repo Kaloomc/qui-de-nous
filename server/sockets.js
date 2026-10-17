@@ -98,8 +98,9 @@ export function registerSockets(io, store) {
 
     const hostActions = {
       'host:start': (game) => game.start(),
-      'host:next': (game, { round }) => game.hostNext(Number.isInteger(round) ? round : undefined),
-      'host:reveal': (game, { round }) => game.reveal(Number.isInteger(round) ? round : undefined),
+      // roundId : manche que l'écran croit terminer ; un clic en retard (autre manche, autre jeu) est ignoré.
+      'host:next': (game, { roundId }) => game.hostNext(Number.isInteger(roundId) ? roundId : undefined),
+      'host:reveal': (game, { roundId }) => game.reveal(Number.isInteger(roundId) ? roundId : undefined),
       'host:end': (game) => (game.partyActive ? game.endParty() : game.end()),
       'host:partyStart': (game, { durationMs, games }) => game.startParty({ durationMs, games }),
       'host:partySkip': (game) => game.skipPartyGame(),
@@ -107,7 +108,7 @@ export function registerSockets(io, store) {
       'host:restart': (game, { mode }) => game.restart(mode),
       'host:chooseGame': (game) => game.chooseGame(),
       'host:pickGame': (game, { mode }) => game.pickGame(mode),
-      'host:gameAction': (game, { action }) => game.gameHostAction(action),
+      'host:gameAction': (game, { action, roundId }) => game.gameHostAction(action, Number.isInteger(roundId) ? roundId : undefined),
       'host:settings': (game, { settings }) => game.setSettings(settings),
       'host:resetSips': (game) => game.resetPartySips(),
       'host:adultRequest': (game) => game.requestAdult(),
@@ -148,7 +149,7 @@ export function registerSockets(io, store) {
       const { player, error } = game.upsertPlayer({ playerId, secret, name, photo });
       if (error) return ack({ ok: false, error });
       attachPlayer(game, player);
-      ack({ ok: true, playerId: player.id, secret: player.secret, round: game.round, myVote: game.votes.get(player.id) ?? null });
+      ack({ ok: true, playerId: player.id, secret: player.secret, roundId: game.roundId, myVote: game.votes.get(player.id) ?? null });
       broadcast(game);
     });
 
@@ -158,24 +159,24 @@ export function registerSockets(io, store) {
       const player = game.findPlayer(playerId, secret);
       if (!player) return ack({ ok: false, error: 'Joueur inconnu.' });
       attachPlayer(game, player);
-      ack({ ok: true, round: game.round, myVote: game.votes.get(player.id) ?? null });
+      ack({ ok: true, roundId: game.roundId, myVote: game.votes.get(player.id) ?? null });
       broadcast(game);
     });
 
-    on('player:vote', ({ choice }, ack) => {
+    on('player:vote', ({ choice, roundId }, ack) => {
       const game = currentGame();
       if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
-      const error = game.vote(socket.data.playerId, choice);
+      const error = game.vote(socket.data.playerId, choice, Number.isInteger(roundId) ? roundId : undefined);
       if (error) return ack({ ok: false, error });
       game.touch();
       broadcast(game);
       ack({ ok: true });
     });
 
-    on('player:action', ({ action }, ack) => {
+    on('player:action', ({ action, roundId }, ack) => {
       const game = currentGame();
       if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
-      const error = game.action(socket.data.playerId, action);
+      const error = game.action(socket.data.playerId, action, Number.isInteger(roundId) ? roundId : undefined);
       if (error) return ack({ ok: false, error });
       game.touch();
       broadcast(game);

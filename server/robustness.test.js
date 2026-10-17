@@ -55,3 +55,59 @@ test('joueur arrivé pendant les résultats : il n’apparaît pas parmi les jou
 test('Estimation : le plus proche parti pendant le suspense ne casse pas les statistiques', () => {
   assert.doesNotThrow(() => GAMES.estimation.updateStats({}, { closestIds: ['parti'] }));
 });
+
+// ---------- Changements de jeu et manches : identifiant unique, minuteurs, dernier choix ----------
+
+const fakeClock = () => {
+  const pending = [];
+  let nextId = 1;
+  return { pending, now: () => 0, setTimeout: (fn) => (pending.push({ fn, id: nextId }), nextId++), clearTimeout: () => {} };
+};
+
+function playing(mode = 'qui-de-nous', clock = fakeClock()) {
+  const game = new Game('TEST', mode, { clock });
+  const ids = ['A', 'B', 'C'].map((name, i) => {
+    const { player } = game.upsertPlayer({ name });
+    game.connectPlayer(player, `s${i}`);
+    return player.id;
+  });
+  return { game, ids, clock };
+}
+
+test('manche : identifiant unique dans toute la partie, un vote d’une manche passée est ignoré', () => {
+  const { game, ids } = playing();
+  game.start();
+  const first = game.roundId;
+  game.end();
+  game.chooseGame();
+  game.pickGame('qui-de-nous');
+  game.start();
+  assert.equal(game.round, 1, 'le numéro de manche repart à 1');
+  assert.notEqual(game.roundId, first, 'mais l’identifiant, jamais');
+  assert.match(game.vote(ids[0], ids[1], first), /terminée/);
+  assert.equal(game.votes.size, 0);
+  assert.equal(game.vote(ids[0], ids[1], game.roundId), null);
+  assert.equal(game.reveal(first), null, 'clic « Révéler » d’une ancienne manche : ignoré');
+  assert.equal(game.phase, 'question');
+});
+
+test('minuteur annulé ou d’un jeu quitté : il ne se déclenche jamais', () => {
+  const { game, clock } = playing();
+  let fired = 0;
+  game.schedule('test', 1000, () => (fired += 1));
+  game.cancel('test');
+  clock.pending.at(-1).fn();
+  game.schedule('test2', 1000, () => (fired += 1));
+  game.pickGame('tu-preferes'); // changement de jeu : nouvelle session
+  clock.pending.at(-1).fn();
+  assert.equal(fired, 0);
+});
+
+test('changements de jeu en rafale : le dernier gagne, un jeu inconnu est refusé sans rien changer', () => {
+  const { game } = playing();
+  for (const mode of ['tu-preferes', 'roue', 'imposteur', 'estimation']) assert.equal(game.pickGame(mode), null);
+  assert.equal(game.mode, 'estimation');
+  assert.ok(game.pickGame('jeu-inconnu'));
+  assert.ok(game.pickGame(undefined));
+  assert.equal(game.mode, 'estimation');
+});

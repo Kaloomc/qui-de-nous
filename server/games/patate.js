@@ -29,7 +29,7 @@ export default {
     const fuseMs = fuseDuration();
     Object.assign(game.roundData, startPatate(ids.length ? ids : [...game.players.keys()]), { fuseMs });
     // La mèche est cachée : seul le serveur sait quand ça explose.
-    game.schedulePausable('g:boom', fuseMs, () => game.reveal(game.round));
+    game.schedulePausable('g:boom', fuseMs, () => game.reveal(game.roundId));
     armIdle(game);
   },
   acceptsVotes: () => false,
