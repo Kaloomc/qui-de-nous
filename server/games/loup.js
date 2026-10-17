@@ -330,7 +330,7 @@ function endVote(game, only) {
 
 function pad(me) {
   const size = JSON.stringify(me).length;
-  return size < ME_SIZE ? { ...me, pad: 'x'.repeat(ME_SIZE - size - 12) } : me;
+  return size < ME_SIZE ? { ...me, pad: 'x'.repeat(Math.max(0, ME_SIZE - size - 12)) } : me;
 }
 
 function privateView(game, d, playerId) {
