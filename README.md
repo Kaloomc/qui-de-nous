@@ -467,6 +467,8 @@ Une bonne question fait penser tout de suite à quelqu'un du groupe (« ahah c'e
 3. **Absurde** : scénario farfelu (post-it mystère sur le front, accent espagnol après un week-end à Barcelone) qui ne fait penser à personne.
 4. **Cliché bateau** : pâtes en fin de mois, story « bonne nuit »… Tout le monde se reconnaît, donc le vote ne départage personne.
 
+**Tu préfères ? : le test des 10 amis.** Pose le dilemme à 10 amis : au moins 3 doivent choisir l'option la moins populaire, avec une vraie raison (on vise 40 à 60 % de chaque côté). Une option clairement meilleure (génial / nul, luxe / galère, adoré / détesté, qui marche / qui ne marche pas) ou deux options sans enjeu (jacuzzi ou sauna) : à jeter. Un bon dilemme oppose **deux sacrifices** ou **deux avantages qui s'excluent** (qualité ou quantité, honte publique ou privation, savoir ou ne pas savoir).
+
 `npm test` refuse toute entrée qui contient un mot de la liste `BANNED_WORDS` (niche et boulot) dans [`scripts/check-content.js`](scripts/check-content.js). Pour un faux positif vérifié (« serveur » au sens de serveur de café, par exemple), ajoute le texte exact dans `ALLOWED_WORDS`, juste en dessous.
 
 ## Héberger en ligne (gratuit)
