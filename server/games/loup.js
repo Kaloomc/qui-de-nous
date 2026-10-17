@@ -4,7 +4,7 @@
 // `g:soon` déclenche la suite juste après la dernière action. Tous sont annulés au même endroit (Game.reset / nextQuestion /
 // reveal) et chacun vérifie son `phaseId`.
 // Confidentialité : publicRound() ne renvoie à chaque écran que ce qu'il a le droit de voir ; la TV ne reçoit jamais
-// de rôle vivant. Une phase de nuit se joue aussi pour un rôle mort ou absent, avec un délai aléatoire proche de celui d'un
+// de rôle vivant. Un rôle absent de la composition ou dont le joueur est mort (donc révélé) est sauté ; un rôle vivant mais absent ou sans pouvoir se joue avec un délai aléatoire proche de celui d'un
 // joueur qui joue : on ne peut pas deviner qu'un rôle est mort à la vitesse à laquelle la nuit avance.
 import * as L from '../rules/loup.js';
 import { recommendedComposition, validateComposition } from '../rules/loup.js';
@@ -15,7 +15,7 @@ export const LOUP_TIMING = {
   doneBeatMs: 1500, // pause après la dernière action d'une phase de nuit
   readBeatMs: 4000, // idem pour la Voyante et l'Ours : le temps de lire ce qu'ils viennent d'apprendre
   voteBeatMs: 1500, // pause après le dernier vote
-  absentMinMs: 3500, // rôle mort, absent ou sans pouvoir : durée simulée (tirée au hasard entre les deux)
+  absentMinMs: 3500, // rôle vivant mais absent ou sans pouvoir : durée simulée (tirée au hasard entre les deux)
   absentMaxMs: 8000,
   // Garde-fous invisibles : un joueur qui ne fait rien ne bloque jamais la partie.
   dealSafetyMs: 120000,
@@ -104,7 +104,7 @@ function nextNightPhase(game) {
     const id = L.actorOf(d.eng, 'ivrogne');
     if (id) game.drink(id, 1);
   }
-  // Qui peut agir dans cette phase ? Un rôle mort, absent ou sans pouvoir restant se joue quand même, avec un délai crédible.
+  // Qui peut agir dans cette phase ? Un rôle vivant mais absent ou sans pouvoir restant se joue quand même, avec un délai crédible.
   const e = d.eng;
   let actors = [];
   if (phase === 'loups') actors = L.livingIds(e).filter((id) => L.isWolf(e, id));

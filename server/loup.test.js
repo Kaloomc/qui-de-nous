@@ -216,14 +216,26 @@ test('voyante : rôle de la cible, loup démasqué une seule fois = 1 crédit', 
   assert.equal(L.seerReveal(s, 'c', 'a'), null, 'seule la voyante');
 });
 
-test('phases de nuit : mêmes phases qu’un rôle soit vivant ou mort, Cupidon seulement la nuit 1', () => {
+test('phases de nuit : rôle absent ou mort = phase sautée, Cupidon seulement la nuit 1', () => {
   const s = game({ ...six, b: 'voyante', c: 'sorciere', d: 'cupidon' });
   s.night = 1;
   assert.deepEqual(L.nightPhases(s), ['cupidon', 'voyante', 'loups', 'sorciere']);
   s.dead = { b: {}, c: {} };
-  assert.deepEqual(L.nightPhases(s), ['cupidon', 'voyante', 'loups', 'sorciere'], 'morts : la phase se joue quand même');
+  assert.deepEqual(L.nightPhases(s), ['cupidon', 'loups'], 'voyante et sorcière mortes : sautées');
   s.night = 2;
-  assert.deepEqual(L.nightPhases(s), ['voyante', 'loups', 'sorciere']);
+  assert.deepEqual(L.nightPhases(s), ['loups']);
+  const sansSorciere = game({ ...six, b: 'voyante' });
+  sansSorciere.night = 2;
+  assert.deepEqual(L.nightPhases(sansSorciere), ['voyante', 'loups'], 'pas de sorcière dans la composition');
+});
+
+test('phases de nuit : rôle vivant sans pouvoir restant (ours à 0) reste joué ; loups morts = plus de phase loups', () => {
+  const s = game({ ...six, b: 'ours' });
+  s.night = 3;
+  s.oursUses = 0;
+  assert.deepEqual(L.nightPhases(s), ['ours', 'loups']);
+  for (const id of s.order) if (L.isWolf(s, id)) s.dead[id] = {};
+  assert.ok(!L.nightPhases(s).includes('loups'));
 });
 
 test('Tribunal : camp perdant 3, crédits répartis ou au hasard, plafond de 8, fantômes', () => {

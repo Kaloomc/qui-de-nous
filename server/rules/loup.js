@@ -125,9 +125,12 @@ export function createGame(playerIds, counts, { rng = Math.random, options = {} 
   };
 }
 
-/** Phases de la nuit à jouer, même pour les rôles dont le joueur est mort (durée constante, rien ne fuit). */
+/**
+ * Phases de la nuit à jouer : seulement les rôles de la composition dont un joueur est encore en vie (la mort et le rôle
+ * d'un joueur sont publics). Un rôle vivant sans pouvoir restant reste joué : le sauter trahirait qu'il ne peut plus agir.
+ */
 export function nightPhases(s) {
-  const present = new Set(Object.values(s.roles));
+  const present = new Set(s.order.filter((id) => isAlive(s, id)).map((id) => s.roles[id]));
   return NIGHT_ORDER.filter((p) => {
     if (p === 'cupidon' && s.night !== 1) return false;
     if (p === 'loups') return present.has('loup');
