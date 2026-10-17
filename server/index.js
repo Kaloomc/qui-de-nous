@@ -26,7 +26,8 @@ function lanAddresses() {
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { maxHttpBufferSize: 1e6 });
+// Messages compressés au-delà de 1 Ko (états de partie : ×7 environ) : moins de trafic sur le Wi-Fi d'une grosse soirée.
+const io = new Server(server, { maxHttpBufferSize: 1e6, perMessageDeflate: { threshold: 1024 } });
 const store = new GameStore();
 
 app.get('/api/info', (_req, res) => {

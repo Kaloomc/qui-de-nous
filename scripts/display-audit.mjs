@@ -49,12 +49,16 @@ async function startServer() {
 
 // ---------- Bots (jouent au hasard, comme de vrais joueurs) ----------
 
+const botStats = { msgs: 0, bytes: 0 }; // trafic reçu par les téléphones (bots)
+
 function bot(url, code, name) {
   const s = io(url, { transports: ['websocket'], forceNew: true });
   let me = null;
   let done = '';
   const act = (a) => s.emit('player:action', { action: a }, () => {});
   s.on('state', (st) => {
+    botStats.msgs += 1;
+    botStats.bytes += JSON.stringify(st).length;
     const r = st.round;
     if (st.mode !== 'loup' || !r?.me || r.me.spectator) return;
     const sc = r.me.screen;
@@ -169,6 +173,14 @@ function pageChecks({ tv, lobby }) {
   let overlaps = 0;
   for (let i = 0; i < av.length; i++) for (let j = i + 1; j < av.length; j++) if (Math.min(av[i].right, av[j].right) - Math.max(av[i].left, av[j].left) > 3 && Math.min(av[i].bottom, av[j].bottom) - Math.max(av[i].top, av[j].top) > 3) overlaps++;
   if (overlaps) issues.push(`${overlaps} paires d'avatars du village se chevauchent`);
+  // Un prénom recouvert par l'avatar d'un autre siège (ou par un autre prénom).
+  const seats = Array.from(document.querySelectorAll('.village-seat')).filter(visible);
+  const names = seats.map((s) => s.querySelector('.village-name').getBoundingClientRect());
+  const faces = seats.map((s) => s.querySelector('.village-avatar').getBoundingClientRect());
+  const hit = (a, b) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 4 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 4;
+  let covered = 0;
+  for (let i = 0; i < seats.length; i++) for (let j = 0; j < seats.length; j++) if (i !== j && (hit(names[i], faces[j]) || (j > i && hit(names[i], names[j])))) covered++;
+  if (covered) issues.push(`${covered} prénoms du village recouverts par un autre siège`);
   return issues;
 }
 /* eslint-enable no-undef */
@@ -321,6 +333,7 @@ async function perfRun(browser, srv, report) {
   game.loupTiming = FAST;
   frames = 0;
   bytes = 0;
+  Object.assign(botStats, { msgs: 0, bytes: 0 });
   await page.getByRole('button', { name: /Lancer la partie/ }).click();
   const t0 = Date.now();
   await page.evaluate(() => Object.assign(window.__perf, { frames: 0, worst: 0, long: 0, longMs: 0, mutations: 0, last: performance.now() }));
@@ -328,7 +341,9 @@ async function perfRun(browser, srv, report) {
   const sec = (Date.now() - t0) / 1000;
   const p = await page.evaluate(() => window.__perf);
   const line = `30 joueurs, TV 1366×768, CPU ×4, ${sec.toFixed(0)} s de partie : ${(p.frames / sec).toFixed(0)} images/s (pire image ${p.worst.toFixed(0)} ms), ${p.long} longues tâches (${p.longMs.toFixed(0)} ms au total), ${(p.mutations / sec).toFixed(0)} mutations DOM/s ; réseau TV : ${(frames / sec).toFixed(1)} messages/s, ${(bytes / 1024 / sec).toFixed(1)} Ko/s (${(bytes / Math.max(frames, 1) / 1024).toFixed(1)} Ko par message)`;
+  const phones = `30 téléphones : ${(botStats.msgs / n / sec).toFixed(2)} messages/s et ${(botStats.bytes / n / 1024 / sec).toFixed(2)} Ko/s chacun, ${(botStats.bytes / 1024 / 1024).toFixed(1)} Mo reçus au total`;
   console.log(line);
+  console.log(phones);
   report.push({ tag: 'perf', key: 'mesure', issue: line });
   for (const b of bots) b.disconnect();
   await ctx.close();

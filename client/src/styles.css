@@ -4163,7 +4163,7 @@ body.loup-night {
 }
 
 .loup-tv {
-  --village: min(66vh, 46vw);
+  --village: min(62vh, 46vw);
   flex-direction: row;
   justify-content: center;
   gap: clamp(16px, 4vw, 64px);
@@ -4278,6 +4278,10 @@ body.loup-night {
 
 .loup-reveal-avatar {
   animation-delay: 2.2s;
+  /* la photo suit la hauteur de l'écran : l'annonce tient sur une TV de 768 px avec les voix, le décompte et le village */
+  width: min(200px, 20vh) !important;
+  height: min(200px, 20vh) !important;
+  font-size: min(90px, 9vh) !important;
 }
 
 .loup-reveal-name {

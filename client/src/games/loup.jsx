@@ -31,7 +31,7 @@ function useNightTheme(round) {
  * ni les avatars ni les prénoms ne se chevauchent, même à 30 joueurs.
  */
 export function villageLayout(n) {
-  const rings = n > 12 ? [0.44, 0.26] : [0.42];
+  const rings = n > 12 ? [0.45, 0.24] : [0.42];
   const total = rings.reduce((a, b) => a + b, 0);
   const sizes = rings.length === 1 ? [n] : [Math.round((n * rings[0]) / total), n - Math.round((n * rings[0]) / total)];
   const seats = [];
@@ -45,7 +45,9 @@ export function villageLayout(n) {
     seats.push({ r: rings[ring], angle });
   }
   const spacing = Math.min(...rings.map((r, k) => 2 * r * Math.sin(Math.PI / Math.max(sizes[k], 2))));
-  return { seats, spacing, seat: Math.min(0.16, spacing * 0.62) };
+  // Le siège (avatar + prénom dessous) doit aussi tenir dans l'écart entre les deux cercles.
+  const radial = rings.length === 2 ? (rings[0] - rings[1]) * 0.48 : 1;
+  return { seats, spacing, seat: Math.min(0.16, spacing * 0.62, radial) };
 }
 
 function Village({ round, marked = [] }) {
@@ -156,7 +158,7 @@ function AnnounceItem({ round }) {
       <div className="loup-announce">
         <p className="loup-line">Le village a voté contre… l’Idiot du village. Il reste, mais il ne votera plus.</p>
         <div className="loup-reveal">
-          <Avatar player={c} size={180} />
+          <Avatar player={c} size={180} className="loup-reveal-avatar" />
           <p className="loup-reveal-name">{c?.name}</p>
           <p className="loup-reveal-role">🤡 Idiot du village</p>
           {item.drinkers?.length > 0 && <p className="loup-drinkers">🍺 Boivent : {item.drinkers.map((pid) => nameOf(round, pid)).join(', ')}</p>}
