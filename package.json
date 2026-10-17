@@ -13,6 +13,8 @@
     "start": "node server/index.js",
     "share": "node scripts/share.js",
     "voices": "node scripts/voices.js",
+    "narration": "node scripts/narration.js",
+    "loupsim": "node scripts/loup-sim.js",
     "test": "node --test server/*.test.js"
   },
   "dependencies": {

@@ -1,9 +1,11 @@
 // Loup-Garou : écrans de la TV (village en cercle, nuit, aube, débat, vote) et des téléphones (rôle secret, actions de nuit,
 // vote, fantômes, Tribunal des gorgées). Toutes les actions portent le `phaseId` de la phase affichée : le serveur ignore le reste.
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Avatar, PlayerGrid, TimerBar } from '../components.jsx';
 import { sipsLabel } from '../sips.jsx';
-import { sounds } from '../sound.js';
+import { sounds, unlockAudio } from '../sound.js';
+import { getNarratorVolume, preloadNarration, say, setNarrationSession, setNarratorVolume, useNarratorStatus } from '../narrator.js';
+import { serverNow } from '../lib.js';
 import { CAMP_NAME, PHASE_LABEL, ROLE_INFO, roleIcon } from './loupRoles.js';
 
 export const id = 'loup';
@@ -49,6 +51,97 @@ function Village({ round, marked = [] }) {
 }
 
 // ---------- TV ----------
+
+/**
+ * Narrateur : une phrase par événement, sans prénom (la photo et le prénom s'affichent pendant le roulement de tambour,
+ * puis le rôle). Les clips partent dans une file ; sans clip ou sans son, seul le texte reste à l'écran.
+ */
+function useLoupNarration(state) {
+  const round = state.round;
+  const done = useRef(new Set());
+  const lastNight = useRef(null);
+  const once = (key, fn) => {
+    if (done.current.has(key)) return;
+    done.current.add(key);
+    fn();
+  };
+  useEffect(() => {
+    preloadNarration();
+  }, []);
+  useEffect(() => {
+    setNarrationSession(state.roundId);
+    if (round.stage === 'night') {
+      once(round.phaseId, () => {
+        if (lastNight.current && lastNight.current !== round.phase) say(`sleep_${lastNight.current}`);
+        say(`wake_${round.phase}`);
+        lastNight.current = round.phase;
+      });
+      return;
+    }
+    if (lastNight.current)
+      once(`end-${round.phaseId}`, () => {
+        say(`sleep_${lastNight.current}`);
+        lastNight.current = null;
+      });
+    if (round.stage === 'deal') once(round.phaseId, () => (say('intro'), say('deal')));
+    else if (round.stage === 'sleep') once(round.phaseId, () => say('sleep'));
+    else if (round.stage === 'announce')
+      once(round.phaseId, () => {
+        const { items, i, deaths } = round.announce;
+        const item = items[i];
+        const afterVote = !!round.voteResult;
+        const firstDeath = items.findIndex((it) => it.type === 'death') === i;
+        if (i === 0 && !afterVote) say('dawn');
+        if (item.type === 'none') say('no_victim');
+        else if (item.type === 'novote') say('novote');
+        else if (item.type === 'gorgees') say('gorgee');
+        else if (item.type === 'idiot') say('idiot');
+        else if (item.type === 'death') {
+          if (item.cause === 'chagrin') say('grief');
+          else if (item.cause === 'chasseur') say('hunter_hit');
+          else if (item.cause === 'vote') say('vote_result');
+          else if (item.cause === 'nuit' && firstDeath) say(deaths > 1 ? 'victim_many' : 'victim_one');
+          // Le rôle est annoncé quand il apparaît à l'écran (après le roulement de tambour).
+          if (item.role) say(`role_${item.role}`, 3600);
+        }
+      });
+    else if (round.stage === 'hunter') once(round.phaseId, () => say('hunter_fire'));
+    else if (round.stage === 'debate') once(round.phaseId, () => say('debate_start'));
+    else if (round.stage === 'vote') once(round.phaseId, () => say(round.tie ? 'tie' : 'vote_start'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round.phaseId, round.stage]);
+
+  // Relances du minuteur de débat (30 s, 10 s), si le débat est assez long pour qu'elles aient un sens.
+  useEffect(() => {
+    if (round.stage !== 'debate' || !round.timer || round.timer.paused || round.timer.totalMs < 45000) return undefined;
+    const id = setInterval(() => {
+      const left = round.timer.endsAt - serverNow(state);
+      if (left <= 10000) once(`${round.phaseId}:10`, () => say('timer_10'));
+      else if (left <= 30000) once(`${round.phaseId}:30`, () => say('timer_30'));
+    }, 500);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round.phaseId, round.timer?.endsAt, round.timer?.paused]);
+}
+
+/** Activation de la voix (clic de l'hôte : les navigateurs bloquent le son avant) et volume ; avertit si aucun clip n'est disponible. */
+function NarratorControls() {
+  const status = useNarratorStatus();
+  const [volume, setVolume] = useState(getNarratorVolume);
+  if (status === 'none') return <p className="muted small loup-narrator">Voix du narrateur indisponible : texte seul.</p>;
+  if (status === 'locked')
+    return (
+      <button className="ctrl loup-narrator" onClick={unlockAudio}>
+        🔊 Activer la voix du narrateur
+      </button>
+    );
+  return (
+    <label className="loup-narrator muted small">
+      🔊 Voix
+      <input type="range" min="0" max="1" step="0.1" value={volume} onChange={(e) => (setNarratorVolume(Number(e.target.value)), setVolume(Number(e.target.value)))} />
+    </label>
+  );
+}
 
 function DeathCard({ item, round }) {
   const c = playerOf(round, item.id);
@@ -134,6 +227,7 @@ function VoteTally({ round }) {
 export function HostQuestion({ state, gameAct }) {
   const round = state.round;
   useNightTheme(round);
+  useLoupNarration(state);
   const t = round.timer;
   let body;
   if (round.stage === 'deal') {
@@ -204,6 +298,7 @@ export function HostQuestion({ state, gameAct }) {
             {(s) => `${s} s`}
           </TimerBar>
         )}
+        <NarratorControls />
       </div>
       <Village round={round} marked={round.tie ?? []} />
     </div>
@@ -215,7 +310,8 @@ export function HostReveal({ state }) {
   const winner = results?.winner;
   useEffect(() => {
     sounds.reveal?.();
-  }, []);
+    say(`win_${winner}`);
+  }, [winner]);
   return (
     <div className="loup loup-end">
       <p className="round">Loup-Garou</p>
@@ -230,6 +326,9 @@ export function HostResults({ state }) {
   const sips = results.tribunal?.sips;
   const rows = state.players.filter((p) => results.roles[p.id]);
   const losers = (p) => (sips ? sips[p.id] ?? 0 : null);
+  useEffect(() => {
+    say('tribunal', 1500);
+  }, []);
   return (
     <div className="loup loup-tribunal">
       <p className="round">Le Tribunal des gorgées</p>

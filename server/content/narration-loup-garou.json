@@ -1,0 +1,198 @@
+[
+  { "id": "intro", "categorie": "Intro de partie", "variantes": [
+    "Bienvenue dans un charmant petit village, où personne n'est vraiment innocent.",
+    "Une nouvelle partie commence. Les loups sont là. Les amis, beaucoup moins.",
+    "Le village a l'air paisible. C'est exactement ce que pensaient les derniers habitants.",
+    "Ce soir, vous allez apprendre à ne faire confiance à personne. Même pas à vous.",
+    "Mesdames et messieurs, la chasse est ouverte. Les verres aussi."
+  ] },
+  { "id": "deal", "categorie": "Distribution des rôles", "variantes": [
+    "Regardez votre téléphone. Découvrez votre rôle. Et gardez cet air innocent, vous en aurez besoin.",
+    "Chacun reçoit un rôle secret. Certains sont gentils. Certains mentent très bien.",
+    "Votre rôle est sur votre téléphone. Ne le montrez à personne, pas même à votre meilleur ami. Surtout pas à lui.",
+    "Les rôles sont distribués. Le hasard a été cruel avec certains d'entre vous."
+  ] },
+  { "id": "sleep", "categorie": "Le village s'endort", "variantes": [
+    "Le village s'endort. Pour certains, ce sera définitif.",
+    "La nuit tombe. Fermez les yeux. Les loups, eux, vont les ouvrir.",
+    "Tout le monde dort. Enfin, tout le monde n'est pas forcément honnête.",
+    "Le village s'endort, la lune se lève, et quelque chose se prépare.",
+    "Fermez les yeux, tout le monde. Oui, même vous qui trichez.",
+    "Les lumières s'éteignent. Le village dort. Le village a tort."
+  ] },
+  { "id": "wake_cupidon", "categorie": "Réveil des rôles", "variantes": [
+    "Cupidon se réveille. Il va rendre deux personnes très heureuses, ou très malheureuses.",
+    "Cupidon ouvre les yeux. Deux cœurs, une flèche, aucune garantie."
+  ] },
+  { "id": "sleep_cupidon", "categorie": "Les rôles se rendorment", "variantes": ["Cupidon se rendort. Le mal est fait."] },
+  { "id": "wake_salvateur", "categorie": "Réveil des rôles", "variantes": [
+    "Le Salvateur se réveille et choisit qui protéger. Pas deux fois la même personne, c'est la règle.",
+    "Le Salvateur ouvre les yeux. Il a un bouclier, et une conscience à peu près tranquille."
+  ] },
+  { "id": "sleep_salvateur", "categorie": "Les rôles se rendorment", "variantes": ["Le Salvateur se rendort, le bouclier prêt."] },
+  { "id": "wake_voyante", "categorie": "Réveil des rôles", "variantes": [
+    "La Voyante se réveille. Elle va voir ce que vous cachez.",
+    "La Voyante ouvre les yeux. Elle sait déjà que vous mentez. Elle veut juste savoir qui."
+  ] },
+  { "id": "sleep_voyante", "categorie": "Les rôles se rendorment", "variantes": ["La Voyante se rendort avec un secret de plus."] },
+  { "id": "wake_ours", "categorie": "Réveil des rôles", "variantes": [
+    "L'Ours se réveille et renifle l'air. Il sent quelque chose, et ce n'est pas votre parfum.",
+    "L'Ours ouvre un œil, puis le nez. Y a-t-il un loup dans le coin ?"
+  ] },
+  { "id": "sleep_ours", "categorie": "Les rôles se rendorment", "variantes": ["L'Ours se rendort. Il a le nez fin et le sommeil léger."] },
+  { "id": "wake_loups", "categorie": "Réveil des rôles", "variantes": [
+    "Les loups-garous se réveillent. Ils ont faim, et ils ne sont pas difficiles.",
+    "Les loups se réveillent. Ils choisissent leur dîner. Silence, les amis."
+  ] },
+  { "id": "sleep_loups", "categorie": "Les rôles se rendorment", "variantes": ["Les loups se rendorment, le ventre plein ou l'air déçu."] },
+  { "id": "wake_sorciere", "categorie": "Réveil des rôles", "variantes": [
+    "La Sorcière se réveille. Une potion pour sauver, une potion pour tuer, et aucun scrupule.",
+    "La Sorcière ouvre les yeux. Elle a ses petites fioles, et des opinions arrêtées."
+  ] },
+  { "id": "sleep_sorciere", "categorie": "Les rôles se rendorment", "variantes": ["La Sorcière se rendort. Elle a pris sa décision."] },
+  { "id": "wake_distributeur", "categorie": "Réveil des rôles", "variantes": [
+    "Quelqu'un se réveille et sort des verres. On ne dira pas qui, ce serait gâcher le plaisir.",
+    "Quelqu'un ouvre les yeux. Il y a de la distribution dans l'air."
+  ] },
+  { "id": "sleep_distributeur", "categorie": "Les rôles se rendorment", "variantes": ["Quelqu'un se rendort. La tournée est lancée."] },
+  { "id": "wake_ivrogne", "categorie": "Réveil des rôles", "variantes": [
+    "Quelqu'un se réveille et titube vers son verre. Un grand classique.",
+    "Quelqu'un ouvre les yeux, et tout de suite un verre. Le sérieux, ça compte."
+  ] },
+  { "id": "sleep_ivrogne", "categorie": "Les rôles se rendorment", "variantes": ["Quelqu'un se rendort, le verre vide."] },
+  { "id": "dawn", "categorie": "L'aube", "variantes": [
+    "Le jour se lève. Voyons qui a eu la politesse de se réveiller.",
+    "Le soleil se lève sur le village. Pas pour tout le monde.",
+    "Le village se réveille. On compte les têtes.",
+    "Debout, le village. Ou ce qu'il en reste.",
+    "Le jour se lève. La nuit n'a pas été douce pour tout le monde."
+  ] },
+  { "id": "no_victim", "categorie": "Aucune victime", "variantes": [
+    "Personne n'est mort cette nuit. Les loups ont dû se tromper de maison.",
+    "Aucune victime. Les loups ont raté leur livraison.",
+    "Une nuit sans mort. Quelqu'un a de la chance. Ou de bonnes relations.",
+    "Personne ne manque à l'appel. Les loups ont sûrement fait un régime.",
+    "Le village est au complet. C'est suspect, mais c'est charmant.",
+    "Rien à signaler. Les loups ont dormi, ou ils font semblant."
+  ] },
+  { "id": "victim_one", "categorie": "Une victime", "variantes": [
+    "Le village se réveille. Quelqu'un ne s'est pas réveillé.",
+    "Une victime cette nuit. Roulement de tambour, s'il vous plaît.",
+    "Cette nuit, quelqu'un a fini sur le menu. Le voici.",
+    "Les loups ont mangé. Et ils ont choisi cette personne.",
+    "Une mauvaise nouvelle. Pour une personne en particulier."
+  ] },
+  { "id": "victim_many", "categorie": "Plusieurs victimes", "variantes": [
+    "Plusieurs victimes cette nuit. Les loups avaient visiblement un gros appétit.",
+    "Ça n'a pas chômé cette nuit. Plusieurs habitants manquent à l'appel.",
+    "Une nuit chargée. Plusieurs victimes. Roulement de tambour.",
+    "Plusieurs personnes ne se réveilleront pas. Je vous laisse découvrir lesquelles."
+  ] },
+  { "id": "role_villageois", "categorie": "Révélation du rôle", "variantes": ["C'était un simple Villageois. Aucun pouvoir, et la vie a été à son image."] },
+  { "id": "role_loup", "categorie": "Révélation du rôle", "variantes": ["Un loup-garou ! Voilà au moins un mystère de résolu."] },
+  { "id": "role_voyante", "categorie": "Révélation du rôle", "variantes": ["La Voyante. Elle avait tout vu, sauf ça."] },
+  { "id": "role_sorciere", "categorie": "Révélation du rôle", "variantes": ["La Sorcière. Elle avait les potions, mais pas la chance."] },
+  { "id": "role_chasseur", "categorie": "Révélation du rôle", "variantes": ["Le Chasseur. Il n'ira pas seul."] },
+  { "id": "role_cupidon", "categorie": "Révélation du rôle", "variantes": ["Cupidon. Il avait l'amour dans la peau, et une flèche dans le dos."] },
+  { "id": "role_salvateur", "categorie": "Révélation du rôle", "variantes": ["Le Salvateur. Il a sauvé tout le monde, sauf lui."] },
+  { "id": "role_ours", "categorie": "Révélation du rôle", "variantes": ["L'Ours. Il sentait le loup, il ne sentait pas le danger."] },
+  { "id": "role_idiot", "categorie": "Révélation du rôle", "variantes": ["L'Idiot du village. Il avait été prévenu, mais bon."] },
+  { "id": "role_ancien", "categorie": "Révélation du rôle", "variantes": ["L'Ancien. Les belles choses ont une fin."] },
+  { "id": "role_ivrogne", "categorie": "Révélation du rôle", "variantes": ["L'Ivrogne. Il part comme il a vécu, un verre à la main."] },
+  { "id": "role_distributeur", "categorie": "Révélation du rôle", "variantes": ["Le Distributeur. La tournée est terminée."] },
+  { "id": "grief", "categorie": "Chagrin des amoureux", "variantes": [
+    "Les amoureux ne se sont pas quittés. L'autre ne s'en est pas remis.",
+    "Le chagrin est une maladie mortelle. La preuve.",
+    "Cette personne est morte de chagrin. L'amour, c'est un sport à risque.",
+    "L'amour est plus fort que la mort. Surtout quand il la provoque."
+  ] },
+  { "id": "hunter_fire", "categorie": "Tir du Chasseur", "variantes": [
+    "Le Chasseur a une dernière balle, et personne ne veut être dans sa ligne de mire.",
+    "Le Chasseur ne part pas seul. Il va choisir son compagnon de route.",
+    "Dernier souffle, dernière balle. Le Chasseur vise.",
+    "Le Chasseur n'est pas rancunier, mais il a quand même une balle à placer."
+  ] },
+  { "id": "hunter_hit", "categorie": "Tir du Chasseur", "variantes": [
+    "La balle a trouvé sa cible. Le Chasseur n'a rien perdu de sa précision.",
+    "Boum. Et une personne de moins dans le village.",
+    "Le Chasseur a tiré. Quelqu'un va devoir s'en remettre. Ou pas."
+  ] },
+  { "id": "gorgee", "categorie": "Gorgée sans source", "variantes": [
+    "Une gorgée est offerte. Par qui ? Ça, c'est votre problème.",
+    "Quelqu'un boit, et personne ne sait qui l'a décidé. Santé.",
+    "Une gorgée tombée du ciel. Ou de la manche de quelqu'un.",
+    "Quelqu'un doit boire. Le village se demandera pourquoi.",
+    "Une petite gorgée, offerte par une main anonyme. Les belles choses sont discrètes."
+  ] },
+  { "id": "debate_start", "categorie": "Début du débat", "variantes": [
+    "Le village débat. Accusez, mentez, défendez-vous. Tous les coups sont permis.",
+    "À vous de jouer. Qui est le loup ? Je vous écoute, j'ai tout mon temps. Vous, moins.",
+    "Le débat est ouvert. Rappel : un loup ment toujours. Un villageois aussi, mais pour d'autres raisons.",
+    "Place aux accusations. Soyez de mauvaise foi, ça fait partie du jeu.",
+    "Le village se réunit. L'ambiance va être chaleureuse."
+  ] },
+  { "id": "timer_30", "categorie": "Relance de minuteur", "variantes": [
+    "Plus que trente secondes. Les aveux, c'est maintenant.",
+    "Trente secondes. Si vous avez un coupable, c'est le moment de le dire.",
+    "Il reste trente secondes. Accusez vite, accusez bien."
+  ] },
+  { "id": "timer_10", "categorie": "Relance de minuteur", "variantes": [
+    "Dix secondes. Choisissez votre victime.",
+    "Dix secondes. Dernière chance de changer d'avis.",
+    "Dix secondes. Les indécis sont priés de décider."
+  ] },
+  { "id": "vote_start", "categorie": "Début du vote", "variantes": [
+    "Le temps des accusations est fini. Place au vote.",
+    "Votez. Quelqu'un va payer pour les autres.",
+    "Le village va voter. La démocratie, c'est magnifique, surtout quand elle se trompe.",
+    "Au vote ! Un seul nom, un seul sacrifice."
+  ] },
+  { "id": "vote_result", "categorie": "Résultat du vote", "variantes": [
+    "Le village a parlé. Il se trompera peut-être. Il se trompe souvent.",
+    "La sentence est tombée. Roulement de tambour.",
+    "Le village a décidé. Voyons s'il a eu la main heureuse.",
+    "La démocratie a frappé. Découvrons ce qu'elle a fait.",
+    "Les votes sont comptés. Quelqu'un ne va pas être content."
+  ] },
+  { "id": "tie", "categorie": "Égalité", "variantes": [
+    "Égalité. Second vote, entre les ex æquo seulement.",
+    "Égalité. Le village n'a pas su choisir. Il va devoir recommencer.",
+    "Égalité. On vote encore, et cette fois, un peu de courage."
+  ] },
+  { "id": "novote", "categorie": "Égalité", "variantes": [
+    "Égalité encore. Personne n'est éliminé. Bravo, tout ça pour ça.",
+    "Toujours égalité. Aucun mort aujourd'hui. Les loups vous remercient.",
+    "Le village n'a pas réussi à se mettre d'accord. Personne ne meurt, c'est la démocratie.",
+    "Deuxième égalité. Pas d'élimination. Je ne dis rien, mais je pense beaucoup."
+  ] },
+  { "id": "idiot", "categorie": "Idiot épargné", "variantes": [
+    "L'Idiot du village ! Il survit, mais il ne votera plus. La démocratie a ses limites.",
+    "Le village a éliminé l'Idiot du village. Il garde la vie, il perd la voix.",
+    "Surprise, c'était l'Idiot du village. Il reste en vie, mais plus de vote pour lui."
+  ] },
+  { "id": "win_village", "categorie": "Fin de partie", "variantes": [
+    "Le village a gagné. Les loups sont éliminés. Les gorgées, elles, ne font que commencer.",
+    "Victoire du village. Bravo à tous ceux qui n'ont pas accusé le mauvais voisin. Ou pas trop.",
+    "Le village triomphe. Les loups boivent, et c'est mérité."
+  ] },
+  { "id": "win_loups", "categorie": "Fin de partie", "variantes": [
+    "Les loups-garous ont gagné. Le village n'a pas survécu à son propre débat.",
+    "Victoire des loups. Ils ont dévoré le village, avec un très bon appétit.",
+    "Les loups l'emportent. Le village aura le temps de réfléchir en buvant."
+  ] },
+  { "id": "win_amoureux", "categorie": "Fin de partie", "variantes": [
+    "Les amoureux gagnent. L'amour triomphe de tout, même de la logique.",
+    "Victoire des amoureux ! Ils sont les derniers debout. C'est romantique, c'est louche.",
+    "Les amoureux ont gagné. Les autres boiront à leur santé. Ou à leur place."
+  ] },
+  { "id": "win_nul", "categorie": "Fin de partie", "variantes": [
+    "Plus personne. Tout le monde a perdu. C'est rare, c'est impressionnant.",
+    "Aucun survivant. Les loups, le village, tout le monde. Félicitations, quel gâchis."
+  ] },
+  { "id": "tribunal", "categorie": "Tribunal des gorgées", "variantes": [
+    "Place au Tribunal des gorgées. Ceux qui ont perdu boivent, ceux qui ont des crédits distribuent.",
+    "Le Tribunal est ouvert. Chacun reçoit ce qu'il mérite, ou ce qu'on lui doit.",
+    "Le moment que tout le monde attendait : les comptes. Un verre d'eau compte aussi.",
+    "Audience du Tribunal des gorgées. L'accusé se lève, enfin, s'il peut."
+  ] }
+]

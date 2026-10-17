@@ -156,7 +156,7 @@ function announce(game, status, after, quiet = false) {
   if (!items.length) return next();
   const step = (i) => {
     for (const { id, n } of drinks[i]) game.drink(id, n);
-    go(game, 'announce', timing(game).announceMs, () => (i + 1 < items.length ? step(i + 1) : next()), { announce: { items: items.slice(0, i + 1), i } });
+    go(game, 'announce', timing(game).announceMs, () => (i + 1 < items.length ? step(i + 1) : next()), { announce: { items: items.slice(0, i + 1), i, deaths: items.filter((it) => it.type === 'death').length } });
   };
   step(0);
 }
