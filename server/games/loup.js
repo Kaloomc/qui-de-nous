@@ -1,22 +1,29 @@
 // Loup-Garou côté serveur : une partie entière = une « manche » du moteur commun (phase `question`).
-// Les phases (distribution, nuit, aube, débat, vote…) sont gérées ici avec des minuteurs `g:phase` :
-// ils sont tous annulés au même endroit (Game.reset / nextQuestion / reveal) et chacun vérifie son `phaseId`.
+// Les phases (distribution, nuit, aube, débat, vote…) avancent dès que les joueurs ont agi ou sont d'accord : aucun
+// compte à rebours affiché. Seuls des garde-fous invisibles (`g:phase`, longs) évitent qu'un joueur absent bloque la partie ;
+// `g:soon` déclenche la suite juste après la dernière action. Tous sont annulés au même endroit (Game.reset / nextQuestion /
+// reveal) et chacun vérifie son `phaseId`.
 // Confidentialité : publicRound() ne renvoie à chaque écran que ce qu'il a le droit de voir ; la TV ne reçoit jamais
-// de rôle vivant. Les phases de nuit ont toutes la même durée, jouées même si le rôle est mort (rien ne fuit).
+// de rôle vivant. Une phase de nuit se joue aussi pour un rôle mort ou absent, avec un délai aléatoire proche de celui d'un
+// joueur qui joue : on ne peut pas deviner qu'un rôle est mort à la vitesse à laquelle la nuit avance.
 import * as L from '../rules/loup.js';
 import { recommendedComposition, validateComposition } from '../rules/loup.js';
 
 export const LOUP_TIMING = {
-  dealMs: 20000,
-  sleepMs: 4000,
-  nightMs: 12000,
-  announceMs: 6500,
-  hunterMs: 15000,
-  debateMs: 150000,
-  voteMs: 30000,
-  vote2Ms: 20000,
-  endMs: 8000,
-  tribunalMs: 25000,
+  sleepMs: 4000, // « le village s'endort » (rythme de la narration)
+  announceMs: 6500, // une annonce de l'aube ou du vote (roulement de tambour, photo, rôle)
+  doneBeatMs: 1500, // pause après la dernière action d'une phase de nuit
+  readBeatMs: 4000, // idem pour la Voyante et l'Ours : le temps de lire ce qu'ils viennent d'apprendre
+  voteBeatMs: 1500, // pause après le dernier vote
+  absentMinMs: 3500, // rôle mort, absent ou sans pouvoir : durée simulée (tirée au hasard entre les deux)
+  absentMaxMs: 8000,
+  // Garde-fous invisibles : un joueur qui ne fait rien ne bloque jamais la partie.
+  dealSafetyMs: 120000,
+  nightSafetyMs: 60000,
+  hunterSafetyMs: 45000,
+  debateSafetyMs: 300000,
+  voteSafetyMs: 120000,
+  tribunalMs: 30000,
 };
 /** Taille fixe (en caractères) de la vue privée : tous les joueurs reçoivent le même volume de données. */
 const ME_SIZE = 2048;
@@ -35,16 +42,32 @@ function snapshot(game, ids) {
 
 // ---------- Phases ----------
 
-/** Passe à une nouvelle phase : identifiant unique, minuteur annulable ; `next` ne s'exécute que si la phase est toujours la courante. */
+/**
+ * Passe à une nouvelle phase : identifiant unique, `next` ne s'exécute que si la phase est toujours la courante.
+ * `ms` est le garde-fou (ou la durée d'une annonce) ; `soon()` avance plus tôt quand tout le monde a agi.
+ */
 function go(game, stage, ms, next, extra = {}) {
   const d = data(game);
   d.seq += 1;
-  Object.assign(d, { stage, phaseId: `${game.roundId}:${d.seq}`, ...extra });
+  Object.assign(d, { stage, phaseId: `${game.roundId}:${d.seq}`, advance: next, soonFor: null, ...extra });
   const id = d.phaseId;
   game.cancel('g:phase');
-  if (ms > 0) game.schedulePausable('g:phase', ms, () => data(game).phaseId === id && next());
-  else d.timerless = true;
+  game.cancel('g:soon');
+  game.schedulePausable('g:phase', ms, () => data(game).phaseId === id && next());
 }
+
+/** Termine la phase courante dans `ms` (une seule fois par phase) : tout le monde a agi, ou le rôle est absent. */
+function soon(game, ms) {
+  const d = data(game);
+  if (d.soonFor === d.phaseId) return;
+  d.soonFor = d.phaseId;
+  const id = d.phaseId;
+  const next = d.advance;
+  game.schedulePausable('g:soon', ms, () => data(game).phaseId === id && next());
+}
+
+const between = (game, min, max) => min + Math.random() * (max - min);
+const present = (game, id) => !!game.players.get(id)?.sockets.size;
 
 /** Fin de partie : l'écran de victoire puis le Tribunal des gorgées (moteur commun : reveal → results en attente). */
 function over(game) {
@@ -56,8 +79,7 @@ function over(game) {
 }
 
 function startDeal(game) {
-  const t = timing(game);
-  go(game, 'deal', t.dealMs, () => startNight(game), { acked: {} });
+  go(game, 'deal', timing(game).dealSafetyMs, () => startNight(game), { acked: {} });
 }
 
 function startNight(game) {
@@ -82,7 +104,27 @@ function nextNightPhase(game) {
     const id = L.actorOf(d.eng, 'ivrogne');
     if (id) game.drink(id, 1);
   }
-  go(game, 'night', timing(game).nightMs, () => endNightPhase(game), { phase, phaseRole: role });
+  // Qui peut agir dans cette phase ? Un rôle mort, absent ou sans pouvoir restant se joue quand même, avec un délai crédible.
+  const e = d.eng;
+  let actors = [];
+  if (phase === 'loups') actors = L.livingIds(e).filter((id) => L.isWolf(e, id));
+  else if (phase !== 'ivrogne') {
+    const a = L.actorOf(e, role);
+    const spent = (phase === 'distributeur' && e.distributeurUsed) || (phase === 'ours' && e.oursUses <= 0);
+    if (a && !spent) actors = [a];
+  }
+  d.able = actors.filter((id) => present(game, id));
+  const t = timing(game);
+  go(game, 'night', t.nightSafetyMs, () => endNightPhase(game), { phase, phaseRole: role });
+  if (!d.able.length) soon(game, between(game, t.absentMinMs, t.absentMaxMs));
+}
+
+/** Une action de nuit vient d'être faite : si tous ceux qui pouvaient agir ont fini, la phase se termine bientôt. */
+function nightProgress(game) {
+  const d = data(game);
+  const t = timing(game);
+  const finished = d.phase === 'loups' ? d.able.every((id) => d.wolfVotes[id]) : d.able.every((id) => d.done[id]);
+  if (finished) soon(game, d.phase === 'voyante' || d.phase === 'ours' ? t.readBeatMs : t.doneBeatMs);
 }
 
 function endNightPhase(game) {
@@ -177,7 +219,7 @@ function startDawn(game) {
 function startHunter(game, after) {
   const d = data(game);
   const hunter = d.eng.awaitingHunter;
-  go(game, 'hunter', timing(game).hunterMs, () => resolveHunter(game, hunter, null, after), { hunter, after });
+  go(game, 'hunter', timing(game).hunterSafetyMs, () => resolveHunter(game, hunter, null, after), { hunter, after });
 }
 
 function resolveHunter(game, hunter, target, after) {
@@ -189,14 +231,31 @@ function resolveHunter(game, hunter, target, after) {
 }
 
 function startDebate(game) {
-  go(game, 'debate', timing(game).debateMs, () => startVote(game, null), { votes: {}, debate: true });
+  go(game, 'debate', timing(game).debateSafetyMs, () => startVote(game, null), { votes: {}, debate: true, ready: {} });
+  debateProgress(game);
+}
+
+/** Le débat se termine dès que tous les vivants présents sont d'accord pour voter. */
+function debateProgress(game) {
+  const d = data(game);
+  const need = L.livingIds(d.eng).filter((id) => present(game, id));
+  if (d.stage === 'debate' && need.length > 0 && need.every((id) => d.ready[id])) startVote(game, null);
 }
 
 function startVote(game, only) {
   const d = data(game);
   d.votes = {};
   d.only = only;
-  go(game, 'vote', only ? timing(game).vote2Ms : timing(game).voteMs, () => endVote(game, only), { voting: true });
+  go(game, 'vote', timing(game).voteSafetyMs, () => endVote(game, only), { voting: true });
+  voteProgress(game);
+}
+
+/** Le vote se termine bientôt quand tous les votants présents ont voté (ou si personne ne peut voter). */
+function voteProgress(game) {
+  const d = data(game);
+  if (d.stage !== 'vote') return;
+  const need = L.eligibleVoters(d.eng).filter((id) => present(game, id));
+  if (need.every((id) => d.votes[id])) soon(game, timing(game).voteBeatMs);
 }
 
 function endVote(game, only) {
@@ -264,7 +323,7 @@ function screenOf(game, d, playerId, role, alive) {
     return screen;
   }
   if (d.stage === 'hunter') return e.awaitingHunter === playerId ? { kind: 'shoot', options: living.filter((id) => id !== playerId) } : { kind: 'watch' };
-  if (d.stage === 'debate') return alive ? { kind: 'debate' } : { kind: 'bet', options: living, mine: e.ghostBets[playerId] ?? null };
+  if (d.stage === 'debate') return alive ? { kind: 'debate', ready: !!d.ready[playerId] } : { kind: 'bet', options: living, mine: e.ghostBets[playerId] ?? null };
   if (d.stage === 'vote') {
     if (!alive) return { kind: 'bet', options: living, mine: e.ghostBets[playerId] ?? null };
     if (e.idiotOut[playerId]) return { kind: 'novote' };
@@ -365,13 +424,14 @@ export default {
 
     if (action.type === 'ack' && d.stage === 'deal') {
       d.acked[playerId] = true;
-      if (e.order.every((id) => d.acked[id] || !game.players.get(id)?.sockets.size)) startNight(game);
+      if (e.order.every((id) => d.acked[id] || !present(game, id))) startNight(game);
       return null;
     }
     if (d.stage === 'night' && action.type === 'wolfVote') {
       if (d.phase !== 'loups' || !alive || role !== 'loup') return 'Pas maintenant.';
       if (!L.isAlive(e, action.target) || L.isWolf(e, action.target)) return 'Cible invalide.';
       d.wolfVotes[playerId] = action.target;
+      nightProgress(game);
       return null;
     }
     if (d.stage === 'night' && action.type === 'night') {
@@ -380,6 +440,7 @@ export default {
       const ok = nightAction(d, role, playerId, action);
       if (ok !== null) return ok;
       d.done[playerId] = true;
+      nightProgress(game);
       return null;
     }
     if (d.stage === 'hunter' && action.type === 'shoot') {
@@ -391,6 +452,7 @@ export default {
       if (!alive || e.idiotOut[playerId]) return 'Tu ne votes pas.';
       if (!L.isAlive(e, action.target) || action.target === playerId || (d.only && !d.only.includes(action.target))) return 'Choix invalide.';
       d.votes[playerId] = action.target;
+      voteProgress(game);
       return null;
     }
     // Dernières paroles (option) : une phrase de 80 caractères, texte brut, que le mort peut aussi passer. Jamais bloquant.
@@ -399,6 +461,13 @@ export default {
       if (d.last[playerId]) return 'Déjà dit.';
       const text = typeof action.text === 'string' ? action.text.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80) : '';
       d.last[playerId] = { text, hidden: false };
+      return null;
+    }
+    // Débat : « on peut voter » (un tap, on peut se rétracter) ; quand tous les vivants présents sont d'accord, on vote.
+    if (d.stage === 'debate' && action.type === 'ready') {
+      if (!alive) return 'Les fantômes ne décident pas.';
+      d.ready[playerId] = !d.ready[playerId];
+      debateProgress(game);
       return null;
     }
     if ((d.stage === 'debate' || d.stage === 'vote') && action.type === 'bet') return L.ghostBet(e, playerId, action.target) ? null : 'Pari invalide.';
@@ -411,7 +480,15 @@ export default {
     const d = game.roundData;
     if (game.phase !== 'question' || !d?.eng) return;
     for (const id of d.eng.order) if (!game.players.has(id) && L.isAlive(d.eng, id)) L.withdraw(d.eng, id);
-    if (d.eng.winner && d.stage !== 'over') over(game);
+    if (d.eng.winner && d.stage !== 'over') return over(game);
+    // Quelqu'un part ou revient : on revérifie si tout le monde est prêt, sans attendre un absent.
+    debateProgress(game);
+    if (d.stage === 'vote') voteProgress(game);
+    if (d.stage === 'night') {
+      d.able = d.able.filter((id) => present(game, id));
+      nightProgress(game);
+      if (!d.able.length) soon(game, between(game, timing(game).absentMinMs, timing(game).absentMaxMs));
+    }
   },
 
   computeResults(_ids, _votes, game) {
@@ -446,7 +523,8 @@ export default {
       phaseId: d.phaseId,
       phase: d.stage === 'night' ? d.phase : null,
       night: e.night,
-      timer: game.timerState('g:phase'),
+      // Débat : combien de vivants sont d'accord pour voter (public : rien de secret).
+      ready: d.stage === 'debate' ? { n: L.livingIds(e).filter((id) => d.ready?.[id]).length, of: L.livingIds(e).filter((id) => present(game, id)).length } : null,
       circle: e.order.map((id) => ({
         id,
         name: d.names[id].name,

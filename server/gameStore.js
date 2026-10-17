@@ -286,6 +286,7 @@ export class Game {
 
   schedule(name, ms, fn, total = ms) {
     this.cancel(name);
+    if (this.disposed) return; // partie supprimée : plus aucun minuteur (un départ de joueur tardif ne doit pas en relancer)
     const session = this.session;
     const id = this.clock.setTimeout(() => {
       if (this.timers[name]?.id !== id || session !== this.session) return; // annulé, ou jeu quitté entre-temps
@@ -313,7 +314,7 @@ export class Game {
     } else {
       delete this.pausedTimers[name];
       this.schedule(name, ms, fn, total);
-      this.timers[name].pausable = true;
+      if (this.timers[name]) this.timers[name].pausable = true;
     }
   }
 
@@ -332,6 +333,7 @@ export class Game {
   }
 
   dispose() {
+    this.disposed = true;
     this.clearTimers();
   }
 

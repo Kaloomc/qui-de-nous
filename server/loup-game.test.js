@@ -9,7 +9,8 @@ import { GameStore } from './gameStore.js';
 import { registerSockets } from './sockets.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const FAST = { dealMs: 400, sleepMs: 30, nightMs: 70, announceMs: 50, hunterMs: 120, debateMs: 100, voteMs: 120, vote2Ms: 80, endMs: 50, tribunalMs: 200 };
+const FAST = { sleepMs: 30, announceMs: 50, doneBeatMs: 20, readBeatMs: 30, voteBeatMs: 20, absentMinMs: 40, absentMaxMs: 90, dealSafetyMs: 400, nightSafetyMs: 400, hunterSafetyMs: 200, debateSafetyMs: 300, voteSafetyMs: 300, tribunalMs: 200 };
+const SLOW = { ...FAST, dealSafetyMs: 60000 };
 
 async function startServer() {
   const server = http.createServer();
@@ -65,6 +66,7 @@ function client(url, { bot = false } = {}) {
     }
     if (s.kind === 'shoot') return doit({ type: 'shoot', target: pick(s.options) });
     if (s.kind === 'vote') return doit({ type: 'vote', target: pick(s.options) });
+    if (s.kind === 'debate') return doit({ type: 'ready' });
     if (s.kind === 'bet') return doit({ type: 'bet', target: pick(s.options) });
   });
   c.waitFor = async (check, ms = 20000) => {
@@ -138,11 +140,19 @@ test('partie complète à 8 joueurs : une victoire, le Tribunal, rien ne fuit, n
     // Rien de secret ni pour la TV ni pour les téléphones.
     for (const m of ctx.tv.log) assertNoLeak(m, eng, null);
     for (const p of ctx.players) for (const m of p.log) assertNoLeak(m, eng, p.id);
-    // Nuits : toutes les phases ont la même durée, qu'un rôle soit vivant, mort ou sans action ; et la vue privée a la même taille.
-    const totals = new Set();
+    // Nuits : les phases de tous les rôles présents se jouent chaque nuit, même pour un rôle mort (on ne devine rien à la
+    // vitesse de la nuit), et la vue privée a la même taille pour tous les vivants.
     const sizes = new Map();
-    for (const m of ctx.tv.log) if (m.round?.stage === 'night' && m.round.timer?.totalMs) totals.add(m.round.timer.totalMs);
-    assert.deepEqual([...totals], [FAST.nightMs], 'toutes les phases de nuit durent pareil');
+    const seenPhases = new Map();
+    for (const m of ctx.tv.log) if (m.round?.stage === 'night') seenPhases.set(m.round.night, new Set([...(seenPhases.get(m.round.night) ?? []), m.round.phase]));
+    const roles = new Set(Object.values(eng.roles));
+    for (const [night, phases] of seenPhases) {
+      if (night < 2 || night === eng.night) continue; // la dernière nuit peut avoir été interrompue
+      for (const phase of ['loups', 'voyante', 'sorciere', 'salvateur', 'ours']) {
+        const role = phase === 'loups' ? 'loup' : phase;
+        if (roles.has(role)) assert.ok(phases.has(phase), `nuit ${night} : la phase ${phase} a été sautée`);
+      }
+    }
     for (const p of ctx.players)
       for (const m of p.log) {
         const me = m.round?.me;
@@ -188,7 +198,7 @@ test('lancement refusé si la composition ne correspond pas aux joueurs, moins d
 });
 
 test('changement de jeu en pleine partie : aucun minuteur du Loup-Garou ne se déclenche ensuite', async () => {
-  const ctx = await setup(8, { fast: { ...FAST, dealMs: 60000 } });
+  const ctx = await setup(8, { fast: SLOW });
   try {
     assert.ok((await ctx.tv.emit('host:start')).ok);
     await ctx.tv.waitFor((s) => s.phase === 'question' && s.round?.stage === 'deal');
@@ -207,7 +217,8 @@ test('changement de jeu en pleine partie : aucun minuteur du Loup-Garou ne se d�
 });
 
 test('reconnexion : le joueur retrouve sa vue privée, un nouvel arrivant est spectateur', async () => {
-  const ctx = await setup(8, { fast: { ...FAST, dealMs: 60000 } });
+  const ctx = await setup(8, { fast: SLOW });
+  const extra = [];
   try {
     assert.ok((await ctx.tv.emit('host:start')).ok);
     await ctx.tv.waitFor((s) => s.phase === 'question' && s.round?.stage === 'deal');
@@ -217,26 +228,27 @@ test('reconnexion : le joueur retrouve sa vue privée, un nouvel arrivant est sp
     p.socket.disconnect();
     await sleep(100);
     const back = client(p.socket.io.uri);
+    extra.push(back);
     const res = await back.emit('player:resume', identity);
     assert.ok(res.ok);
     await back.waitFor((s) => s.round?.me);
     assert.equal(back.state.round.me.role, eng.roles[p.id]);
     // Un nouvel arrivant en cours de partie : spectateur, aucun rôle.
     const late = client(p.socket.io.uri);
+    extra.push(late);
     const joined = await late.emit('player:join', { code: ctx.code, name: 'Retard' });
     assert.ok(joined.ok);
     await late.waitFor((s) => s.round?.me);
     assert.equal(late.state.round.me.spectator, true);
     assert.equal(late.state.round.me.role, undefined);
-    back.socket.disconnect();
-    late.socket.disconnect();
   } finally {
+    for (const c of extra) c.socket.disconnect();
     await ctx.end();
   }
 });
 
 test('joueur retiré par l’hôte : mort sans rôle révélé, la partie continue', async () => {
-  const ctx = await setup(8, { fast: { ...FAST, dealMs: 60000 } });
+  const ctx = await setup(8, { fast: SLOW });
   try {
     assert.ok((await ctx.tv.emit('host:start')).ok);
     await ctx.tv.waitFor((s) => s.phase === 'question' && s.round?.stage === 'deal');

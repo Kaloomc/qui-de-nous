@@ -64,19 +64,19 @@ test('gorgées dans le flux et privées : mort, tir du Chasseur (double), Sorci�
   clock.tick(T.sleepMs);
   assert.equal(d().phase, 'voyante');
   act(1, { type: 'night', target: ps[0].id });
-  clock.tick(T.nightMs);
+  clock.tick(T.readBeatMs);
   assert.equal(d().phase, 'loups');
   act(0, { type: 'wolfVote', target: ps[3].id });
-  clock.tick(T.nightMs);
+  clock.tick(T.doneBeatMs);
   assert.equal(d().phase, 'sorciere');
   act(2, { type: 'night', gorgee: ps[7].id });
-  clock.tick(T.nightMs);
+  clock.tick(T.doneBeatMs);
   assert.equal(d().phase, 'distributeur');
   act(5, { type: 'night', targets: [ps[6].id, ps[7].id] });
-  clock.tick(T.nightMs);
+  clock.tick(T.doneBeatMs);
   assert.equal(d().phase, 'ivrogne');
   assert.equal(sips(4), 1, 'l’Ivrogne boit dès sa phase, en privé');
-  clock.tick(T.nightMs);
+  clock.tick(T.absentMaxMs);
   // Aube : le Chasseur meurt (1 gorgée) puis tire.
   assert.equal(d().stage, 'announce');
   watch();
@@ -106,18 +106,18 @@ test('Tribunal : le camp perdant boit 3, les crédits sont répartis ou tirés a
   for (let i = 0; i < ps.length; i++) act(i, { type: 'ack' });
   clock.tick(T.sleepMs);
   act(1, { type: 'night', target: ps[0].id }); // la Voyante démasque le loup : 1 crédit
-  clock.tick(T.nightMs);
+  clock.tick(T.readBeatMs);
   act(0, { type: 'wolfVote', target: ps[5].id });
-  clock.tick(T.nightMs);
+  clock.tick(T.doneBeatMs);
   assert.equal(d().stage, 'announce');
   assert.equal(sips(5), 1);
   clock.tick(T.announceMs);
   assert.equal(d().stage, 'debate');
-  clock.tick(T.debateMs);
+  for (const i of [0, 1, 2, 3, 4]) act(i, { type: 'ready' }); // tous d'accord : on vote, sans attendre de minuteur
   assert.equal(d().stage, 'vote');
   for (const i of [1, 2, 3, 4]) act(i, { type: 'vote', target: ps[0].id });
   act(0, { type: 'vote', target: ps[1].id });
-  clock.tick(T.voteMs);
+  clock.tick(T.voteBeatMs);
   assert.equal(sips(0), 1, 'le loup éliminé boit comme tout mort');
   clock.tick(T.announceMs);
   clock.tick(10000);
@@ -140,10 +140,15 @@ test('Tribunal : sans répartition, les crédits partent au hasard au bout du te
   for (let i = 0; i < ps.length; i++) act(i, { type: 'ack' });
   clock.tick(T.sleepMs);
   act(1, { type: 'night', target: ps[0].id });
-  clock.tick(T.nightMs * 2 + T.announceMs + T.debateMs);
+  clock.tick(T.readBeatMs);
+  clock.tick(T.nightSafetyMs); // les loups ne votent pas : le garde-fou clôt la phase, personne ne meurt
+  clock.tick(T.announceMs);
+  assert.equal(d().stage, 'debate');
+  for (const i of [0, 1, 2, 3, 4, 5]) act(i, { type: 'ready' });
   assert.equal(d().stage, 'vote');
-  for (const i of [1, 2, 3, 4]) act(i, { type: 'vote', target: ps[0].id });
-  clock.tick(T.voteMs + T.announceMs + 30000);
+  for (const i of [1, 2, 3, 4, 5]) act(i, { type: 'vote', target: ps[0].id });
+  act(0, { type: 'vote', target: ps[1].id });
+  clock.tick(T.voteBeatMs + T.announceMs + 30000);
   assert.equal(game.phase, 'results');
   clock.tick(T.tribunalMs + 1000);
   const total = [...game.partySips.values()].reduce((a, b) => a + b, 0);
@@ -154,9 +159,11 @@ test('dernières paroles (option) : texte brut de 80 caractères, passer est per
   const { game, clock, ps, eng, d, act, T } = setup(['loup', 'voyante', 'chasseur', 'villageois', 'villageois', 'villageois']);
   game.roundData.eng.options.dernieresParoles = true;
   for (let i = 0; i < ps.length; i++) act(i, { type: 'ack' });
-  clock.tick(T.sleepMs + T.nightMs);
+  clock.tick(T.sleepMs);
+  act(1, { type: 'night', target: ps[0].id });
+  clock.tick(T.readBeatMs);
   act(0, { type: 'wolfVote', target: ps[5].id });
-  clock.tick(T.nightMs);
+  clock.tick(T.doneBeatMs);
   assert.equal(eng.dead[ps[5].id].cause, 'loups');
   const view = (i) => game.publicState({ playerId: ps[i].id }).round.me;
   assert.equal(view(5).last, 'pending');
@@ -177,9 +184,10 @@ test('dernières paroles (option) : texte brut de 80 caractères, passer est per
   assert.equal(game.action(ps[5].id, { type: 'bet', target: ps[0].id }), null);
   assert.ok(game.action(ps[2].id, { type: 'bet', target: ps[0].id }), 'un vivant ne parie pas');
   assert.equal(game.action(ps[5].id, { type: 'campBet', camp: 'village' }), null);
-  clock.tick(T.debateMs);
+  for (const i of [0, 1, 2, 3, 4]) act(i, { type: 'ready' });
   for (const i of [1, 2, 3, 4]) act(i, { type: 'vote', target: ps[0].id });
-  clock.tick(T.voteMs);
+  act(0, { type: 'vote', target: ps[1].id });
+  clock.tick(T.voteBeatMs);
   assert.equal(eng.ghostPoints[ps[5].id], 1, 'pari juste = 1 point');
 });
 

@@ -4525,3 +4525,32 @@ body.loup-night {
 .loup-setup-warning {
   color: var(--yellow);
 }
+
+.loup-reminder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 14px;
+  border: 2px dashed var(--teal);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.loup-reminder.is-hidden {
+  border-color: var(--muted);
+}
+
+.loup-reminder strong {
+  font-size: 1.15rem;
+}
+
+.loup-reminder span {
+  font-size: 0.9rem;
+}

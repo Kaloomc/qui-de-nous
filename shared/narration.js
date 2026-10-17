@@ -9,6 +9,6 @@ export const narrationFile = (id, n) => `${id}-${n + 1}.mp3`;
 /** Événements que le narrateur de la TV peut demander (les clips « wake_ », « sleep_ » et « role_ » s'y ajoutent, un par phase ou par rôle). */
 export const NARRATION_EVENTS = [
   'intro', 'deal', 'sleep', 'dawn', 'no_victim', 'victim_one', 'victim_many', 'grief', 'hunter_fire', 'hunter_hit', 'gorgee',
-  'debate_start', 'timer_30', 'timer_10', 'vote_start', 'vote_result', 'tie', 'novote', 'idiot',
+  'debate_start', 'vote_start', 'vote_result', 'tie', 'novote', 'idiot',
   'win_village', 'win_loups', 'win_amoureux', 'win_nul', 'tribunal',
 ];

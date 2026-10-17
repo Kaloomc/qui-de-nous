@@ -33,6 +33,18 @@ async function main() {
   const todo = planClips(items, manifest, voiceId, NARRATOR_CONFIG, (f) => fs.existsSync(path.join(outDir, f)), opts);
   const all = allClips(items);
   console.log(`${all.length} clips au total, ${todo.length} à générer (${characters(todo)} caractères sur ${characters(all)}).`);
+  // Clips qui ne sont plus dans le fichier de texte (événement ou variante supprimés) : on les retire du disque et du manifest.
+  const wanted = new Set(all.map((c) => c.file));
+  const orphans = fs.existsSync(outDir) ? fs.readdirSync(outDir).filter((f) => f.endsWith('.mp3') && !wanted.has(f)) : [];
+  if (orphans.length) {
+    console.log(`${orphans.length} clip(s) obsolète(s)${opts.dry ? ' à supprimer' : ' supprimé(s)'} : ${orphans.join(', ')}`);
+    if (!opts.dry) {
+      for (const f of orphans) fs.rmSync(path.join(outDir, f));
+      for (const f of Object.keys(manifest.clips)) if (!wanted.has(f)) delete manifest.clips[f];
+      fs.writeFileSync(manifestPath, `${JSON.stringify({ voice: manifest.voice ?? voiceId, clips: manifest.clips }, null, 2)}
+`);
+    }
+  }
   if (opts.dry || todo.length === 0) return;
 
   const key = requireKey();

@@ -1,11 +1,10 @@
 // Loup-Garou : écrans de la TV (village en cercle, nuit, aube, débat, vote) et des téléphones (rôle secret, actions de nuit,
 // vote, fantômes, Tribunal des gorgées). Toutes les actions portent le `phaseId` de la phase affichée : le serveur ignore le reste.
 import { useEffect, useRef, useState } from 'react';
-import { Avatar, PlayerGrid, TimerBar } from '../components.jsx';
+import { Avatar, PlayerGrid } from '../components.jsx';
 import { sipsLabel } from '../sips.jsx';
 import { sounds, unlockAudio } from '../sound.js';
 import { getNarratorVolume, preloadNarration, say, setNarrationSession, setNarratorVolume, useNarratorStatus } from '../narrator.js';
-import { serverNow } from '../lib.js';
 import { CAMP_NAME, PHASE_LABEL, ROLE_INFO, roleIcon } from './loupRoles.js';
 
 export const id = 'loup';
@@ -111,17 +110,6 @@ function useLoupNarration(state) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round.phaseId, round.stage]);
 
-  // Relances du minuteur de débat (30 s, 10 s), si le débat est assez long pour qu'elles aient un sens.
-  useEffect(() => {
-    if (round.stage !== 'debate' || !round.timer || round.timer.paused || round.timer.totalMs < 45000) return undefined;
-    const id = setInterval(() => {
-      const left = round.timer.endsAt - serverNow(state);
-      if (left <= 10000) once(`${round.phaseId}:10`, () => say('timer_10'));
-      else if (left <= 30000) once(`${round.phaseId}:30`, () => say('timer_30'));
-    }, 500);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [round.phaseId, round.timer?.endsAt, round.timer?.paused]);
 }
 
 /** Activation de la voix (clic de l'hôte : les navigateurs bloquent le son avant) et volume ; avertit si aucun clip n'est disponible. */
@@ -246,7 +234,6 @@ export function HostQuestion({ state, gameAct }) {
   const round = state.round;
   useNightTheme(round);
   useLoupNarration(state);
-  const t = round.timer;
   let body;
   if (round.stage === 'deal') {
     body = (
@@ -291,6 +278,7 @@ export function HostQuestion({ state, gameAct }) {
       <>
         <h1>Le village débat</h1>
         <p className="lead">Qui est le loup ? Accusez, mentez, défendez-vous.</p>
+        <p className="loup-count">{round.ready.n} / {round.ready.of} prêts à voter</p>
         <button className="btn btn-primary btn-xl" onClick={() => gameAct({ type: 'skipDebate' })}>
           Passer au vote
         </button>
@@ -311,11 +299,6 @@ export function HostQuestion({ state, gameAct }) {
       <div className="loup-main">
         <p className="round">Loup-Garou · Nuit {round.night || 1}</p>
         {body}
-        {t && (
-          <TimerBar timer={t} state={state} small>
-            {(s) => `${s} s`}
-          </TimerBar>
-        )}
         <LastWordsBoard round={round} gameAct={gameAct} />
         <NarratorControls />
       </div>
@@ -418,6 +401,28 @@ function LastWords({ act }) {
         </button>
       </div>
     </form>
+  );
+}
+
+/** Rappel du rôle, avec sa description : on peut le cacher d'un tap (comme le mot de l'Imposteur) si un voisin regarde. */
+function RoleReminder({ role }) {
+  const [hidden, setHidden] = useState(false);
+  const info = ROLE_INFO[role];
+  if (!info) return null;
+  return (
+    <button className={`loup-reminder ${hidden ? 'is-hidden' : ''}`} onClick={() => setHidden(!hidden)}>
+      {hidden ? (
+        <span className="muted">👁 Rôle caché · touche pour l’afficher</span>
+      ) : (
+        <>
+          <strong>
+            {info.icon} {info.name}
+          </strong>
+          <span>{info.text}</span>
+          <em className="muted small">Touche pour le cacher</em>
+        </>
+      )}
+    </button>
   );
 }
 
@@ -637,6 +642,10 @@ export function PlayerRound({ state, me: player, act }) {
         <h1>Débat</h1>
         <p className="lead">Discutez à voix haute. {me.role === 'loup' ? 'Fais l’innocent.' : 'Trouve le loup.'}</p>
         <Intel me={me} round={round} />
+        <button className={`btn btn-xl ${s.ready ? 'btn-primary' : 'btn-secondary'}`} onClick={() => act({ type: 'ready', ...base })}>
+          {s.ready ? '✓ Prêt à voter (retirer)' : '👍 On peut voter'}
+        </button>
+        <p className="muted small">On vote dès que tout le monde est d’accord.</p>
       </div>
     );
   else if (s.kind === 'sleep')
@@ -645,6 +654,7 @@ export function PlayerRound({ state, me: player, act }) {
         <p className="loup-moon">🌙</p>
         <h1>Le village dort…</h1>
         <p className="lead">Les yeux fermés.</p>
+        <Intel me={me} round={round} />
       </div>
     );
   else
@@ -656,11 +666,7 @@ export function PlayerRound({ state, me: player, act }) {
     );
   return (
     <div className="loup loup-phone">
-      {round.timer && (
-        <TimerBar timer={round.timer} state={state} small>
-          {(sec) => `${sec} s`}
-        </TimerBar>
-      )}
+      {s.kind !== 'role' && s.kind !== 'waiting' && <RoleReminder role={me.role} />}
       {me.lover && s.kind !== 'role' && (
         <p className="loup-lover">
           💘 <Avatar player={playerOf(round, me.lover)} size={28} /> {nameOf(round, me.lover)}
