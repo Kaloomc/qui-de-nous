@@ -64,6 +64,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
   - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
   - [Mode soirée](#mode-soirée)
+  - [Mode 18+](#mode-18)
   - [Récap de fin de soirée](#récap-de-fin-de-soirée)
 - [Règles du jeu](#règles-du-jeu)
   - [Qui de nous ?](#qui-de-nous--1)
@@ -274,6 +275,19 @@ La grosse carte **Mode soirée**, en tête de la grille des jeux, lance un encha
 - **Retardataires** : un joueur qui rejoint en pleine manche voit « tu joues dès la prochaine manche » et entre au tour suivant, sans boire pour la manche qu'il n'a pas jouée.
 - Tout est piloté par le serveur (`server/party.js` pour le programme, `Game.startParty` et suivantes dans `server/gameStore.js`) : l'hôte peut recharger sa page, les téléphones peuvent se reconnecter.
 
+### Mode 18+
+
+Un mode réservé aux adultes, avec des questions sexuelles directes et une ambiance noir, gris et rouge.
+
+- **Activation** : bouton **Mode 18+** (icône flamme) sur la grille des jeux ou dans le lobby. La TV affiche un avertissement et la liste des joueurs ; **chaque joueur connecté confirme sur son téléphone** (« J'ai 18 ans ou plus, je suis partant(e) » ou « Non, pas pour moi »). Le mode ne s'active que quand **tout le monde** a dit oui. Sinon, l'hôte voit qui bloque et peut **annuler** ou **retirer** ce joueur.
+- **Un joueur qui dit non n'est jamais mis dans un jeu 18+.** Un joueur qui arrive après l'activation voit d'abord la même question, sans rien voir du jeu ni du thème ; s'il refuse, il ne rejoint pas la partie.
+- **Ambiance** : transition de 2 à 3 secondes (écran noir, battement rouge, « 18+ ») en même temps sur la TV et les téléphones, puis thème sombre partout. Le mode persiste quand on change de jeu, qu'on rejoue ou en mode soirée.
+- **Retour au normal** : bouton **« Repasser en mode normal »** toujours visible en haut à gauche de la TV, en un clic (une manche 18+ en cours est abandonnée).
+- **Contenu** : *Qui de nous ?*, *Tu préfères ?*, *Qui me connaît le mieux ?*, *La Roue* et *L'Imposteur* tirent alors **uniquement** dans leur contenu 18+ (fichiers séparés, jamais utilisés en mode normal). Estimation, Réflexes et Patate chaude gardent leur contenu normal avec le thème sombre. À la Roue, un défi 18+ n'oblige jamais à se déshabiller, toucher, embrasser ou envoyer une photo : aveux, votes, mimes habillés et gages verbaux, qu'on peut toujours refuser en buvant.
+- **Rien n'est conservé** : les confirmations vivent dans la mémoire du serveur et disparaissent avec la partie. Aucune date de naissance ni pièce d'identité n'est demandée.
+
+> **La confirmation est déclarative.** Gorgée ne peut pas vérifier l'âge de qui que ce soit : c'est à **l'hôte** de n'activer ce mode qu'entre adultes consentants, et de repasser en mode normal si quelqu'un arrive.
+
 ### Récap de fin de soirée
 
 À la fin du mode soirée, la TV enchaîne sur le **récap** ; après une partie classique, il est à un clic (« Récap de la soirée » sur l'écran de fin). Il couvre toute la soirée, tous jeux confondus.
@@ -424,6 +438,9 @@ Les contenus des autres jeux sont dans [`server/content/`](server/content/) :
 | `words-imposteur.json` | L'Imposteur | `{ "mot": "Netflix", "proche": "YouTube", "categorie": "Applis" }` : deux mots de la **même grande catégorie mais clairement différents** (voir ci-dessous) |
 | `defis-roue.json` | La Roue | `{ "texte": "Bois 2 gorgées.", "type": "boire", "n": 2, "niveau": "chill" }`, avec `type` parmi `boire`, `groupe`, `echange` (`n: 0`), `duo`, `distribuer`, `tous`, `vote`, `gage`, et `n` de 1 à 5 |
 | `words-feu.json` | Réflexes | `{ "pieges": ["FEUX", "BLEU", …], "neutres": ["PIZZA", …] }` en majuscules, sans « FEU » lui-même |
+| `*-18plus.json` | Mode 18+ | Même format que le fichier normal du jeu, avec `"adulte": true` en plus (voir ci-dessous) |
+
+**Contenu 18+** : `questions-18plus.json` (Qui de nous ?), `preferes-18plus.json` (Tu préfères ?), `connait-18plus.json` (Qui me connaît le mieux ?), `roue-18plus.json` (La Roue) et `imposteur-18plus.json` (L'Imposteur), dans `server/content/`. Chaque entrée porte `"adulte": true` (le test le vérifie, et refuse ce champ dans les fichiers normaux). Registre cash et drôle, une phrase, mais toujours entre adultes consentants : rien qui implique un mineur, de la contrainte, de l'inceste, des animaux, de la violence, quelqu'un d'endormi ou trop ivre pour consentir ; pas de description pornographique, rien de discriminatoire ni de stigmatisant (IST comprises), pas de vraies personnes, pas de traumatisme. `npm test` vérifie aussi qu'aucune entrée 18+ ne double une entrée du mode normal.
 
 Pour un défi de la roue adressé au joueur désigné (`boire`, `duo`, `distribuer`, `gage`), écris à la 2e personne : la TV affiche « Ana : bois 2 gorgées. ». Pour les autres, écris pour tout le groupe. Le nombre de gorgées dans le texte doit correspondre à `n`.
 
