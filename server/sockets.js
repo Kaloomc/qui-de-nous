@@ -24,12 +24,21 @@ export function registerSockets(io, store) {
 
   // Chaque écran reçoit son propre état : la TV voit les résultats pendant le suspense (pour animer),
   // et chaque téléphone ne voit que ses informations secrètes (le mot de l'Imposteur, par exemple).
+  // Un téléphone ne reçoit pas deux fois le même état (hors horloge) : beaucoup d'événements d'une partie à 30 ne changent
+  // rien à son écran (les votes des autres, par exemple). Le cache est par connexion : une nouvelle connexion reçoit toujours l'état.
+  const lastSent = new Map();
   const broadcast = (game) => {
     io.to(hostRoom(game.code)).emit('state', game.publicState({ host: true }));
     for (const player of game.players.values()) {
       if (player.sockets.size === 0) continue;
       const state = game.publicState({ playerId: player.id });
-      for (const id of player.sockets) io.to(id).emit('state', state);
+      const { serverTime, ...rest } = state;
+      const key = JSON.stringify(rest);
+      for (const id of player.sockets) {
+        if (lastSent.get(id) === key) continue;
+        lastSent.set(id, key);
+        io.to(id).emit('state', state);
+      }
     }
   };
   store.onChange = broadcast;
@@ -208,5 +217,6 @@ export function registerSockets(io, store) {
     });
 
     socket.on('disconnect', detach);
+    socket.on('disconnect', () => lastSent.delete(socket.id));
   });
 }

@@ -15,3 +15,10 @@ export function avatarColor(name = '?') {
   for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return colorFor(h);
 }
+
+/** Encre lisible (sombre ou claire) sur une pastille de couleur : contraste d'au moins 4,5 sur toute la palette. */
+export function inkFor(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return (lum + 0.05) / 0.0627 > 1.05 / (lum + 0.05) ? '#1b1530' : '#ffffff'; // encre sombre (luminance ≈ 0,0127) ou blanche : la meilleure des deux
+}

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { avatarColor } from './colors.js';
+import { avatarColor, inkFor } from './colors.js';
 import { serverNow, useRemaining } from './lib.js';
 import { sounds } from './sound.js';
 
@@ -33,7 +33,7 @@ export function Avatar({ player, size = 64, className = '' }) {
     return <img className={`avatar ${className}`} style={style} src={player.photoUrl} alt={player.name} draggable={false} />;
   }
   return (
-    <span className={`avatar avatar-fallback ${className}`} style={{ ...style, background: avatarColor(player?.name ?? '?') }}>
+    <span className={`avatar avatar-fallback ${className}`} style={{ ...style, background: avatarColor(player?.name ?? '?'), color: inkFor(avatarColor(player?.name ?? '?')) }}>
       {(player?.name ?? '?').charAt(0).toUpperCase()}
     </span>
   );

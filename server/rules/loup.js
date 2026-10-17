@@ -433,7 +433,7 @@ export function settleTribunal(s, allocations = {}, rng = Math.random) {
   const raw = Object.fromEntries(s.order.map((id) => [id, 0]));
   const loserCamp = s.winner === 'village' ? 'loups' : s.winner === 'loups' ? 'village' : null;
   for (const id of s.order) {
-    const loses = loserCamp ? campOf(s, id) === loserCamp : s.winner === 'amoureux' ? !s.lovers.includes(id) : false;
+    const loses = loserCamp ? campOf(s, id) === loserCamp : s.winner === 'amoureux' ? !s.lovers?.includes(id) : false;
     if (loses) raw[id] += 3;
   }
   for (const { id, n } of s.penalties) raw[id] += n;

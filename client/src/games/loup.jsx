@@ -25,26 +25,46 @@ function useNightTheme(round) {
   }, [dark]);
 }
 
-/** Les joueurs en cercle, dans l'ordre fixe du début ; les morts en gris avec leur rôle révélé. */
+/**
+ * Les joueurs en cercle, dans l'ordre fixe du début ; les morts en gris avec leur rôle révélé.
+ * Jusqu'à 12 joueurs : un cercle. Au-delà : deux cercles imbriqués (les sièges se répartissent selon la longueur de chaque cercle) :
+ * ni les avatars ni les prénoms ne se chevauchent, même à 30 joueurs.
+ */
+export function villageLayout(n) {
+  const rings = n > 12 ? [0.44, 0.26] : [0.42];
+  const total = rings.reduce((a, b) => a + b, 0);
+  const sizes = rings.length === 1 ? [n] : [Math.round((n * rings[0]) / total), n - Math.round((n * rings[0]) / total)];
+  const seats = [];
+  const index = rings.map(() => 0);
+  for (let i = 0; i < n; i++) {
+    // Répartition régulière des sièges entre les cercles : le joueur i va sur le cercle extérieur ou intérieur.
+    const outer = rings.length === 1 || Math.floor(((i + 1) * sizes[0]) / n) > Math.floor((i * sizes[0]) / n);
+    const ring = outer ? 0 : 1;
+    const k = index[ring]++;
+    const angle = (k / sizes[ring]) * Math.PI * 2 - Math.PI / 2 + (ring === 1 ? Math.PI / sizes[ring] : 0);
+    seats.push({ r: rings[ring], angle });
+  }
+  const spacing = Math.min(...rings.map((r, k) => 2 * r * Math.sin(Math.PI / Math.max(sizes[k], 2))));
+  return { seats, spacing, seat: Math.min(0.16, spacing * 0.62) };
+}
+
 function Village({ round, marked = [] }) {
   const n = round.circle.length;
+  const { seats, spacing, seat } = villageLayout(n);
   return (
-    <div className="village" style={{ '--seat': `calc(var(--village) * ${Math.min(0.16, 2.2 / n).toFixed(3)})` }}>
-      {round.circle.map((c, i) => {
-        const a = (i / n) * Math.PI * 2 - Math.PI / 2;
-        return (
-          <div
-            key={c.id}
-            className={`village-seat ${c.alive ? '' : 'is-dead'} ${marked.includes(c.id) ? 'is-marked' : ''} ${c.connected ? '' : 'is-away'}`}
-            style={{ left: `${50 + 42 * Math.cos(a)}%`, top: `${50 + 42 * Math.sin(a)}%` }}
-          >
-            <Avatar player={c} size={100} className="village-avatar" />
-            {!c.alive && <span className="village-role">{c.role ? roleIcon(c.role) : '💀'}</span>}
-            {c.idiotOut && c.alive && <span className="village-role">🤡</span>}
-            <span className="village-name">{c.name}</span>
-          </div>
-        );
-      })}
+    <div className="village" style={{ '--seat': `calc(var(--village) * ${seat.toFixed(3)})`, '--name-w': `calc(var(--village) * ${(spacing * 0.97).toFixed(3)})` }}>
+      {round.circle.map((c, i) => (
+        <div
+          key={c.id}
+          className={`village-seat ${c.alive ? '' : 'is-dead'} ${marked.includes(c.id) ? 'is-marked' : ''} ${c.connected ? '' : 'is-away'}`}
+          style={{ left: `${50 + seats[i].r * 100 * Math.cos(seats[i].angle)}%`, top: `${50 + seats[i].r * 100 * Math.sin(seats[i].angle)}%` }}
+        >
+          <Avatar player={c} size={100} className="village-avatar" />
+          {!c.alive && <span className="village-role">{c.role ? roleIcon(c.role) : '💀'}</span>}
+          {c.idiotOut && c.alive && <span className="village-role">🤡</span>}
+          <span className="village-name">{c.name}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -301,10 +321,10 @@ export function HostResults({ state }) {
       <p className="round">Le Tribunal des gorgées</p>
       <h1>{CAMP_NAME[results.winner]} {results.winner === 'amoureux' ? 'gagnent' : 'gagne'}</h1>
       <p className="muted">Un verre d’eau compte aussi.</p>
-      <div className="loup-roles">
+      <div className={`loup-roles ${rows.length > 16 ? 'is-dense' : ''}`}>
         {rows.map((p) => (
           <div key={p.id} className={`loup-role-card ${results.dead?.[p.id] ? 'is-dead' : ''}`}>
-            <Avatar player={p} size={64} />
+            <Avatar player={p} size={rows.length > 16 ? 36 : 64} />
             <strong>{p.name}</strong>
             <span>
               {roleIcon(results.roles[p.id])} {ROLE_INFO[results.roles[p.id]]?.name}
@@ -408,7 +428,7 @@ function Ghost({ me, round, act }) {
         <div className="loup-camp-bet">
           <span className="muted small">Pari bonus : qui va gagner ?</span>
           {['village', 'loups', 'amoureux'].map((camp) => (
-            <button key={camp} className="ctrl" onClick={() => act({ type: 'campBet', camp })}>
+            <button key={camp} className="ctrl ctrl-tall" onClick={() => act({ type: 'campBet', camp })}>
               {CAMP_NAME[camp]}
             </button>
           ))}
