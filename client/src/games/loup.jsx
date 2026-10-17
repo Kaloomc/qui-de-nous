@@ -224,6 +224,24 @@ function VoteTally({ round }) {
   );
 }
 
+/** Dernières paroles des morts (option), avec un bouton pour masquer une phrase déplacée. */
+function LastWordsBoard({ round, gameAct }) {
+  if (!round.lastWords?.length) return null;
+  return (
+    <div className="loup-lastwords">
+      {round.lastWords.slice(-3).map((w) => (
+        <div key={w.id} className="loup-lastword">
+          <Avatar player={playerOf(round, w.id)} size={44} />
+          <q>{w.hidden ? 'phrase masquée' : w.text}</q>
+          <button className="ctrl" onClick={() => gameAct({ type: 'hideLast', id: w.id })}>
+            {w.hidden ? 'Afficher' : 'Masquer'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function HostQuestion({ state, gameAct }) {
   const round = state.round;
   useNightTheme(round);
@@ -298,6 +316,7 @@ export function HostQuestion({ state, gameAct }) {
             {(s) => `${s} s`}
           </TimerBar>
         )}
+        <LastWordsBoard round={round} gameAct={gameAct} />
         <NarratorControls />
       </div>
       <Village round={round} marked={round.tie ?? []} />
@@ -377,10 +396,36 @@ function Pick({ round, options, onPick, selected = null, disabled = [] }) {
   return <PlayerGrid players={players} onPick={onPick} selectedId={selected} disabledIds={disabled} />;
 }
 
+/** Dernières paroles (option) : une phrase de 80 caractères, texte brut, affichée sur la TV ; on peut passer. */
+function LastWords({ act }) {
+  const [text, setText] = useState('');
+  return (
+    <form
+      className="loup-last"
+      onSubmit={(e) => {
+        e.preventDefault();
+        act({ type: 'last', text });
+      }}
+    >
+      <p className="lead">💀 Tes dernières paroles ? (affichées sur la TV)</p>
+      <input className="input" maxLength={80} value={text} onChange={(e) => setText(e.target.value)} placeholder="80 caractères maximum" enterKeyHint="send" autoComplete="off" />
+      <div className="loup-actions">
+        <button className="btn btn-primary" disabled={!text.trim()}>
+          Envoyer
+        </button>
+        <button type="button" className="btn btn-ghost" onClick={() => act({ type: 'last', text: '' })}>
+          Passer
+        </button>
+      </div>
+    </form>
+  );
+}
+
 function Ghost({ me, round, act }) {
   if (!me.allRoles) return null;
   return (
     <div className="loup-ghost">
+      {me.last === 'pending' && <LastWords act={act} />}
       <p className="muted small">👻 Tu es un fantôme : tu vois tout, mais interdit de parler du jeu !</p>
       <div className="loup-ghost-list">
         {me.allRoles.map((r) => (

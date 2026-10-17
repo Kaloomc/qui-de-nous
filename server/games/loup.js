@@ -239,6 +239,7 @@ function privateView(game, d, playerId) {
     partners: role === 'loup' ? wolves.filter((id) => id !== playerId) : [],
     lover: e.lovers?.includes(playerId) ? e.lovers.find((id) => id !== playerId) : null,
     intel: d.intel[playerId] ?? { seen: [], bear: [] },
+    last: !alive && e.options.dernieresParoles && e.dead[playerId]?.cause !== 'retire' ? (d.last[playerId] ? 'done' : 'pending') : null,
     allRoles: alive ? null : e.order.map((id) => ({ id, role: e.roles[id], alive: L.isAlive(e, id) })),
     screen: screenOf(game, d, playerId, role, alive),
   };
@@ -293,7 +294,7 @@ export default {
     const ids = game.connectedPlayers().map((p) => p.id);
     const counts = game.loupConfig?.counts ?? recommendedComposition(ids.length);
     const eng = L.createGame(ids, counts, { options: game.loupConfig?.options });
-    Object.assign(game.roundData, { eng, seq: 0, mark: 0, intel: {}, votes: {}, wolfVotes: {}, done: {}, names: snapshot(game, eng.order), stage: 'deal', phaseId: null, announce: null });
+    Object.assign(game.roundData, { eng, seq: 0, mark: 0, intel: {}, last: {}, votes: {}, wolfVotes: {}, done: {}, names: snapshot(game, eng.order), stage: 'deal', phaseId: null, announce: null });
     startDeal(game);
   },
 
@@ -306,6 +307,13 @@ export default {
     }
     const d = data(game);
     if (game.phase !== 'question') return 'Aucune partie en cours.';
+    // Dernières paroles : l'hôte peut masquer (ou ré-afficher) une phrase.
+    if (action.type === 'hideLast') {
+      const entry = d.last?.[action.id];
+      if (!entry) return 'Phrase inconnue.';
+      entry.hidden = !entry.hidden;
+      return null;
+    }
     if (action.type === 'skipDebate' && d.stage === 'debate') {
       startVote(game, null);
       return null;
@@ -361,6 +369,14 @@ export default {
       if (!alive || e.idiotOut[playerId]) return 'Tu ne votes pas.';
       if (!L.isAlive(e, action.target) || action.target === playerId || (d.only && !d.only.includes(action.target))) return 'Choix invalide.';
       d.votes[playerId] = action.target;
+      return null;
+    }
+    // Dernières paroles (option) : une phrase de 80 caractères, texte brut, que le mort peut aussi passer. Jamais bloquant.
+    if (action.type === 'last') {
+      if (alive || !e.options.dernieresParoles || e.dead[playerId]?.cause === 'retire') return 'Pas de dernières paroles pour toi.';
+      if (d.last[playerId]) return 'Déjà dit.';
+      const text = typeof action.text === 'string' ? action.text.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80) : '';
+      d.last[playerId] = { text, hidden: false };
       return null;
     }
     if ((d.stage === 'debate' || d.stage === 'vote') && action.type === 'bet') return L.ghostBet(e, playerId, action.target) ? null : 'Pari invalide.';
@@ -426,6 +442,8 @@ export default {
       hunter: d.stage === 'hunter' ? d.hunter : null,
       winner: e.winner,
       dernieresParoles: !!e.options.dernieresParoles,
+      // Phrases non vides ; une phrase masquée par l'hôte reste dans la liste (pour pouvoir la ré-afficher) mais sans son texte.
+      lastWords: Object.entries(d.last).filter(([, w]) => w.text).map(([id, w]) => ({ id, text: w.hidden ? null : w.text, hidden: w.hidden })),
     };
     if (game.phase === 'results') round.credits = d.credits ?? {};
     if (viewer.playerId) round.me = privateView(game, d, viewer.playerId);

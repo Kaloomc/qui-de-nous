@@ -272,7 +272,8 @@ export function advance(s) {
     s.awaitingHunter = s.hunters.shift();
     return 'hunter';
   }
-  s.events.push(...s.pendingGorgees);
+  // Une gorgée sans source ne vise pas quelqu'un qui est mort entre-temps (tir du Chasseur…).
+  s.events.push(...s.pendingGorgees.filter((e) => isAlive(s, e.id)));
   s.pendingGorgees = [];
   checkVictory(s);
   return 'done';

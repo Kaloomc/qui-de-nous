@@ -4433,3 +4433,33 @@ body.loup-night {
   align-items: center;
   gap: 8px;
 }
+
+.loup-last {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.loup-lastwords {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.loup-lastword {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+.loup-lastword q {
+  flex: 1;
+  font-weight: 700;
+  quotes: '« ' ' »';
+}
