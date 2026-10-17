@@ -95,6 +95,19 @@ export const GAME_CATALOG = [
     rhythm: 'rapide',
     available: true,
   },
+  {
+    id: 'loup',
+    name: 'Loup-Garou',
+    icon: 'house',
+    tagline: 'Le village dort, les loups rôdent. Sans maître du jeu : les téléphones jouent la nuit, la TV raconte.',
+    rule: 'Le camp perdant boit, et chaque rôle a ses gorgées.',
+    players: { min: 8, max: 30 },
+    minToStart: 6,
+    rhythm: 'ambiance',
+    partyRounds: [1, 1],
+    partyDefault: false,
+    available: true,
+  },
 ];
 
 export const DEFAULT_GAME = 'qui-de-nous';

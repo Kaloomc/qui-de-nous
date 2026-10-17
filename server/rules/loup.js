@@ -451,3 +451,17 @@ export function settleTribunal(s, allocations = {}, rng = Math.random) {
   const sips = Object.fromEntries(Object.entries(raw).map(([id, n]) => [id, Math.min(n, TRIBUNAL_CAP)]));
   return { sips, credits };
 }
+
+// ---------- Retrait par l'hôte ----------
+
+/** Joueur retiré en cours de partie : mort sans rôle révélé, sans chagrin ni tir ; la victoire est revérifiée. */
+export function withdraw(s, id) {
+  if (!isAlive(s, id)) return false;
+  s.dead[id] = { cause: 'retire', night: s.night };
+  s.events.push({ type: 'death', id, role: null, cause: 'retire', sips: 0 });
+  s.queue = s.queue.filter((q) => q.id !== id);
+  if (s.awaitingHunter === id) s.awaitingHunter = null;
+  s.hunters = s.hunters.filter((h) => h !== id);
+  checkVictory(s);
+  return true;
+}

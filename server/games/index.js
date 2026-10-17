@@ -2,6 +2,7 @@ import { DEFAULT_GAME, GAME_CATALOG } from '../../shared/games.js';
 import estimation from './estimation.js';
 import feu from './feu.js';
 import imposteur from './imposteur.js';
+import loup from './loup.js';
 import patate from './patate.js';
 import quiDeNous from './quiDeNous.js';
 import quiMeConnait from './quiMeConnait.js';
@@ -19,6 +20,7 @@ export const GAME_RULES = {
   [patate.id]: patate,
   [roue.id]: roue,
   [feu.id]: feu,
+  [loup.id]: loup,
 };
 
 /** Registre complet : métadonnées du catalogue + règles. */
@@ -32,4 +34,4 @@ export const isGame = (id) => typeof id === 'string' && Object.hasOwn(GAMES, id)
 export const isPlayable = (id) => isGame(id) && GAMES[id].available && Object.hasOwn(GAME_RULES, id);
 
 /** Jeux vus par le mode soirée (server/party.js) : métadonnées + `playable`. */
-export const partyGames = () => Object.values(GAMES).map((g) => ({ id: g.id, rhythm: g.rhythm, minToStart: g.minToStart, partyRounds: g.partyRounds, playable: isPlayable(g.id) }));
+export const partyGames = () => Object.values(GAMES).map((g) => ({ id: g.id, rhythm: g.rhythm, minToStart: g.minToStart, partyRounds: g.partyRounds, partyDefault: g.partyDefault, playable: isPlayable(g.id) }));

@@ -461,6 +461,8 @@ export class Game {
     if (this.phase !== 'lobby') return 'La partie a déjà commencé.';
     const min = this.rules.minToStart ?? 2;
     if (this.players.size < min) return `Il faut au moins ${min} joueurs.`;
+    const blocked = this.rules.canStart?.(this);
+    if (blocked) return blocked;
     return this.nextQuestion();
   }
 
@@ -726,7 +728,8 @@ export class Game {
     if (!['picking', 'lobby', 'ended'].includes(this.phase)) return 'Termine la partie avant de lancer le mode soirée.';
     if (!PARTY_DURATIONS.includes(durationMs)) return 'Durée invalide.';
     const all = partyGames();
-    const included = all.filter((g) => !Array.isArray(games) || games.includes(g.id)).map((g) => g.id);
+    // Les jeux longs (partyDefault: false) ne sont dans le programme que si l'hôte les a cochés.
+    const included = all.filter((g) => (Array.isArray(games) ? games.includes(g.id) : g.partyDefault !== false)).map((g) => g.id);
     if (!eligibleGames(all, Infinity, included).length) return 'Coche au moins un jeu.';
     if (!eligibleGames(all, this.connectedCount(), included).length) return 'Pas assez de joueurs connectés pour ces jeux.';
     this.party = {
