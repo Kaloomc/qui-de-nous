@@ -4145,3 +4145,285 @@ button {
 :root[data-theme='after-dark'] .verdict-safe .verdict-sips {
   background: rgba(20, 14, 16, 0.1);
 }
+
+/* ---------- Loup-Garou ---------- */
+
+/* Nuit : la palette actuelle assombrie (bleu nuit), sans le rouge du mode 18+. */
+body.loup-night {
+  background: radial-gradient(circle at 70% 10%, #1d2a5c 0%, #0b1030 55%) fixed, #0b1030;
+}
+
+.loup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.loup-tv {
+  --village: min(64vh, 46vw);
+  flex-direction: row;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 64px);
+}
+
+.loup-main {
+  flex: 1;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.loup-main h1 {
+  font-size: clamp(1.8rem, 3.4vw, 3.4rem);
+}
+
+.loup-moon {
+  font-size: clamp(3rem, 8vh, 6rem);
+  line-height: 1;
+  filter: drop-shadow(0 0 24px rgba(180, 200, 255, 0.55));
+}
+
+.village {
+  position: relative;
+  flex: none;
+  width: var(--village);
+  height: var(--village);
+}
+
+.village-seat {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: calc(var(--seat) * 1.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.village-avatar {
+  width: var(--seat) !important;
+  height: var(--seat) !important;
+  font-size: calc(var(--seat) * 0.45) !important;
+}
+
+.village-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: clamp(0.6rem, calc(var(--seat) * 0.28), 1.1rem);
+}
+
+.village-seat.is-dead .village-avatar {
+  filter: grayscale(1) brightness(0.55);
+}
+
+.village-seat.is-dead .village-name {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.village-seat.is-away .village-avatar {
+  opacity: 0.6;
+}
+
+.village-seat.is-marked .village-avatar {
+  box-shadow: 0 0 0 4px var(--yellow), 0 0 30px var(--yellow);
+}
+
+.village-role {
+  position: absolute;
+  top: calc(var(--seat) * -0.1);
+  right: calc(50% - var(--seat) * 0.75);
+  font-size: calc(var(--seat) * 0.5);
+  line-height: 1;
+}
+
+.loup-announce {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loup-line {
+  font-size: clamp(1.1rem, 2vw, 2rem);
+  font-weight: 700;
+}
+
+.loup-line-big {
+  font-size: clamp(1.4rem, 2.6vw, 2.6rem);
+}
+
+.loup-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* La voix dit une phrase sans prénom ; la photo, puis le prénom, puis le rôle apparaissent ensuite (roulement de tambour). */
+.loup-reveal-avatar,
+.loup-reveal-name,
+.loup-reveal-role {
+  opacity: 0;
+  animation: fade-up 0.6s ease forwards;
+}
+
+.loup-reveal-avatar {
+  animation-delay: 2.2s;
+}
+
+.loup-reveal-name {
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  font-weight: 800;
+  animation-delay: 2.6s;
+}
+
+.loup-reveal-role {
+  font-size: clamp(1.3rem, 2.4vw, 2.4rem);
+  color: var(--yellow);
+  font-weight: 800;
+  animation-delay: 3.6s;
+}
+
+.loup-tally {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+  font-weight: 700;
+}
+
+.loup-tally-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loup-count {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--yellow);
+}
+
+.loup-win {
+  font-size: clamp(2.4rem, 6vw, 6rem);
+  color: var(--yellow);
+}
+
+.loup-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.loup-role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.9rem;
+}
+
+.loup-role-card.is-dead {
+  opacity: 0.6;
+}
+
+.loup-role-card em {
+  font-style: normal;
+  color: var(--muted);
+}
+
+.loup-role-card em.is-drinking {
+  color: var(--red);
+  font-weight: 800;
+}
+
+.loup-phone {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.loup-deal,
+.loup-sleep {
+  gap: 12px;
+}
+
+.loup-role-icon {
+  font-size: clamp(4rem, 14vh, 8rem);
+  line-height: 1;
+}
+
+.loup-intel {
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.1rem;
+}
+
+.loup-lover {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.loup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(100%, 420px);
+}
+
+.loup-ghost {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loup-ghost-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+  font-size: 0.9rem;
+}
+
+.loup-ghost-list .is-dead {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.loup-camp-bet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 900px) {
+  .loup-tv {
+    flex-direction: column;
+    --village: min(70vw, 50vh);
+  }
+}
+
+.loup-drinkers {
+  font-weight: 700;
+  color: var(--yellow);
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
+  animation: fade-up 0.6s ease 4.2s both;
+}

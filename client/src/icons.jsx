@@ -116,6 +116,16 @@ const ICONS = {
       <path d="M60 4 l10 16 h-20 z" fill="#fff8f0" />
     </>
   ),
+  house: (
+    <>
+      <circle cx="92" cy="26" r="14" fill="#ffc93c" />
+      <circle cx="98" cy="22" r="12" fill="#14102a" />
+      <path d="M14 108 V62 L60 24 L106 62 V108 Z" fill="#6c8bff" />
+      <path d="M8 66 L60 18 L112 66" stroke="#ff4f8b" strokeWidth="8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="48" y="72" width="24" height="36" rx="4" fill="#14102a" />
+      <path d="M26 88 l8 -14 l8 14 z" fill="#ffc93c" />
+    </>
+  ),
   flame: (
     <>
       <path d="M60 10 c6 18 30 28 30 58 a30 30 0 0 1 -60 0 c0 -16 10 -24 14 -34 c4 10 6 14 12 16 c-2 -16 -2 -28 4 -40 z" fill="#ff4f8b" />

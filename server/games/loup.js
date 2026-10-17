@@ -118,10 +118,35 @@ function announce(game, status, after, quiet = false) {
   const e = d.eng;
   const fresh = e.events.slice(d.mark);
   d.mark = e.events.length;
-  const items = fresh.map(publicEvent);
+  // Les gorgées n'ajoutent aucune étape : celles du vote s'affichent avec la mort (ou l'Idiot) qu'elles suivent,
+  // celles de la Sorcière / du Distributeur forment un seul message en fin d'aube.
+  const items = [];
+  const drinks = [];
+  let drinkers = [];
+  const sips = [];
+  for (const ev of fresh) {
+    if (ev.type === 'voteSips') drinkers.push(ev.id);
+    else if (ev.type === 'gorgee') sips.push(ev);
+    else {
+      const item = publicEvent(ev);
+      if (ev.type === 'death') {
+        item.drinkers = drinkers;
+        drinks.push([{ id: ev.id, n: ev.sips }, ...drinkers.map((id) => ({ id, n: 1 }))]);
+        drinkers = [];
+      } else if (ev.type === 'idiot') {
+        item.drinkers = ev.voters;
+        drinks.push(ev.voters.map((id) => ({ id, n: 1 })));
+      } else drinks.push([]);
+      items.push(item);
+    }
+  }
+  if (sips.length) {
+    items.push({ type: 'gorgees', ids: sips.map((ev) => ev.id) });
+    drinks.push(sips.map((ev) => ({ id: ev.id, n: 1 })));
+  }
   if (!items.length && quiet) {
     items.push({ type: 'none' });
-    fresh.push(null);
+    drinks.push([]);
   }
   const next = () => {
     if (status === 'hunter' && e.awaitingHunter) return startHunter(game, after);
@@ -130,25 +155,16 @@ function announce(game, status, after, quiet = false) {
   };
   if (!items.length) return next();
   const step = (i) => {
-    applySips(game, fresh[i]);
+    for (const { id, n } of drinks[i]) game.drink(id, n);
     go(game, 'announce', timing(game).announceMs, () => (i + 1 < items.length ? step(i + 1) : next()), { announce: { items: items.slice(0, i + 1), i } });
   };
   step(0);
-}
-
-/** Les gorgées « dans le flux » partent au moment où l'événement s'affiche (jamais avant : pas de spoiler). */
-function applySips(game, ev) {
-  if (!ev) return;
-  if (ev.type === 'death' || ev.type === 'voteSips' || ev.type === 'gorgee') game.drink(ev.id, ev.sips);
-  if (ev.type === 'idiot') for (const v of ev.voters) game.drink(v, ev.sips);
 }
 
 /** Version publique d'un événement : la cause d'une mort de nuit (loups ou poison) n'est jamais révélée. */
 function publicEvent(ev) {
   if (ev.type === 'death') return { type: 'death', id: ev.id, role: ev.role, cause: ev.cause === 'loups' || ev.cause === 'poison' ? 'nuit' : ev.cause };
   if (ev.type === 'idiot') return { type: 'idiot', id: ev.id, role: ev.role };
-  if (ev.type === 'voteSips') return { type: 'voteSips', id: ev.id };
-  if (ev.type === 'gorgee') return { type: 'gorgee', id: ev.id };
   return { type: ev.type };
 }
 
