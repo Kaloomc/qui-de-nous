@@ -8,6 +8,7 @@ import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
 import { preloadNarration } from '../narrator.js';
+import { LoupSetup } from '../games/loupSetup.jsx';
 import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
@@ -120,6 +121,8 @@ export default function Host({ code }) {
           onSettings={() => setSettingsOpen(true)}
           onChangeGame={() => act('host:chooseGame')}
           adultSlot={<AdultButton state={state} act={act} />}
+          extra={mode.id === 'loup' ? <LoupSetup state={state} gameAct={gameAct} /> : null}
+          blocked={mode.id === 'loup' ? state.lobby?.errors?.[0] : null}
         />
       )}
 
@@ -436,7 +439,7 @@ function GamePill({ game, onChange }) {
   );
 }
 
-function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSlot }) {
+function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSlot, extra, blocked }) {
   const joinUrl = useJoinUrl(state.code);
   const [qr, setQr] = useState(null);
 
@@ -473,6 +476,7 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSl
             ))}
           </div>
         )}
+        {extra}
         <div className="actions lobby-actions">
           <button className="settings-summary" onClick={onSettings}>
             <span>Réglages</span>
@@ -480,8 +484,8 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSl
             <em>Modifier</em>
           </button>
           {adultSlot}
-          <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < (mode.minToStart ?? 2)}>
-            {count < (mode.minToStart ?? 2) ? `Il faut au moins ${mode.minToStart ?? 2} joueurs` : 'Lancer la partie'}
+          <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < (mode.minToStart ?? 2) || !!blocked}>
+            {count < (mode.minToStart ?? 2) ? `Il faut au moins ${mode.minToStart ?? 2} joueurs` : blocked ? 'Compo à corriger' : 'Lancer la partie'}
           </button>
         </div>
       </section>

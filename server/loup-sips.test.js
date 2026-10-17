@@ -182,3 +182,50 @@ test('dernières paroles (option) : texte brut de 80 caractères, passer est per
   clock.tick(T.voteMs);
   assert.equal(eng.ghostPoints[ps[5].id], 1, 'pari juste = 1 point');
 });
+
+test('composition (lobby) : conseillée par défaut, réglable, options seules, retour au conseil, lancement bloqué si ça ne colle pas', () => {
+  const clock = new FakeClock();
+  const game = new Game('TEST', 'loup', { clock });
+  for (let i = 0; i < 8; i++) game.connectPlayer(game.upsertPlayer({ name: `J${i}` }).player, `s${i}`);
+  let lobby = game.publicState({ host: true }).lobby;
+  assert.equal(lobby.custom, false);
+  assert.equal(lobby.players, 8);
+  assert.deepEqual(lobby.errors, []);
+  assert.equal(lobby.counts.loup, 2);
+  // Un loup de plus, sans enlever de villageois : 9 rôles pour 8 joueurs, lancement refusé avec le motif.
+  assert.equal(game.gameHostAction({ type: 'config', counts: { ...lobby.counts, loup: 3 } }), null);
+  lobby = game.publicState({ host: true }).lobby;
+  assert.equal(lobby.custom, true);
+  assert.match(lobby.errors[0], /9 rôles pour 8 joueurs/);
+  assert.match(game.start(), /rôles/);
+  // Les options seules ne touchent pas à la composition réglée.
+  game.gameHostAction({ type: 'config', options: { dernieresParoles: true, potionGorgee: false, rolesMaison: true } });
+  lobby = game.publicState({ host: true }).lobby;
+  assert.equal(lobby.counts.loup, 3);
+  assert.equal(lobby.options.dernieresParoles, true);
+  assert.equal(lobby.options.potionGorgee, false);
+  // Retour à la composition recommandée : elle suit ensuite les arrivées.
+  game.gameHostAction({ type: 'config', counts: null });
+  game.connectPlayer(game.upsertPlayer({ name: 'J8' }).player, 's8');
+  lobby = game.publicState({ host: true }).lobby;
+  assert.equal(lobby.custom, false);
+  assert.equal(lobby.players, 9);
+  assert.deepEqual(lobby.errors, []);
+  assert.equal(game.start(), null);
+  assert.equal(game.roundData.eng.options.dernieresParoles, true, 'les options choisies sont appliquées');
+  assert.equal(game.roundData.eng.options.potionGorgee, false);
+});
+
+test('récap : trophées du Loup-Garou (loup le plus rusé, meilleure voyante), sans rôle avant la fin de la partie', async () => {
+  const { recordRound, computeTrophies } = await import('./recap.js');
+  const stats = new Map();
+  const results = { winner: 'loups', nights: 4, seerFound: 1, roles: { a: 'loup', b: 'loup', c: 'voyante', d: 'villageois' }, dead: { b: { night: 2 }, c: { night: 3 } } };
+  recordRound(stats, 'loup', results, ['a', 'b', 'c', 'd']);
+  assert.equal(stats.get('a').wolfNights, 4, 'loup vivant à la fin : toutes les nuits');
+  assert.equal(stats.get('b').wolfNights, 2);
+  assert.equal(stats.get('c').seerFound, 1);
+  const players = ['a', 'b', 'c', 'd'].map((id) => ({ id, name: id.toUpperCase() }));
+  const trophies = computeTrophies(players, {}, stats);
+  assert.equal(trophies.find((t) => t.id === 'loup').playerId, 'a');
+  assert.equal(trophies.find((t) => t.id === 'voyante').playerId, 'c');
+});

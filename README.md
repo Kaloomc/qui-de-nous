@@ -20,6 +20,7 @@ Après **Créer une partie**, l'hôte choisit le jeu dans une grille de cartes. 
 | **Patate chaude** | Une bombe passe de téléphone en téléphone, mèche cachée. | Celui qui l'a quand elle explose | 3 à 20 |
 | **La Roue** | Une roue choisit un joueur, une deuxième son défi. | Selon le défi : gorgées, duo, vote, gage… | 2 à 20 |
 | **Réflexes** | La TV dit des mots qui ressemblent à « feu ». On tape seulement sur « FEU ». | Le plus lent, les faux départs, ceux qui ne tapent pas | 2 à 20 |
+| **Loup-Garou** | Le classique, sans maître du jeu : rôles secrets sur les téléphones, village et narrateur vocal sur la TV. | Le camp perdant, les morts, et des gorgées liées aux rôles | 6 à 30 |
 
 Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur de gorgées et le podium de fin.
 
@@ -363,6 +364,19 @@ Un duel de cowboys, inspiré du principe d'« Imbroglio au Far West » : on atte
 - Boivent : le **dernier** à taper après « FEU », ceux qui tapent sur un **mauvais mot** (ou moins de 120 ms après « FEU » : c'est de l'anticipation) et ceux qui **ne tapent pas**. Un joueur déconnecté n'est pas puni.
 - Les temps sont mesurés **à la réception par le serveur** : on compare les joueurs entre eux, la latence de la TV est la même pour tous.
 
+### Loup-Garou
+
+Le jeu classique **sans maître du jeu** : chaque téléphone reçoit un rôle secret et gère ses actions de nuit, la TV affiche le village en cercle et un **narrateur vocal** (sarcastique) raconte la partie. 6 à 30 joueurs, 15 à 40 minutes : le jeu est **exclu du programme automatique du mode soirée** par défaut, mais l'hôte peut le cocher.
+
+- **Camps et victoire** : le village gagne quand il n'y a plus de loup ; les loups gagnent quand ils sont au moins aussi nombreux que les autres ; deux amoureux de camps différents gagnent seuls s'ils sont les deux derniers en vie.
+- **Rôles** (composition réglable dans le lobby, bouton « Composition recommandée » selon le nombre de joueurs) : Villageois, Loup-garou, Voyante, Sorcière (vie, mort et potion de gorgée), Chasseur, Cupidon, Salvateur (jamais deux nuits de suite la même cible), Ours (3 flairages : « elle ou un de ses voisins vivants est-il un loup ? »), Idiot du village, Ancien, et deux rôles maison : Ivrogne (boit en secret chaque nuit) et Distributeur (fait boire jusqu'à 3 joueurs, une fois, sans source).
+- **Nuit** : toutes les phases durent **exactement le même temps**, même quand le rôle est mort ou n'agit pas, pour ne rien révéler. À l'aube, les morts sont annoncées une par une : la voix ne dit aucun prénom, la photo, le prénom puis le rôle apparaissent ensuite.
+- **Gorgées sans ralentir le jeu** : celles de la mort et du vote s'annoncent avec la mort ; celles de la Sorcière et du Distributeur forment un seul message sans source ; celles de l'Ivrogne restent sur son téléphone ; le reste est réglé en une fois au **Tribunal des gorgées** (le camp perdant boit 3, chaque rôle distribue les gorgées gagnées, 8 gorgées maximum reçues par joueur).
+- **Fantômes** : les morts voient tous les rôles sur leur téléphone (jamais sur la TV), parient sur le prochain éliminé et sur le camp gagnant, et peuvent laisser des dernières paroles de 80 caractères (option, masquables par l'hôte).
+- **Confidentialité** : le serveur n'envoie à chaque écran que ce qu'il a le droit de voir ; un test automatique vérifie qu'aucun rôle ni action secrète n'est envoyé à la TV ni à un joueur non autorisé.
+
+**Voix du narrateur** : 132 phrases (5 à 6 variantes pour les moments répétés) dans [`server/content/narration-loup-garou.json`](server/content/narration-loup-garou.json), pré-générées avec ElevenLabs comme celles de Réflexes (même pipeline). Mets ta clé dans `.env` (`ELEVENLABS_API_KEY=…`, jamais commité) et, si tu veux une autre voix que George, `LOUP_VOICE_ID=…`. Puis `npm run narration -- --dry` (nombre de clips et de caractères à générer, sans rien payer), `npm run narration` (seuls les clips manquants ou dont le texte, la voix ou les réglages ont changé sont refaits) et commite `client/public/narration/`. Sans clips, ou son coupé, le jeu affiche le texte seul. **Ajouter une phrase** : une variante de plus dans la liste d'un événement, puis `npm run narration`. **Ajouter un rôle** : ses règles dans `server/rules/loup.js` (`ROLES`, `NIGHT_ORDER` s'il agit la nuit), son écran dans `client/src/games/loup.jsx` et `loupRoles.js`, une ligne `role_…` (et `wake_…` / `sleep_…`) dans le fichier de narration ; `npm test` signale un clip manquant. `npm run loupsim` joue 500 parties complètes avec des bots pour vérifier que rien ne se bloque.
+
 ### Compteur de gorgées
 
 Chaque fois que le jeu dit « tu bois », ça compte une gorgée :
@@ -507,6 +521,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │       │   ├── patate.jsx       Bombe SVG animée en requestAnimationFrame
 │       │   ├── roue.jsx         Roues SVG (rotation calée sur l'horloge du serveur, cliquet)
 │       │   ├── feu.jsx          Mots animés, flammes, gros bouton FEU
+│       │   ├── loup.jsx, loupRoles.js, loupSetup.jsx   Loup-Garou : village en cercle, nuit, vote, fantômes, composition
 │       │   └── index.js         Registre client : catalogue + écrans
 │       ├── icons.jsx       Logo Gorgée et illustrations des jeux (SVG maison)
 │       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, minuteurs
@@ -517,7 +532,8 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │       ├── credit.js, credit.jsx   Crédit « Made by Kaloo » (constante + composant)
 │       ├── colors.js       Couleurs des joueurs sans photo
 │       ├── sound.js        Sons synthétisés (WebAudio, aucun fichier audio)
-│       ├── speech.js       Voix de la TV pour Réflexes (Web Speech API)
+│       ├── speech.js       Voix de la TV pour Réflexes (voix enregistrées, Web Speech API en secours)
+│       ├── narrator.js     Narrateur vocal du Loup-Garou (clips préchargés, file de lecture, repli texte)
 │       ├── lib.js          Socket.IO, navigation, stockage local
 │       └── photo.js        Recadrage et compression des photos
 ├── server/

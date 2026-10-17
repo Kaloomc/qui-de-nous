@@ -290,9 +290,20 @@ export default {
     return errors[0] ?? null;
   },
 
+  /** Composition affichée dans le lobby de la TV : réglée par l'hôte, ou conseillée pour le nombre de joueurs connectés. */
+  publicLobby(game) {
+    const n = game.connectedCount();
+    const custom = !!game.loupConfig?.counts;
+    const counts = game.loupConfig?.counts ?? recommendedComposition(n);
+    const { errors, warnings } = validateComposition(counts, n);
+    return { players: n, counts, custom, recommended: recommendedComposition(n), errors, warnings, options: { dernieresParoles: false, potionGorgee: true, rolesMaison: true, ...game.loupConfig?.options } };
+  },
+
   startRound(game) {
     const ids = game.connectedPlayers().map((p) => p.id);
-    const counts = game.loupConfig?.counts ?? recommendedComposition(ids.length);
+    // Composition réglée par l'hôte si elle correspond aux joueurs, sinon la composition conseillée (mode soirée, arrivées tardives).
+    const custom = game.loupConfig?.counts;
+    const counts = custom && validateComposition(custom, ids.length).errors.length === 0 ? custom : recommendedComposition(ids.length);
     const eng = L.createGame(ids, counts, { options: game.loupConfig?.options });
     Object.assign(game.roundData, { eng, seq: 0, mark: 0, intel: {}, last: {}, votes: {}, wolfVotes: {}, done: {}, names: snapshot(game, eng.order), stage: 'deal', phaseId: null, announce: null });
     startDeal(game);
@@ -302,7 +313,18 @@ export default {
   hostAction(game, action) {
     if (action.type === 'config') {
       if (game.phase !== 'lobby') return 'La composition se règle avant le lancement.';
-      game.loupConfig = { counts: action.counts, options: { dernieresParoles: !!action.options?.dernieresParoles, potionGorgee: action.options?.potionGorgee !== false, rolesMaison: action.options?.rolesMaison !== false } };
+      // « Composition recommandée » : on repart du conseil pour le nombre de joueurs (qui suit ensuite les arrivées).
+      if (action.counts === null) {
+        game.loupConfig = { counts: null, options: game.loupConfig?.options };
+        return null;
+      }
+      // Sans `counts`, on ne change que les options (la composition réglée, ou conseillée, reste telle quelle).
+      const prev = game.loupConfig ?? {};
+      const o = action.options ?? prev.options ?? {};
+      game.loupConfig = {
+        counts: action.counts === undefined ? prev.counts ?? null : action.counts,
+        options: { dernieresParoles: !!o.dernieresParoles, potionGorgee: o.potionGorgee !== false, rolesMaison: o.rolesMaison !== false },
+      };
       return null;
     }
     const d = data(game);
@@ -397,7 +419,7 @@ export default {
     const d = data(game);
     d.credits = L.tribunalCredits(e);
     d.allocations = {};
-    return { winner: e.winner, roles: Object.fromEntries(e.order.map((id) => [id, e.roles[id]])), lovers: e.lovers, credits: d.credits, dead: e.dead };
+    return { winner: e.winner, nights: e.night, seerFound: Object.keys(e.seen).length, roles: Object.fromEntries(e.order.map((id) => [id, e.roles[id]])), lovers: e.lovers, credits: d.credits, dead: e.dead };
   },
 
   afterReveal(game) {

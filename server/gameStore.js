@@ -790,8 +790,8 @@ export class Game {
   partyStartBlock() {
     if (!this.partyActive || this.phase !== 'lobby') return;
     if (this.party.ending || this.partyTimeUp) return this.finishParty();
-    // Quelqu'un est parti pendant la transition : on choisit un autre jeu.
-    if (this.connectedCount() < (this.rules.minToStart ?? 2)) return this.partyNextGame();
+    // Quelqu'un est parti pendant la transition (ou la composition du jeu ne convient plus) : on choisit un autre jeu.
+    if (this.connectedCount() < (this.rules.minToStart ?? 2) || this.rules.canStart?.(this)) return this.partyNextGame();
     this.party.step = 'playing';
     this.nextQuestion();
   }
@@ -953,6 +953,8 @@ export class Game {
       pendingTimer: this.pending ? this.timerState('pending') : null,
       stats: Object.fromEntries(this.stats),
       party: this.partyState(),
+      // Données propres au jeu choisi pendant le lobby (ex. la composition du Loup-Garou).
+      lobby: this.phase === 'lobby' && this.rules?.publicLobby ? this.rules.publicLobby(this) : null,
       adult: this.adultState(viewer),
       recap: this.phase === 'ended' ? this.recap() : null,
     };

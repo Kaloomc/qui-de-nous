@@ -47,6 +47,15 @@ export function recordRound(stats, mode, results, playerIds) {
     case 'roue':
       if (results.targetId) add(results.targetId, 'picked');
       break;
+    case 'loup': {
+      // Les rôles ne sont révélés qu'ici, la partie est finie : le récap n'apparaît qu'en fin de soirée.
+      const { roles = {}, dead = {}, nights = 0, seerFound = 0 } = results;
+      for (const [id, role] of Object.entries(roles)) {
+        if (role === 'loup') add(id, 'wolfNights', dead[id]?.night ?? nights);
+        if (role === 'voyante' && seerFound) add(id, 'seerFound', seerFound);
+      }
+      break;
+    }
     default:
   }
 }
@@ -69,6 +78,8 @@ export const TROPHIES = [
   { id: 'pote', emoji: '🤝', title: 'Le meilleur pote', key: 'correct', min: 2, label: (n) => `${plural(n, 'bonne réponse')} sur les autres` },
   { id: 'maudit', emoji: '💣', title: 'Les mains brûlantes', key: 'bombs', min: 1, label: (n) => `${plural(n, 'bombe')} en pleine figure` },
   { id: 'chouchou', emoji: '🎡', title: 'Le chouchou de la roue', key: 'picked', min: 2, label: (n) => `désigné ${n} fois` },
+  { id: 'loup', emoji: '🐺', title: 'Le loup le plus rusé', key: 'wolfNights', min: 2, label: (n) => `${plural(n, 'nuit')} sans se faire croquer` },
+  { id: 'voyante', emoji: '🔮', title: 'La meilleure voyante', key: 'seerFound', min: 1, label: (n) => `${plural(n, 'loup')} démasqué${n > 1 ? 's' : ''}` },
 ];
 
 /** Un autre que le premier peut recevoir le trophée s'il n'en a pas encore et qu'il est au moins à moitié aussi bon. */
