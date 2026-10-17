@@ -22,7 +22,7 @@ export const LOUP_TIMING = {
   // Garde-fous invisibles : un joueur qui ne fait rien ne bloque jamais la partie.
   dealSafetyMs: 120000,
   nightSafetyMs: 60000,
-  hunterSafetyMs: 45000,
+  hunterSafetyMs: 15000, // le Chasseur a 15 s (invisibles) : sans tir, personne ne meurt
   debateSafetyMs: 300000,
   voteSafetyMs: 120000,
   tribunalMs: 30000,
