@@ -7,6 +7,7 @@ import patate from './patate.js';
 import quiDeNous from './quiDeNous.js';
 import quiMeConnait from './quiMeConnait.js';
 import roue from './roue.js';
+import savant from './savant.js';
 import tuPreferes from './tuPreferes.js';
 
 // Règles côté serveur de chaque jeu jouable : questions, validation d'un vote, résultats, gorgées, durée du suspense.
@@ -21,6 +22,7 @@ export const GAME_RULES = {
   [roue.id]: roue,
   [feu.id]: feu,
   [loup.id]: loup,
+  [savant.id]: savant,
 };
 
 /** Registre complet : métadonnées du catalogue + règles. */

@@ -72,7 +72,7 @@ export function sanitizeSettings(patch) {
  *   expectedVoters(game, players), handleAction(game, playerId, payload), hostAction(game, payload),
  *   computeResults(playerIds, votes, game), afterReveal(game) → true si le résultat attend une action,
  *   resolvePending(game), sipsOf(results), updateStats(stats, results, game), onPresenceChange(game),
- *   publicRound(game, viewer).
+ *   publicRound(game, viewer), canReveal(game) (refuse une révélation trop tôt), afterVote(game, playerId), isLastRound(game) (nombre de manches propre au jeu).
  * `game.roundData` est l'état privé de la manche, réservé au jeu.
  */
 export class Game {
@@ -517,6 +517,7 @@ export class Game {
     if (this.isLate(playerId)) return LATE_MESSAGE;
     if (!this.rules.isValidVote(this, choice, playerId)) return 'Choix invalide.';
     this.votes.set(playerId, choice);
+    this.rules.afterVote?.(this, playerId);
     this.evaluate();
     return null;
   }
@@ -525,6 +526,7 @@ export class Game {
     if (expectedRound != null && expectedRound !== this.roundId) return null;
     if (this.phase === 'revealing' || this.phase === 'results') return null;
     if (this.phase !== 'question') return 'Aucune question en cours.';
+    if (this.rules.canReveal && !this.rules.canReveal(this)) return 'Pas encore.';
     this.cancel('vote');
     this.cancel('autoReveal');
     this.cancel('grace');
@@ -575,6 +577,7 @@ export class Game {
 
   get isLastRound() {
     if (this.partyActive) return false;
+    if (this.rules?.isLastRound) return this.rules.isLastRound(this); // nombre de manches propre au jeu
     return this.settings.maxRounds > 0 && this.round >= this.settings.maxRounds;
   }
 

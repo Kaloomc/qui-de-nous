@@ -126,6 +126,16 @@ const ICONS = {
       <path d="M26 88 l8 -14 l8 14 z" fill="#ffc93c" />
     </>
   ),
+  savant: (
+    <>
+      <path d="M60 10 a30 30 0 0 1 17 55 c-4 3 -6 7 -6 12 H49 c0 -5 -2 -9 -6 -12 A30 30 0 0 1 60 10 z" fill="#ffc93c" />
+      <rect x="49" y="82" width="22" height="8" rx="4" fill="#fff8f0" />
+      <rect x="53" y="94" width="14" height="8" rx="4" fill="#fff8f0" />
+      <path d="M52 40 a8 8 0 0 1 16 0 c0 6 -8 7 -8 13 M60 62 v1" stroke="#14102a" strokeWidth="6" fill="none" strokeLinecap="round" />
+      <circle cx="96" cy="86" r="14" fill="none" stroke="#3ee0c5" strokeWidth="6" />
+      <path d="M106 96 l10 10" stroke="#3ee0c5" strokeWidth="7" strokeLinecap="round" />
+    </>
+  ),
   flame: (
     <>
       <path d="M60 10 c6 18 30 28 30 58 a30 30 0 0 1 -60 0 c0 -16 10 -24 14 -34 c4 10 6 14 12 16 c-2 -16 -2 -28 4 -40 z" fill="#ff4f8b" />

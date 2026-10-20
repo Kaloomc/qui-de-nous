@@ -108,6 +108,18 @@ export const GAME_CATALOG = [
     partyDefault: false,
     available: true,
   },
+  {
+    id: 'savant',
+    name: 'Le Savant',
+    icon: 'savant',
+    tagline: 'Un seul d’entre vous connaît la vérité. Les autres inventent. Le Chercheur doit démasquer le Savant.',
+    rule: 'Le Chercheur se trompe : il boit. Il trouve : les Bluffeurs boivent, et lui distribue.',
+    players: { min: 4, max: 30 },
+    minToStart: 4,
+    rhythm: 'rapide',
+    partyRounds: [3, 4],
+    available: true,
+  },
 ];
 
 export const DEFAULT_GAME = 'qui-de-nous';
