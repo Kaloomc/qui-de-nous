@@ -4617,8 +4617,20 @@ body.loup-night {
 }
 
 .savant-question.is-big {
-  font-size: clamp(2rem, 5.2vh + 2vw, 5.6rem);
+  font-size: clamp(2rem, 4.6vh + 1.8vw, 5.2rem);
   max-width: 24ch;
+}
+
+/* Révélation et résultats : la question rappelée en plus petit, pour laisser la place aux réponses et aux gorgées. */
+.savant-question.is-small {
+  font-size: clamp(1.05rem, 1.6vw, 1.7rem);
+  font-weight: 700;
+}
+
+/* Question longue : un peu plus petit pour que tout tienne, même sur une TV de 768 px de haut. */
+.savant-question.is-big.is-long {
+  font-size: clamp(1.7rem, 3.4vh + 1.4vw, 4rem);
+  max-width: 30ch;
 }
 
 .savant-blank {
@@ -4684,7 +4696,8 @@ body.loup-night {
 
 .savant-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-w, 200px), 1fr));
+  --card-w: clamp(150px, 11vw, 200px);
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
   gap: 8px;
   width: 100%;
   min-width: 0;
@@ -4696,7 +4709,7 @@ body.loup-night {
 }
 
 .savant-cards.is-xdense {
-  --card-w: 118px;
+  --card-w: clamp(105px, 7.5vw, 125px);
   gap: 5px;
 }
 
@@ -5089,6 +5102,55 @@ body.loup-night {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
+}
+
+/* TV de 768 px de haut (portables, vidéoprojecteurs) : réponses un peu plus compactes pour que tout tienne avec les boutons. */
+@media (max-height: 820px) {
+  .savant-cards:not(.is-dense):not(.is-xdense) .savant-card-text {
+    font-size: 0.9rem;
+  }
+
+  .savant-cards:not(.is-dense):not(.is-xdense) .savant-card-head .avatar {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 16px !important;
+  }
+
+  .savant-cards:not(.is-dense):not(.is-xdense) {
+    --card-w: clamp(140px, 10vw, 170px);
+    gap: 6px;
+  }
+
+  .savant-card {
+    padding: 6px 8px;
+  }
+
+  /* Beaucoup de joueurs : le plus compact possible (30 réponses de 60 caractères + les votes sur 768 px). */
+  .savant-cards.is-xdense .savant-card-text {
+    font-size: 0.7rem;
+    line-height: 1.08;
+  }
+
+  .savant-cards.is-xdense .savant-card-name {
+    font-size: 0.66rem;
+  }
+
+  .savant-cards.is-xdense .savant-card-head .avatar {
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 10px !important;
+  }
+
+  .savant-cards.is-xdense .savant-card {
+    padding: 4px 5px;
+    gap: 2px;
+  }
+
+  .savant-cards.is-xdense .savant-card-votes .avatar {
+    width: 15px !important;
+    height: 15px !important;
+    font-size: 8px !important;
+  }
 }
 
 @media (max-width: 900px) {

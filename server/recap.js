@@ -47,6 +47,12 @@ export function recordRound(stats, mode, results, playerIds) {
     case 'roue':
       if (results.targetId) add(results.targetId, 'picked');
       break;
+    case 'savant':
+      // Bluffeurs : votes de spectateurs reçus (le plus crédible) ; Chercheur qui trouve ; Savant qui n'est pas démasqué.
+      for (const [id, n] of Object.entries(results.voteCounts ?? {})) if (results.bluffers?.includes(id)) add(id, 'savantFooled', n);
+      if (results.found) add(results.seekerId, 'savantFound');
+      else add(results.savantId, 'savantUnfound');
+      break;
     case 'loup': {
       // Les rôles ne sont révélés qu'ici, la partie est finie : le récap n'apparaît qu'en fin de soirée.
       const { roles = {}, dead = {}, nights = 0, seerFound = 0 } = results;
@@ -79,6 +85,9 @@ export const TROPHIES = [
   { id: 'maudit', emoji: '💣', title: 'Les mains brûlantes', key: 'bombs', min: 1, label: (n) => `${plural(n, 'bombe')} en pleine figure` },
   { id: 'chouchou', emoji: '🎡', title: 'Le chouchou de la roue', key: 'picked', min: 2, label: (n) => `désigné ${n} fois` },
   { id: 'loup', emoji: '🐺', title: 'Le loup le plus rusé', key: 'wolfNights', min: 2, label: (n) => `${plural(n, 'nuit')} sans se faire croquer` },
+  { id: 'credible', emoji: '🤥', title: 'Le plus crédible', key: 'savantFooled', min: 2, label: (n) => `${plural(n, 'vote')} de joueurs bluffés` },
+  { id: 'enqueteur', emoji: '🕵️', title: 'Le meilleur enquêteur', key: 'savantFound', min: 1, label: (n) => `${plural(n, 'Savant')} démasqué${n > 1 ? 's' : ''}` },
+  { id: 'imbattable', emoji: '🧠', title: 'Le Savant imbattable', key: 'savantUnfound', min: 1, label: (n) => `${n > 1 ? `${n} fois` : 'une fois'} sans être démasqué` },
   { id: 'voyante', emoji: '🔮', title: 'La meilleure voyante', key: 'seerFound', min: 1, label: (n) => `${plural(n, 'loup')} démasqué${n > 1 ? 's' : ''}` },
 ];
 

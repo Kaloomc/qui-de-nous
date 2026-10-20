@@ -21,6 +21,7 @@ Après **Créer une partie**, l'hôte choisit le jeu dans une grille de cartes. 
 | **La Roue** | Une roue choisit un joueur, une deuxième son défi. | Selon le défi : gorgées, duo, vote, gage… | 2 à 20 |
 | **Réflexes** | La TV dit des mots qui ressemblent à « feu ». On tape seulement sur « FEU ». | Le plus lent, les faux départs, ceux qui ne tapent pas | 2 à 20 |
 | **Loup-Garou** | Le classique, sans maître du jeu : rôles secrets sur les téléphones, village et narrateur vocal sur la TV. | Le camp perdant, les morts, et des gorgées liées aux rôles | 6 à 30 |
+| **Le Savant** | Un seul joueur connaît la vraie réponse à un fait surprenant, les autres bluffent. Le Chercheur doit démasquer le Savant. | Le Chercheur s'il se trompe, les Bluffeurs s'il trouve | 4 à 30 |
 
 Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur de gorgées et le podium de fin.
 
@@ -380,6 +381,27 @@ Le jeu classique **sans maître du jeu** : chaque téléphone reçoit un rôle s
 **La voix décide du rythme** : le serveur publie à la TV les phrases de chaque phase (`round.narration`), la TV les joue dans une seule file (jamais coupées ni chevauchées), puis envoie l'accusé `narrated` ; la phase démarre à ce moment-là. Sans accusé, le serveur avance après la durée des clips + 2 s (durées mesurées par `npm run narration:durations`, aussi lancé par `npm run narration`). La pause de l'hôte fige l'audio et les délais. Seuls les rôles présents dans la composition et encore en vie sont appelés la nuit.
 
 **Outils de contrôle** : `npm run loupsoak` (500 parties serveur avec joueurs inactifs, déconnectés ou qui cliquent deux fois : rien de bloqué, pas de fuite mémoire) et `npm run audit:display` (Playwright : 4 tailles d'écran × 6/12/20/30 joueurs, captures dans `docs/captures-audit/`, contrôle des débordements, du texte coupé, du contraste, des boutons de 44 px, du cercle du village et de la console ; `-- --perf` mesure les images par seconde avec un CPU ralenti ×4 et le trafic réseau). Première installation : `npx playwright install chromium`.
+
+### Le Savant
+
+Bluff rapide, 100 % téléphone, sans maître du jeu. Une manche dure 40 à 60 secondes.
+
+- **Les trois rôles.** Le **Chercheur** (tourne à chaque manche, dans un ordre aléatoire fixé au début) ne sait rien. Le **Savant** (tiré au hasard, jamais deux manches de suite, en priorité parmi ceux qui l'ont été le moins) reçoit sur son téléphone la vraie réponse du trou « ___ ». Les **Bluffeurs** (tous les autres) inventent une réponse crédible.
+- **Une manche.** Annonce du Chercheur (3 s) → écriture (20 s, réglable à 15 ou 30 s ; on avance dès que tout le monde a envoyé) → lecture des réponses sur la TV, avec photo et prénom, dans un ordre mélangé (8 s au moins) → choix (15 s) : le Chercheur désigne le Savant et tous les autres votent aussi, en secret → révélation avec suspense. Le Savant reformule la vraie réponse avec ses mots (il peut aussi la recopier telle quelle). Celui qui n'écrit rien « a séché » ; si c'est le Savant, sa vraie réponse est affichée à son nom.
+- **Gorgées.** *Le Chercheur trouve le Savant* : les Bluffeurs boivent 1, le Chercheur distribue 2, le Savant ne boit pas. *Le Chercheur se trompe (ou ne choisit pas)* : il boit 2, le Savant boit 1 et le Bluffeur désigné à tort distribue 2 (personne n'est récompensé si le Chercheur n'a désigné personne). *Les autres joueurs* : qui a voté pour le vrai Savant distribue 1 ; le Bluffeur qui a reçu le plus de votes de spectateurs (les ex æquo aussi) distribue 1 de plus. Distribuer se fait pendant une fenêtre de 8 s, simultanée pour tous ; sans choix, les gorgées sont tirées au hasard. Maximum 6 gorgées reçues par joueur et par manche.
+- **Points** (podium de fin, sans lien avec les gorgées) : Chercheur qui trouve +2 ; Savant non trouvé +2 ; Bluffeur désigné à tort +2 ; spectateur qui vote pour le vrai Savant +1 ; Bluffeur +1 par spectateur trompé.
+- **Fin de partie.** Une manche par joueur (10 au plus) par défaut ; réglable dans le lobby (5, 8, 10, une par joueur, sans fin) comme le temps d'écriture. Le podium donne un titre moqueur aux trois premiers. Le Savant fait aussi partie du mode soirée et du récap (trophées *le plus crédible*, *le meilleur enquêteur*, *le Savant imbattable*).
+- **Confidentialité.** La vraie réponse et l'identité du Savant ne partent que vers le téléphone du Savant avant la révélation (un test de fuite sur de vrais sockets le vérifie). Les votes sont secrets jusqu'à la révélation. L'hôte peut masquer une réponse déplacée en la touchant sur la TV.
+- **Déconnexions.** Une manche continue sans un joueur parti ; si le Chercheur disparaît (plus de 5 secondes), la manche est rejouée avec un autre fait et un autre Chercheur. Sous 4 joueurs connectés, la manche attend.
+
+**Ajouter un fait** (`server/content/facts-savant.json`) : une entrée `{ id, question, reponse, explication, categorie, source }`.
+
+- `question` : une phrase avec **un seul** trou `___` ; `reponse` : 1 à 5 mots, qui ne figure pas déjà dans la question ; `explication` : une phrase, dans tes propres mots, affichée à la révélation ; `categorie` : animaux, sciences, histoire, pays et voyages, bouffe, technologie, sport, culture pop, corps humain ou insolite.
+- `source` : l'URL d'une source fiable (encyclopédie, institut, musée, grand média scientifique) **ouverte et lue** pour confirmer le fait. Pas de fait sans source : un faux fait ruine la manche.
+- Critères : surprenant mais plausible (la vraie réponse doit pouvoir s'inventer), question ouverte, comprise par tous les adultes, intemporelle (pas de record qui change), sans sujet sensible (politique, guerre, maladie, religion, tragédie).
+- `npm run check-facts` vérifie le format, les doublons, la longueur, la présence d'une source et le volume minimal (150 faits) ; `npm test` lance le même contrôle et refuse une source hors de la liste des sites fiables du test.
+
+**Outils de contrôle** : `npm run savantsoak` (parties serveur avec joueurs inactifs, déconnectés, réponses vides, doubles clics), `npm run audit:savant` (Playwright : captures TV et téléphones pour 4, 12 et 30 joueurs, réponses et prénoms longs, débordements, contraste, boutons, console).
 
 ### Compteur de gorgées
 

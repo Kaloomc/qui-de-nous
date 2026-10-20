@@ -390,3 +390,38 @@ test('la vraie réponse n’est jamais dans l’état de la TV ni des autres, se
     }
   }
 });
+
+test('récap : trophées du Savant (le plus crédible, le meilleur enquêteur, le Savant imbattable)', async () => {
+  const { recordRound, computeTrophies } = await import('./recap.js');
+  const stats = new Map();
+  const ids = ['a', 'b', 'c', 'd'];
+  // a cherche et trouve b ; puis c cherche et se trompe : d (Savant) n'est pas démasqué, b reçoit 2 votes de spectateurs.
+  recordRound(stats, 'savant', { found: true, seekerId: 'a', savantId: 'b', bluffers: ['c', 'd'], voteCounts: { c: 1 } }, ids);
+  recordRound(stats, 'savant', { found: false, seekerId: 'c', savantId: 'd', bluffers: ['a', 'b'], voteCounts: { a: 1, b: 2 } }, ids);
+  recordRound(stats, 'savant', { found: false, seekerId: 'c', savantId: 'd', bluffers: ['a', 'b'], voteCounts: { b: 1 } }, ids);
+  const trophies = Object.fromEntries(computeTrophies(ids.map((id) => ({ id, name: id })), {}, stats).map((t) => [t.id, t]));
+  assert.equal(trophies.credible.playerId, 'b', 'b a trompé 3 spectateurs');
+  assert.equal(trophies.enqueteur.playerId, 'a');
+  assert.equal(trophies.imbattable.playerId, 'd');
+});
+
+test('mode soirée : Le Savant s’enchaîne tout seul (3 à 4 manches), le mode auto passe à la manche suivante', async () => {
+  const { TRANSITION_MS } = await import('./party.js');
+  const ctx = await makeGame(null, names(5));
+  ctx.game.savantFacts = Array.from({ length: 12 }, (_, i) => FACT(i));
+  assert.equal(ctx.game.startParty({ durationMs: 30 * 60_000, games: ['savant'] }), null);
+  ctx.tick(TRANSITION_MS);
+  assert.equal(ctx.game.mode, 'savant');
+  assert.equal(ctx.game.phase, 'question');
+  const rounds = ctx.game.party.block.rounds;
+  assert.ok(rounds >= 3 && rounds <= 4);
+  const seekers = new Set();
+  // Personne ne joue : les chronos font avancer chaque manche, le mode auto enchaîne.
+  for (let i = 0; i < rounds * 150 && ctx.game.mode === 'savant'; i++) {
+    if (ctx.game.roundData.seekerId) seekers.add(ctx.game.roundData.seekerId);
+    assert.equal(ctx.game.isLastRound, false, 'pas de « dernière manche » en mode soirée');
+    ctx.tick(1000);
+  }
+  assert.ok(seekers.size >= 3, `les Chercheurs tournent (${seekers.size})`);
+  assert.notEqual(ctx.game.mode === 'savant' && ctx.game.round > rounds, true, 'le bloc s’arrête après ses manches');
+});

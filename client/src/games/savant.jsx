@@ -26,10 +26,10 @@ const playerOf = (state, pid) => state.players.find((p) => p.id === pid) ?? { id
 const names = (state, ids) => ids.map((pid) => playerOf(state, pid).name).join(', ');
 
 /** La question, avec son trou mis en évidence. */
-function Question({ text, big = false }) {
+function Question({ text, big = false, small = false }) {
   const parts = String(text ?? '').split('___');
   return (
-    <h1 className={`savant-question ${big ? 'is-big' : ''}`}>
+    <h1 className={`savant-question ${big ? 'is-big' : ''} ${big && String(text ?? '').length > 95 ? 'is-long' : ''} ${small ? 'is-small' : ''}`}>
       {parts.map((part, i) => (
         <Fragment key={i}>
           {part}
@@ -187,7 +187,7 @@ function Board({ state, animate }) {
       )}
       <div className={`savant-board ${densityOf(round.cards?.length ?? 0)}`}>
         <div className="savant-side">
-          <Question text={results.question} />
+          <Question text={results.question} small />
           <div className="savant-truth-block">
             <p className="savant-label">La vraie réponse</p>
             <p className="savant-answer">{results.answer}</p>
