@@ -164,12 +164,6 @@ test('plafond de 6 gorgées par joueur et par manche ; joueur parti : son crédi
   assert.equal(gone.sips.a, 1, 'ses gorgées directes restent');
 });
 
-test('titres du podium : un par joueur, sans doublon tant qu’il y en a assez ; classement par points', () => {
-  const t = S.podiumTitles(['a', 'b', 'c'], seeded(1));
-  assert.equal(new Set(Object.values(t)).size, 3);
-  assert.deepEqual(S.ranking({ a: 3, b: 5, c: 1 }, ['a', 'b', 'c']), ['b', 'a', 'c']);
-});
-
 test('simulateur : 300 parties de 4 à 30 joueurs (inactifs, votes invalides), aucune exception ni invariant violé', () => {
   for (let seed = 1; seed <= 300; seed++) {
     const res = runGame(seeded(seed), { chaos: seed % 3 === 0 ? 0.6 : seed % 3 === 1 ? 0.25 : 0 });

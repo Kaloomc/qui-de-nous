@@ -185,24 +185,3 @@ export function settleSips({ direct, credits, allocations = {}, ids, rng = Math.
   for (const [id, n] of Object.entries(received)) if (inGame.has(id)) sips[id] = Math.min(n, SIP_CAP);
   return { sips, given };
 }
-
-// ---------- Titres moqueurs du podium ----------
-
-const TITLES = [
-  'Le Savant du village',
-  'Le menteur le plus crédible',
-  'Le détective de comptoir',
-  'Le bluffeur qui ne rougit jamais',
-  'Quelqu’un qui sait tout, ou presque',
-  'Le tricheur au visage d’ange',
-];
-/** Un titre par joueur du podium : choisi dans l'ordre, au hasard parmi les titres non encore pris. */
-export function podiumTitles(ids, rng = Math.random) {
-  const pool = shuffle(TITLES, rng);
-  return Object.fromEntries(ids.map((id, i) => [id, pool[i % pool.length]]));
-}
-
-/** Classement par points (égalités départagées par le nom d'ordre fourni), du meilleur au moins bon. */
-export function ranking(points, ids) {
-  return [...ids].sort((a, b) => (points[b] ?? 0) - (points[a] ?? 0));
-}

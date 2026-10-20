@@ -92,7 +92,7 @@ function begin(game, restarted = false) {
 }
 
 function startWrite(game) {
-  go(game, 'write', config(game).writeMs ?? timing(game).writeMs, () => endWrite(game));
+  go(game, 'write', game.savantTiming?.writeMs ?? config(game).writeMs, () => endWrite(game));
   writeProgress(game);
 }
 
