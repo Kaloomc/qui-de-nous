@@ -16,6 +16,7 @@
     "narration": "node scripts/narration.js",
     "loupsoak": "node --expose-gc scripts/loup-soak.js",
     "savantsoak": "node --expose-gc scripts/savant-soak.js",
+    "check-facts": "node scripts/check-facts.js",
     "audit:savant": "node scripts/savant-audit.mjs",
     "audit:display": "node scripts/display-audit.mjs",
     "narration:durations": "node scripts/narration-durations.js",
