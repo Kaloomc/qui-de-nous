@@ -63,7 +63,7 @@ export const CONTENT = [
   {
     id: 'estimation',
     file: 'content/questions-estimation.json',
-    target: 250,
+    target: 322,
     entries: (d) => d,
     key: (q) => normalize(q.question),
     near: (q) => q.question,

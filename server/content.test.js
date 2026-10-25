@@ -26,7 +26,8 @@ const FORMATS = {
     q.choix.length === 4 &&
     q.choix.every(text) &&
     new Set(q.choix).size === 4,
-  estimation: (q) => text(q.question) && typeof q.reponse === 'number' && Number.isFinite(q.reponse) && text(q.unite),
+  // `source` : l'URL qui confirme le chiffre (obligatoire pour le contenu ajouté depuis la refonte, facultative avant).
+  estimation: (q) => text(q.question) && typeof q.reponse === 'number' && Number.isFinite(q.reponse) && text(q.unite) && (q.source === undefined || /^https:\/\/[^ ]+$/.test(q.source)),
   imposteur: (p) => text(p.mot) && text(p.proche) && text(p.categorie) && p.mot !== p.proche,
   roue: isValidDefi,
   // Phrase à trou : un seul trou, une phrase, une forme ; carte de réponse : courte, sans trou, avec sa forme.
