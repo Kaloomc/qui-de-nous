@@ -8,7 +8,7 @@ Un commit par chantier ; `npm test` et `npm run build` après chacun.
 - [x] 3. La Roue : défis par genre (30 normaux + 30 en 18+ déjà écrits)
 - [x] 5. Noir Boire Mangue : moteur, écrans, tests (règles, moteur, fuite sur sockets réels, 300 parties de bots). Contenu écrit : 155 phrases / 402 cartes (normal), 87 phrases / 159 cartes (18+).
 - [x] Contenu (questions par genre, faits du Savant, phrases et cartes de Noir Boire Mangue)
-- [ ] 7. README et simulation de soirée
+- [x] 7. README (genre, vie privée, accords, tirage équitable, Noir Boire Mangue, ajout de contenu) et simulation de soirée (`npm run fairness`, tests du registre)
 - [ ] 8. Captures d'écran (`scripts/capture-demo.js`, `docs/captures/`)
 
 ## Faits du Savant : test du devinage à froid

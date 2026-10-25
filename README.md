@@ -22,8 +22,9 @@ Après **Créer une partie**, l'hôte choisit le jeu dans une grille de cartes. 
 | **Réflexes** | La TV dit des mots qui ressemblent à « feu ». On tape seulement sur « FEU ». | Le plus lent, les faux départs, ceux qui ne tapent pas | 2 à 20 |
 | **Loup-Garou** | Le classique, sans maître du jeu : rôles secrets sur les téléphones, village et narrateur vocal sur la TV. | Le camp perdant, les morts, et des gorgées liées aux rôles | 6 à 30 |
 | **Le Savant** | Un seul joueur connaît la vraie réponse à un fait surprenant, les autres bluffent. Le Chercheur doit démasquer le Savant. | Le Chercheur s'il se trompe, les Bluffeurs s'il trouve | 4 à 30 |
+| **Noir Boire Mangue** | Une phrase à trou, chacun la complète avec une carte ou sa propre réponse. Les réponses défilent sans nom d'auteur et tout le monde les note. | Le dernier de la manche (le gagnant en distribue) | 3 à 30 |
 
-Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur de gorgées et le podium de fin.
+Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur de gorgées et le podium de fin. Le nom « Noir Boire Mangue » vit à un seul endroit du code (la constante `NBM_NAME` de [`shared/games.js`](shared/games.js)) : pour le changer, il suffit de modifier cette ligne.
 
 ### Qui de nous ?
 
@@ -67,10 +68,13 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
   - [Mode soirée](#mode-soirée)
   - [Mode 18+](#mode-18)
+  - [Genre des joueurs et vie privée](#genre-des-joueurs-et-vie-privée)
+  - [Tirage équitable](#tirage-équitable)
   - [Récap de fin de soirée](#récap-de-fin-de-soirée)
 - [Règles du jeu](#règles-du-jeu)
   - [Qui de nous ?](#qui-de-nous--1)
   - [Tu préfères ?](#tu-préfères--1)
+  - [Noir Boire Mangue](#noir-boire-mangue)
 - [Dépannage](#dépannage)
 - [Personnaliser les questions](#personnaliser-les-questions)
   - [Ajouter des questions : checklist qualité](#ajouter-des-questions--checklist-qualité)
@@ -93,7 +97,9 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
 - **Récap de fin de soirée** : trophées révélés un par un sur la TV, et une image au format story à partager (voir [Récap de fin de soirée](#récap-de-fin-de-soirée)).
 - **Compteur de gorgées** : chaque joueur voit son total sur la TV et sur son téléphone, et la partie se termine sur un **podium** des plus assoiffés.
 - **Reconnexion automatique** : un joueur qui recharge sa page ou perd le réseau retrouve sa place (et son vote).
-- 520 questions et 500 dilemmes pensés pour les soirées étudiantes, du plus chill au plus osé, tirés au hasard sans répétition (et des centaines de mots, défis et questions chiffrées pour les autres jeux).
+- **Tirage équitable à l'échelle de la soirée** : qui est désigné (cible de « Qui me connaît ? », Savant, Chercheur, imposteur, porteur de la bombe, cible de la Roue) est réparti à égalité entre tous les joueurs, tous jeux confondus (voir [Tirage équitable](#tirage-équitable)).
+- **Genre des joueurs** : à l'entrée, chacun choisit « Homme », « Femme » ou « Je préfère ne pas dire ». Les textes s'accordent en conséquence (« la plus accusée », « le roi des gorgées ») avec une vraie forme neutre pour les autres, et quelques questions ou défis sont réservés à un genre (voir [Genre des joueurs et vie privée](#genre-des-joueurs-et-vie-privée)).
+- Plus de 640 questions « Qui de nous ? » et 500 dilemmes pensés pour les soirées étudiantes, du plus chill au plus osé, tirés au hasard sans répétition (et plusieurs centaines de questions, de mots, de défis, de phrases à trou, de cartes et de faits pour les autres jeux ; autant à nouveau en mode 18+).
 - Aucun compte, aucune base de données : les parties vivent en mémoire et disparaissent toutes seules.
 
 ## Démarrage rapide
@@ -285,16 +291,33 @@ Un mode réservé aux adultes, avec des questions sexuelles directes et une ambi
 - **Un joueur qui dit non n'est jamais mis dans un jeu 18+.** Un joueur qui arrive après l'activation voit d'abord la même question, sans rien voir du jeu ni du thème ; s'il refuse, il ne rejoint pas la partie.
 - **Ambiance** : transition de 2 à 3 secondes (écran noir, battement rouge, « 18+ ») en même temps sur la TV et les téléphones, puis thème sombre partout. Le mode persiste quand on change de jeu, qu'on rejoue ou en mode soirée.
 - **Retour au normal** : bouton **« Repasser en mode normal »** toujours visible en haut à gauche de la TV, en un clic (une manche 18+ en cours est abandonnée).
-- **Contenu** : *Qui de nous ?*, *Tu préfères ?*, *Qui me connaît le mieux ?*, *La Roue* et *L'Imposteur* tirent alors **uniquement** dans leur contenu 18+ (fichiers séparés, jamais utilisés en mode normal). Estimation, Réflexes et Patate chaude gardent leur contenu normal avec le thème sombre. À la Roue, un défi 18+ n'oblige jamais à se déshabiller, toucher, embrasser ou envoyer une photo : aveux, votes, mimes habillés et gages verbaux, qu'on peut toujours refuser en buvant.
+- **Contenu** : *Qui de nous ?*, *Tu préfères ?*, *Qui me connaît le mieux ?*, *La Roue*, *L'Imposteur* et *Noir Boire Mangue* (phrases **et** cartes de réponse) tirent alors **uniquement** dans leur contenu 18+ (fichiers séparés, jamais utilisés en mode normal). Estimation, Réflexes et Patate chaude gardent leur contenu normal avec le thème sombre. À la Roue, un défi 18+ n'oblige jamais à se déshabiller, toucher, embrasser ou envoyer une photo : aveux, votes, mimes habillés et gages verbaux, qu'on peut toujours refuser en buvant.
 - **Rien n'est conservé** : les confirmations vivent dans la mémoire du serveur et disparaissent avec la partie. Aucune date de naissance ni pièce d'identité n'est demandée.
 
 > **La confirmation est déclarative.** Gorgée ne peut pas vérifier l'âge de qui que ce soit : c'est à **l'hôte** de n'activer ce mode qu'entre adultes consentants, et de repasser en mode normal si quelqu'un arrive.
+
+### Genre des joueurs et vie privée
+
+- **À l'entrée**, le téléphone demande de choisir entre **Homme**, **Femme** et **Je préfère ne pas dire**. Le choix est obligatoire (trois boutons, aucune valeur par défaut) pour qu'aucun texte ne soit accordé au hasard. On peut le modifier entre deux jeux depuis son téléphone (grille des jeux ou lobby), jamais en pleine manche. Un joueur qui revient garde son choix.
+- **Ce que ça change** : les phrases s'accordent (« Qui est la plus susceptible de… », « Bravo, tu es la plus accusée »). Pour « Je préfère ne pas dire », les textes passent par une **forme neutre** écrite exprès (le prénom, « cette personne », une tournure sans accord), jamais par de l'écriture inclusive à points. Les trophées de fin de soirée suivent la même règle.
+- **Questions réservées à un genre** (*Qui de nous ?*, *Qui me connaît le mieux ?*) : une question peut être réservée aux hommes ou aux femmes du groupe (« Qui est la plus susceptible de… » ne désigne que des femmes). Elles représentent environ 15 à 20 % des tirages, réparties équitablement entre les deux genres, jamais plus de deux à la suite, et seulement s'il y a au moins **3 candidats** de ce genre dans la partie (sinon une autre question est tirée). Les joueurs qui préfèrent ne pas dire leur genre ne sont jamais candidats à ces questions, mais votent et devinent normalement.
+- **Défis de la Roue par genre** : un défi peut viser les hommes ou les femmes du groupe (ils boivent tous, distribuent à l'autre genre, le premier à répondre choisit qui boit, le dernier à toucher son téléphone boit). Il est sauté s'il y a moins de 2 joueurs du genre concerné. Les joueurs « ne préfère pas dire » sont **épargnés** : ils ne sont jamais visés, mais regardent comme tout le monde.
+- **Vie privée** : le genre n'est **jamais affiché** (ni sur la TV, ni sur les téléphones des autres). Il est transmis aux écrans de la partie pour une seule raison, accorder les textes, et sert à choisir les candidats. Il reste en mémoire avec la partie et disparaît avec elle ; il n'est ni enregistré ni envoyé ailleurs.
+
+### Tirage équitable
+
+Quand un jeu désigne quelqu'un, le tirage ne se fait pas au hasard pur : un **registre unique pour toute la soirée** (`server/spotlight.js`) compte combien de fois chaque joueur a été désigné pour chaque rôle (cible de *Qui me connaît ?*, Chercheur et Savant, imposteur, premier porteur de la bombe, cible de la Roue) et tire parmi ceux qui l'ont été **le moins**, au hasard en cas d'égalité. Conséquences :
+
+- sur une soirée de 20 joueurs et 10 jeux de 3 manches, l'écart maximal entre deux joueurs est d'**un seul tirage** par rôle ; avec arrivées et départs, un arrivant démarre au niveau du minimum (il ne rattrape pas toute la soirée d'un coup) ;
+- le registre **survit au changement de jeu** et à « Rejouer » ; il repart à zéro avec une nouvelle partie (nouveau code) ;
+- une manche rejouée (le Chercheur a disparu, par exemple) rend le tirage au registre : personne n'est compté pour une manche qui n'a pas eu lieu ;
+- `npm run fairness` affiche le tableau de répartition d'une soirée simulée (avec et sans arrivées/départs), et `npm test` vérifie ces propriétés.
 
 ### Récap de fin de soirée
 
 À la fin du mode soirée, la TV enchaîne sur le **récap** ; après une partie classique, il est à un clic (« Récap de la soirée » sur l'écran de fin). Il couvre toute la soirée, tous jeux confondus.
 
-- **Trophées**, calculés par le serveur (`server/recap.js`) et révélés un par un avec suspense : le roi des gorgées, le plus accusé (Qui de nous ?), le plus mouton et le plus rebelle (Tu préfères ?), le meilleur menteur et le meilleur détective (L'Imposteur), le plus rapide (Réflexes), le plus précis (Estimation), le meilleur pote (Qui me connaît le mieux ?), les mains brûlantes (Patate chaude), le chouchou de la roue. Un trophée n'apparaît que si le jeu a été joué et que la valeur compte (par exemple au moins 2 votes reçus). Pour qu'un seul joueur ne rafle pas tout, un trophée peut aller à un autre joueur presque aussi bon qui n'en a pas encore ; la couronne du roi des gorgées, elle, va toujours au vrai premier.
+- **Trophées**, calculés par le serveur (`server/recap.js`) et révélés un par un avec suspense : le roi des gorgées, le plus accusé (Qui de nous ?), le plus mouton et le plus rebelle (Tu préfères ?), le meilleur menteur et le meilleur détective (L'Imposteur), le plus rapide (Réflexes), le plus précis (Estimation), le meilleur pote (Qui me connaît le mieux ?), les mains brûlantes (Patate chaude), le chouchou de la roue, la meilleure plume et le roi du Golden (Noir Boire Mangue), le plus crédible, le meilleur enquêteur et le Savant imbattable (Le Savant). Un trophée n'apparaît que si le jeu a été joué et que la valeur compte (par exemple au moins 2 votes reçus). Pour qu'un seul joueur ne rafle pas tout, un trophée peut aller à un autre joueur presque aussi bon qui n'en a pas encore ; la couronne du roi des gorgées, elle, va toujours au vrai premier.
 - **Image partageable** (1080×1920, format story) avec le logo, la date, les trophées, le classement des gorgées, le crédit et l'adresse du site (`PUBLIC_URL` si elle est définie). Elle est **dessinée sur l'appareil** (`client/src/recapImage.js`, canvas) : rien n'est envoyé à un serveur.
   - Sur les **téléphones** : « Partager le récap » ouvre le partage natif (Instagram, Snap, WhatsApp…) ; sinon, l'image est téléchargée.
   - Sur la **TV** : un bouton de téléchargement, et un **QR code** vers `/recap/CODE` pour que chacun ouvre le récap sur son téléphone, même sans être dans la partie.
@@ -311,6 +334,7 @@ Un mode réservé aux adultes, avec des questions sexuelles directes et une ambi
 - **Vote pour soi-même** : autorisé.
 - **Pas voté à temps** : l'hôte peut révéler sans attendre, et le retardataire boit.
 - Le plus voté qui n'a pas non plus voté comme les autres… boit deux fois.
+- Environ une question sur six est **réservée à un genre** (« Qui est la plus susceptible… ») : seuls les joueurs de ce genre sont désignables, voir [Genre des joueurs et vie privée](#genre-des-joueurs-et-vie-privée).
 
 ### Tu préfères ?
 
@@ -327,6 +351,7 @@ Un mode réservé aux adultes, avec des questions sexuelles directes et une ambi
 
 - Un joueur (la cible) répond en secret sur lui-même, les autres devinent sa réponse parmi 4 choix.
 - **Ceux qui se trompent boivent.** Personne n'a trouvé, ou tout le monde : la cible boit.
+- La cible est tirée par le [tirage équitable](#tirage-équitable) de la soirée, et la question s'accorde à son genre (certaines sont réservées aux hommes ou aux femmes).
 
 ### L'Imposteur
 
@@ -350,6 +375,7 @@ Un mode réservé aux adultes, avec des questions sexuelles directes et une ambi
 - L'hôte lance la roue (toute seule en mode auto) : une première roue désigne un joueur, une deuxième tire son défi.
 - Types de défis : boire, **duo** (il choisit qui boit avec lui), **distribuer** (une gorgée par toucher), **tout le monde boit**, **échange de places**, **« tous ceux qui ont déjà… »** (chacun avoue sur son téléphone), **vote du groupe**, **gage** (fait, ou on boit).
 - Sans réponse au bout de 30 s : le duo boit seul, les gorgées non distribuées reviennent au distributeur, le gage se boit.
+- **Défis par genre** : certains visent les hommes ou les femmes du groupe, jamais ceux qui ont choisi « ne préfère pas dire » (voir [Genre des joueurs et vie privée](#genre-des-joueurs-et-vie-privée)).
 
 ### Réflexes (« Feu ! »)
 
@@ -384,13 +410,14 @@ Le jeu classique **sans maître du jeu** : chaque téléphone reçoit un rôle s
 
 ### Le Savant
 
-Bluff rapide, 100 % téléphone, sans maître du jeu. Une manche dure 40 à 60 secondes.
+Bluff rapide, 100 % téléphone, sans maître du jeu, **sans écran de réglages** : on lance, ça joue. Une manche dure environ une minute.
 
-- **Les trois rôles.** Le **Chercheur** (tourne à chaque manche, dans un ordre aléatoire fixé au début) ne sait rien. Le **Savant** (tiré au hasard, jamais deux manches de suite, en priorité parmi ceux qui l'ont été le moins) reçoit sur son téléphone la vraie réponse du trou « ___ ». Les **Bluffeurs** (tous les autres) inventent une réponse crédible.
-- **Une manche.** Annonce du Chercheur (3 s) → écriture (20 s, réglable à 15 ou 30 s ; on avance dès que tout le monde a envoyé) → lecture des réponses sur la TV, avec photo et prénom, dans un ordre mélangé (8 s au moins) → choix (15 s) : le Chercheur désigne le Savant et tous les autres votent aussi, en secret → révélation avec suspense. Le Savant reformule la vraie réponse avec ses mots (il peut aussi la recopier telle quelle). Celui qui n'écrit rien « a séché » ; si c'est le Savant, sa vraie réponse est affichée à son nom.
-- **Gorgées.** *Le Chercheur trouve le Savant* : les Bluffeurs boivent 1, le Chercheur distribue 2, le Savant ne boit pas. *Le Chercheur se trompe (ou ne choisit pas)* : il boit 2, le Savant boit 1 et le Bluffeur désigné à tort distribue 2 (personne n'est récompensé si le Chercheur n'a désigné personne). *Les autres joueurs* : qui a voté pour le vrai Savant distribue 1 ; le Bluffeur qui a reçu le plus de votes de spectateurs (les ex æquo aussi) distribue 1 de plus. Distribuer se fait pendant une fenêtre de 8 s, simultanée pour tous ; sans choix, les gorgées sont tirées au hasard. Maximum 6 gorgées reçues par joueur et par manche.
+- **Les trois rôles.** Le **Chercheur** ne sait rien. Le **Savant** reçoit sur son téléphone la vraie réponse du trou « ___ ». Les **Bluffeurs** (tous les autres) inventent une réponse crédible. Chercheur et Savant sont tirés par le [tirage équitable](#tirage-équitable) de la soirée (le Savant n'est jamais le même deux manches de suite).
+- **Une manche.** Annonce du Chercheur (3 s) → écriture → lecture des réponses sur la TV, avec photo et prénom, dans un ordre mélangé (6 s au minimum) → choix : le Chercheur désigne le Savant et tous les autres votent aussi, en secret → révélation. **Chaque étape avance dès que tout le monde a agi** ; les minuteurs (écriture 30 s, choix 20 s) ne sont qu'un secours pour les retardataires. Celui qui n'écrit rien « a séché » ; si c'est le Savant, sa vraie réponse est affichée à son nom.
+- **Révélation en quatre temps**, lisible de loin : le bandeau « Le Savant était… » (avec sa photo), la vraie réponse en doré (les cartes sont marquées : la vraie, les Bluffeurs désignés), le verdict en plein écran (« Trouvé ! » ou « Raté ! »), puis la couronne du Savant, la loupe du Chercheur et les pastilles de votes de chaque spectateur.
+- **Gorgées.** *Le Chercheur trouve le Savant* : les Bluffeurs boivent 1, le Chercheur distribue 2, le Savant ne boit pas. *Le Chercheur se trompe (ou ne choisit pas)* : il boit 2, le Savant boit 1 et le Bluffeur désigné à tort distribue 2. *Les autres joueurs* : qui a voté pour le vrai Savant distribue 1 ; le Bluffeur qui a reçu le plus de votes de spectateurs distribue 1 de plus. Distribuer se fait pendant une fenêtre de 8 s ; sans choix, les gorgées sont tirées au hasard. Maximum 6 gorgées reçues par joueur et par manche.
 - **Points** (podium de fin, sans lien avec les gorgées) : Chercheur qui trouve +2 ; Savant non trouvé +2 ; Bluffeur désigné à tort +2 ; spectateur qui vote pour le vrai Savant +1 ; Bluffeur +1 par spectateur trompé.
-- **Fin de partie.** Une manche par joueur (10 au plus) par défaut ; réglable dans le lobby (5, 8, 10, une par joueur, sans fin) comme le temps d'écriture. Le podium donne un titre moqueur aux trois premiers. Le Savant fait aussi partie du mode soirée et du récap (trophées *le plus crédible*, *le meilleur enquêteur*, *le Savant imbattable*).
+- **Fin de partie.** Une manche par joueur (10 au plus). Le podium donne un titre moqueur aux trois premiers. Le Savant fait aussi partie du mode soirée et du récap.
 - **Confidentialité.** La vraie réponse et l'identité du Savant ne partent que vers le téléphone du Savant avant la révélation (un test de fuite sur de vrais sockets le vérifie). Les votes sont secrets jusqu'à la révélation. L'hôte peut masquer une réponse déplacée en la touchant sur la TV.
 - **Déconnexions.** Une manche continue sans un joueur parti ; si le Chercheur disparaît (plus de 5 secondes), la manche est rejouée avec un autre fait et un autre Chercheur. Sous 4 joueurs connectés, la manche attend.
 
@@ -399,9 +426,23 @@ Bluff rapide, 100 % téléphone, sans maître du jeu. Une manche dure 40 à 60 s
 - `question` : une phrase avec **un seul** trou `___` ; `reponse` : 1 à 5 mots, qui ne figure pas déjà dans la question ; `explication` : une phrase, dans tes propres mots, affichée à la révélation ; `categorie` : animaux, sciences, histoire, pays et voyages, bouffe, technologie, sport, culture pop, corps humain ou insolite.
 - `source` : l'URL d'une source fiable (encyclopédie, institut, musée, grand média scientifique) **ouverte et lue** pour confirmer le fait. Pas de fait sans source : un faux fait ruine la manche.
 - Critères : surprenant mais plausible (la vraie réponse doit pouvoir s'inventer), question ouverte, comprise par tous les adultes, intemporelle (pas de record qui change), sans sujet sensible (politique, guerre, maladie, religion, tragédie).
+- **Le test du devinage à froid** : avant d'ajouter un fait, demande-toi si quelqu'un qui ne le connaît pas peut trouver la réponse en y réfléchissant dix secondes (culture générale, formulation qui la souffle, chiffre sans surprise). Si oui, jette-le : la manche ne vaut que si la vraie réponse est impossible à deviner et pourtant plausible à imiter. Les faits écartés ou contestés (sources qui se contredisent) ne vont pas dans le fichier.
 - `npm run check-facts` vérifie le format, les doublons, la longueur, la présence d'une source et le volume minimal (150 faits) ; `npm test` lance le même contrôle et refuse une source hors de la liste des sites fiables du test.
 
 **Outils de contrôle** : `npm run savantsoak` (parties serveur avec joueurs inactifs, déconnectés, réponses vides, doubles clics), `npm run audit:savant` (Playwright : captures TV et téléphones pour 4, 12 et 30 joueurs, réponses et prénoms longs, débordements, contraste, boutons, console).
+
+### Noir Boire Mangue
+
+Un jeu de phrases à trou, 100 % téléphone pour écrire, la TV pour rire. Il se joue de 3 à 30 joueurs ; une manche par joueur, 8 au plus.
+
+- **La phrase** apparaît en très gros sur la TV (3 s) : « Mon excuse préférée pour quitter une soirée : ___ ».
+- **L'écriture.** Chaque joueur reçoit une **main de 5 cartes** de réponse sur son téléphone : il en choisit une, ou il écrit sa propre réponse (60 caractères au maximum). La manche avance dès que tout le monde a envoyé (30 s de secours). Les cartes déjà vues ne reviennent pas avant que le paquet soit épuisé, et, autant que possible, deux joueurs d'une même manche n'ont pas la même carte.
+- **Les réponses défilent une par une, sans nom d'auteur**, la phrase complétée en grand sur la TV. Tout le monde note, sauf l'auteur : **Nul** (0 point), **Meh** (1), **Drôle** (2) et **Golden** (4). Chaque joueur n'a **qu'un seul Golden par manche**. On passe à la réponse suivante dès que tout le monde a noté (au moins 3 s à l'écran, secours à 15 s), avec un petit résultat animé entre deux.
+- **La révélation** montre le classement de la manche et les auteurs de chaque réponse, seulement une fois la manche terminée.
+- **Gorgées.** Le gagnant (les ex æquo aussi) **distribue 2 gorgées** ; le dernier en **boit 2**. Maximum **4 gorgées** reçues par joueur et par manche. Si personne n'a marqué de point, personne ne boit ; s'il n'y a pas de dernier (égalité générale), seul le gagnant distribue.
+- **Confidentialité.** Ni la TV ni les autres téléphones ne reçoivent le lien entre une réponse et son auteur avant la fin de la manche (un test sur de vrais sockets, plus un test de mutation qui casse volontairement la protection, le vérifient). Un joueur ne sait que quelle réponse est la sienne, sans le montrer aux autres.
+- **Censure.** L'hôte peut masquer une réponse déplacée en la touchant sur la TV : elle est cachée et son auteur sort du classement de la manche.
+- Il fait partie du mode soirée (2 à 3 manches), du mode 18+ (phrases et cartes 18+ séparées) et du récap (trophées *la meilleure plume* et *le roi du Golden*).
 
 ### Compteur de gorgées
 
@@ -409,6 +450,7 @@ Chaque fois que le jeu dit « tu bois », ça compte une gorgée :
 
 - *Qui de nous ?* : 1 gorgée pour le plus voté (chaque ex æquo en cas d’égalité), 1 pour chaque joueur qui n’a pas voté pour lui. Le plus voté qui n’a pas voté pour lui-même… en prend 2.
 - *Tu préfères ?* : 1 gorgée par joueur de la minorité (et par non-votant).
+- *Noir Boire Mangue* : 2 gorgées pour le dernier, 2 distribuées par le gagnant, au plus 4 reçues par joueur et par manche.
 - Les autres jeux : 1 gorgée par perdant, sauf *Patate chaude* (2 pour celui qui a la bombe) et *La Roue* (le nombre indiqué par le défi).
 
 Le compteur de gorgées vaut **pour toute la soirée** : il survit à « Rejouer », « Changer de jeu », à la fin d’un jeu et aux reconnexions. Il ne repart à zéro qu’avec une **nouvelle partie** (nouveau QR code) ou le bouton discret « Remettre les compteurs à zéro » sous la grille des jeux (avec confirmation).
@@ -451,7 +493,7 @@ Les questions osées restent entre adultes consentants et sur le ton du chambrag
 
 Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélangés quel que soit le niveau. Le champ servira plus tard à choisir l'intensité de la soirée.
 
-**Qui de nous ?** (520 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
+**Qui de nous ?** (640 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
 
 ```json
 [
@@ -469,6 +511,26 @@ Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélan
 ]
 ```
 
+**Questions réservées à un genre** : ajoute `"cible": "homme"` ou `"cible": "femme"` à une entrée de *Qui de nous ?* ou de *Qui me connaît le mieux ?* (valeur par défaut : `"tous"`) :
+
+```json
+{ "niveau": "epice", "text": "Qui est la plus susceptible de pleurer devant une pub ?", "cible": "femme" }
+```
+
+Écris la question au féminin pour `femme`, au masculin pour `homme`. Pas de stéréotype humiliant, et un équilibre entre les deux genres (`node scripts/audit-genre.js` affiche le décompte). Les [candidats](#genre-des-joueurs-et-vie-privée) sont alors les joueurs de ce genre uniquement.
+
+**Accords dans n'importe quel texte** (questions, défis, interface). Syntaxe du moteur [`shared/formulation.js`](shared/formulation.js), testé :
+
+| Écrire | Résultat |
+|---|---|
+| `{cible}` | le prénom du joueur concerné |
+| `{de_cible}` | « de Bob » / « d'Alice » (élision) |
+| `{m=il\|f=elle\|n=cette personne}` | l'accord d'après le genre de la cible ; **les trois formes `m`, `f` et `n` sont obligatoires** |
+| `{autre:m=il\|f=elle\|n=le groupe}` | l'accord d'après un autre joueur (variable `autre`) |
+| `$cible` dans une forme | le prénom : `{m=il\|f=elle\|n=$cible}` |
+
+La forme `n` est une vraie reformulation (prénom, « cette personne », tournure sans accord), jamais un point médian. Après rendu, aucun champ `{…}` ne reste affiché, et `{` `}` sont retirés des prénoms saisis.
+
 Les contenus des autres jeux sont dans [`server/content/`](server/content/) :
 
 | Fichier | Jeu | Format d'une entrée |
@@ -477,14 +539,22 @@ Les contenus des autres jeux sont dans [`server/content/`](server/content/) :
 | `questions-connait.json` | Qui me connaît le mieux ? | `{ "niveau": "chill", "question": "… {nom} … ?", "choix": ["A", "B", "C", "D"] }` (`{nom}` = la cible) |
 | `words-imposteur.json` | L'Imposteur | `{ "mot": "Netflix", "proche": "YouTube", "categorie": "Applis" }` : deux mots de la **même grande catégorie mais clairement différents** (voir ci-dessous) |
 | `defis-roue.json` | La Roue | `{ "texte": "Bois 2 gorgées.", "type": "boire", "n": 2, "niveau": "chill" }`, avec `type` parmi `boire`, `groupe`, `echange` (`n: 0`), `duo`, `distribuer`, `tous`, `vote`, `gage`, et `n` de 1 à 5 |
+| `defis-roue.json` (défis de genre) | La Roue | `{ "texte": "Toutes les femmes boivent 1 gorgée.", "type": "genre-boit", "genre": "femme", "n": 1, "niveau": "chill" }` (ou, pour `genre-distribue`, `"genre": "femme", "vers": "homme"`), avec `type` parmi `genre-boit`, `genre-distribue`, `genre-choisit`, `genre-dernier` ; `genre` = qui agit ; `vers` (`homme` ou `femme`, différent de `genre`) = qui reçoit pour `genre-distribue` et `genre-choisit`. Prévoir autant de défis pour chaque genre, sans nudité, contact, photo ni stigmatisation. |
+| `facts-savant.json` | Le Savant | `{ "id", "question", "reponse", "explication", "categorie", "source" }` (voir [Le Savant](#le-savant)) |
+| `phrases-nbm.json` | Noir Boire Mangue | `{ "niveau": "chill", "texte": "Mon excuse préférée pour quitter une soirée : ___." }` : **un seul trou** `___`, 110 caractères au maximum |
+| `cartes-nbm.json` | Noir Boire Mangue | une simple chaîne : `"Un pigeon en costume"` : 1 à 6 mots, courte, sans trou, qui fait rire dans beaucoup de phrases différentes |
 | `words-feu.json` | Réflexes | `{ "pieges": ["FEUX", "BLEU", …], "neutres": ["PIZZA", …] }` en majuscules, sans « FEU » lui-même |
 | `*-18plus.json` | Mode 18+ | Même format que le fichier normal du jeu, avec `"adulte": true` en plus (voir ci-dessous) |
 
-**Contenu 18+** : `questions-18plus.json` (Qui de nous ?), `preferes-18plus.json` (Tu préfères ?), `connait-18plus.json` (Qui me connaît le mieux ?), `roue-18plus.json` (La Roue) et `imposteur-18plus.json` (L'Imposteur), dans `server/content/`. Chaque entrée porte `"adulte": true` (le test le vérifie, et refuse ce champ dans les fichiers normaux). Registre cash et drôle, une phrase, mais toujours entre adultes consentants : rien qui implique un mineur, de la contrainte, de l'inceste, des animaux, de la violence, quelqu'un d'endormi ou trop ivre pour consentir ; pas de description pornographique, rien de discriminatoire ni de stigmatisant (IST comprises), pas de vraies personnes, pas de traumatisme. `npm test` vérifie aussi qu'aucune entrée 18+ ne double une entrée du mode normal.
+**Contenu 18+** : `questions-18plus.json` (Qui de nous ?), `preferes-18plus.json` (Tu préfères ?), `connait-18plus.json` (Qui me connaît le mieux ?), `roue-18plus.json` (La Roue), `imposteur-18plus.json` (L'Imposteur), `phrases-nbm-18plus.json` et `cartes-nbm-18plus.json` (Noir Boire Mangue ; les cartes sont de simples chaînes, leur mode se lit au nom du fichier), dans `server/content/`. Chaque entrée porte `"adulte": true` (le test le vérifie, et refuse ce champ dans les fichiers normaux). Registre cash et drôle, une phrase, mais toujours entre adultes consentants : rien qui implique un mineur, de la contrainte, de l'inceste, des animaux, de la violence, quelqu'un d'endormi ou trop ivre pour consentir ; pas de description pornographique, rien de discriminatoire ni de stigmatisant (IST comprises), pas de vraies personnes, pas de traumatisme. `npm test` vérifie aussi qu'aucune entrée 18+ ne double une entrée du mode normal.
 
 Pour un défi de la roue adressé au joueur désigné (`boire`, `duo`, `distribuer`, `gage`), écris à la 2e personne : la TV affiche « Ana : bois 2 gorgées. ». Pour les autres, écris pour tout le groupe. Le nombre de gorgées dans le texte doit correspondre à `n`.
 
 **Conseils** : une phrase qui se lit en 3 secondes sur la TV (120 caractères maximum, 75 par option de dilemme), une question qui désigne vraiment quelqu'un ou qui divise la salle, et deux options aussi tentantes ou aussi pénibles l'une que l'autre. Pas de moquerie sur l'origine, la religion, l'orientation, le genre, le physique ou la santé, pas de contenu sexuel explicite, et rien qui pousse à se mettre en danger.
+
+**Ajouter une phrase ou une carte de Noir Boire Mangue.** Une bonne phrase se complète de dix façons drôles et ne dépend d'aucun univers de niche ; une bonne carte est un mot ou un groupe nominal absurde qui marche dans presque toutes les phrases (« Un pigeon en costume », « Ma tante Josette »). Les cartes ne peuvent pas contenir de trou. Contenu **original** uniquement : n'en recopie aucun d'un jeu existant. `npm test` vérifie le format, les doublons (exacts et quasi-doublons) et que le contenu 18+ ne reprend rien du normal, et que le mode normal n'utilise jamais de carte 18+ (avec le vrai contenu).
+
+**Ajouter un fait du Savant.** Voir [Le Savant](#le-savant) : une source fiable ouverte et lue, un seul trou, et le test du devinage à froid.
 
 **Bien choisir une paire de l'Imposteur.** On doit pouvoir donner un indice vrai pour un mot qui ne colle pas parfaitement à l'autre, tout en laissant l'imposteur comprendre vaguement de quoi on parle. Le bon écart : Netflix / YouTube, Fortnite / Minecraft, Vodka / Bière, Coachella / Disneyland, Squeezie / Cyprien, Tinder / Uber Eats, Plage / Montagne. Trop proches (à éviter) : Netflix / Prime Video, Vodka / Gin, TikTok / Reels, deux versions du même produit ou deux objets interchangeables. Le test refuse les paires en double et les mots identiques ou dont l'un contient l'autre.
 
@@ -532,13 +602,17 @@ npm run dev    # serveur (port 3000, redémarrage auto) + site Vite (port 5173, 
 npm test       # tests des règles, des questions et du déroulement (mode auto, minuteurs, pause…)
 ```
 
+Autres commandes utiles : `npm run fairness` (tableau du tirage équitable sur une soirée simulée), `npm run check-facts` (faits du Savant), `node scripts/check-content.js` (doublons et volumes de tout le contenu), `node scripts/audit-genre.js` (décompte du contenu par genre), `npm run nbmsoak` et `npm run savantsoak` (parties de bots), et `npm run captures` (captures d'écran Playwright reproductibles : 12 joueurs mixtes, TV 1920×1080 et téléphone 390×844, dans `docs/captures/`).
+
 En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<IP du PC>:5173`.
 
 **Stack** : Node.js, Express, Socket.IO, React, Vite. Aucune base de données.
 
 ```
 ├── shared/
-│   └── games.js            Catalogue des jeux (nom, icône, accroche, règle, joueurs conseillés, disponible), partagé serveur/client
+│   ├── games.js            Catalogue des jeux (nom, icône, accroche, règle, joueurs conseillés, disponible), partagé serveur/client
+│   ├── formulation.js      Moteur d'accords de genre (syntaxe `{m=|f=|n=}`), partagé serveur/client
+│   └── savantReveal.js     Chronologie de la révélation du Savant (TV et téléphones)
 ├── client/                 Site React (une seule app pour l'écran et les téléphones)
 │   └── src/
 │       ├── pages/          Home (accueil), Host (écran TV : grille des jeux, lobby, partie), Player (téléphone)
@@ -548,6 +622,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │       │   ├── roue.jsx         Roues SVG (rotation calée sur l'horloge du serveur, cliquet)
 │       │   ├── feu.jsx          Mots animés, flammes, gros bouton FEU
 │       │   ├── loup.jsx, loupRoles.js, loupSetup.jsx   Loup-Garou : village en cercle, nuit, vote, fantômes, composition
+│       │   ├── savant.jsx, nbm.jsx   Le Savant (révélation en quatre temps) et Noir Boire Mangue (mains de cartes, notes)
 │       │   └── index.js         Registre client : catalogue + écrans
 │       ├── icons.jsx       Logo Gorgée et illustrations des jeux (SVG maison)
 │       ├── components.jsx  Avatar, carte joueur, camembert SVG, confettis, minuteurs
@@ -568,6 +643,7 @@ En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<I
 │   ├── gameStore.js        État des parties : phases, choix du jeu, minuteurs, mode auto, pause, gorgées, mode soirée
 │   ├── party.js            Mode soirée : composition du programme (alternance des rythmes, minimums de joueurs)
 │   ├── recap.js            Statistiques de la soirée et trophées du récap
+│   ├── spotlight.js        Registre du tirage équitable (qui est désigné, par rôle, à l'échelle de la soirée)
 │   ├── timing.js           Délais du moteur (grâce de déconnexion, réessai)
 │   ├── games/              Registre serveur : un fichier par jeu (questions, votes, résultats, gorgées, durée du suspense)
 │   ├── rules.js, rules/    Règles des jeux (fonctions pures, testées)
