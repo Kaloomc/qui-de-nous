@@ -38,7 +38,7 @@ export const CONTENT = [
   {
     id: 'qui-de-nous',
     file: 'questions.json',
-    target: 639,
+    target: 782,
     entries: (d) => d,
     key: (q) => normalize(q.text),
     near: (q) => q.text,
@@ -86,7 +86,7 @@ export const CONTENT = [
     sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre,
   },
   // Mode 18+ : fichiers séparés, jamais tirés en mode normal (voir Game.contentPool). Même format que le jeu `format`.
-  { id: 'qui-de-nous-18', format: 'qui-de-nous', adult: true, file: 'content/questions-18plus.json', target: 655, entries: (d) => d, key: (q) => normalize(q.text), near: (q) => q.text },
+  { id: 'qui-de-nous-18', format: 'qui-de-nous', adult: true, file: 'content/questions-18plus.json', target: 786, entries: (d) => d, key: (q) => normalize(q.text), near: (q) => q.text },
   {
     id: 'tu-preferes-18',
     format: 'tu-preferes',
