@@ -17,3 +17,13 @@ Test appliqué aux 158 faits d’origine : « quelqu’un qui ne sait pas, mais 
 Retirés (61) parce que la réponse se devine ou se déduit : réponses de culture générale (girafe et ses sept vertèbres, narval et sa dent, ours polaire à la peau noire, tour Eiffel « vingt ans », Napoléon 1,69 m, « Nike = victoire », « judo = souplesse », « Samsung = trois étoiles »…), formulations qui donnent la réponse (« hippopotame : sueur de sang », cuisine : « la fraise et ses fruits », « la pomme et son air ») et chiffres secs sans surprise (durées d’orbite, températures, millions de degrés, âges d’arbres, dates de chantiers).
 Gardés (97) : réponses qu’on ne trouve pas sans les connaître (crottes de wombat, loutres main dans la patte, chats et goût sucré, « disque dur d’une tonne », premier SMS, Pickles et la Coupe du monde, etc.).
 Ajoutés (63), chacun confirmé sur le web avant l’écriture, avec une source fiable ; les affirmations contestées ou non retrouvées ont été écartées : lien parenté humains/bananes (60 %), langue enroulée du pic-vert, escargot qui dort trois ans, ketchup « médicament » (source faible), doigts fripés (étude contredite), acariens « chez presque tous » (non confirmé), « la tour Eiffel grandit de 15 cm » (remplacé par les 18 cm de déplacement du sommet, source Wikipédia).
+
+# Corrections après tests (icônes de genre, questions par genre, Savant, Noir Boire Mangue, contenu)
+
+- [x] 1. Boutons de genre à icônes (♂ bleu, ♀ rose, rond gris à trois points), coche, `aria-label`, test de rendu
+- [x] 2. Questions réservées à un genre : audit complet. Questions « Qui de nous ? » : 240 entrées examinées (normal + 18+) → 6 gardées + 16 nouvelles de qualité, 297 converties en « tous » (accords neutres), 17 supprimées. « Qui me connaît ? » : 120 examinées → 2 gardées + 4 nouvelles, 123 converties, 15 supprimées. Proportion ramenée à 8–10 % des tirages. Script `scripts/check-genre-stereotypes.js` + liste d'exceptions `server/content/genre-exceptions.json`.
+- [ ] 3. Le Savant : refonte des faits (anecdotes complètes, trou sur le plus surprenant, jamais un nombre, test du devinage à froid et du camouflage)
+- [ ] 4. Noir Boire Mangue : phrases variées (position du trou), champ `forme`, mains compatibles, contrôles
+- [ ] 6. Volume de contenu (par lots, doublons contrôlés)
+- [ ] 5. Captures d'écran + `docs/captures/contenu-echantillon.md`
+- [ ] README

@@ -71,7 +71,7 @@ test('garde-fous : moins de 3 candidats ou genre absent → jamais de question r
   assert.deepEqual([...kinds].sort(), ['femme', 'tous'], 'seul le genre présent est tiré');
 });
 
-test('proportion : environ 15 à 20 % de questions réservées, équitablement réparties, jamais plus de 2 de suite', () => {
+test('proportion : environ 8 à 10 % de questions réservées, équitablement réparties, jamais plus de 2 de suite', () => {
   for (let seed = 1; seed <= 20; seed++) {
     const rng = seeded(seed);
     const mix = newMix();

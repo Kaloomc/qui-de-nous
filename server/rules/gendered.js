@@ -2,13 +2,13 @@
 // - Les candidats d'une question réservée sont les joueurs de ce genre ; ceux qui préfèrent ne pas dire ne sont jamais candidats
 //   (ils votent normalement, ou devinent normalement).
 // - Moins de MIN_CANDIDATES candidats : la question est sautée et une autre est tirée ; un genre absent du groupe n'est jamais tiré.
-// - Environ 15 à 20 % des tirages sont des questions réservées, réparties équitablement entre hommes et femmes, jamais plus de
+// - Environ 8 à 10 % des tirages sont des questions réservées, réparties équitablement entre hommes et femmes, jamais plus de
 //   MAX_RUN de suite.
 import { CIBLES, TARGET_GENDER } from '../../shared/formulation.js';
 
 export const MIN_CANDIDATES = 3;
-export const SHARE_MIN = 0.15;
-export const SHARE_MAX = 0.2;
+export const SHARE_MIN = 0.08;
+export const SHARE_MAX = 0.1;
 export const MAX_RUN = 2;
 
 export const cibleOf = (question) => (CIBLES.includes(question?.cible) ? question.cible : 'tous');
@@ -35,7 +35,7 @@ export function chooseKind(mix, counts, rng = Math.random) {
   const open = ['homme', 'femme'].filter((c) => counts[c] >= MIN_CANDIDATES);
   if (!open.length || mix.run >= MAX_RUN) return 'tous';
   const share = mix.drawn ? mix.reserved / mix.drawn : 0;
-  const chance = share < SHARE_MIN ? 0.5 : share > SHARE_MAX ? 0 : 0.17;
+  const chance = share < SHARE_MIN ? 0.3 : share > SHARE_MAX ? 0 : 0.09;
   if (rng() >= chance) return 'tous';
   // Équité entre les genres : celui qui a eu le moins de questions réservées, au hasard entre ex æquo.
   const least = Math.min(...open.map((c) => mix.byCible[c]));
