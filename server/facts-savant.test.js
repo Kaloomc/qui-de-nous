@@ -6,7 +6,7 @@ import { checkFacts, CATEGORIES, FACTS_FILE, MIN_FACTS } from '../scripts/check-
 
 const facts = JSON.parse(readFileSync(FACTS_FILE, 'utf8'));
 // Sources acceptées : encyclopédies, instituts, musées, grands médias scientifiques, articles scientifiques.
-const RELIABLE = /(^|\.)(wikipedia\.org|britannica\.com|nasa\.gov|nature\.com|nih\.gov|noaa\.gov|usgs\.gov|usda\.gov|si\.edu|smithsonianmag\.com|nationalgeographic\.com|livescience\.com|scientificamerican\.com|history\.com|loc\.gov|nobelprize\.org|unesco\.org|guinnessworldrecords\.com|computerhistory\.org|clevelandclinic\.org|swissinfo\.ch|visitfinland\.com|bluetooth\.com|nhl\.com|pbs\.org|discovermagazine\.com|bgr\.com|nps\.gov)$/;
+const RELIABLE = /(^|\.)(wikipedia\.org|britannica\.com|nasa\.gov|nature\.com|nih\.gov|noaa\.gov|usgs\.gov|usda\.gov|si\.edu|smithsonianmag\.com|nationalgeographic\.com|livescience\.com|scientificamerican\.com|history\.com|loc\.gov|nobelprize\.org|unesco\.org|guinnessworldrecords\.com|computerhistory\.org|clevelandclinic\.org|swissinfo\.ch|visitfinland\.com|bluetooth\.com|nhl\.com|pbs\.org|discovermagazine\.com|bgr\.com|nps\.gov|sciencedaily\.com|moma\.org)$/;
 
 test('faits du Savant : au moins 150 faits valides, sans doublon, une source par fait', () => {
   assert.ok(facts.length >= MIN_FACTS, `${facts.length} faits`);
