@@ -146,7 +146,8 @@ test('mode 18+ : uniquement le contenu 18+ des jeux qui en ont, le contenu norma
 test('mode 18+ : anti-répétition propre au contenu 18+ (toute la liste avant de revoir une question)', () => {
   const { game, ids } = setup(['Ana', 'Ben', 'Chloé']);
   activate(game, ids);
-  const total = game.rules.adultQuestions.length;
+  // Joueurs sans genre donné : seules les questions pour tous sont possibles (les questions réservées ont leur propre historique).
+  const total = game.rules.adultQuestions.filter((q) => !q.cible || q.cible === 'tous').length;
   const seen = new Set();
   for (let i = 0; i < total; i++) seen.add(game.drawQuestion().text);
   assert.equal(seen.size, total);

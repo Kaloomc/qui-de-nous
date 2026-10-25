@@ -15,7 +15,7 @@ const cibleOk = (q) => q.cible === undefined || CIBLES.includes(q.cible);
 /** Format attendu d'une entrée, par jeu. */
 const FORMATS = {
   // Question réservée aux femmes : « la plus susceptible » (les candidates sont toutes des femmes).
-  'qui-de-nous': (q) => NIVEAUX.includes(q.niveau) && cibleOk(q) && new RegExp(`^Qui est ${q.cible === 'femme' ? 'la' : 'le'} plus susceptible d(e |')`).test(q.text) && q.text.endsWith(' ?'),
+  'qui-de-nous': (q) => NIVEAUX.includes(q.niveau) && cibleOk(q) && new RegExp(`^Qui est ${q.cible === 'femme' ? 'la' : 'le'} plus susceptible d(e |['’])`).test(q.text) && q.text.endsWith(' ?'),
   'tu-preferes': (q) => NIVEAUX.includes(q.niveau) && text(q.a) && text(q.b) && q.a !== q.b,
   'qui-me-connait': (q) =>
     NIVEAUX.includes(q.niveau) &&

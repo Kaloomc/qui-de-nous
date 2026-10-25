@@ -35,6 +35,8 @@ let total = 0;
 for (const spec of CONTENT.filter((s) => roots.has(s.id))) {
   const lines = [];
   for (const entry of loadContent(spec)) {
+    // Question réservée à un genre : le genre de la cible est connu, « il » ou « elle » est écrit directement.
+    if (entry.cible === 'homme' || entry.cible === 'femme') continue;
     const texts = Object.values(entry).flat().filter((v) => typeof v === 'string');
     for (const text of texts) {
       if ((hasAgreement(text) || VERIFIED.includes(text)) && !all) continue;

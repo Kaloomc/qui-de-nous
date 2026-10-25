@@ -38,7 +38,7 @@ export const CONTENT = [
   {
     id: 'qui-de-nous',
     file: 'questions.json',
-    target: 400,
+    target: 640,
     entries: (d) => d,
     key: (q) => normalize(q.text),
     near: (q) => q.text,
@@ -55,7 +55,7 @@ export const CONTENT = [
   {
     id: 'qui-me-connait',
     file: 'content/questions-connait.json',
-    target: 250,
+    target: 370,
     entries: (d) => d,
     key: (q) => normalize(q.question),
     near: (q) => q.question,
@@ -86,7 +86,7 @@ export const CONTENT = [
     sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre,
   },
   // Mode 18+ : fichiers séparés, jamais tirés en mode normal (voir Game.contentPool). Même format que le jeu `format`.
-  { id: 'qui-de-nous-18', format: 'qui-de-nous', adult: true, file: 'content/questions-18plus.json', target: 450, entries: (d) => d, key: (q) => normalize(q.text), near: (q) => q.text },
+  { id: 'qui-de-nous-18', format: 'qui-de-nous', adult: true, file: 'content/questions-18plus.json', target: 655, entries: (d) => d, key: (q) => normalize(q.text), near: (q) => q.text },
   {
     id: 'tu-preferes-18',
     format: 'tu-preferes',
@@ -97,7 +97,7 @@ export const CONTENT = [
     key: (q) => [normalize(q.a), normalize(q.b)].sort().join(' | '),
     near: (q) => `${q.a} ${q.b}`,
   },
-  { id: 'qui-me-connait-18', format: 'qui-me-connait', adult: true, file: 'content/connait-18plus.json', target: 220, entries: (d) => d, key: (q) => normalize(q.question), near: (q) => q.question },
+  { id: 'qui-me-connait-18', format: 'qui-me-connait', adult: true, file: 'content/connait-18plus.json', target: 303, entries: (d) => d, key: (q) => normalize(q.question), near: (q) => q.question },
   { id: 'roue-18', format: 'roue', adult: true, file: 'content/roue-18plus.json', target: 170, entries: (d) => d, key: (d) => normalize(d.texte), near: (d) => d.texte, sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre },
   { id: 'imposteur-18', format: 'imposteur', adult: true, file: 'content/imposteur-18plus.json', target: 120, entries: (d) => d, key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | ') },
   // Noir Boire Mangue : phrases à trou et cartes de réponse (originales). Les cartes sont de simples chaînes.
