@@ -5225,39 +5225,76 @@ body.loup-night {
 
 .gender-options {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: 8px;
+  gap: 14px;
+  padding-top: 8px;
   width: 100%;
 }
 
 .gender-option {
-  flex: 1 1 auto;
-  min-height: 48px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  border: 2px solid transparent;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 88px;
+  max-width: 124px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.14);
   background: var(--card);
-  color: var(--text);
-  font-weight: 700;
-  font-size: 1.05rem;
   cursor: pointer;
   touch-action: manipulation;
 }
 
+.gender-option:active {
+  transform: scale(0.96);
+}
+
+/* Sélectionné : cadre épais de la couleur du symbole, fond teinté, coche en coin. */
 .gender-option.is-selected {
-  border-color: var(--teal);
-  background: color-mix(in srgb, var(--teal) 22%, var(--card));
+  border-width: 6px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gender-option.is-m.is-selected {
+  border-color: #4da3ff;
+}
+
+.gender-option.is-f.is-selected {
+  border-color: #ff5fa2;
+}
+
+.gender-option.is-n.is-selected {
+  border-color: #c9c6dd;
+}
+
+.gender-check {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  color: #1a1536;
+  font-weight: 900;
+  font-size: 1.15rem;
+  line-height: 30px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .gender-option:focus-visible {
   outline: 3px solid var(--yellow);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .gender-picker.is-compact .gender-option {
-  font-size: 0.95rem;
-  min-height: 44px;
+  min-width: 72px;
+  max-width: 92px;
+  border-radius: 20px;
 }
 
 .gender-picker.is-compact legend {
