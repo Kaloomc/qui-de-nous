@@ -5,6 +5,7 @@
 // Confidentialité : l'identité du Savant et la vraie réponse ne quittent le serveur, avant la révélation, que vers le téléphone du
 // Savant (`me.truth`) ; la TV et les autres téléphones ne reçoivent que des compteurs et des réponses déjà écrites.
 import * as S from '../rules/savant.js';
+import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { TIMING } from '../timing.js';
 import { loadJson } from './load.js';
 
@@ -29,9 +30,9 @@ const config = (game) => ({ ...DEFAULT_CONFIG, ...game.savantConfig });
 const facts = (game) => game.savantFacts ?? FACTS;
 const present = (game, id) => !!game.players.get(id)?.sockets.size;
 
-/** Mémoire de la partie (rotation, Savants tirés) : repart de zéro à chaque nouvelle session de jeu. */
+/** Mémoire du jeu en cours (dernier Savant, nombre de manches) : repart de zéro à chaque nouvelle session de jeu. Le tirage des rôles, lui, est celui de la soirée. */
 function run(game) {
-  if (game.savantRun?.session !== game.session) game.savantRun = { session: game.session, rot: S.newRotation([...game.players.keys()]), counts: {}, last: null, total: null };
+  if (game.savantRun?.session !== game.session) game.savantRun = { session: game.session, last: null, total: null };
   return game.savantRun;
 }
 
@@ -74,7 +75,6 @@ function soon(game, ms) {
 function begin(game, restarted = false) {
   const d = data(game);
   const r = run(game);
-  const all = [...game.players.keys()];
   const here = game.connectedPlayers().map((p) => p.id);
   if (r.total == null) r.total = S.roundsFor(config(game).rounds, here.length);
   Object.assign(d, { seq: d.seq ?? 0, restarted, answers: {}, hidden: {}, cards: null, allocations: {}, seekerId: null, savantId: null, writers: [] });
@@ -84,8 +84,8 @@ function begin(game, restarted = false) {
     d.phaseId = `${game.roundId}:w`;
     return;
   }
-  const seekerId = S.nextSeeker(r.rot, all, here);
-  const savantId = S.pickSavant(r.counts, r.last, here.filter((id) => id !== seekerId));
+  const seekerId = game.spotlight.pick(SPOTLIGHT_ROLES.savantChercheur, here);
+  const savantId = game.spotlight.pick(SPOTLIGHT_ROLES.savantSavant, here.filter((id) => id !== seekerId), { avoid: r.last });
   r.last = savantId;
   Object.assign(d, { seekerId, savantId, writers: here.filter((id) => id !== seekerId) });
   go(game, 'announce', timing(game).announceMs, () => startWrite(game));
@@ -138,6 +138,9 @@ function restartRound(game) {
   game.roundSeq += 1;
   game.roundId = game.roundSeq;
   game.votes = new Map();
+  // Le Chercheur a disparu : ni lui ni le Savant tiré n'ont joué, ils gardent leur tour.
+  game.spotlight.refund(SPOTLIGHT_ROLES.savantChercheur, data(game).seekerId);
+  game.spotlight.refund(SPOTLIGHT_ROLES.savantSavant, data(game).savantId);
   game.question = game.drawQuestion();
   const seq = data(game).seq ?? 0;
   game.roundData = { seq };

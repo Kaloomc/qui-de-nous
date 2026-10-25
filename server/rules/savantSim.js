@@ -1,5 +1,6 @@
 // Simulateur de parties de Savant (règles pures, bots au comportement aléatoire) : lève une erreur dès qu'un invariant est violé.
 import * as S from './savant.js';
+import { Spotlight } from '../spotlight.js';
 
 /**
  * Joue une partie de `rounds` manches avec `n` joueurs. chaos : part de joueurs inactifs / qui se déconnectent / qui ne votent pas.
@@ -7,8 +8,7 @@ import * as S from './savant.js';
  */
 export function runGame(rng, { n = 4 + Math.floor(rng() * 27), rounds = 3 * n, chaos = 0.25 } = {}) {
   const ids = Array.from({ length: n }, (_, i) => `p${i}`);
-  const rot = S.newRotation(ids, rng);
-  const counts = {};
+  const spot = new Spotlight();
   const points = {};
   const sips = {};
   const seekers = [];
@@ -17,12 +17,11 @@ export function runGame(rng, { n = 4 + Math.floor(rng() * 27), rounds = 3 * n, c
   for (let r = 1; r <= rounds; r++) {
     const present = ids.filter(() => rng() > chaos * 0.3);
     if (present.length < S.MIN_PLAYERS) continue; // la manche attend des joueurs
-    const seekerId = S.nextSeeker(rot, ids, present, rng);
+    const seekerId = spot.pick('chercheur', present, { rng });
     if (!present.includes(seekerId)) throw new Error('Chercheur absent');
     const candidates = present.filter((id) => id !== seekerId);
-    const savantId = S.pickSavant(counts, lastSavant, candidates, rng);
+    const savantId = spot.pick('savant', candidates, { rng, avoid: lastSavant });
     if (savantId === seekerId) throw new Error('Savant = Chercheur');
-    if (savantId === lastSavant && candidates.length > 1) throw new Error('même Savant deux manches de suite');
     lastSavant = savantId;
     seekers.push(seekerId);
     savants.push(savantId);

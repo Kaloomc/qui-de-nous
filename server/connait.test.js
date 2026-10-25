@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeConnait, pickTarget, sipsConnait, updateConnaitStats } from './rules/connait.js';
+import { computeConnait, sipsConnait, updateConnaitStats } from './rules/connait.js';
 
 const ids = ['cible', 'b', 'c', 'd'];
 const votes = (entries) => new Map(Object.entries(entries));
@@ -33,11 +33,7 @@ test('la cible n’a pas répondu : elle seule boit', () => {
   assert.deepEqual(sipsConnait(r), { cible: 1 });
 });
 
-test('cible à tour de rôle et statistiques de bonnes réponses', () => {
-  assert.equal(pickTarget(ids, 1), 'cible');
-  assert.equal(pickTarget(ids, 2), 'b');
-  assert.equal(pickTarget(ids, 5), 'cible');
-  assert.equal(pickTarget([], 1), null);
+test('statistiques de bonnes réponses', () => {
   const stats = { cible: {}, b: {}, c: {}, d: {} };
   updateConnaitStats(stats, computeConnait(ids, votes({ cible: 'a', b: 'a', c: 'b' }), 'cible'));
   updateConnaitStats(stats, computeConnait(ids, votes({ b: 'a', cible: 'a', c: 'a', d: 'a' }), 'b'));
@@ -65,16 +61,16 @@ test('déroulé avec le moteur : cible à tour de rôle, réponses secrètes, st
   ps.push(c);
   assert.equal(game.start(), null);
   const target = game.publicState().round.targetId;
-  assert.equal(target, ps[0].id);
-  assert.equal(game.vote(ps[1].id, 'e'), 'Choix invalide.');
-  game.vote(ps[0].id, 'c');
-  game.vote(ps[1].id, 'c');
-  game.vote(ps[2].id, 'a');
+  const [right, wrong] = ps.filter((p) => p.id !== target);
+  assert.equal(game.vote(right.id, 'e'), 'Choix invalide.');
+  game.vote(target, 'c');
+  game.vote(right.id, 'c');
+  game.vote(wrong.id, 'a');
   game.reveal(1);
-  assert.equal(game.publicState({ playerId: ps[1].id }).results, null, 'pas de spoiler côté téléphone');
+  assert.equal(game.publicState({ playerId: right.id }).results, null, 'pas de spoiler côté téléphone');
   tick(game.rules.revealMs);
-  assert.deepEqual(game.publicState().sips, { [ps[2].id]: 1 });
-  assert.deepEqual(game.publicState().stats[ps[1].id], { guesses: 1, correct: 1 });
+  assert.deepEqual(game.publicState().sips, { [wrong.id]: 1 });
+  assert.deepEqual(game.publicState().stats[right.id], { guesses: 1, correct: 1 });
   game.nextQuestion(1);
-  assert.equal(game.publicState().round.targetId, ps[1].id, 'la cible change à chaque tour');
+  assert.notEqual(game.publicState().round.targetId, target, 'la cible change à chaque tour (tirage équitable : personne ne repasse avant les autres)');
 });

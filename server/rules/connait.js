@@ -2,12 +2,6 @@
 
 export const CHOICES = ['a', 'b', 'c', 'd'];
 
-/** Cible du tour : chaque joueur connecté à tour de rôle (dans l'ordre d'arrivée). */
-export function pickTarget(playerIds, round) {
-  if (playerIds.length === 0) return null;
-  return playerIds[(round - 1) % playerIds.length];
-}
-
 /**
  * votes : Map joueur → 'a' | 'b' | 'c' | 'd' (celui de la cible = sa vraie réponse).
  * Ceux qui se trompent (ou ne répondent pas) boivent. Personne n'a trouvé : la cible boit aussi.

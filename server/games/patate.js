@@ -1,3 +1,4 @@
+import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { allowedTargets, explode, fuseDuration, passBomb, randomPass, sipsPatate, startPatate } from '../rules/patate.js';
 
 /** Un porteur qui ne passe pas la bombe dans ce délai la voit partir au hasard. */
@@ -27,7 +28,8 @@ export default {
   startRound(game) {
     const ids = candidates(game);
     const fuseMs = fuseDuration();
-    Object.assign(game.roundData, startPatate(ids.length ? ids : [...game.players.keys()]), { fuseMs });
+    const pool = ids.length ? ids : [...game.players.keys()];
+    Object.assign(game.roundData, startPatate(pool, Math.random, game.spotlight.pick(SPOTLIGHT_ROLES.patatePorteur, pool)), { fuseMs });
     // La mèche est cachée : seul le serveur sait quand ça explose.
     game.schedulePausable('g:boom', fuseMs, () => game.reveal(game.roundId));
     armIdle(game);

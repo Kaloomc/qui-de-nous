@@ -1,4 +1,5 @@
 import { applyLastChance, checkClue, computeImposteur, NO_CLUE, lastChanceOptions, setupImposteur, sipsImposteur, speakingTurns } from '../rules/imposteur.js';
+import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { TIMING } from '../timing.js';
 import { loadJson } from './load.js';
 
@@ -67,7 +68,7 @@ export default {
   startRound(game) {
     const connected = game.connectedPlayers().map((p) => p.id);
     const ids = connected.length >= 3 ? connected : [...game.players.keys()];
-    const setup = setupImposteur(ids, game.question);
+    const setup = setupImposteur(ids, game.question, Math.random, game.spotlight.pick(SPOTLIGHT_ROLES.imposteur, ids));
     Object.assign(game.roundData, setup, { step: 'words', turnIndex: -1, turns: speakingTurns(setup.order), clues: [], options: null });
     if (game.settings.auto) game.schedulePausable('g:words', WORDS_MS, () => startSpeaking(game));
   },

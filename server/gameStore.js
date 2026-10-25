@@ -3,6 +3,7 @@ import { GAMES, isGame, isPlayable, partyGames } from './games/index.js';
 import { eligibleGames, PARTY_DURATIONS, pickNextBlock, TRANSITION_MS } from './party.js';
 import { computeTrophies, recordRound, sipsRanking } from './recap.js';
 import { QuestionHistory } from './questionHistory.js';
+import { Spotlight } from './spotlight.js';
 import { TIMING } from './timing.js';
 
 export { TIMING };
@@ -92,6 +93,8 @@ export class Game {
     // Gorgées de toute la soirée, par joueur : survit aussi à reset(). Seule une nouvelle partie (nouveau QR code)
     // ou le bouton « Remettre les compteurs à zéro » de l'hôte les efface.
     this.partySips = new Map();
+    // Tirage équitable des joueurs désignés (cible, Chercheur, Imposteur…) à l'échelle de la soirée : survit à reset() lui aussi.
+    this.spotlight = new Spotlight();
     // Statistiques de la soirée pour les trophées du récap (server/recap.js), et jeux joués : survivent aussi à reset().
     this.partyStats = new Map();
     this.playedModes = new Set();
@@ -362,6 +365,8 @@ export class Game {
       while (this.players.has(id));
       player = { id, secret: token(), sockets: new Set(), disconnectedAt: null, photo: null, photoVersion: 0 };
       this.players.set(id, player);
+      // Arrivé en cours de soirée : il démarre au minimum du groupe, pas à zéro (sinon il serait désigné à chaque tirage).
+      this.spotlight.join(id, [...this.players.values()].filter((p) => p.sockets.size > 0).map((p) => p.id));
       // Arrivé en pleine manche du mode soirée : il joue à partir de la manche suivante.
       if (this.partyActive && ['question', 'revealing', 'results'].includes(this.phase)) this.party.late.add(id);
     }
@@ -393,6 +398,7 @@ export class Game {
   removePlayer(playerId) {
     // Ses gorgées restent dans partySips (le total de la soirée reste cohérent), mais il sort du classement.
     this.players.delete(playerId);
+    this.spotlight.remove(playerId);
     this.party?.late.delete(playerId);
     this.votes.delete(playerId);
     for (const [voter, target] of this.votes) if (target === playerId) this.votes.delete(voter);

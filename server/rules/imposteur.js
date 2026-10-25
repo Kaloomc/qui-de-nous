@@ -12,8 +12,8 @@ const shuffleWith = (list, rng) => {
 };
 
 /** Tire l'imposteur et l'ordre de parole. L'imposteur reçoit le mot « proche » sans savoir qu'il est l'imposteur. */
-export function setupImposteur(playerIds, pair, rng = Math.random) {
-  const imposterId = playerIds[Math.floor(rng() * playerIds.length)];
+export function setupImposteur(playerIds, pair, rng = Math.random, chosenImposterId = null) {
+  const imposterId = chosenImposterId ?? playerIds[Math.floor(rng() * playerIds.length)];
   const words = Object.fromEntries(playerIds.map((id) => [id, id === imposterId ? pair.proche : pair.mot]));
   return { imposterId, words, order: shuffleWith(playerIds, rng) };
 }

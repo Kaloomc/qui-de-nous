@@ -27,57 +27,6 @@ test('nombre de manches : 5 / 8 / 10 / une par joueur (10 au plus) / sans fin', 
   assert.equal(S.roundsFor('n’importe quoi', 4), 4, 'valeur inconnue : réglage par défaut');
 });
 
-test('rotation : chacun cherche une fois avant que quelqu’un repasse, jamais le même deux fois de suite', () => {
-  const rng = seeded(1);
-  const all = ids(5);
-  const rot = S.newRotation(all, rng);
-  let previous = Array.from({ length: 5 }, () => S.nextSeeker(rot, all, all, rng));
-  assert.deepEqual([...previous].sort(), [...all].sort(), 'un tour complet : tout le monde une fois');
-  for (let cycle = 0; cycle < 20; cycle++) {
-    const turn = Array.from({ length: 5 }, () => S.nextSeeker(rot, all, all, rng));
-    assert.equal(new Set(turn).size, 5);
-    assert.notEqual(turn[0], previous.at(-1), 'le dernier Chercheur ne repasse pas tout de suite');
-    previous = turn;
-  }
-});
-
-test('rotation : les arrivants sont ajoutés à la fin, les absents gardent leur tour, les partis sont oubliés', () => {
-  const rng = seeded(2);
-  let all = ids(4);
-  const rot = S.newRotation(all, rng);
-  const first = S.nextSeeker(rot, all, all, rng);
-  all = [...all, 'nouveau'];
-  const rest = Array.from({ length: 4 }, () => S.nextSeeker(rot, all, all, rng));
-  assert.equal(rest.at(-1), 'nouveau', 'le nouveau cherche à la fin du tour');
-  assert.ok(!rest.includes(first));
-
-  const r2 = S.newRotation(ids(4), seeded(3));
-  const absent = r2.order[0];
-  const present = ids(4).filter((id) => id !== absent);
-  assert.notEqual(S.nextSeeker(r2, ids(4), present, seeded(3)), absent);
-  assert.ok(!r2.done.has(absent), 'l’absent garde son tour');
-  S.nextSeeker(r2, present, present, seeded(3));
-  assert.ok(!r2.order.includes(absent), 'un joueur parti est retiré de l’ordre');
-  assert.equal(S.nextSeeker(S.newRotation([], seeded(1)), [], [], seeded(1)), null);
-});
-
-test('Savant : jamais deux manches de suite le même, priorité à ceux qui l’ont été le moins', () => {
-  const rng = seeded(4);
-  const counts = {};
-  let last = null;
-  const all = ids(6);
-  for (let i = 0; i < 60; i++) {
-    const id = S.pickSavant(counts, last, all, rng);
-    assert.notEqual(id, last);
-    last = id;
-  }
-  const values = Object.values(counts);
-  assert.ok(Math.max(...values) - Math.min(...values) <= 1, `répartition équilibrée : ${values}`);
-  assert.equal(S.pickSavant({ a: 3, b: 3, c: 0 }, 'a', ['a', 'b', 'c'], seeded(5)), 'c', 'celui qui ne l’a jamais été passe avant');
-  assert.equal(S.pickSavant({}, 'a', ['a'], seeded(5)), 'a', 'un seul candidat : on le prend');
-  assert.equal(S.pickSavant({}, null, [], seeded(5)), null);
-});
-
 const W = ['sa', 'b1', 'b2', 'b3', 'b4']; // Savant + 4 Bluffeurs ; le Chercheur est « se »
 
 test('Chercheur juste : Bluffeurs 1 gorgée, Chercheur distribue 2, Savant ne boit pas, points', () => {

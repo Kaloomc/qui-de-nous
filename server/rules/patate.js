@@ -25,8 +25,9 @@ export function allowedTargets(holderId, candidateIds, passes) {
   return [];
 }
 
-export function startPatate(candidateIds, rng = Math.random) {
-  return { holderId: candidateIds[Math.floor(rng() * candidateIds.length)] ?? null, passes: [] };
+/** `holderId` : premier porteur déjà désigné par le tirage équitable de la soirée ; sinon, au hasard. */
+export function startPatate(candidateIds, rng = Math.random, holderId = null) {
+  return { holderId: holderId ?? candidateIds[Math.floor(rng() * candidateIds.length)] ?? null, passes: [] };
 }
 
 const withPass = (round, to, at, random) => ({

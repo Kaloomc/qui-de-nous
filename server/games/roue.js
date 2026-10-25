@@ -1,3 +1,4 @@
+import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { applyRoueAction, drawRoue, isInteractive, isRoueComplete, isValidDefi, sipsRoue } from '../rules/roue.js';
 import { loadJson } from './load.js';
 
@@ -34,7 +35,9 @@ export default {
     const ids = connectedIds(game);
     const { key, list } = game.contentPool(DEFIS, ADULT_DEFIS);
     const defi = game.history.draw(key, list);
-    const results = drawRoue(ids.length ? ids : playerIds, list, Math.random, game.lastRoueTarget, defi);
+    const pool = ids.length ? ids : playerIds;
+    const target = game.spotlight.pick(SPOTLIGHT_ROLES.roueCible, pool, { avoid: game.lastRoueTarget });
+    const results = drawRoue(pool, list, Math.random, game.lastRoueTarget, defi, target);
     game.lastRoueTarget = results.targetId;
     return results;
   },

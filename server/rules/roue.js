@@ -34,9 +34,9 @@ const pick = (list, rng) => list[Math.floor(rng() * list.length)];
  * plus les cases affichées sur la deuxième roue (le défi tiré + des leurres variés).
  * `chosenDefi` : défi déjà tiré par l'appelant (anti-répétition) ; sinon, tiré ici au hasard.
  */
-export function drawRoue(playerIds, defis, rng = Math.random, lastTargetId = null, chosenDefi = null) {
+export function drawRoue(playerIds, defis, rng = Math.random, lastTargetId = null, chosenDefi = null, chosenTargetId = null) {
   const pool = playerIds.length > 1 ? playerIds.filter((id) => id !== lastTargetId) : playerIds;
-  const targetId = pick(pool, rng);
+  const targetId = chosenTargetId ?? pick(pool, rng);
   const defi = chosenDefi ?? pick(defis, rng);
   const decoys = [];
   const others = defis.filter((d) => d !== defi);

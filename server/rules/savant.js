@@ -41,62 +41,8 @@ export const normalizeAnswer = (text) =>
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 
-// ---------- Rotation du Chercheur ----------
-
-function shuffle(list, rng) {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-/** Ordre aléatoire fixé au début ; `done` = ceux qui ont déjà cherché pendant ce tour. */
-export const newRotation = (ids, rng = Math.random) => ({ order: shuffle(ids, rng), done: new Set(), last: null });
-
-/**
- * Prochain Chercheur : chacun une fois avant que quelqu'un repasse. Les joueurs arrivés en cours de partie sont ajoutés à la fin
- * de l'ordre ; les absents gardent leur tour pour plus tard dans le tour. Quand tout le monde (présent) est passé, un nouveau tour
- * commence dans un nouvel ordre, sans reprendre tout de suite le dernier Chercheur.
- * all : joueurs de la partie ; present : ceux qui peuvent jouer maintenant. Renvoie null s'il n'y a personne.
- */
-export function nextSeeker(rot, all, present, rng = Math.random) {
-  const inGame = new Set(all);
-  rot.order = rot.order.filter((id) => inGame.has(id));
-  for (const id of all) if (!rot.order.includes(id)) rot.order.push(id);
-  for (const id of [...rot.done]) if (!inGame.has(id)) rot.done.delete(id);
-  const ok = new Set(present);
-  let pick = rot.order.find((id) => !rot.done.has(id) && ok.has(id));
-  if (!pick) {
-    // Tour terminé (ou il ne reste que des absents) : nouveau tour.
-    rot.done.clear();
-    rot.order = shuffle(rot.order, rng);
-    const candidates = rot.order.filter((id) => ok.has(id));
-    pick = candidates.find((id) => id !== rot.last) ?? candidates[0] ?? null;
-  }
-  if (pick) {
-    rot.done.add(pick);
-    rot.last = pick;
-  }
-  return pick;
-}
-
-// ---------- Tirage du Savant ----------
-
-/**
- * Savant : au hasard parmi ceux qui l'ont été le moins souvent, jamais deux manches de suite le même joueur si possible.
- * counts : joueur → nombre de fois Savant ; last : Savant de la manche précédente.
- */
-export function pickSavant(counts, last, candidates, rng = Math.random) {
-  if (!candidates.length) return null;
-  const pool = candidates.length > 1 ? candidates.filter((id) => id !== last) : candidates;
-  const fewest = Math.min(...pool.map((id) => counts[id] ?? 0));
-  const best = pool.filter((id) => (counts[id] ?? 0) === fewest);
-  const id = best[Math.floor(rng() * best.length)];
-  counts[id] = (counts[id] ?? 0) + 1;
-  return id;
-}
+// Le Chercheur et le Savant sont tirés par le registre de la soirée (server/spotlight.js) : le plus petit compteur d'abord,
+// au hasard entre ex æquo, et un joueur ne repasse que lorsque tous les autres sont passés.
 
 // ---------- Fin de manche : gorgées et points ----------
 
