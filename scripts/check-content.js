@@ -78,10 +78,12 @@ export const CONTENT = [
   {
     id: 'roue',
     file: 'content/defis-roue.json',
-    target: 150,
+    target: 180,
     entries: (d) => d,
     key: (d) => normalize(d.texte),
     near: (d) => d.texte,
+    // Les défis de genre existent en deux versions symétriques (hommes / femmes) : ce ne sont pas des quasi-doublons.
+    sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre,
   },
   // Mode 18+ : fichiers séparés, jamais tirés en mode normal (voir Game.contentPool). Même format que le jeu `format`.
   { id: 'qui-de-nous-18', format: 'qui-de-nous', adult: true, file: 'content/questions-18plus.json', target: 450, entries: (d) => d, key: (q) => normalize(q.text), near: (q) => q.text },
@@ -96,7 +98,7 @@ export const CONTENT = [
     near: (q) => `${q.a} ${q.b}`,
   },
   { id: 'qui-me-connait-18', format: 'qui-me-connait', adult: true, file: 'content/connait-18plus.json', target: 220, entries: (d) => d, key: (q) => normalize(q.question), near: (q) => q.question },
-  { id: 'roue-18', format: 'roue', adult: true, file: 'content/roue-18plus.json', target: 140, entries: (d) => d, key: (d) => normalize(d.texte), near: (d) => d.texte },
+  { id: 'roue-18', format: 'roue', adult: true, file: 'content/roue-18plus.json', target: 170, entries: (d) => d, key: (d) => normalize(d.texte), near: (d) => d.texte, sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre },
   { id: 'imposteur-18', format: 'imposteur', adult: true, file: 'content/imposteur-18plus.json', target: 120, entries: (d) => d, key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | ') },
   {
     id: 'feu',
@@ -163,6 +165,7 @@ export function findDuplicates(spec, list) {
       if (sets[i].size < 3) continue;
       for (let j = i + 1; j < sets.length; j++) {
         if (sets[j].size < 3 || jaccard(sets[i], sets[j]) < NEAR_THRESHOLD) continue;
+        if (spec.sameFamily?.(list[i], list[j])) continue;
         if (!ALLOWED_NEAR.includes([spec.near(list[i]), spec.near(list[j])].map(normalize).sort().join(' | '))) near.push([i, j]);
       }
     }

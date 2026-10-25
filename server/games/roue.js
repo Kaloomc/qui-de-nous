@@ -1,5 +1,5 @@
 import { SPOTLIGHT_ROLES } from '../spotlight.js';
-import { applyRoueAction, drawRoue, isInteractive, isRoueComplete, isValidDefi, sipsRoue } from '../rules/roue.js';
+import { applyRoueAction, drawRoue, groupsFor, isEligible, isGendered, isInteractive, isRoueComplete, isValidDefi, settleGendered, sipsRoue } from '../rules/roue.js';
 import { loadJson } from './load.js';
 
 const DEFIS = loadJson('../content/defis-roue.json').filter(isValidDefi);
@@ -7,6 +7,8 @@ const DEFIS = loadJson('../content/defis-roue.json').filter(isValidDefi);
 const ADULT_DEFIS = loadJson('../content/roue-18plus.json').filter(isValidDefi);
 const AUTO_SPIN_MS = 2500;
 const ACTION_MS = 30000;
+/** Les défis « le dernier à toucher » sont rapides : 15 s de fenêtre. */
+const ACTION_MS_BY_TYPE = { 'genre-dernier': 15000 };
 
 const connectedIds = (game) => game.connectedPlayers().map((p) => p.id);
 
@@ -33,20 +35,31 @@ export default {
   // Le tirage se fait au moment de lancer la roue : pendant le suspense, la TV anime vers le résultat.
   computeResults(playerIds, _votes, game) {
     const ids = connectedIds(game);
-    const { key, list } = game.contentPool(DEFIS, ADULT_DEFIS);
+    const { key, list: all } = game.contentPool(DEFIS, ADULT_DEFIS);
+    // Défi de genre sauté si l'un des genres concernés compte moins de 2 joueurs dans la partie.
+    const players = game.connectedPlayers().map((p) => ({ id: p.id, gender: p.gender }));
+    const list = all.filter((d) => isEligible(d, players));
     const defi = game.history.draw(key, list);
-    const pool = ids.length ? ids : playerIds;
+    // Défi de genre : la première roue s'arrête sur quelqu'un du genre visé (jamais sur un joueur épargné).
+    const actors = isGendered(defi) ? groupsFor(defi, players).actors : null;
+    const base = ids.length ? ids : playerIds;
+    const pool = actors?.length ? actors : base;
     const target = game.spotlight.pick(SPOTLIGHT_ROLES.roueCible, pool, { avoid: game.lastRoueTarget });
-    const results = drawRoue(pool, list, Math.random, game.lastRoueTarget, defi, target);
+    const results = drawRoue(base, list, Math.random, game.lastRoueTarget, defi, target, players);
     game.lastRoueTarget = results.targetId;
     return results;
   },
   afterReveal(game) {
     if (!isInteractive(game.results)) return false;
     const { type } = game.results.defi;
-    const needsTarget = !['tous', 'vote'].includes(type);
-    if (needsTarget && !game.players.get(game.results.targetId)?.sockets.size) return false;
-    game.schedule('pending', ACTION_MS, () => game.finalize());
+    if (isGendered(game.results.defi)) {
+      // Personne du genre concerné n'est là : rien à attendre.
+      if (!connectedIds(game).some((id) => game.results.groups.actors.includes(id))) return false;
+    } else {
+      const needsTarget = !['tous', 'vote'].includes(type);
+      if (needsTarget && !game.players.get(game.results.targetId)?.sockets.size) return false;
+    }
+    game.schedule('pending', ACTION_MS_BY_TYPE[type] ?? ACTION_MS, () => game.finalize());
     return true;
   },
   handleAction(game, playerId, action) {
@@ -56,6 +69,10 @@ export default {
     game.results = results;
     finishIfComplete(game);
     return null;
+  },
+  // Fin de la fenêtre : ce qui n'a pas été décidé l'est au hasard (gorgées non distribuées, choix absent, « dernier à toucher »).
+  resolvePending(game) {
+    game.results = settleGendered(game.results);
   },
   onPresenceChange: finishIfComplete,
   sipsOf: (results) => sipsRoue(results),

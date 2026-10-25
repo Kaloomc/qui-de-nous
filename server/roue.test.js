@@ -29,7 +29,7 @@ test('tirage valide : un joueur présent, le défi tiré est bien sous l’aigui
     assert.notEqual(r.targetId, 'a', 'jamais deux fois de suite le même');
     assert.equal(r.whoSegments[r.whoIndex], r.targetId);
     assert.ok(DEFIS.includes(r.defi));
-    assert.deepEqual(r.whatSegments[r.whatIndex], { type: r.defi.type, n: r.defi.n });
+    assert.deepEqual(r.whatSegments[r.whatIndex], { type: r.defi.type, n: r.defi.n, ...(r.defi.genre ? { genre: r.defi.genre } : {}) });
     assert.ok(r.whatSegments.length <= WHAT_SEGMENTS && r.whatSegments.length >= 2);
   }
   assert.equal(drawRoue(['solo'], DEFIS, Math.random, 'solo').targetId, 'solo', 'seul joueur : c’est lui');

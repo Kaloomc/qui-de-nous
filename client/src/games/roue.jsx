@@ -17,7 +17,7 @@ const TURNS = 6;
 
 const COLORS = ['#ff4f8b', '#ffc93c', '#3ee0c5', '#6c8bff', '#ff8a3d', '#b46cff', '#7ee05a', '#ff6f6f'];
 const NIVEAUX = { chill: 'Chill', epice: 'Épicé', hardcore: 'Hardcore' };
-const CONFETTI_TYPES = ['groupe', 'echange', 'distribuer'];
+const CONFETTI_TYPES = ['groupe', 'echange', 'distribuer', 'genre-boit'];
 /** Défis adressés au joueur désigné (« Ana : bois 2 gorgées »), les autres concernent tout le groupe. */
 const PERSONAL = ['boire', 'duo', 'distribuer', 'gage'];
 
@@ -25,7 +25,11 @@ const byIdOf = (state) => new Map(state.players.map((p) => [p.id, p]));
 const lcFirst = (text) => text.charAt(0).toLowerCase() + text.slice(1);
 const short = (name) => (name.length > 11 ? `${name.slice(0, 10)}…` : name);
 
-export function segmentLabel({ type, n }) {
+const GROUP = { femme: 'Les femmes', homme: 'Les hommes' };
+const GAGE_ONLY = ['genre-boit', 'genre-distribue', 'genre-choisit', 'genre-dernier'];
+
+export function segmentLabel({ type, n, genre }) {
+  if (GAGE_ONLY.includes(type)) return { 'genre-boit': GROUP[genre], 'genre-distribue': `${GROUP[genre]} donnent`, 'genre-choisit': `${GROUP[genre]} choisissent`, 'genre-dernier': 'Le dernier' }[type];
   return {
     boire: sipsLabel(n),
     groupe: 'Tout le monde',
@@ -221,6 +225,20 @@ function Status({ state }) {
     if (state.pending) return <p className="lead">{answered} / {state.players.filter((p) => p.connected).length} réponses sur les téléphones…</p>;
     return null;
   }
+  if (type === 'genre-distribue') {
+    const gives = Object.values(results.gives ?? {}).reduce((a, mine) => a + Object.values(mine).reduce((x, y) => x + y, 0), 0);
+    const total = n * results.groups.actors.length;
+    return state.pending ? <p className="lead pulse-text">{gives} / {total} gorgées distribuées sur les téléphones…</p> : null;
+  }
+  if (type === 'genre-choisit') {
+    if (!results.chosen) return state.pending ? <p className="lead pulse-text">Le premier à répondre décide…</p> : null;
+    return <p className="verdict-line"><strong>{byId.get(results.chosenBy)?.name ?? 'Le sort'}</strong> a choisi <strong>{byId.get(results.chosen)?.name}</strong> !</p>;
+  }
+  if (type === 'genre-dernier') {
+    const touched = Object.keys(results.touches ?? {}).length;
+    if (state.pending) return <p className="lead pulse-text">{touched} / {results.groups.actors.length} ont touché leur téléphone…</p>;
+    return null;
+  }
   if (type === 'gage') {
     if (!results.gage) return state.pending ? <p className="lead pulse-text">Gage relevé… ou on boit ?</p> : null;
     return <p className="verdict-line">{results.gage === 'fait' ? <strong>Gage relevé, bravo !</strong> : <strong>{target?.name} préfère boire !</strong>}</p>;
@@ -237,7 +255,7 @@ export function HostResults({ state }) {
     <div className="roue">
       {CONFETTI_TYPES.includes(results.defi.type) && <Confetti />}
       <p className="round">Tour {round.number} · La Roue</p>
-      {target && <Avatar player={target} size={140} className="roulette-avatar zoom-in" />}
+      {target && !results.groups && <Avatar player={target} size={140} className="roulette-avatar zoom-in" />}
       <div className={`defi-card niveau-${results.defi.niveau} fade-up`}>
         <span className="niveau-chip">{NIVEAUX[results.defi.niveau]}</span>
         <p>{defiLine(results, target?.name ?? '?')}</p>
@@ -293,6 +311,7 @@ export function PlayerResults({ state, me, act, verdict }) {
   const { type, n, texte } = results.defi;
   const mine = results.targetId === me.id;
   const others = state.players.filter((p) => p.id !== me.id && p.connected);
+  if (results.groups) return <GenderDefi state={state} me={me} act={act} />;
   const card = (
     <div className={`defi-card defi-card-phone niveau-${results.defi.niveau}`}>
       <p>{mine ? texte : defiLine(results, target?.name ?? '?')}</p>
@@ -361,10 +380,67 @@ export function PlayerResults({ state, me, act, verdict }) {
   );
 }
 
+/** Défis de genre sur les téléphones : ceux qui ne sont pas visés (dont « ne préfère pas dire ») sont simplement épargnés. */
+export const SPARED = 'Ce défi ne te concerne pas, tu respires.';
+const concerned = (results, id) => results.groups.actors.includes(id) || results.groups.receivers.includes(id);
+
+function GenderDefi({ state, me, act }) {
+  const { results } = state;
+  const { type, n, texte, genre, vers } = results.defi;
+  const actor = results.groups.actors.includes(me.id);
+  const card = (
+    <div className={`defi-card defi-card-phone niveau-${results.defi.niveau}`}>
+      <p>{texte}</p>
+    </div>
+  );
+  if (!concerned(results, me.id)) return <Waiting title="Ce défi ne te concerne pas" text="Tu respires. Regarde l’écran." />;
+  if (!actor) return <Waiting title={`${GROUP[genre]} s’en occupent`} text="Ça pourrait bien te concerner. Regarde l’écran !" />;
+  const receivers = state.players.filter((p) => results.groups.receivers.includes(p.id));
+  if (type === 'genre-distribue') {
+    const mine = results.gives?.[me.id] ?? {};
+    const given = Object.values(mine).reduce((a, b) => a + b, 0);
+    if (given >= n) return <Waiting title="C’est distribué" text="On attend les autres…" />;
+    return (
+      <div className="vote">
+        {card}
+        <h1 className="vote-question">
+          Encore {n - given} gorgée{n - given > 1 ? 's' : ''} à donner
+        </h1>
+        <p className="muted small">Un toucher = une gorgée. Le reste sera tiré au hasard à la fin.</p>
+        <PlayerGrid players={receivers.map((p) => ({ ...p, name: mine[p.id] ? `${p.name} (+${mine[p.id]})` : p.name }))} onPick={(targetId) => act({ targetId })} />
+      </div>
+    );
+  }
+  if (type === 'genre-choisit') {
+    if (results.chosen) return <Waiting title="C’est décidé" text="Regarde l’écran." />;
+    return (
+      <div className="vote">
+        {card}
+        <h1 className="vote-question">Vite : qui boit {n} gorgée{n > 1 ? 's' : ''} ?</h1>
+        <p className="muted small">Le premier à répondre décide pour tout le monde.</p>
+        <PlayerGrid players={receivers} onPick={(targetId) => act({ targetId })} />
+      </div>
+    );
+  }
+  if (type === 'genre-dernier') {
+    if (me.id in (results.touches ?? {})) return <Waiting title="Touché !" text="Plus qu’à attendre les autres." />;
+    return (
+      <div className="vote">
+        {card}
+        <button className="btn btn-primary btn-xl btn-block roue-touch" onClick={() => act({ touch: true })}>
+          Touche ici, vite !
+        </button>
+      </div>
+    );
+  }
+  return null;
+}
+
 export function verdict(state, me) {
   const { results } = state;
   const target = byIdOf(state).get(results.targetId);
   const sips = state.roundSips?.[me.id] ?? 0;
+  if (results.groups && !concerned(results, me.id)) return { drinks: false, title: 'Tu ne bois pas', detail: SPARED };
   const detail = defiLine(results, results.targetId === me.id ? 'Toi' : target?.name ?? '?');
   if (sips > 0) return { drinks: true, title: 'Tu bois !', detail };
   return { drinks: false, title: 'Tu ne bois pas', detail };
