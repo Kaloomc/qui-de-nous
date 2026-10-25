@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { makeGame } from './testClock.js';
 import { NBM_TIMING } from './games/nbm.js';
 import { TIMING } from './timing.js';
+import { readFileSync } from 'node:fs';
 
 const T = NBM_TIMING;
 const PHRASES = Array.from({ length: 12 }, (_, i) => ({ niveau: 'chill', texte: `Phrase ${i} : ___ !` }));
@@ -359,6 +360,28 @@ test('mode 18+ : le paquet 18+ n’est utilisé que si le mode est actif, avec s
   // Hors mode 18+ : cartes normales.
   for (const hand of Object.values(s.d().hands)) for (const c of hand) assert.ok(DECK.includes(c));
   assert.equal(game.adult.active, false);
+});
+
+const readJson = (name) => JSON.parse(readFileSync(new URL(`./content/${name}`, import.meta.url), 'utf8'));
+const cartes = readJson('cartes-nbm.json');
+const cartes18 = readJson('cartes-nbm-18plus.json');
+
+test('étanchéité avec le vrai contenu : normal = jamais de carte ni de phrase 18+, 18+ = uniquement des cartes 18+', async () => {
+  const names = ['Ana', 'Ben', 'Chloé', 'Dan'];
+  for (let i = 0; i < 25; i++) {
+    const normal = await makeGame('nbm', names);
+    assert.equal(normal.game.start(), null);
+    assert.notEqual(normal.game.question.adulte, true, 'phrase 18+ en mode normal');
+    for (const hand of Object.values(normal.game.roundData.hands)) for (const c of hand) assert.ok(cartes.includes(c) && !cartes18.includes(c), `carte « ${c} » en mode normal`);
+
+    const adult = await makeGame('nbm', names);
+    adult.game.requestAdult();
+    for (const p of adult.players) adult.game.answerAdult(p.id, true);
+    assert.equal(adult.game.adult.active, true);
+    assert.equal(adult.game.start(), null);
+    assert.equal(adult.game.question.adulte, true, 'phrase normale en mode 18+');
+    for (const hand of Object.values(adult.game.roundData.hands)) for (const c of hand) assert.ok(cartes18.includes(c) && !cartes.includes(c), `carte « ${c} » en mode 18+`);
+  }
 });
 
 test('mode soirée : Noir Boire Mangue fait partie du programme, avec 2 à 3 manches', async () => {

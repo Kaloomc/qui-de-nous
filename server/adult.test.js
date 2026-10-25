@@ -114,7 +114,7 @@ test('mode 18+ : persiste quand on change de jeu ou qu’on rejoue', () => {
 
 // ---------- Étanchéité entre le mode normal et le mode 18+ ----------
 
-const WITH_ADULT_CONTENT = ['qui-de-nous', 'tu-preferes', 'qui-me-connait', 'imposteur'];
+const WITH_ADULT_CONTENT = ['qui-de-nous', 'tu-preferes', 'qui-me-connait', 'imposteur', 'nbm'];
 const activate = (game, ids) => {
   game.requestAdult();
   ids.forEach((id) => game.answerAdult(id, true));
