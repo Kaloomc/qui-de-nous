@@ -8,7 +8,14 @@ import { fileURLToPath } from 'node:url';
 
 export const CATEGORIES = ['animaux', 'sciences', 'histoire', 'pays et voyages', 'bouffe', 'technologie', 'sport', 'culture pop', 'corps humain', 'insolite'];
 export const MIN_FACTS = 150;
-export const MIN_PER_CATEGORY = 8;
+export const MIN_PER_CATEGORY = 5;
+export const MIN_WORDS = 12;
+export const MAX_WORDS = 35;
+
+/** Un nombre en chiffres ou en lettres ne peut pas être la réponse (on le devinerait ou on le lirait à voix haute sans effet), ni une unité autour du trou. */
+const NUMBER_WORDS = /^(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quinze|seize|vingt|trente|quarante|cinquante|soixante|cent|mille|million|millions|milliard)$/;
+const UNITS = '%|°|minutes?|secondes?|heures?|jours?|semaines?|mois|ans?|années?|siècles?|mètres?|m|km|kilomètres?|centimètres?|cm|kilos?|kg|grammes?|litres?|langues?|fois|degrés|euros?|dollars?|pesos|pixels?|lettres?|personnes?|habitants?|hémisphères?';
+const UNIT_AROUND_BLANK = new RegExp(`(^|\\s)\\d+\\s+___|___\\s+(${UNITS})(\\s|[.,;?!]|$)`, 'i');
 
 const normalize = (text) =>
   String(text)
@@ -50,7 +57,9 @@ export function checkFacts(list) {
       const holes = fact.question.split('___').length - 1;
       if (holes !== 1) bad(`la question doit contenir un seul trou « ___ » (${holes} trouvé${holes > 1 ? 's' : ''})`);
       if (/\s{2,}/.test(fact.question) || fact.question !== fact.question.trim()) bad('espaces en trop dans la question');
-      if (fact.question.length > 220) bad('question trop longue');
+      const nWords = fact.question.trim().split(/\s+/).length;
+      if (nWords < MIN_WORDS || nWords > MAX_WORDS) bad(`la question doit faire ${MIN_WORDS} à ${MAX_WORDS} mots (${nWords}) : une anecdote complète, jamais un fragment`);
+      if (UNIT_AROUND_BLANK.test(fact.question)) bad('le trou ne doit pas être entouré d’un nombre ou d’une unité (« ___ minutes », « ___ langues »)');
       const key = normalize(fact.question);
       if (questions.has(key)) bad(`question en double de « ${questions.get(key)} »`);
       questions.set(key, fact.id);
@@ -59,6 +68,7 @@ export function checkFacts(list) {
       const n = words(fact.reponse).length;
       if (n < 1 || n > 5) bad(`la réponse doit faire 1 à 5 mots (${n})`);
       if (/^\s|\s$|\s{2,}/.test(fact.reponse)) bad('espaces en trop dans la réponse');
+      if (/\d/.test(fact.reponse) || words(fact.reponse).some((w) => NUMBER_WORDS.test(w))) bad('la réponse ne doit pas être un nombre');
       // La réponse ne doit pas déjà figurer dans la question.
       if (typeof fact.question === 'string' && normalize(fact.reponse).length > 3 && ` ${normalize(fact.question)} `.includes(` ${normalize(fact.reponse)} `)) bad('la réponse apparaît dans la question');
     }
