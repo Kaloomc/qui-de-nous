@@ -23,7 +23,7 @@ Ajoutés (63), chacun confirmé sur le web avant l’écriture, avec une source 
 - [x] 1. Boutons de genre à icônes (♂ bleu, ♀ rose, rond gris à trois points), coche, `aria-label`, test de rendu
 - [x] 2. Questions réservées à un genre : audit complet. Questions « Qui de nous ? » : 240 entrées examinées (normal + 18+) → 6 gardées + 16 nouvelles de qualité, 297 converties en « tous » (accords neutres), 17 supprimées. « Qui me connaît ? » : 120 examinées → 2 gardées + 4 nouvelles, 123 converties, 15 supprimées. Proportion ramenée à 8–10 % des tirages. Script `scripts/check-genre-stereotypes.js` + liste d'exceptions `server/content/genre-exceptions.json`.
 - [x] 3. Le Savant : 153 faits refaits (anecdotes complètes, trou sur le plus surprenant, jamais un nombre, test du devinage à froid et du camouflage). Bilan : 59 réécrits, 101 retirés, 94 nouveaux ; voir `docs/audit-faits-savant.md`
-- [ ] 4. Noir Boire Mangue : phrases variées (position du trou), champ `forme`, mains compatibles, contrôles
+- [x] 4. Noir Boire Mangue : 204 phrases + 106 en 18+ réécrites (trou début/milieu/fin 24/42/34), champ `forme`, 546 + 219 cartes, mains avec au moins 3 cartes compatibles, `npm run check-nbm` ; voir `docs/audit-nbm.md`
 - [ ] 6. Volume de contenu (par lots, doublons contrôlés)
 - [ ] 5. Captures d'écran + `docs/captures/contenu-echantillon.md`
 - [ ] README

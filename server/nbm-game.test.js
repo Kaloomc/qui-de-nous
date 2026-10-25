@@ -363,8 +363,8 @@ test('mode 18+ : le paquet 18+ n’est utilisé que si le mode est actif, avec s
 });
 
 const readJson = (name) => JSON.parse(readFileSync(new URL(`./content/${name}`, import.meta.url), 'utf8'));
-const cartes = readJson('cartes-nbm.json');
-const cartes18 = readJson('cartes-nbm-18plus.json');
+const cartes = readJson('cartes-nbm.json').map((c) => c.texte);
+const cartes18 = readJson('cartes-nbm-18plus.json').map((c) => c.texte);
 
 test('étanchéité avec le vrai contenu : normal = jamais de carte ni de phrase 18+, 18+ = uniquement des cartes 18+', async () => {
   const names = ['Ana', 'Ben', 'Chloé', 'Dan'];

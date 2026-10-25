@@ -24,12 +24,32 @@ export const roundsFor = (playerCount) => Math.min(MAX_ROUNDS, Math.max(1, playe
 /** Une phrase est valide si elle contient exactement un trou. */
 export const blanksIn = (text) => (String(text).match(/___/g) ?? []).length;
 
+/** Majuscule au début d'une phrase ou d'une citation : les cartes sont écrites en minuscules pour s'insérer au milieu d'une phrase. */
+export const startsSentence = (before) => /(^|[.!?…]\s+|[«"“]\s*)$/.test(String(before));
+export const capitalizeFirst = (text) => (text ? text.charAt(0).toLocaleUpperCase('fr') + text.slice(1) : text);
+
 /** Insère la réponse dans la phrase à la place du trou. Renvoie les trois morceaux (avant, réponse, après) pour la mise en forme. */
 export function fillSentence(sentence, answer) {
   const i = String(sentence).indexOf(BLANK);
   if (i < 0) return { before: `${sentence} `, answer, after: '' };
-  return { before: sentence.slice(0, i), answer, after: sentence.slice(i + BLANK.length) };
+  const before = sentence.slice(0, i);
+  return { before, answer: startsSentence(before) ? capitalizeFirst(answer) : answer, after: sentence.slice(i + BLANK.length) };
 }
+
+// ---------- Formes ----------
+// Chaque phrase dit ce qui la complète (`forme`) et chaque carte ce qu'elle est :
+//  groupe_nominal : « un pigeon en costume »  (après un verbe, une préposition : « j'ai croisé ___ »)
+//  infinitif      : « chanter faux au mariage »  (« je refuse de… » sans « de » avant le trou : « j'ose ___ »)
+//  libre          : phrase ou exclamation entière, pour les citations « ___ »
+// Une phrase « libre » (citation) accepte toutes les cartes ; les autres n'acceptent que leur propre forme.
+
+export const FORMES = ['groupe_nominal', 'infinitif', 'libre'];
+export const MIN_COMPATIBLE = 3; // cartes qui vont dans la phrase, dans chaque main de 5
+
+export const cardText = (card) => (typeof card === 'string' ? card : card.texte);
+export const cardForme = (card) => (typeof card === 'string' ? 'libre' : card.forme ?? 'libre');
+export const phraseForme = (phrase) => phrase?.forme ?? 'libre';
+export const compatible = (phrase, carte) => (phrase === 'libre' ? true : phrase === carte);
 
 // ---------- Mains de cartes ----------
 
@@ -43,23 +63,32 @@ function shuffle(list, rng) {
 }
 
 /**
- * Distribue une main de HAND_SIZE cartes à chaque joueur, depuis le paquet commun.
+ * Distribue une main de HAND_SIZE cartes à chaque joueur, depuis le paquet commun (cartes en texte ou `{ texte, forme }`).
  * Aucune carte en double dans une main ; autant que possible, aucune carte déjà vue dans une manche précédente
- * (`seen`, un Set qui survit aux manches : il est vidé quand le paquet ne suffit plus) ni donnée à un autre joueur de la manche.
+ * (`seen`, un Set de textes qui survit aux manches : il est vidé quand le paquet ne suffit plus) ni donnée à un autre joueur de la manche.
+ * `forme` est celle de la phrase : chaque main contient au moins MIN_COMPATIBLE cartes qui s'y insèrent (autant que le paquet le permet).
+ * Les mains sont renvoyées en texte, mélangées : rien ne distingue les cartes compatibles des autres.
  */
-export function dealHands(playerIds, deck, seen, rng = Math.random) {
+export function dealHands(playerIds, deck, seen, rng = Math.random, forme = 'libre') {
+  const cards = deck.map((c) => ({ text: cardText(c), fits: compatible(forme, cardForme(c)) }));
+  const size = Math.min(HAND_SIZE, cards.length);
   const need = playerIds.length * HAND_SIZE;
-  if (deck.length - seen.size < need) seen.clear();
-  let fresh = shuffle(deck.filter((c) => !seen.has(c)), rng);
+  if (cards.length - seen.size < need) seen.clear();
+  let fresh = shuffle(cards.filter((c) => !seen.has(c.text)), rng);
   const hands = {};
   for (const id of playerIds) {
     const hand = [];
-    while (hand.length < Math.min(HAND_SIZE, deck.length)) {
-      if (fresh.length === 0) fresh = shuffle(deck.filter((c) => !hand.includes(c)), rng); // paquet très court : on réutilise
-      const card = fresh.pop();
-      if (!hand.includes(card)) hand.push(card);
-    }
-    hands[id] = hand;
+    const draw = (wantFit) => {
+      // D'abord une carte jamais vue, puis (paquet trop court pour la forme demandée) n'importe quelle carte du paquet.
+      let i = fresh.findLastIndex((c) => (wantFit ? c.fits : true) && !hand.includes(c.text));
+      if (i >= 0) return fresh.splice(i, 1)[0];
+      const pool = shuffle(cards.filter((c) => (wantFit ? c.fits : true) && !hand.includes(c.text)), rng);
+      return pool[0] ?? null;
+    };
+    const wanted = Math.min(MIN_COMPATIBLE, size, cards.filter((c) => c.fits).length);
+    while (hand.length < wanted) hand.push(draw(true).text);
+    while (hand.length < size) hand.push(draw(false).text);
+    hands[id] = shuffle(hand, rng);
     for (const card of hand) seen.add(card);
   }
   return hands;

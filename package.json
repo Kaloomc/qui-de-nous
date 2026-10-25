@@ -17,6 +17,7 @@
     "loupsoak": "node --expose-gc scripts/loup-soak.js",
     "savantsoak": "node --expose-gc scripts/savant-soak.js",
     "check-facts": "node scripts/check-facts.js",
+    "check-nbm": "node scripts/check-nbm.js",
     "audit:savant": "node scripts/savant-audit.mjs",
     "captures": "node scripts/capture-demo.js",
     "fairness": "node scripts/fairness-report.js",

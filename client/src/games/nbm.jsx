@@ -15,6 +15,9 @@ export const playerLayout = 'custom';
 export const nextLabel = 'Manche suivante';
 
 const MAX_ANSWER = 60; // même limite que le serveur (server/rules/nbm.js)
+/** Les cartes sont écrites en minuscules pour s'insérer dans une phrase : majuscule seulement si le trou ouvre la phrase ou une citation. */
+const startsSentence = (before) => /(^|[.!?…]\s+|[«"“]\s*)$/.test(before);
+const capitalizeFirst = (text) => (text ? text.charAt(0).toLocaleUpperCase('fr') + text.slice(1) : text);
 /** Les quatre notes, dans l'ordre des boutons : libellé, points, symbole (le sens ne repose jamais sur la couleur seule). */
 const RATINGS = [
   { id: 'nul', label: 'Nul', points: 0, icon: '😐' },
@@ -29,7 +32,9 @@ const sizeClass = (text) => (text.length > 70 ? 'is-long' : text.length > 40 ? '
 /** La phrase à trou ; avec `answer`, la réponse prend la place du trou (en très gros, en jaune). */
 function Sentence({ text, answer = null, censored = false, big = false, small = false }) {
   const parts = String(text ?? '').split('___');
-  const filler = censored ? <em className="nbm-blank is-censored">censurée</em> : answer != null ? <span className="nbm-blank is-filled">{answer}</span> : <span className="nbm-blank">___</span>;
+  const before = parts[0];
+  const shown = answer != null && startsSentence(before) ? capitalizeFirst(answer) : answer;
+  const filler = censored ? <em className="nbm-blank is-censored">censurée</em> : answer != null ? <span className="nbm-blank is-filled">{shown}</span> : <span className="nbm-blank">___</span>;
   const total = String(text ?? '').length + (answer?.length ?? 0);
   return (
     <h1 className={`nbm-sentence ${big ? 'is-big' : ''} ${small ? 'is-small' : ''} ${sizeClass({ length: total })}`}>

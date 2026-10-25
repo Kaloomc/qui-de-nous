@@ -58,7 +58,7 @@ function begin(game) {
   if (r.total == null) r.total = N.roundsFor(here.length);
   const { deck, seen } = deckOf(game);
   d.players = here;
-  d.hands = N.dealHands(here, deck, seen);
+  d.hands = N.dealHands(here, deck, seen, Math.random, N.phraseForme(game.question));
   go(game, 'announce', timing(game).announceMs, () => startWrite(game));
 }
 
