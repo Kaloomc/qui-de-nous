@@ -464,8 +464,8 @@ export function verdict(state, me) {
   const extra = points > 0 ? `+${points} point${points > 1 ? 's' : ''}` : 'Un verre d’eau compte aussi.';
   const gave = Object.keys(r.settled?.given?.[me.id] ?? {}).length > 0;
   let detail;
-  if (me.id === r.seekerId) detail = r.found ? '🕵️ Tu as trouvé le Savant !' : '🕵️ Tu t’es trompé de Savant.';
-  else if (me.id === r.savantId) detail = r.found ? '🧠 Tu étais le Savant : démasqué !' : '🧠 Tu étais le Savant : personne ne t’a cru.';
+  if (me.id === r.seekerId) detail = r.found ? '🕵️ Tu as trouvé le Savant !' : '🕵️ Mauvais Savant : tu as été bluffé.';
+  else if (me.id === r.savantId) detail = r.found ? '🧠 Tu étais le Savant : {m=démasqué|f=démasquée|n=ton masque est tombé} !' : '🧠 Tu étais le Savant : personne ne t’a cru.';
   else if (r.bluffers?.includes(me.id)) detail = r.choice === me.id ? '🎭 Le Chercheur est tombé dans ton piège !' : '🎭 Bluffeur';
   else detail = 'Tu regardais le spectacle.';
   return { drinks, title: drinks ? 'Tu bois !' : gave ? 'Bien joué !' : 'Tu ne bois pas', detail, extra };

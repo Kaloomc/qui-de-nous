@@ -66,7 +66,7 @@ function bot(url, code, name, i) {
       setTimeout(() => s.emit('player:vote', { choice: options[Math.floor(Math.random() * options.length)], roundId: st.roundId }, () => {}), 300 + Math.random() * 1500);
     }
   });
-  s.emit('player:join', { code, name }, (ack) => (me = ack.playerId));
+  s.emit('player:join', { code, name, gender: 'n' }, (ack) => (me = ack.playerId));
   return s;
 }
 
@@ -101,6 +101,7 @@ async function playGame(browser, srv, { n, tv: tvSize, phone: phoneSize, report 
     watch(page, `Téléphone ${name}`);
     await page.goto(`${srv.url}/join/${code}`, { waitUntil: 'domcontentloaded' });
     await page.getByPlaceholder('Ton prénom').fill(name);
+    await page.getByRole('radio', { name: 'Je préfère ne pas dire' }).click();
     await page.locator('button.btn-primary.btn-block').click();
     phones.push({ name, ctx, page, seen: new Set() });
   }

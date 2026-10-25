@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Avatar, PlayerChip, TimerBar } from '../components.jsx';
 import { StatBoard } from '../sips.jsx';
+import { fmt } from '../format.js';
 import { sounds, unlockAudio } from '../sound.js';
 import { getVolume, isSpeechUnlocked, preloadVoices, setVolume, speak, unlockSpeech, useSpeechStatus } from '../speech.js';
 
@@ -240,8 +241,8 @@ export function HostResults({ state }) {
               <Avatar player={p} size={52} />
               <span className="ranking-name">{p.name}</span>
               <span className="feu-ms">{r.ms} ms</span>
-              {last && <span className="feu-tag">le plus lent</span>}
-              {i === 0 && !last && <span className="feu-tag feu-tag-win">le plus rapide</span>}
+              {last && <span className="feu-tag">{fmt('{m=le plus lent|f=la plus lente|n=en queue de peloton}', p)}</span>}
+              {i === 0 && !last && <span className="feu-tag feu-tag-win">{fmt('{m=le plus rapide|f=la plus rapide|n=plus rapide que l’éclair}', p)}</span>}
             </li>
           );
         })}
@@ -336,10 +337,10 @@ export function verdict(state, me) {
   const rank = results.ranking.findIndex((r) => r.id === me.id);
   if (rank < 0) return { drinks: false, title: 'Pas joué', detail: 'Tu joues à la prochaine manche.' };
   const { ms } = results.ranking[rank];
-  if (results.lastIds.includes(me.id)) return { drinks: true, title: 'Le plus lent !', detail: `${ms} ms. Réveille-toi !` };
-  return { drinks: false, title: rank === 0 ? 'Le plus rapide !' : 'Sauvé !', detail: `${ms} ms · ${rank + 1}${rank === 0 ? 'er' : 'e'}` };
+  if (results.lastIds.includes(me.id)) return { drinks: true, title: '{m=Le plus lent|f=La plus lente|n=En queue de peloton} !', detail: `${ms} ms. Réveille-toi !` };
+  return { drinks: false, title: rank === 0 ? '{m=Le plus rapide|f=La plus rapide|n=Plus rapide que l’éclair} !' : '{m=Sauvé|f=Sauvée|n=Ouf} !', detail: `${ms} ms · ${rank + 1}${rank === 0 ? 'er' : 'e'}` };
 }
 
 export function EndStats({ state }) {
-  return <StatBoard state={state} title="Réflexes d’acier" valueOf={(s) => s.fastest} format={(n) => `${n} fois le plus rapide`} />;
+  return <StatBoard state={state} title="Réflexes d’acier" valueOf={(s) => s.fastest} format={(n) => `${n} fois {m=le plus rapide|f=la plus rapide|n=plus rapide que l’éclair}`} />;
 }

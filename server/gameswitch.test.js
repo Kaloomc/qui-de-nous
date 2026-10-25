@@ -53,7 +53,7 @@ test('changements de jeu rapides : dernier choix gagnant, pas de vote fantôme, 
   const created = await host.emit('host:create', { mode: 'qui-de-nous', settings: { auto: true, voteMs: 15000, resultsMs: 5000 } });
   assert.ok(created.ok);
   const players = Array.from({ length: 6 }, () => client(url));
-  for (const [i, p] of players.entries()) assert.ok((await p.emit('player:join', { code: created.code, name: `J${i}` })).ok);
+  for (const [i, p] of players.entries()) assert.ok((await p.emit('player:join', { code: created.code, name: `J${i}`, gender: 'n' })).ok);
   try {
     // Manche 1 de « Qui de nous ? » : tout le monde vote, révélation automatique.
     assert.ok((await host.emit('host:start')).ok);
@@ -98,7 +98,7 @@ test('mode soirée : sauts de jeu rapides puis fin, plus aucun minuteur de la so
   const host = client(url);
   const created = await host.emit('host:create', { mode: null });
   const players = Array.from({ length: 5 }, () => client(url));
-  for (const [i, p] of players.entries()) await p.emit('player:join', { code: created.code, name: `J${i}` });
+  for (const [i, p] of players.entries()) await p.emit('player:join', { code: created.code, name: `J${i}`, gender: 'n' });
   try {
     assert.ok((await host.emit('host:partyStart', { durationMs: 0 })).ok);
     await Promise.all([host.emit('host:partySkip'), host.emit('host:partySkip'), host.emit('host:partySkip'), host.emit('host:partyEnd'), host.emit('host:partyEnd')]);

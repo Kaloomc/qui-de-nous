@@ -1,4 +1,5 @@
 import { Avatar } from './components.jsx';
+import { fmt, fmtGroup } from './format.js';
 
 export const sipsLabel = (n) => `${n} gorgée${n > 1 ? 's' : ''}`;
 
@@ -39,7 +40,7 @@ export function StatBoard({ state, title, valueOf, format, limit = 5 }) {
             <span className="ranking-rank">{i + 1}</span>
             <Avatar player={r.player} size={36} />
             <span className="ranking-name">{r.player.name}</span>
-            <span className="ranking-sips">{format(r.value)}</span>
+            <span className="ranking-sips">{fmt(format(r.value), r.player)}</span>
           </li>
         ))}
       </ol>
@@ -69,7 +70,7 @@ export function PartyBoard({ state, onReset }) {
       <div className="party-board-top">
         <Avatar player={top.player} size={64} className="podium-champion" />
         <div>
-          <span className="podium-title">Le plus assoiffé de la soirée</span>
+          <span className="podium-title">{fmt('{m=Le plus assoiffé|f=La plus assoiffée|n=Soif suprême} de la soirée', top.player)}</span>
           <strong>{top.player.name}</strong>
           <span className="ranking-sips">{sipsLabel(top.sips)}</span>
         </div>
@@ -95,7 +96,12 @@ export function PartyBoard({ state, onReset }) {
   );
 }
 
-const TITLES = { 1: 'Le plus assoiffé', 2: 'Dauphin', 3: 'Sur le podium' };
+// Titres du podium, accordés au genre du groupe sur la marche (forme neutre s'il y a un mélange ou un « ne préfère pas dire »).
+const TITLES = {
+  1: '{m=Le plus assoiffé|f=La plus assoiffée|n=Soif suprême}',
+  2: '{m=Dauphin|f=Dauphine|n=Médaille d’argent}',
+  3: 'Sur le podium',
+};
 const PODIUM_STEP_MAX = 4;
 
 export function Podium({ state }) {
@@ -137,7 +143,7 @@ export function Podium({ state }) {
             </div>
             <div className="podium-block">
               <span className="podium-rank">{rank}</span>
-              <span className="podium-title">{TITLES[rank]}</span>
+              <span className="podium-title">{fmtGroup(TITLES[rank], atRank.map((r) => r.player))}</span>
             </div>
           </div>
         ))}

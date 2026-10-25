@@ -5158,3 +5158,105 @@ body.loup-night {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------- Choix du genre (téléphone) ---------- */
+
+.gender-picker {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.gender-picker legend {
+  padding: 0;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  width: 100%;
+  float: none;
+  margin-bottom: 8px;
+}
+
+.gender-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.gender-option {
+  flex: 1 1 auto;
+  min-height: 48px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background: var(--card);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.gender-option.is-selected {
+  border-color: var(--teal);
+  background: color-mix(in srgb, var(--teal) 22%, var(--card));
+}
+
+.gender-option:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.gender-picker.is-compact .gender-option {
+  font-size: 0.95rem;
+  min-height: 44px;
+}
+
+.gender-picker.is-compact legend {
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+/* Question réservée à un genre : les candidats en bas de la question (TV). */
+.qdn-candidates {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.qdn-candidates-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+.qdn-candidates-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 24px;
+  max-width: 1500px;
+}
+
+.qdn-candidate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

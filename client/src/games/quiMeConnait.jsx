@@ -7,12 +7,7 @@ export const waitingText = 'En attente des autres…';
 
 const LETTERS = ['a', 'b', 'c', 'd'];
 
-/** Remplace {nom} et {de_nom} (« de Bob », « d’Alice ») dans la question. */
-export function fillName(text, name = '?') {
-  const de = /^[aeiouyhàâäéèêëîïôöùûü]/i.test(name) ? `d’${name}` : `de ${name}`;
-  return text.replaceAll('{de_nom}', de).replaceAll('{nom}', name);
-}
-
+// La question et les choix arrivent déjà accordés au genre de la cible (server/games/quiMeConnait.js, moteur shared/formulation.js).
 const targetOf = (state) => state.players.find((p) => p.id === state.round.targetId);
 
 function ChoiceGrid({ state, showVoters = false, showAnswer = false }) {
@@ -69,7 +64,7 @@ export function HostQuestion({ state }) {
       <p className="round">Question {state.round.number} · Qui me connaît le mieux ?</p>
       <TargetBanner target={target} label="Tout le monde parle de" />
       <h1 key={state.round.number} className="question-text connait-question slide-in">
-        {fillName(state.round.question, target?.name)}
+        {state.round.question}
       </h1>
       <ChoiceGrid state={state} />
     </>
@@ -82,7 +77,7 @@ export function HostReveal({ state }) {
   return (
     <div className="connait">
       <p className="round">Question {state.round.number} · Qui me connaît le mieux ?</p>
-      <h2 className="results-question">{fillName(state.round.question, target?.name)}</h2>
+      <h2 className="results-question">{state.round.question}</h2>
       <p className="announce">{remaining > state.reveal.durationMs - 1200 ? 'Attention…' : `Qu’a répondu ${target?.name ?? 'la cible'} ?`}</p>
       <ChoiceGrid state={state} showVoters />
     </div>
@@ -104,7 +99,7 @@ export function HostResults({ state }) {
   return (
     <div className="connait">
       <p className="round">Question {state.round.number} · Qui me connaît le mieux ?</p>
-      <h2 className="results-question">{fillName(state.round.question, target?.name)}</h2>
+      <h2 className="results-question">{state.round.question}</h2>
       <ChoiceGrid state={state} showVoters showAnswer />
       <p className="verdict-line fade-up" style={{ animationDelay: '500ms' }}>
         {results.reason ? REASONS[results.reason](name) : `${right} ${right > 1 ? 'ont' : 'a'} trouvé. Les autres boivent !`}
@@ -119,7 +114,7 @@ export function PlayerVote({ state, me, onVote }) {
   return (
     <div className="vote">
       <p className="round">{isTarget ? 'C’est toi la cible !' : `Qu’a répondu ${target?.name} ?`}</p>
-      <h1 className="vote-question">{fillName(state.round.question, target?.name)}</h1>
+      <h1 className="vote-question">{state.round.question}</h1>
       <p className="muted">{isTarget ? 'Réponds sincèrement, en secret.' : 'Devine ce que la cible a répondu.'}</p>
       {state.round.choix.map((text, i) => (
         <button key={LETTERS[i]} className="answer-choice" onClick={() => onVote(LETTERS[i])}>

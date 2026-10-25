@@ -1,4 +1,5 @@
 // Récap de fin de soirée : statistiques de la soirée (tous jeux confondus) et trophées. Fonctions pures, testées.
+import { render } from '../shared/formulation.js';
 
 const inc = (stats, id, key, n = 1) => {
   const s = stats.get(id) ?? {};
@@ -69,26 +70,26 @@ export function recordRound(stats, mode, results, playerIds) {
 const plural = (n, word) => `${n} ${word}${n > 1 ? 's' : ''}`;
 
 /**
- * Trophées possibles, dans l'ordre de révélation. `min` = valeur minimale pour que le trophée ait du sens,
+ * Trophées possibles (titres accordés au genre du gagnant par le moteur de formulation, forme neutre s'il ne l'a pas donné), dans l'ordre de révélation. `min` = valeur minimale pour que le trophée ait du sens,
  * `lower` = plus petit vaut mieux, `strict` = jamais donné à un autre que le vrai premier.
  */
 export const TROPHIES = [
-  { id: 'roi', emoji: '👑', title: 'Le roi des gorgées', key: 'sips', min: 1, strict: true, label: (n) => plural(n, 'gorgée') },
-  { id: 'accuse', emoji: '👉', title: 'Le plus accusé', key: 'accused', min: 2, label: (n) => `${plural(n, 'vote')} reçu${n > 1 ? 's' : ''}` },
-  { id: 'menteur', emoji: '🎭', title: 'Le meilleur menteur', key: 'fooled', min: 1, label: (n) => (n > 1 ? `${n} fois imposteur sans être démasqué` : 'imposteur sans être démasqué') },
-  { id: 'detective', emoji: '🔍', title: 'Le meilleur détective', key: 'found', min: 1, label: (n) => `${plural(n, 'imposteur')} démasqué${n > 1 ? 's' : ''}` },
-  { id: 'rapide', emoji: '⚡', title: 'Le plus rapide', key: 'bestMs', min: 0, lower: true, label: (ms) => `${(ms / 1000).toFixed(2).replace('.', ',')} s au « FEU »` },
-  { id: 'mouton', emoji: '🐑', title: 'Le plus mouton', key: 'sheep', min: 2, label: (n) => `${n} fois avec la majorité` },
-  { id: 'rebelle', emoji: '🤘', title: 'Le plus rebelle', key: 'rebel', min: 2, label: (n) => `${n} fois contre tout le monde` },
-  { id: 'precis', emoji: '🎯', title: 'Le plus précis', key: 'closest', min: 2, label: (n) => `${plural(n, 'estimation')} au plus près` },
-  { id: 'pote', emoji: '🤝', title: 'Le meilleur pote', key: 'correct', min: 2, label: (n) => `${plural(n, 'bonne réponse')} sur les autres` },
+  { id: 'roi', emoji: '👑', title: '{m=Le roi des gorgées|f=La reine des gorgées|n=Au sommet des gorgées}', key: 'sips', min: 1, strict: true, label: (n) => plural(n, 'gorgée') },
+  { id: 'accuse', emoji: '👉', title: '{m=Le plus accusé|f=La plus accusée|n=Cible favorite des votes}', key: 'accused', min: 2, label: (n) => `${plural(n, 'vote')} reçu${n > 1 ? 's' : ''}` },
+  { id: 'menteur', emoji: '🎭', title: '{m=Le meilleur menteur|f=La meilleure menteuse|n=Un talent pour le mensonge}', key: 'fooled', min: 1, label: (n) => (n > 1 ? `${n} fois imposteur sans être démasqué` : 'imposteur sans être démasqué') },
+  { id: 'detective', emoji: '🔍', title: '{m=Le meilleur détective|f=La meilleure détective|n=Un flair de détective}', key: 'found', min: 1, label: (n) => `${plural(n, 'imposteur')} démasqué${n > 1 ? 's' : ''}` },
+  { id: 'rapide', emoji: '⚡', title: '{m=Le plus rapide|f=La plus rapide|n=Plus rapide que l’éclair}', key: 'bestMs', min: 0, lower: true, label: (ms) => `${(ms / 1000).toFixed(2).replace('.', ',')} s au « FEU »` },
+  { id: 'mouton', emoji: '🐑', title: '{m=Le mouton du groupe|f=La brebis du groupe|n=L’esprit de troupeau}', key: 'sheep', min: 2, label: (n) => `${n} fois avec la majorité` },
+  { id: 'rebelle', emoji: '🤘', title: '{m=Le plus rebelle|f=La plus rebelle|n=L’esprit rebelle}', key: 'rebel', min: 2, label: (n) => `${n} fois contre tout le monde` },
+  { id: 'precis', emoji: '🎯', title: '{m=Le plus précis|f=La plus précise|n=Une précision d’horloger}', key: 'closest', min: 2, label: (n) => `${plural(n, 'estimation')} au plus près` },
+  { id: 'pote', emoji: '🤝', title: '{m=Le meilleur pote|f=La meilleure pote|n=Le sens de l’amitié}', key: 'correct', min: 2, label: (n) => `${plural(n, 'bonne réponse')} sur les autres` },
   { id: 'maudit', emoji: '💣', title: 'Les mains brûlantes', key: 'bombs', min: 1, label: (n) => `${plural(n, 'bombe')} en pleine figure` },
-  { id: 'chouchou', emoji: '🎡', title: 'Le chouchou de la roue', key: 'picked', min: 2, label: (n) => `désigné ${n} fois` },
-  { id: 'loup', emoji: '🐺', title: 'Le loup le plus rusé', key: 'wolfNights', min: 2, label: (n) => `${plural(n, 'nuit')} sans se faire croquer` },
-  { id: 'credible', emoji: '🤥', title: 'Le plus crédible', key: 'savantFooled', min: 2, label: (n) => `${plural(n, 'vote')} de joueurs bluffés` },
-  { id: 'enqueteur', emoji: '🕵️', title: 'Le meilleur enquêteur', key: 'savantFound', min: 1, label: (n) => `${plural(n, 'Savant')} démasqué${n > 1 ? 's' : ''}` },
-  { id: 'imbattable', emoji: '🧠', title: 'Le Savant imbattable', key: 'savantUnfound', min: 1, label: (n) => `${n > 1 ? `${n} fois` : 'une fois'} sans être démasqué` },
-  { id: 'voyante', emoji: '🔮', title: 'La meilleure voyante', key: 'seerFound', min: 1, label: (n) => `${plural(n, 'loup')} démasqué${n > 1 ? 's' : ''}` },
+  { id: 'chouchou', emoji: '🎡', title: '{m=Le chouchou de la roue|f=La chouchoute de la roue|n=Star de la roue}', key: 'picked', min: 2, label: (n) => `${n} fois sous les projecteurs` },
+  { id: 'loup', emoji: '🐺', title: '{m=Le loup le plus rusé|f=La louve la plus rusée|n=Une ruse de loup}', key: 'wolfNights', min: 2, label: (n) => `${plural(n, 'nuit')} sans se faire croquer` },
+  { id: 'credible', emoji: '🤥', title: '{m=Le plus crédible|f=La plus crédible|n=Crédibilité maximale}', key: 'savantFooled', min: 2, label: (n) => `${plural(n, 'vote')} de joueurs bluffés` },
+  { id: 'enqueteur', emoji: '🕵️', title: '{m=Le meilleur enquêteur|f=La meilleure enquêtrice|n=Un flair d’enquête}', key: 'savantFound', min: 1, label: (n) => `${plural(n, 'Savant')} démasqué${n > 1 ? 's' : ''}` },
+  { id: 'imbattable', emoji: '🧠', title: '{m=Le Savant imbattable|f=La Savante imbattable|n=Un savoir imbattable}', key: 'savantUnfound', min: 1, label: (n) => `${n > 1 ? `${n} fois` : 'une fois'} sans être démasqué` },
+  { id: 'voyante', emoji: '🔮', title: '{m=Le meilleur voyant|f=La meilleure voyante|n=Le don de voyance}', key: 'seerFound', min: 1, label: (n) => `${plural(n, 'loup')} démasqué${n > 1 ? 's' : ''}` },
 ];
 
 /** Un autre que le premier peut recevoir le trophée s'il n'en a pas encore et qu'il est au moins à moitié aussi bon. */
@@ -116,7 +117,7 @@ export function computeTrophies(players, sips, stats) {
     pool.sort((a, b) => (won.get(a.player.id) ?? 0) - (won.get(b.player.id) ?? 0) || better(a, b) || a.player.name.localeCompare(b.player.name));
     const winner = pool[0];
     won.set(winner.player.id, (won.get(winner.player.id) ?? 0) + 1);
-    trophies.push({ id: trophy.id, emoji: trophy.emoji, title: trophy.title, playerId: winner.player.id, value: winner.value, label: trophy.label(winner.value) });
+    trophies.push({ id: trophy.id, emoji: trophy.emoji, title: render(trophy.title, { cible: winner.player }), playerId: winner.player.id, value: winner.value, label: trophy.label(winner.value) });
   }
   return trophies;
 }

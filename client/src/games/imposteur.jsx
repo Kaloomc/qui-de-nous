@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Avatar, PlayerChip, PlayerGrid, TimerBar, VoteProgress, allVoted, useRevealSound } from '../components.jsx';
 import { useRemaining } from '../lib.js';
 import { roundCaption, StatBoard } from '../sips.jsx';
+import { fmt } from '../format.js';
 
 export const id = 'imposteur';
 export const waitingText = 'En attente des autres…';
@@ -159,10 +160,10 @@ export function HostResults({ state }) {
   const imposter = byId.get(results.imposterId);
   let headline;
   if (!results.present) headline = 'L’imposteur a quitté la partie : personne ne boit.';
-  else if (!results.unmasked) headline = `Raté ! ${imposter?.name} vous a tous eus : tout le monde boit, sauf lui.`;
-  else if (state.pending) headline = `Démasqué ! Dernière chance pour ${imposter?.name} : deviner le mot des autres…`;
+  else if (!results.unmasked) headline = fmt('Raté ! {cible} vous a tous eus : tout le monde boit, sauf {m=lui|f=elle|n=$cible}.', imposter);
+  else if (state.pending) headline = fmt('{m=Démasqué|f=Démasquée|n=Masque tombé} ! Dernière chance pour {cible} : deviner le mot des autres…', imposter);
   else if (results.lastChance?.success) headline = `${imposter?.name} a trouvé « ${results.mot} » ! Ceux qui l’ont démasqué boivent à sa place.`;
-  else headline = `Démasqué ! ${imposter?.name} boit${results.wrongVoterIds.length ? ', avec ceux qui ne l’ont pas trouvé' : ''}.`;
+  else headline = fmt('{m=Démasqué|f=Démasquée|n=Masque tombé} ! {cible} boit', imposter) + `${results.wrongVoterIds.length ? ', avec ceux qui ne l’ont pas trouvé' : ''}.`;
 
   return (
     <div className="imposteur">
@@ -312,7 +313,7 @@ export function PlayerResults({ state, me, act, verdict }) {
   if (state.pending && results.imposterId === me.id && round.options) {
     return (
       <div className="vote">
-        <p className="round">Démasqué !</p>
+        <p className="round">{fmt('{m=Démasqué|f=Démasquée|n=Masque tombé} !', me)}</p>
         <h1 className="vote-question">Dernière chance : quel était le mot des autres ?</h1>
         {round.options.map((w) => (
           <button key={w} className="answer-choice" onClick={() => act({ type: 'guess', word: w })}>
@@ -325,7 +326,7 @@ export function PlayerResults({ state, me, act, verdict }) {
   if (state.pending) {
     return (
       <div className="center suspense">
-        <h1>Démasqué !</h1>
+        <h1>{fmt('{m=Démasqué|f=Démasquée|n=Masque tombé} !', state.players.find((p) => p.id === results.imposterId))}</h1>
         <p className="lead">L’imposteur tente sa dernière chance…</p>
       </div>
     );
@@ -340,7 +341,7 @@ export function verdict(state, me) {
   const sips = state.roundSips?.[me.id] ?? 0;
   if (isImposter) {
     if (!results.unmasked) return { drinks: false, title: 'Bien joué !', detail: 'Tu étais l’imposteur et personne ne t’a démasqué.', extra };
-    if (results.lastChance?.success) return { drinks: false, title: 'Sauvé !', detail: 'Démasqué, mais tu as trouvé le mot des autres.', extra };
+    if (results.lastChance?.success) return { drinks: false, title: '{m=Sauvé|f=Sauvée|n=Ouf} !', detail: 'Démasqué, mais tu as trouvé le mot des autres.', extra };
     return { drinks: true, title: 'Tu bois !', detail: 'Tu étais l’imposteur, et tu t’es fait démasquer.', extra };
   }
   if (sips > 0) {

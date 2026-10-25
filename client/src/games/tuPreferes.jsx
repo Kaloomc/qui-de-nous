@@ -255,7 +255,7 @@ export function verdict(state, me) {
   if (results.tie) {
     return drinks
       ? { drinks, title: 'Tu bois !', detail: 'Égalité : tout le monde boit.', extra }
-      : { drinks, title: 'Sauvé !', detail: 'Égalité, tout le monde est sauvé.', extra };
+      : { drinks, title: '{m=Sauvé|f=Sauvée|n=Ouf} !', detail: 'Égalité, tout le monde est sauvé.', extra };
   }
   return drinks
     ? { drinks, title: 'Tu bois !', detail: 'Ton camp est en minorité.', extra }

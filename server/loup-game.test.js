@@ -86,7 +86,7 @@ async function setup(n, { fast = FAST } = {}) {
   const players = [];
   for (let i = 0; i < n; i++) {
     const p = client(url, { bot: true });
-    const joined = await p.emit('player:join', { code: created.code, name: `J${i}` });
+    const joined = await p.emit('player:join', { code: created.code, name: `J${i}`, gender: 'n' });
     p.id = joined.playerId;
     players.push(p);
   }
@@ -233,7 +233,7 @@ test('reconnexion : le joueur retrouve sa vue privée, un nouvel arrivant est sp
     // Un nouvel arrivant en cours de partie : spectateur, aucun rôle.
     const late = client(p.socket.io.uri);
     extra.push(late);
-    const joined = await late.emit('player:join', { code: ctx.code, name: 'Retard' });
+    const joined = await late.emit('player:join', { code: ctx.code, name: 'Retard', gender: 'n' });
     assert.ok(joined.ok);
     await late.waitFor((s) => s.round?.me);
     assert.equal(late.state.round.me.spectator, true);

@@ -3,6 +3,7 @@ import { Avatar, PieChart, PlayerChip, useRevealSound } from '../components.jsx'
 import { colorFor, serverNow, useRemaining } from '../lib.js';
 import { sounds } from '../sound.js';
 import { roundCaption } from '../sips.jsx';
+import { fmt, fmtGroup } from '../format.js';
 
 export const id = 'qui-de-nous';
 export const waitingText = 'En attente des autres…';
@@ -68,6 +69,28 @@ export function HostReveal({ state }) {
   );
 }
 
+const CIBLE_LABEL = { homme: 'Question réservée aux hommes', femme: 'Question réservée aux femmes' };
+
+/** Question réservée à un genre : seuls les joueurs de ce genre sont candidats ; les autres votent quand même. */
+function Candidates({ state }) {
+  const { cible, candidateIds } = state.round;
+  if (!candidateIds) return null;
+  const candidates = state.players.filter((p) => candidateIds.includes(p.id));
+  return (
+    <section className="qdn-candidates" aria-label="Candidats">
+      <p className="qdn-candidates-label">{CIBLE_LABEL[cible]} · tout le monde vote</p>
+      <div className="qdn-candidates-row">
+        {candidates.map((p) => (
+          <span key={p.id} className="qdn-candidate">
+            <Avatar player={p} size={candidates.length > 12 ? 44 : 64} />
+            <span>{p.name}</span>
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function HostQuestion({ state }) {
   return (
     <>
@@ -75,6 +98,7 @@ export function HostQuestion({ state }) {
       <h1 key={state.round.number} className={`question-text slide-in ${state.round.text.length > 85 ? 'question-text-long' : ''}`}>
         {state.round.text}
       </h1>
+      <Candidates state={state} />
     </>
   );
 }
@@ -102,7 +126,7 @@ export function HostResults({ state }) {
             <p className="big">Personne n’a voté !</p>
           ) : (
             <>
-              <p className="winner-label">{top.length > 1 ? 'Égalité !' : 'Le plus voté'}</p>
+              <p className="winner-label">{top.length > 1 ? 'Égalité !' : fmt('{m=Le plus voté|f=La plus votée|n=En tête des votes}', top[0])}</p>
               <div className="winner-list">
                 {top.map((p) => (
                   <div key={p.id} className="winner-card zoom-in">
@@ -112,7 +136,7 @@ export function HostResults({ state }) {
                 ))}
               </div>
               <p className="winner-votes">
-                {results.topCount} vote{results.topCount > 1 ? 's' : ''} · {top.length > 1 ? 'ils boivent' : 'boit'} !{top.length === 1 && roundCaption(state, top[0].id) ? ` (${roundCaption(state, top[0].id)})` : ''}
+                {results.topCount} vote{results.topCount > 1 ? 's' : ''} · {top.length > 1 ? fmtGroup('{m=ils boivent|f=elles boivent|n=ça boit}', top) : 'boit'} !{top.length === 1 && roundCaption(state, top[0].id) ? ` (${roundCaption(state, top[0].id)})` : ''}
               </p>
             </>
           )}
@@ -143,7 +167,7 @@ export function HostResults({ state }) {
       </div>
 
       <section className="drinkers">
-        <h3>{drinkers.length ? 'N’ont pas voté pour le plus voté : ils boivent aussi' : 'Tout le monde a voté comme la majorité !'}</h3>
+        <h3>{drinkers.length ? 'Boivent aussi : ceux qui n’ont pas voté comme la majorité' : 'Tout le monde a voté comme la majorité !'}</h3>
         <div className="drinkers-row">
           {drinkers.map((p, i) => (
             <div key={p.id} className="fade-up" style={{ animationDelay: `${900 + i * 80}ms` }}>
@@ -157,12 +181,16 @@ export function HostResults({ state }) {
 }
 
 export function PlayerVote({ state, me, onVote }) {
+  const { candidateIds, cible } = state.round;
+  // Question réservée à un genre : seuls les candidats sont proposés (tout le monde vote, mais pas pour n'importe qui).
+  const options = candidateIds ? state.players.filter((p) => candidateIds.includes(p.id)) : state.players;
   return (
     <div className="vote">
       <p className="round">Question {state.round.number}</p>
       <h1 className="vote-question">{state.round.text}</h1>
+      {candidateIds && <p className="muted">{CIBLE_LABEL[cible]} : vote pour {cible === 'femme' ? 'l’une d’elles' : 'l’un d’eux'}.</p>}
       <div className="grid grid-vote">
-        {state.players.map((p) => (
+        {options.map((p) => (
           <button key={p.id} className="vote-option" onClick={() => onVote(p.id)}>
             <Avatar player={p} size={88} />
             <span>{p.id === me.id ? `${p.name} (moi)` : p.name}</span>
@@ -193,16 +221,22 @@ export function verdict(state, me) {
     .map((pid) => state.players.find((p) => p.id === pid)?.name)
     .filter(Boolean)
     .join(' et ');
-  const extra = topNames && !isTop ? `Le plus voté : ${topNames}` : null;
+  const top = results.topIds.map((pid) => state.players.find((p) => p.id === pid)).filter(Boolean);
+  const extra = topNames && !isTop ? fmtGroup(`{m=Le plus voté|f=La plus votée|n=En tête des votes} : ${topNames}`, top) : null;
 
   if (isTop && isWrong) {
-    return { drinks: true, title: 'Tu bois 2 fois !', detail: 'Tu es le plus voté, et en plus tu n’as pas voté comme les autres.', extra };
+    return { drinks: true, title: 'Tu bois 2 fois !', detail: '{m=Tu es le plus voté|f=Tu es la plus votée|n=Tu es en tête des votes}, et en plus tu n’as pas voté comme les autres.', extra };
   }
   if (isTop) {
-    return { drinks: true, title: 'Tu bois !', detail: results.topIds.length > 1 ? 'Tu fais partie des plus votés.' : 'Tu es le plus voté.', extra };
+    return {
+      drinks: true,
+      title: 'Tu bois !',
+      detail: results.topIds.length > 1 ? '{m=Tu fais partie des plus votés|f=Tu fais partie des plus votées|n=Tu fais partie des têtes de vote}.' : '{m=Tu es le plus voté|f=Tu es la plus votée|n=Tu es en tête des votes}.',
+      extra,
+    };
   }
   if (isWrong) {
-    const detail = didNotVote ? 'Tu n’as pas voté à temps.' : `Tu n’as pas voté pour ${topNames || 'le plus voté'}.`;
+    const detail = didNotVote ? 'Tu n’as pas voté à temps.' : `Tu n’as pas voté pour ${topNames || 'la tête du vote'}.`;
     return { drinks: true, title: 'Tu bois !', detail, extra };
   }
   return { drinks: false, title: 'Tu ne bois pas', detail: 'Bien vu, tu as voté comme la majorité.', extra };

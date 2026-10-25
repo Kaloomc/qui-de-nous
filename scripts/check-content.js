@@ -17,7 +17,7 @@ export const normalize = (s) =>
     .trim();
 
 const STOPWORDS = new Set(
-  'qui est le plus susceptible de d l la les du des un une a au aux et ou en ton ta tes son sa ses se s ce c que qu pour par sur dans avec sans il elle on y ne pas n tu te t j je m me mon ma mes nom'.split(' '),
+  'qui est le plus susceptible de d l la les du des un une a au aux et ou en ton ta tes son sa ses se s ce c que qu pour par sur dans avec sans il elle on y ne pas n tu te t j je m me mon ma mes nom cible'.split(' '),
 );
 const tokens = (s) => new Set(normalize(s).split(' ').filter((w) => w && !STOPWORDS.has(w)));
 
@@ -109,7 +109,7 @@ export const CONTENT = [
 
 /** Quasi-doublons vérifiés à la main et conservés : ce sont bien deux questions différentes. */
 export const ALLOWED_NEAR = [
-  ['Quelle est la technique de drague {de_nom} ?', 'Quelle est la technique de drague {de_nom} sur les applis ?'],
+  ['Quelle est la technique de drague {de_cible} ?', 'Quelle est la technique de drague {de_cible} sur les applis ?'],
   [
     'En quelle année la France a-t-elle gagné sa première Coupe du monde de football ?',
     'En quelle année la France a-t-elle gagné sa deuxième Coupe du monde de football ?',

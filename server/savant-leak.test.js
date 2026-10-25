@@ -70,7 +70,7 @@ async function setup(n) {
   for (let i = 0; i < n; i++) {
     const p = client(url, { bot: true });
     p.name = `J${i}`;
-    const joined = await p.emit('player:join', { code: created.code, name: p.name });
+    const joined = await p.emit('player:join', { code: created.code, name: p.name, gender: 'n' });
     Object.assign(p, { id: joined.playerId, secret: joined.secret });
     players.push(p);
   }

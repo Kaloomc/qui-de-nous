@@ -140,7 +140,7 @@ async function main(N) {
 
     p.join = async () => {
       connect();
-      const ack = await emit(p.socket, 'player:join', { code: host.code, name: p.name, photo: i % 3 === 0 ? null : photo }, p.name);
+      const ack = await emit(p.socket, 'player:join', { code: host.code, name: p.name, gender: ['m', 'f', 'n'][i % 3], photo: i % 3 === 0 ? null : photo }, p.name);
       Object.assign(p, { id: ack.playerId, secret: ack.secret, online: true });
     };
     p.drop = () => {

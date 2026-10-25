@@ -146,7 +146,7 @@ export function registerSockets(io, store) {
       });
     }
 
-    on('player:join', ({ code, playerId, secret, name, photo }, ack) => {
+    on('player:join', ({ code, playerId, secret, name, photo, gender }, ack) => {
       const ip = clientIp(socket);
       if (tooManyFailures(ip)) return ack({ ok: false, error: 'Trop de codes essayés : réessaie dans une minute.' });
       const game = store.get(code);
@@ -155,7 +155,7 @@ export function registerSockets(io, store) {
         return ack({ ok: false, error: 'Partie introuvable. Vérifie le code.' });
       }
       if (game.phase === 'ended') return ack({ ok: false, error: 'Cette partie est terminée.' });
-      const { player, error } = game.upsertPlayer({ playerId, secret, name, photo });
+      const { player, error } = game.upsertPlayer({ playerId, secret, name, photo, gender, strictGender: true });
       if (error) return ack({ ok: false, error });
       attachPlayer(game, player);
       ack({ ok: true, playerId: player.id, secret: player.secret, roundId: game.roundId, myVote: game.votes.get(player.id) ?? null });
@@ -186,6 +186,16 @@ export function registerSockets(io, store) {
       const game = currentGame();
       if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
       const error = game.action(socket.data.playerId, action, Number.isInteger(roundId) ? roundId : undefined);
+      if (error) return ack({ ok: false, error });
+      game.touch();
+      broadcast(game);
+      ack({ ok: true });
+    });
+
+    on('player:gender', ({ gender }, ack) => {
+      const game = currentGame();
+      if (!game || socket.data.role !== 'player') return ack({ ok: false, error: 'Tu n’es pas dans la partie.' });
+      const error = game.setGender(socket.data.playerId, gender);
       if (error) return ack({ ok: false, error });
       game.touch();
       broadcast(game);

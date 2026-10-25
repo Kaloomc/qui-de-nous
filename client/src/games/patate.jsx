@@ -250,7 +250,7 @@ export function verdict(state, me) {
   if (results.loserId === me.id) {
     return { drinks: true, title: 'Tu bois !', detail: `La bombe t’a explosé dans les mains : ${sipsLabel(BOOM_SIPS)}.` };
   }
-  return { drinks: false, title: 'Sauvé !', detail: 'La bombe a explosé chez quelqu’un d’autre.' };
+  return { drinks: false, title: '{m=Sauvé|f=Sauvée|n=Ouf} !', detail: 'La bombe a explosé chez quelqu’un d’autre.' };
 }
 
 export function EndStats({ state }) {

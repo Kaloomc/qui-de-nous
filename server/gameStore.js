@@ -1,4 +1,5 @@
 import { randomBytes, randomInt } from 'node:crypto';
+import { isGender } from '../shared/formulation.js';
 import { GAMES, isGame, isPlayable, partyGames } from './games/index.js';
 import { eligibleGames, PARTY_DURATIONS, pickNextBlock, TRANSITION_MS } from './party.js';
 import { computeTrophies, recordRound, sipsRanking } from './recap.js';
@@ -347,23 +348,30 @@ export class Game {
     return player && player.secret === secret ? player : null;
   }
 
-  upsertPlayer({ playerId, secret, name, photo }) {
+  /**
+   * Crée ou met à jour un joueur. `gender` ('m', 'f' ou 'n' = « Je préfère ne pas dire ») : obligatoire à l'arrivée quand
+   * `strictGender` (écran « Rejoindre »), 'n' par défaut sinon ; il n'est jamais écrit ailleurs qu'en mémoire de la partie.
+   * Un joueur qui revient garde son genre (le modifier se fait par setGender, dans le lobby).
+   */
+  upsertPlayer({ playerId, secret, name, photo, gender, strictGender = false }) {
     // Caractères de contrôle et d'inversion de sens retirés (ils cassent l'affichage sur la TV).
     const cleanName =
       typeof name === 'string'
-        ? name.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, '').trim().replace(/\s+/g, ' ').slice(0, MAX_NAME_LENGTH)
+        ? name.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩{}]/g, '').trim().replace(/\s+/g, ' ').slice(0, MAX_NAME_LENGTH)
         : '';
     if (!cleanName) return { error: 'Choisis un prénom.' };
     const parsedPhoto = photo ? parsePhoto(photo) : null;
     if (photo && !parsedPhoto) return { error: 'Photo invalide ou trop lourde.' };
 
     let player = this.findPlayer(playerId, secret);
+    if (!player && gender === undefined && strictGender) return { error: 'Choisis une option : homme, femme ou « je préfère ne pas dire ».' };
+    if (gender !== undefined && !isGender(gender)) return { error: 'Choix du genre invalide.' };
     if (!player) {
       if (this.players.size >= MAX_PLAYERS) return { error: `La partie est complète (${MAX_PLAYERS} joueurs maximum).` };
       let id;
       do id = token().slice(0, 8);
       while (this.players.has(id));
-      player = { id, secret: token(), sockets: new Set(), disconnectedAt: null, photo: null, photoVersion: 0 };
+      player = { id, secret: token(), sockets: new Set(), disconnectedAt: null, photo: null, photoVersion: 0, gender: gender ?? 'n' };
       this.players.set(id, player);
       // Arrivé en cours de soirée : il démarre au minimum du groupe, pas à zéro (sinon il serait désigné à chaque tirage).
       this.spotlight.join(id, [...this.players.values()].filter((p) => p.sockets.size > 0).map((p) => p.id));
@@ -371,11 +379,26 @@ export class Game {
       if (this.partyActive && ['question', 'revealing', 'results'].includes(this.phase)) this.party.late.add(id);
     }
     player.name = cleanName;
+    if (gender !== undefined && this.canChangeGender) player.gender = gender;
     if (parsedPhoto) {
       player.photo = parsedPhoto;
       player.photoVersion += 1;
     }
     return { player };
+  }
+
+  /** Le genre se change avant le lancement d'un jeu (grille des jeux ou lobby), jamais en pleine manche. */
+  get canChangeGender() {
+    return this.phase === 'picking' || this.phase === 'lobby';
+  }
+
+  setGender(playerId, gender) {
+    const player = this.players.get(playerId);
+    if (!player) return 'Tu n’es plus dans la partie.';
+    if (!isGender(gender)) return 'Choix du genre invalide.';
+    if (!this.canChangeGender) return 'Tu pourras le modifier entre deux jeux.';
+    player.gender = gender;
+    return null;
   }
 
   connectPlayer(player, socketId) {
@@ -884,12 +907,14 @@ export class Game {
   /** Récap de la soirée : trophées, classement des gorgées et jeux joués (joueurs encore là uniquement). */
   recap() {
     const players = [...this.players.values()].map((p) => ({ id: p.id, name: p.name, photoUrl: this.photoUrl(p) }));
+    // Le genre ne sert qu'à accorder le titre des trophées : il n'apparaît pas dans le récap partageable.
+    const forTitles = [...this.players.values()].map((p) => ({ id: p.id, name: p.name, gender: p.gender }));
     const sips = this.sipsOfPresent(this.partySips);
     return {
       code: this.code,
       date: new Date(this.endedAt ?? this.clock.now()).toISOString(),
       players,
-      trophies: computeTrophies(players, sips, this.partyStats),
+      trophies: computeTrophies(forTitles, sips, this.partyStats),
       ranking: sipsRanking(players, sips),
       totalSips: Object.values(sips).reduce((a, b) => a + b, 0),
       games: [...this.playedModes],
@@ -947,6 +972,8 @@ export class Game {
         name: p.name,
         connected: p.sockets.size > 0,
         photoUrl: this.photoUrl(p),
+        // Sert uniquement aux accords des textes (shared/formulation.js) : jamais affiché tel quel.
+        gender: p.gender,
       })),
       round,
       votingOpen: this.phase === 'question' && !!this.rules && this.votingOpen,

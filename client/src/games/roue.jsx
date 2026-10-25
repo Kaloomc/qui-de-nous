@@ -371,5 +371,5 @@ export function verdict(state, me) {
 }
 
 export function EndStats({ state }) {
-  return <StatBoard state={state} title="Les chouchous de la roue" valueOf={(s) => s.picked} format={(n) => `${n} fois désigné${n > 1 ? 's' : ''}`} />;
+  return <StatBoard state={state} title="Les chouchous de la roue" valueOf={(s) => s.picked} format={(n) => `${n} fois sous les projecteurs`} />;
 }

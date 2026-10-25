@@ -8,6 +8,8 @@ import { ranking, sipsLabel, totalSips } from '../sips.jsx';
 import { fileToSquareJpeg } from '../photo.js';
 import { AdultConfirm, AdultTheme } from '../adult.jsx';
 import { currentVoteOf, roundKey } from '../vote.js';
+import { fmt } from '../format.js';
+import { GenderPicker } from '../gender.jsx';
 
 export default function Player({ code }) {
   const connected = useConnected();
@@ -58,8 +60,9 @@ export default function Player({ code }) {
   const roundId = roundKey(state);
   const currentVote = currentVoteOf(myVote, state);
 
-  async function join(name, photo) {
-    const res = await request('player:join', { code, ...(identity ?? {}), name, photo });
+  async function join(name, photo, gender) {
+    // Le genre n'est jamais gardé sur l'appareil : il vit seulement dans la partie (mémoire du serveur).
+    const res = await request('player:join', { code, ...(identity ?? {}), name, photo, gender });
     if (!res.ok) return res.error;
     const next = { playerId: res.playerId, secret: res.secret };
     storage.set(identityKey, next);
@@ -86,6 +89,11 @@ export default function Player({ code }) {
     const res = await request('player:action', { action, roundId });
     if (!res.ok) setNotice(res.error);
     return res.ok ? null : res.error;
+  }
+
+  async function changeGender(gender) {
+    const res = await request('player:gender', { gender });
+    if (!res.ok) setNotice(res.error);
   }
 
   async function leave() {
@@ -126,7 +134,7 @@ export default function Player({ code }) {
     );
   }
   else if (state.phase === 'lobby' || state.phase === 'picking') {
-    content = <Waiting me={me} state={state} mode={state.phase === 'picking' ? null : mode} onLeave={leave} />;
+    content = <Waiting me={me} state={state} mode={state.phase === 'picking' ? null : mode} onLeave={leave} onGender={changeGender} />;
   }
   else if (state.party?.lateIds.includes(me.id) && ['question', 'revealing', 'results'].includes(state.phase)) {
     content = <Late me={me} mode={mode} />;
@@ -168,6 +176,8 @@ export default function Player({ code }) {
 function JoinForm({ code, onJoin, notice }) {
   const [name, setName] = useState(() => storage.get('qdn:lastName') ?? '');
   const [photo, setPhoto] = useState(() => storage.get('qdn:lastPhoto'));
+  // Pas de valeur par défaut ni de mémoire : le choix est obligatoire à chaque arrivée dans une partie.
+  const [gender, setGender] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(notice);
   const cameraInput = useRef(null);
@@ -188,7 +198,7 @@ function JoinForm({ code, onJoin, notice }) {
   async function submit(e) {
     e.preventDefault();
     setBusy(true);
-    const err = await onJoin(name.trim(), photo);
+    const err = await onJoin(name.trim(), photo, gender);
     setBusy(false);
     if (err) setError(err);
   }
@@ -221,16 +231,18 @@ function JoinForm({ code, onJoin, notice }) {
         autoComplete="given-name"
         enterKeyHint="go"
       />
+      <GenderPicker value={gender} onChange={setGender} legend="Tu es…" hint="Sert uniquement à accorder les phrases et à choisir certaines questions. Jamais affiché sur la TV, effacé avec la partie." />
       {error && <p className="error">{error}</p>}
-      <button className="btn btn-primary btn-xl btn-block" disabled={busy || !name.trim()}>
+      <button className="btn btn-primary btn-xl btn-block" disabled={busy || !name.trim() || !gender}>
         {busy ? 'Connexion…' : 'Rejoindre la partie'}
       </button>
+      {!gender && name.trim() && <p className="muted small">Choisis une option pour continuer.</p>}
       {!photo && <p className="muted small">Sans photo, on affichera ton initiale.</p>}
     </form>
   );
 }
 
-function Waiting({ me, state, mode, onLeave }) {
+function Waiting({ me, state, mode, onLeave, onGender }) {
   return (
     <div className="center waiting">
       <Avatar player={me} size={160} className="bounce" />
@@ -252,6 +264,7 @@ function Waiting({ me, state, mode, onLeave }) {
         <br />
         Regarde l’écran, ça va bientôt commencer.
       </p>
+      <GenderPicker value={me.gender} onChange={onGender} legend="Tu es…" compact />
       <button className="btn btn-ghost small" onClick={onLeave}>
         Quitter la partie
       </button>
@@ -317,11 +330,12 @@ function Verdict({ state, mode, me }) {
     ? mode.verdict(state, me)
     : { drinks: false, title: 'Pas joué', detail: 'Tu joues dès la prochaine manche.' };
   const roundSips = state.roundSips?.[me.id] ?? 0;
+  // Titre, détail et complément passent par le moteur d'accords (genre du joueur, forme neutre sinon).
   return (
     <div className={`verdict ${drinks ? 'verdict-drink' : 'verdict-safe'}`}>
-      <p className="verdict-title zoom-in">{title}</p>
-      <p className="verdict-detail">{detail}</p>
-      {extra && <p className="verdict-top">{extra}</p>}
+      <p className="verdict-title zoom-in">{fmt(title, me)}</p>
+      <p className="verdict-detail">{fmt(detail, me)}</p>
+      {extra && <p className="verdict-top">{fmt(extra, me)}</p>}
       <p className="verdict-sips">
         {roundSips > 0 && <strong>+{sipsLabel(roundSips)}</strong>}
         <span>Total de la soirée : {sipsLabel(totalSips(state, me.id))}</span>
@@ -343,7 +357,7 @@ function Ended({ state, me, onHome }) {
       {mine && (
         <div className="final-rank pop-in">
           <Avatar player={me} size={120} className={champion ? 'podium-champion' : ''} />
-          <p className="final-rank-title">{champion ? 'Le plus assoiffé de la soirée !' : `${mine.rank === 1 ? '1er' : `${mine.rank}e`}${tied ? ' ex æquo' : ''} au classement`}</p>
+          <p className="final-rank-title">{champion ? fmt('{m=Le plus assoiffé|f=La plus assoiffée|n=Soif suprême} de la soirée !', me) : `${mine.rank === 1 ? '1er' : `${mine.rank}e`}${tied ? ' ex æquo' : ''} au classement`}</p>
           <p className="lead">{sipsLabel(mine.sips)} ce soir</p>
         </div>
       )}

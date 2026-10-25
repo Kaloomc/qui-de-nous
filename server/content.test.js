@@ -4,18 +4,23 @@ import { readFileSync } from 'node:fs';
 import { CONTENT, bannedWord, findDuplicates, loadContent } from '../scripts/check-content.js';
 import { isValidDefi } from './rules/roue.js';
 import { FEU } from './rules/feu.js';
+import { CIBLES, hasAgreement, render, validate } from '../shared/formulation.js';
 
 const NIVEAUX = ['chill', 'epice', 'hardcore'];
 const text = (s) => typeof s === 'string' && s.trim().length > 0;
+/** Champ `cible` (questions réservées à un genre) : absent ou « homme » / « femme » / « tous ». */
+const cibleOk = (q) => q.cible === undefined || CIBLES.includes(q.cible);
 
 /** Format attendu d'une entrée, par jeu. */
 const FORMATS = {
-  'qui-de-nous': (q) => NIVEAUX.includes(q.niveau) && /^Qui est le plus susceptible d(e |')/.test(q.text) && q.text.endsWith(' ?'),
+  // Question réservée aux femmes : « la plus susceptible » (les candidates sont toutes des femmes).
+  'qui-de-nous': (q) => NIVEAUX.includes(q.niveau) && cibleOk(q) && new RegExp(`^Qui est ${q.cible === 'femme' ? 'la' : 'le'} plus susceptible d(e |')`).test(q.text) && q.text.endsWith(' ?'),
   'tu-preferes': (q) => NIVEAUX.includes(q.niveau) && text(q.a) && text(q.b) && q.a !== q.b,
   'qui-me-connait': (q) =>
     NIVEAUX.includes(q.niveau) &&
+    cibleOk(q) &&
     text(q.question) &&
-    /\{(de_)?nom\}/.test(q.question) &&
+    /\{(de_)?cible\}/.test(q.question) &&
     Array.isArray(q.choix) &&
     q.choix.length === 4 &&
     q.choix.every(text) &&
@@ -50,6 +55,35 @@ for (const spec of CONTENT) {
       assert.equal(crossing.length, 0, crossing.map(([i, j]) => `${JSON.stringify(both[i])} ~ ${JSON.stringify(both[j])}`).join('\n'));
     });
   }
+
+  // Moteur de formulation (shared/formulation.js) : champs connus, forme neutre obligatoire pour chaque accord.
+  test(`contenu ${spec.file} : champs {...} valides, forme neutre présente pour chaque accord`, () => {
+    const variables = (spec.format ?? spec.id) === 'qui-me-connait' ? ['cible'] : [];
+    const problems = [];
+    for (const entry of loadContent(spec)) {
+      const texts = typeof entry === 'string' ? [entry] : Object.values(entry).flat().filter((v) => typeof v === 'string');
+      for (const t of texts) for (const p of validate(t, { variables })) problems.push(`${p} — « ${t} »`);
+      // Un accord sans sujet (hors « Qui me connaît ») n'a pas de sens.
+      if (!variables.length) for (const t of texts) if (hasAgreement(t)) problems.push(`accord sans sujet — « ${t} »`);
+    }
+    assert.deepEqual(problems, []);
+  });
+
+  // Rendu pour les trois genres : plus aucun champ, et jamais d'écriture inclusive à points ni de « (e) ».
+  test(`contenu ${spec.file} : rendu correct pour homme, femme et « ne préfère pas dire »`, () => {
+    const variables = (spec.format ?? spec.id) === 'qui-me-connait';
+    const bad = [];
+    for (const entry of loadContent(spec)) {
+      const texts = typeof entry === 'string' ? [entry] : Object.values(entry).flat().filter((v) => typeof v === 'string');
+      for (const t of texts) {
+        for (const gender of ['m', 'f', 'n']) {
+          const out = render(t, variables ? { cible: { name: 'Camille', gender } } : {});
+          if (/[{}$]/.test(out) || /\p{L}·\p{L}|\(e\)|\(s\)/u.test(out)) bad.push(`${gender} : « ${out} »`);
+        }
+      }
+    }
+    assert.deepEqual(bad, []);
+  });
 
   test(`contenu ${spec.file} : aucune référence de niche ni situation de bureau`, () => {
     const hits = loadContent(spec)

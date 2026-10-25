@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Avatar, PlayerGrid, useRevealSound } from '../components.jsx';
 import { roundCaption, StatBoard } from '../sips.jsx';
 import { useRemaining } from '../lib.js';
+import { fmt } from '../format.js';
 
 export const id = 'estimation';
 export const waitingText = 'En attente des autres…';
@@ -260,7 +261,7 @@ export function PlayerResults({ state, me, act, verdict }) {
     const others = state.players.filter((p) => p.id !== me.id);
     return (
       <div className="vote">
-        <p className="round">Bien joué, tu es le plus proche !</p>
+        <p className="round">{fmt('Bien joué, tu es {m=le plus proche|f=la plus proche|n=au plus près} !', me)}</p>
         <h1 className="vote-question">Qui boit avec le plus loin ?</h1>
         <PlayerGrid players={others} onPick={(targetId) => act({ type: 'pick', targetId })} />
       </div>
@@ -278,13 +279,13 @@ export function verdict(state, me) {
 
   if (results.chosenId === me.id) return { drinks: true, title: 'Tu bois !', detail: `${chooserName} t’a désigné.`, extra };
   if (value == null) return { drinks: true, title: 'Tu bois !', detail: 'Tu n’as pas répondu à temps.', extra };
-  if (results.furthestIds.includes(me.id)) return { drinks: true, title: 'Tu bois !', detail: 'Tu es le plus loin de la réponse.', extra };
+  if (results.furthestIds.includes(me.id)) return { drinks: true, title: 'Tu bois !', detail: 'Tu es {m=le plus éloigné|f=la plus éloignée|n=au plus loin} de la réponse.', extra };
   if (results.exactIds.includes(me.id)) return { drinks: false, title: 'Dans le mille !', detail: 'Réponse exacte.', extra };
-  if (results.closestIds.includes(me.id)) return { drinks: false, title: 'Le plus proche !', detail: 'Tu ne bois pas.', extra };
+  if (results.closestIds.includes(me.id)) return { drinks: false, title: '{m=Le plus proche|f=La plus proche|n=Au plus près} !', detail: 'Tu ne bois pas.', extra };
   return { drinks: false, title: 'Tu ne bois pas', detail: `Ta réponse : ${formatNumber(value, state.round.unite)}`, extra };
 }
 
 export function EndStats({ state }) {
-  return <StatBoard state={state} title="Les plus précis" valueOf={(s) => s.closest} format={(n) => `${n} fois le plus proche`} />;
+  return <StatBoard state={state} title="Les plus précis" valueOf={(s) => s.closest} format={(n) => `${n} fois {m=le plus proche|f=la plus proche|n=au plus près}`} />;
 }
 
