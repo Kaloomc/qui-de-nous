@@ -71,7 +71,7 @@ export const CONTENT = [
   {
     id: 'imposteur',
     file: 'content/words-imposteur.json',
-    target: 200,
+    target: 329,
     entries: (d) => d,
     key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | '),
   },
@@ -99,7 +99,7 @@ export const CONTENT = [
   },
   { id: 'qui-me-connait-18', format: 'qui-me-connait', adult: true, file: 'content/connait-18plus.json', target: 290, entries: (d) => d, key: (q) => normalize(q.question), near: (q) => q.question },
   { id: 'roue-18', format: 'roue', adult: true, file: 'content/roue-18plus.json', target: 170, entries: (d) => d, key: (d) => normalize(d.texte), near: (d) => d.texte, sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre },
-  { id: 'imposteur-18', format: 'imposteur', adult: true, file: 'content/imposteur-18plus.json', target: 120, entries: (d) => d, key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | ') },
+  { id: 'imposteur-18', format: 'imposteur', adult: true, file: 'content/imposteur-18plus.json', target: 180, entries: (d) => d, key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | ') },
   // Noir Boire Mangue : phrases à trou et cartes de réponse (originales), chacune avec sa `forme` (voir server/rules/nbm.js).
   { id: 'nbm-phrases', file: 'content/phrases-nbm.json', target: 200, entries: (d) => d, key: (q) => normalize(q.texte), near: (q) => q.texte },
   { id: 'nbm-cartes', file: 'content/cartes-nbm.json', target: 500, entries: (d) => d, key: (c) => normalize(c.texte) },
