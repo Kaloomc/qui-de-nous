@@ -55,7 +55,7 @@ export const CONTENT = [
   {
     id: 'qui-me-connait',
     file: 'content/questions-connait.json',
-    target: 370,
+    target: 448,
     entries: (d) => d,
     key: (q) => normalize(q.question),
     near: (q) => q.question,
@@ -97,7 +97,7 @@ export const CONTENT = [
     key: (q) => [normalize(q.a), normalize(q.b)].sort().join(' | '),
     near: (q) => `${q.a} ${q.b}`,
   },
-  { id: 'qui-me-connait-18', format: 'qui-me-connait', adult: true, file: 'content/connait-18plus.json', target: 290, entries: (d) => d, key: (q) => normalize(q.question), near: (q) => q.question },
+  { id: 'qui-me-connait-18', format: 'qui-me-connait', adult: true, file: 'content/connait-18plus.json', target: 356, entries: (d) => d, key: (q) => normalize(q.question), near: (q) => q.question },
   { id: 'roue-18', format: 'roue', adult: true, file: 'content/roue-18plus.json', target: 237, entries: (d) => d, key: (d) => normalize(d.texte), near: (d) => d.texte, sameFamily: (a, b) => a.genre && b.genre && a.genre !== b.genre },
   { id: 'imposteur-18', format: 'imposteur', adult: true, file: 'content/imposteur-18plus.json', target: 180, entries: (d) => d, key: (p) => [normalize(p.mot), normalize(p.proche)].sort().join(' | ') },
   // Noir Boire Mangue : phrases à trou et cartes de réponse (originales), chacune avec sa `forme` (voir server/rules/nbm.js).
