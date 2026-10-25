@@ -23,7 +23,7 @@ export function roundsFor(choice, playerCount) {
 export function cleanAnswer(text) {
   if (typeof text !== 'string') return { error: 'Écris une réponse.' };
   const clean = text
-    .replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g, ' ')
+    .replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩{}]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, MAX_ANSWER)
@@ -100,10 +100,10 @@ export function resolveRound({ seekerId, savantId, writers, votes }) {
 
 /**
  * Gorgées définitives : les gorgées directes, plus la distribution. Un joueur qui n'a pas réparti son crédit (ou pas en entier)
- * le voit tiré au hasard : jamais de blocage. Personne ne se désigne soi-même ; plafond de SIP_CAP gorgées reçues par joueur.
+ * le voit tiré au hasard : jamais de blocage. Personne ne se désigne soi-même ; plafond de `cap` gorgées reçues par joueur (SIP_CAP par défaut).
  * allocations : distributeur → { cible: n }. Renvoie { sips, given } (given : distributeur → { cible: n } réellement donné).
  */
-export function settleSips({ direct, credits, allocations = {}, ids, rng = Math.random }) {
+export function settleSips({ direct, credits, allocations = {}, ids, rng = Math.random, cap = SIP_CAP }) {
   const inGame = new Set(ids);
   const received = { ...direct };
   const given = {};
@@ -127,6 +127,6 @@ export function settleSips({ direct, credits, allocations = {}, ids, rng = Math.
     for (const [target, n] of Object.entries(mine)) add(received, target, n);
   }
   const sips = {};
-  for (const [id, n] of Object.entries(received)) if (inGame.has(id)) sips[id] = Math.min(n, SIP_CAP);
+  for (const [id, n] of Object.entries(received)) if (inGame.has(id)) sips[id] = Math.min(n, cap);
   return { sips, given };
 }

@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { CONTENT, bannedWord, findDuplicates, loadContent } from '../scripts/check-content.js';
 import { isValidDefi } from './rules/roue.js';
 import { FEU } from './rules/feu.js';
+import { BLANK, MAX_ANSWER, blanksIn } from './rules/nbm.js';
 import { CIBLES, hasAgreement, render, validate } from '../shared/formulation.js';
 
 const NIVEAUX = ['chill', 'epice', 'hardcore'];
@@ -28,6 +29,9 @@ const FORMATS = {
   estimation: (q) => text(q.question) && typeof q.reponse === 'number' && Number.isFinite(q.reponse) && text(q.unite),
   imposteur: (p) => text(p.mot) && text(p.proche) && text(p.categorie) && p.mot !== p.proche,
   roue: isValidDefi,
+  // Phrase à trou : un seul trou, une phrase ; carte de réponse : 1 à 6 mots, courte, sans trou.
+  'nbm-phrases': (q) => NIVEAUX.includes(q.niveau) && text(q.texte) && blanksIn(q.texte) === 1 && q.texte.length <= 110 && !/\n/.test(q.texte),
+  'nbm-cartes': (c) => text(c) && !c.includes(BLANK) && c.trim().split(/\s+/).length <= 6 && c.length <= MAX_ANSWER,
   feu: (w) => text(w) && w === w.toUpperCase() && w !== FEU,
 };
 
@@ -38,7 +42,8 @@ for (const spec of CONTENT) {
     assert.ok(list.length >= spec.target, `${list.length} / ${spec.target}`);
     for (const entry of list) assert.ok(FORMATS[spec.format ?? spec.id](entry), `format invalide : ${JSON.stringify(entry)}`);
     // Le contenu 18+ est marqué comme tel, et seulement lui.
-    for (const entry of list) assert.equal(typeof entry === 'object' && entry.adulte === true, !!spec.adult, `champ « adulte » : ${JSON.stringify(entry)}`);
+    // Les cartes de réponse sont de simples chaînes : leur mode se lit au nom du fichier.
+    for (const entry of list) if (typeof entry === 'object') assert.equal(entry.adulte === true, !!spec.adult, `champ « adulte » : ${JSON.stringify(entry)}`);
     const { exact, near } = findDuplicates(spec, list);
     const show = (pairs) => pairs.map(([i, j]) => `${JSON.stringify(list[i])} ~ ${JSON.stringify(list[j])}`).join('\n');
     assert.equal(exact.length, 0, `doublons :\n${show(exact)}`);

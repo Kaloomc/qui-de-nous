@@ -54,6 +54,13 @@ export function recordRound(stats, mode, results, playerIds) {
       if (results.found) add(results.seekerId, 'savantFound');
       else add(results.savantId, 'savantUnfound');
       break;
+    case 'nbm':
+      // Points et Golden reçus par les réponses de chacun (les auteurs sont connus : la manche est finie).
+      for (const row of results.board ?? []) {
+        if (row.points > 0) add(row.authorId, 'nbmPoints', row.points);
+        if (row.golden > 0) add(row.authorId, 'nbmGolden', row.golden);
+      }
+      break;
     case 'loup': {
       // Les rôles ne sont révélés qu'ici, la partie est finie : le récap n'apparaît qu'en fin de soirée.
       const { roles = {}, dead = {}, nights = 0, seerFound = 0 } = results;
@@ -89,6 +96,8 @@ export const TROPHIES = [
   { id: 'credible', emoji: '🤥', title: '{m=Le plus crédible|f=La plus crédible|n=Crédibilité maximale}', key: 'savantFooled', min: 2, label: (n) => `${plural(n, 'vote')} de joueurs bluffés` },
   { id: 'enqueteur', emoji: '🕵️', title: '{m=Le meilleur enquêteur|f=La meilleure enquêtrice|n=Un flair d’enquête}', key: 'savantFound', min: 1, label: (n) => `${plural(n, 'Savant')} démasqué${n > 1 ? 's' : ''}` },
   { id: 'imbattable', emoji: '🧠', title: '{m=Le Savant imbattable|f=La Savante imbattable|n=Un savoir imbattable}', key: 'savantUnfound', min: 1, label: (n) => `${n > 1 ? `${n} fois` : 'une fois'} sans être démasqué` },
+  { id: 'plume', emoji: '🖋️', title: '{m=La meilleure plume|f=La meilleure plume|n=Une plume d’exception}', key: 'nbmPoints', min: 4, label: (n) => `${n} points de rire` },
+  { id: 'golden', emoji: '🌟', title: '{m=Le roi du Golden|f=La reine du Golden|n=Le Golden incarné}', key: 'nbmGolden', min: 2, label: (n) => `${n} Golden reçus` },
   { id: 'voyante', emoji: '🔮', title: '{m=Le meilleur voyant|f=La meilleure voyante|n=Le don de voyance}', key: 'seerFound', min: 1, label: (n) => `${plural(n, 'loup')} démasqué${n > 1 ? 's' : ''}` },
 ];
 

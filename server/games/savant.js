@@ -8,6 +8,7 @@ import * as S from '../rules/savant.js';
 import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { REVEAL_MS } from '../../shared/savantReveal.js';
 import { TIMING } from '../timing.js';
+import { go, shuffle, soon } from './steps.js';
 import { loadJson } from './load.js';
 
 const FACTS = loadJson('../content/facts-savant.json');
@@ -36,40 +37,7 @@ function run(game) {
   return game.savantRun;
 }
 
-function shuffle(list) {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-// ---------- Étapes ----------
-
-/**
- * Passe à une nouvelle étape : identifiant unique, `next` ne s'exécute que si l'étape est toujours la courante.
- * `ms` : durée de l'étape (minuteur gelé pendant la pause) ; `soon()` l'écourte quand tout le monde a agi.
- */
-function go(game, step, ms, next, extra = {}) {
-  const d = data(game);
-  d.seq += 1;
-  Object.assign(d, { step, phaseId: `${game.roundId}:${d.seq}`, advance: next, soonFor: null, startedAt: game.clock.now(), ...extra });
-  const id = d.phaseId;
-  game.cancel('g:phase');
-  game.cancel('g:soon');
-  game.schedulePausable('g:phase', ms, () => data(game).phaseId === id && next());
-}
-
-/** Termine l'étape courante dans `ms` (une seule fois par étape). */
-function soon(game, ms) {
-  const d = data(game);
-  if (d.soonFor === d.phaseId) return;
-  d.soonFor = d.phaseId;
-  const id = d.phaseId;
-  const next = d.advance;
-  game.schedulePausable('g:soon', ms, () => data(game).phaseId === id && next());
-}
+// ---------- Étapes (voir games/steps.js) ----------
 
 /** Début d'une manche (ou rejouée après la disparition du Chercheur). */
 function begin(game, restarted = false) {

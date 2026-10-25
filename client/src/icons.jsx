@@ -136,6 +136,19 @@ const ICONS = {
       <path d="M106 96 l10 10" stroke="#3ee0c5" strokeWidth="7" strokeLinecap="round" />
     </>
   ),
+  cards: (
+    <>
+      <rect x="12" y="26" width="58" height="82" rx="9" fill="#14102a" stroke="#fff8f0" strokeWidth="5" transform="rotate(-9 41 67)" />
+      <rect x="40" y="16" width="58" height="82" rx="9" fill="#fff8f0" transform="rotate(7 69 57)" />
+      <g transform="rotate(7 69 57)">
+        <rect x="50" y="40" width="38" height="6" rx="3" fill="#b3a9d6" />
+        <rect x="50" y="54" width="26" height="6" rx="3" fill="#b3a9d6" />
+        <rect x="50" y="68" width="34" height="6" rx="3" fill="#ff4f8b" />
+      </g>
+      <text x="30" y="74" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="30" fill="#ffc93c" transform="rotate(-9 41 67)">___</text>
+      <path d="M100 86 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3 z" fill="#3ee0c5" />
+    </>
+  ),
   flame: (
     <>
       <path d="M60 10 c6 18 30 28 30 58 a30 30 0 0 1 -60 0 c0 -16 10 -24 14 -34 c4 10 6 14 12 16 c-2 -16 -2 -28 4 -40 z" fill="#ff4f8b" />

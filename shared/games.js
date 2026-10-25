@@ -5,6 +5,9 @@
 // Mode soirée : `rhythm` (vote, rapide ou ambiance) sert à alterner les rythmes, `partyRounds` = [min, max] manches
 // d'affilée (3 à 5 par défaut).
 
+/** Nom du jeu de phrases à trou : une seule constante, pour pouvoir le changer facilement (écrans, grille, récap, README). */
+export const NBM_NAME = 'Noir Boire Mangue';
+
 export const GAME_CATALOG = [
   {
     id: 'qui-de-nous',
@@ -118,6 +121,18 @@ export const GAME_CATALOG = [
     minToStart: 4,
     rhythm: 'rapide',
     partyRounds: [3, 4],
+    available: true,
+  },
+  {
+    id: 'nbm',
+    name: NBM_NAME,
+    icon: 'cards',
+    tagline: 'Complète la phrase, fais rire la salle. Tout le monde note les réponses, sans savoir qui les a écrites.',
+    rule: 'Le gagnant de la manche distribue 2 gorgées, le dernier en boit 2.',
+    players: { min: 3, max: 30 },
+    minToStart: 3,
+    rhythm: 'ambiance',
+    partyRounds: [2, 3],
     available: true,
   },
 ];

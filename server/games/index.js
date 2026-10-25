@@ -3,6 +3,7 @@ import estimation from './estimation.js';
 import feu from './feu.js';
 import imposteur from './imposteur.js';
 import loup from './loup.js';
+import nbm from './nbm.js';
 import patate from './patate.js';
 import quiDeNous from './quiDeNous.js';
 import quiMeConnait from './quiMeConnait.js';
@@ -23,6 +24,7 @@ export const GAME_RULES = {
   [feu.id]: feu,
   [loup.id]: loup,
   [savant.id]: savant,
+  [nbm.id]: nbm,
 };
 
 /** Registre complet : métadonnées du catalogue + règles. */

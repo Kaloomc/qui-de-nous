@@ -3,6 +3,7 @@ import * as estimation from './estimation.jsx';
 import * as feu from './feu.jsx';
 import * as imposteur from './imposteur.jsx';
 import * as loup from './loup.jsx';
+import * as nbm from './nbm.jsx';
 import * as patate from './patate.jsx';
 import * as quiDeNous from './quiDeNous.jsx';
 import * as quiMeConnait from './quiMeConnait.jsx';
@@ -25,6 +26,7 @@ const VIEWS = {
   [feu.id]: feu,
   [loup.id]: loup,
   [savant.id]: savant,
+  [nbm.id]: nbm,
 };
 
 export const GAMES = GAME_CATALOG.map((game) => ({

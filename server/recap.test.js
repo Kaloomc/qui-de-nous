@@ -94,3 +94,19 @@ test('récap de la partie : stats de la soirée gardées d’un jeu à l’autre
   assert.ok(!game.recap().players.some((p) => p.id === players[0].id));
   assert.ok(!game.recap().trophies.some((t) => t.playerId === players[0].id));
 });
+
+test('Noir Boire Mangue : points et Golden reçus nourrissent la meilleure plume et le roi / la reine du Golden, accordés au genre', () => {
+  const stats = new Map();
+  const results = { board: [{ authorId: 'a', points: 9, golden: 2 }, { authorId: 'b', points: 3, golden: 0 }, { authorId: 'c', points: 0, golden: 0 }] };
+  recordRound(stats, 'nbm', results, ['a', 'b', 'c']);
+  recordRound(stats, 'nbm', results, ['a', 'b', 'c']);
+  assert.deepEqual(stats.get('a'), { nbmPoints: 18, nbmGolden: 4 });
+  assert.equal(stats.get('c'), undefined);
+  const trophies = Object.fromEntries(computeTrophies([{ id: 'a', name: 'Léa', gender: 'f' }, { id: 'b', name: 'Bob', gender: 'm' }, { id: 'c', name: 'Sam', gender: 'n' }], {}, stats).map((t) => [t.id, t]));
+  assert.equal(trophies.plume.playerId, 'a');
+  assert.equal(trophies.golden.playerId, 'a');
+  assert.equal(trophies.golden.title, 'La reine du Golden');
+  assert.equal(trophies.golden.label, '4 Golden reçus');
+  const neutral = computeTrophies([{ id: 'a', name: 'Sam', gender: 'n' }], {}, stats).find((t) => t.id === 'golden');
+  assert.equal(neutral.title, 'Le Golden incarné');
+});
