@@ -46,7 +46,7 @@ export const CONTENT = [
   {
     id: 'tu-preferes',
     file: 'questionsPreferes.json',
-    target: 400,
+    target: 647,
     entries: (d) => d,
     // A/B et B/A sont le même dilemme.
     key: (q) => [normalize(q.a), normalize(q.b)].sort().join(' | '),
@@ -92,7 +92,7 @@ export const CONTENT = [
     format: 'tu-preferes',
     adult: true,
     file: 'content/preferes-18plus.json',
-    target: 395,
+    target: 516,
     entries: (d) => d,
     key: (q) => [normalize(q.a), normalize(q.b)].sort().join(' | '),
     near: (q) => `${q.a} ${q.b}`,
