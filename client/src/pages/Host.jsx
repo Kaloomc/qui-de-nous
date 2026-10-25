@@ -536,8 +536,10 @@ function Ended({ state, mode, onRestart, onChangeGame }) {
         {mode.name} · {n > 0 ? `${n} question${n > 1 ? 's' : ''} jouée${n > 1 ? 's' : ''}. ` : ''}
         Merci d’avoir joué !
       </p>
-      <Podium state={state} />
-      {mode.EndStats && <mode.EndStats state={state} />}
+      <div className={`ended-body ended-body-${mode.id}`}>
+        <Podium state={state} />
+        {mode.EndStats && <mode.EndStats state={state} />}
+      </div>
       <div className="actions">
         <button className="btn btn-ghost" onClick={() => navigate('/')}>
           Accueil

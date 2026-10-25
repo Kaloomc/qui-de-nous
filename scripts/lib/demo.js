@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { spawnSync } from 'node:child_process';
 import { Server } from 'socket.io';
 import { GameStore } from '../../server/gameStore.js';
 import { registerSockets } from '../../server/sockets.js';
@@ -113,6 +114,13 @@ export function bot(url, code, person, avatar) {
   return b;
 }
 
+/** ImageMagick (`convert`), s'il est installé, ramène chaque capture à 256 couleurs : 4 à 5 fois plus léger, aussi lisible. Sinon, rien ne change. */
+let hasConvert = null;
+export function shrinkPng(file) {
+  hasConvert ??= spawnSync('convert', ['-version']).status === 0;
+  if (hasConvert) spawnSync('convert', [file, '-colors', '256', '-strip', `PNG8:${file}`]);
+}
+
 /**
  * Séance de captures : un dossier de sortie, un journal (INDEX), les contrôles d'affichage et les erreurs de console de chaque page.
  * `shot(page, fichier, légende, { tv })` enregistre l'image, ajoute sa description à l'index et signale les problèmes d'affichage.
@@ -135,7 +143,9 @@ export class Session {
   async shot(page, file, caption, { tv = false, lobby = false, section = '' } = {}) {
     await sleep(250);
     const name = file.endsWith('.png') ? file : `${file}.png`;
-    await page.screenshot({ path: path.join(this.outDir, name) });
+    const target = path.join(this.outDir, name);
+    await page.screenshot({ path: target });
+    shrinkPng(target);
     const problems = await page.evaluate(pageChecks, { tv, lobby });
     // Les `.ctrl` de l'hôte et le numéro de version ne comptent pas comme contenu à vérifier.
     const bodyText = await page.evaluate(() => document.body.innerText);

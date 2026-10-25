@@ -59,7 +59,10 @@ export function pageChecks({ tv, lobby }) {
         break;
       }
     }
-    const fg = parse(s.color);
+    // Fond en dégradé (podium, bandeaux) : la couleur du fond n'est pas mesurable, on ne juge pas le contraste.
+    let gradient = false;
+    for (let p = el; p && p !== document.body && p !== root; p = p.parentElement) if (/gradient/.test(getComputedStyle(p).backgroundImage)) gradient = true;
+    const fg = gradient ? null : parse(s.color);
     if (fg) {
       const bg = bgOf(el);
       const a = fg[3];
@@ -76,6 +79,9 @@ export function pageChecks({ tv, lobby }) {
     for (const el of document.querySelectorAll('button, [role=button], input:not([type=hidden]):not([type=file]), a.btn, .ctrl')) {
       if (!visible(el)) continue;
       const r = el.getBoundingClientRect();
+      // Une case à cocher dans une ligne cliquable (label) est touchée par toute la ligne.
+      const tap = el.closest('label')?.getBoundingClientRect() ?? r;
+      if (['checkbox', 'radio'].includes(el.type) && tap.height >= 44 && tap.width >= 44) continue;
       if (r.height < 44 || r.width < 44) issues.push(`bouton trop petit (${Math.round(r.width)}×${Math.round(r.height)}) : ${label(el)}`);
     }
   }

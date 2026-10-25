@@ -104,6 +104,8 @@ const TITLES = {
 };
 const PODIUM_STEP_MAX = 4;
 
+const OTHERS_MAX = 12;
+
 export function Podium({ state }) {
   const rows = ranking(state);
   const total = rows.reduce((sum, r) => sum + r.sips, 0);
@@ -150,7 +152,7 @@ export function Podium({ state }) {
       </div>
       {others.length > 0 && (
         <ol className="ranking fade-up" style={{ animationDelay: '1.6s' }}>
-          {others.map((r) => (
+          {others.slice(0, OTHERS_MAX).map((r) => (
             <li key={r.player.id}>
               <span className="ranking-rank">{r.rank}</span>
               <Avatar player={r.player} size={36} />
@@ -159,6 +161,12 @@ export function Podium({ state }) {
               <GamePart state={state} row={r} />
             </li>
           ))}
+          {/* À 20-30 joueurs, la liste complète sortirait de l'écran de la TV. */}
+          {others.length > OTHERS_MAX && (
+            <li className="ranking-more">
+              + {others.length - OTHERS_MAX} autres joueurs, de {sipsLabel(others[OTHERS_MAX].sips)} à {sipsLabel(others.at(-1).sips)}
+            </li>
+          )}
         </ol>
       )}
       <p className="podium-total fade-up" style={{ animationDelay: '1.8s' }}>

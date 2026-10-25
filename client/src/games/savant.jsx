@@ -554,8 +554,8 @@ export function PlayerResults({ state, me, act, verdict }) {
 
 /** « DÉMASQUÉ ! » ou « PASSÉ INAPERÇU ! » (accordé au Savant) : l'icône et le texte portent le sens, pas la couleur seule. */
 export const VERDICT_TITLE = {
-  found: '{m=DÉMASQUÉ|f=DÉMASQUÉE|n=COUVERTURE GRILLÉE} !',
-  missed: '{m=PASSÉ INAPERÇU|f=PASSÉE INAPERÇUE|n=BLUFF RÉUSSI} !',
+  found: '{m=DÉMASQUÉ|f=DÉMASQUÉE|n=COUVERTURE GRILLÉE}\u00a0!',
+  missed: '{m=PASSÉ INAPERÇU|f=PASSÉE INAPERÇUE|n=BLUFF RÉUSSI}\u00a0!',
 };
 
 /** « Tu distribues ! » : une grille de joueurs, une gorgée par tap ; le reste est tiré au hasard à la fin de la fenêtre de 8 s. */

@@ -124,13 +124,16 @@ function MiniResult({ mini }) {
 }
 
 const MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' };
+const MAX_TOP_ROWS = 4;
 
 /** Les meilleures réponses de la manche, avec leur auteur (la manche est finie : plus de secret). Les ex æquo partagent le rang. */
 function Top3({ state, animate }) {
   const { results } = state;
-  const rows = results.top3;
+  // Beaucoup d'ex æquo : on montre les premiers et on résume les autres, pour que tout tienne sur l'écran de la TV.
+  const rows = results.top3.slice(0, MAX_TOP_ROWS);
+  const more = results.top3.slice(MAX_TOP_ROWS);
   return (
-    <ol className={`nbm-top3 ${rows.length > 4 ? 'is-dense' : ''}`}>
+    <ol className={`nbm-top3 ${rows.length > 3 ? 'is-dense' : ''}`}>
       {rows.map((row, i) => {
         const author = playerOf(state, row.authorId);
         return (
@@ -138,7 +141,7 @@ function Top3({ state, animate }) {
             <span className="nbm-rank" aria-label={`rang ${row.rank}`}>
               {MEDALS[row.rank]} <small>{row.rank}</small>
             </span>
-            <Avatar player={author} size={rows.length > 4 ? 56 : 84} />
+            <Avatar player={author} size={rows.length > 3 ? 56 : 84} />
             <span className="nbm-top-body">
               <strong className="nbm-top-name">{author.name}</strong>
               <span className="nbm-top-answer">{row.censored ? '🙈 censurée' : <Sentence text={results.sentence} answer={row.text} small />}</span>
@@ -150,6 +153,11 @@ function Top3({ state, animate }) {
           </li>
         );
       })}
+      {more.length > 0 && (
+        <li className={`nbm-top-more ${animate ? 'is-animated' : ''}`} style={{ '--i': 0 }}>
+          + {more.length} autre{more.length > 1 ? 's' : ''} dans le top 3 : {more.map((r) => playerOf(state, r.authorId).name).join(', ')}
+        </li>
+      )}
     </ol>
   );
 }
@@ -247,13 +255,13 @@ export function EndStats({ state }) {
           <p className="savant-label">La réponse la plus drôle de la partie · {best.points} points</p>
           <Sentence text={best.sentence} answer={best.text} big />
           <p className="nbm-best-author">
-            <Avatar player={author} size={72} />
+            <Avatar player={author} size={56} />
             <strong>{author.name}</strong>
           </p>
         </div>
       )}
       {podium.length > 0 && (
-        <>
+        <div className="nbm-plume">
           <h2>Le podium de la plume</h2>
           <div className="savant-podium-list">
             {podium.map((r, i) => (
@@ -269,7 +277,7 @@ export function EndStats({ state }) {
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
     </section>
   );
