@@ -298,9 +298,9 @@ Un mode réservé aux adultes, avec des questions sexuelles directes et une ambi
 
 ### Genre des joueurs et vie privée
 
-- **À l'entrée**, le téléphone demande de choisir entre **Homme**, **Femme** et **Je préfère ne pas dire**. Le choix est obligatoire (trois boutons, aucune valeur par défaut) pour qu'aucun texte ne soit accordé au hasard. On peut le modifier entre deux jeux depuis son téléphone (grille des jeux ou lobby), jamais en pleine manche. Un joueur qui revient garde son choix.
+- **À l'entrée**, le téléphone demande de choisir entre **Homme**, **Femme** et **Je préfère ne pas dire**. Le choix est obligatoire : trois grosses icônes (♂ bleu, ♀ rose, rond gris à trois points pour « je préfère ne pas dire »), aucune valeur par défaut ; l'icône choisie reçoit une coche et une bordure épaisse, et chaque bouton a un libellé accessible (lecteur d'écran) pour qu'aucun texte ne soit accordé au hasard. On peut le modifier entre deux jeux depuis son téléphone (grille des jeux ou lobby), jamais en pleine manche. Un joueur qui revient garde son choix.
 - **Ce que ça change** : les phrases s'accordent (« Qui est la plus susceptible de… », « Bravo, tu es la plus accusée »). Pour « Je préfère ne pas dire », les textes passent par une **forme neutre** écrite exprès (le prénom, « cette personne », une tournure sans accord), jamais par de l'écriture inclusive à points. Les trophées de fin de soirée suivent la même règle.
-- **Questions réservées à un genre** (*Qui de nous ?*, *Qui me connaît le mieux ?*) : une question peut être réservée aux hommes ou aux femmes du groupe (« Qui est la plus susceptible de… » ne désigne que des femmes). Elles représentent environ 15 à 20 % des tirages, réparties équitablement entre les deux genres, jamais plus de deux à la suite, et seulement s'il y a au moins **3 candidats** de ce genre dans la partie (sinon une autre question est tirée). Les joueurs qui préfèrent ne pas dire leur genre ne sont jamais candidats à ces questions, mais votent et devinent normalement.
+- **Questions réservées à un genre** (*Qui de nous ?*, *Qui me connaît le mieux ?*) : une question peut être réservée aux hommes ou aux femmes du groupe (« Qui est la plus susceptible de… » ne désigne que des femmes). Elles représentent **8 à 10 % des tirages**, réparties équitablement entre les deux genres, jamais plus de deux à la suite, et seulement s'il y a au moins **3 candidats** de ce genre dans la partie (sinon une autre question est tirée). Elles sont **rares exprès** : une question n'est réservée à un genre que si elle porte sur une expérience réellement liée à ce genre (se raser, une barbe, des talons, une voix qui mue…) ; tout comportement ou trait de caractère attaché à un genre est un cliché et passe en « tous ». Les joueurs qui préfèrent ne pas dire leur genre ne sont jamais candidats à ces questions, mais votent et devinent normalement.
 - **Défis de la Roue par genre** : un défi peut viser les hommes ou les femmes du groupe (ils boivent tous, distribuent à l'autre genre, le premier à répondre choisit qui boit, le dernier à toucher son téléphone boit). Il est sauté s'il y a moins de 2 joueurs du genre concerné. Les joueurs « ne préfère pas dire » sont **épargnés** : ils ne sont jamais visés, mais regardent comme tout le monde.
 - **Vie privée** : le genre n'est **jamais affiché** (ni sur la TV, ni sur les téléphones des autres). Il est transmis aux écrans de la partie pour une seule raison, accorder les textes, et sert à choisir les candidats. Il reste en mémoire avec la partie et disparaît avec elle ; il n'est ni enregistré ni envoyé ailleurs.
 
@@ -421,13 +421,24 @@ Bluff rapide, 100 % téléphone, sans maître du jeu, **sans écran de réglages
 - **Confidentialité.** La vraie réponse et l'identité du Savant ne partent que vers le téléphone du Savant avant la révélation (un test de fuite sur de vrais sockets le vérifie). Les votes sont secrets jusqu'à la révélation. L'hôte peut masquer une réponse déplacée en la touchant sur la TV.
 - **Déconnexions.** Une manche continue sans un joueur parti ; si le Chercheur disparaît (plus de 5 secondes), la manche est rejouée avec un autre fait et un autre Chercheur. Sous 4 joueurs connectés, la manche attend.
 
-**Ajouter un fait** (`server/content/facts-savant.json`) : une entrée `{ id, question, reponse, explication, categorie, source }`.
+**Ajouter un fait** (`server/content/facts-savant.json`) : une entrée `{ id, question, reponse, explication, categorie, source }`. L'`id` commence par le préfixe de la catégorie (`ani`, `sci`, `his`, `pay`, `bou`, `tec`, `spo`, `cul`, `cor`, `ins`).
 
-- `question` : une phrase avec **un seul** trou `___` ; `reponse` : 1 à 5 mots, qui ne figure pas déjà dans la question ; `explication` : une phrase, dans tes propres mots, affichée à la révélation ; `categorie` : animaux, sciences, histoire, pays et voyages, bouffe, technologie, sport, culture pop, corps humain ou insolite.
-- `source` : l'URL d'une source fiable (encyclopédie, institut, musée, grand média scientifique) **ouverte et lue** pour confirmer le fait. Pas de fait sans source : un faux fait ruine la manche.
-- Critères : surprenant mais plausible (la vraie réponse doit pouvoir s'inventer), question ouverte, comprise par tous les adultes, intemporelle (pas de record qui change), sans sujet sensible (politique, guerre, maladie, religion, tragédie).
-- **Le test du devinage à froid** : avant d'ajouter un fait, demande-toi si quelqu'un qui ne le connaît pas peut trouver la réponse en y réfléchissant dix secondes (culture générale, formulation qui la souffle, chiffre sans surprise). Si oui, jette-le : la manche ne vaut que si la vraie réponse est impossible à deviner et pourtant plausible à imiter. Les faits écartés ou contestés (sources qui se contredisent) ne vont pas dans le fichier.
-- `npm run check-facts` vérifie le format, les doublons, la longueur, la présence d'une source et le volume minimal (150 faits) ; `npm test` lance le même contrôle et refuse une source hors de la liste des sites fiables du test.
+**La ligne éditoriale** : une manche ne marche que si la vraie réponse est *impossible à deviner* mais *facile à imiter*.
+
+- `question` : une **anecdote complète** de 12 à 35 mots, jamais un fragment (« Les crottes du wombat ont la forme de ___ » est refusé), avec **un seul** trou `___` placé sur l'**élément le plus surprenant**, pas sur la fin de phrase par défaut.
+- `reponse` : 1 à 5 mots, **jamais un nombre ni une unité** (« 3 », « trois », « 55 langues », « ___ minutes » sont refusés par le contrôle), un **mot courant** qui se mélange aux bluffs des joueurs. Elle ne figure pas déjà dans la question.
+- `explication` : une phrase, dans tes propres mots, affichée à la révélation. `categorie` : animaux, sciences, histoire, pays et voyages, bouffe, technologie, sport, culture pop, corps humain ou insolite (au moins 5 faits par catégorie, **150 au total**). Aucun indice de catégorie dans la phrase.
+- `source` : l'URL d'une source fiable (encyclopédie, institut, musée, grand média scientifique) **ouverte et lue** pour confirmer le fait. Pas de fait sans source : un faux fait ruine la manche. Un fait contesté ou issu d'un mythe (sources qui se contredisent) ne va pas dans le fichier.
+- Critères : surprenant mais plausible, compris par tous les adultes, intemporel (pas de record qui change), sans sujet sensible (politique, guerre, maladie, religion, tragédie).
+
+**Checklist avant d'ajouter un fait** :
+
+1. **Le test « quoi ?! »** : lis l'anecdote à quelqu'un qui ne la connaît pas. S'il ne réagit pas à la vraie réponse, jette le fait.
+2. **Le devinage à froid** : écris les 3 réponses que proposerait quelqu'un qui réfléchit dix secondes. Si la vraie réponse en fait partie (culture générale, formulation qui la souffle), jette le fait ou change le trou.
+3. **Le camouflage** : la vraie réponse, glissée parmi des bluffs écrits par des joueurs, ne doit pas se reconnaître (pas de mot trop savant, trop précis, ni de majuscule qui trahit).
+4. **La source** ouverte, lue, et qui confirme exactement le fait tel qu'il est écrit.
+
+`npm run check-facts` vérifie le format, les doublons, la longueur, la nature de la réponse, la présence d'une source et les volumes minimaux ; `npm test` lance le même contrôle et refuse une source hors de la liste des sites fiables du test (`server/facts-savant.test.js`). Le bilan de la refonte est dans [`docs/audit-faits-savant.md`](docs/audit-faits-savant.md).
 
 **Outils de contrôle** : `npm run savantsoak` (parties serveur avec joueurs inactifs, déconnectés, réponses vides, doubles clics), `npm run audit:savant` (Playwright : captures TV et téléphones pour 4, 12 et 30 joueurs, réponses et prénoms longs, débordements, contraste, boutons, console).
 
@@ -435,8 +446,8 @@ Bluff rapide, 100 % téléphone, sans maître du jeu, **sans écran de réglages
 
 Un jeu de phrases à trou, 100 % téléphone pour écrire, la TV pour rire. Il se joue de 3 à 30 joueurs ; une manche par joueur, 8 au plus.
 
-- **La phrase** apparaît en très gros sur la TV (3 s) : « Mon excuse préférée pour quitter une soirée : ___ ».
-- **L'écriture.** Chaque joueur reçoit une **main de 5 cartes** de réponse sur son téléphone : il en choisit une, ou il écrit sa propre réponse (60 caractères au maximum). La manche avance dès que tout le monde a envoyé (30 s de secours). Les cartes déjà vues ne reviennent pas avant que le paquet soit épuisé, et, autant que possible, deux joueurs d'une même manche n'ont pas la même carte.
+- **La phrase** apparaît en très gros sur la TV (3 s), avec le trou au début, au milieu ou à la fin : « Au mariage de ma cousine, j'ai surpris ___ derrière le buffet. »
+- **L'écriture.** Chaque joueur reçoit une **main de 5 cartes** de réponse sur son téléphone : il en choisit une, ou il écrit sa propre réponse (60 caractères au maximum). La manche avance dès que tout le monde a envoyé (30 s de secours). Chaque phrase a une **forme** (groupe nominal, infinitif ou citation libre) et chaque carte aussi : **au moins 3 des 5 cartes de chaque main vont dans la phrase de la manche** (les autres sont mélangées, rien ne les distingue). Les cartes déjà vues ne reviennent pas avant que le paquet soit épuisé, et, autant que possible, deux joueurs d'une même manche n'ont pas la même carte.
 - **Les réponses défilent une par une, sans nom d'auteur**, la phrase complétée en grand sur la TV. Tout le monde note, sauf l'auteur : **Nul** (0 point), **Meh** (1), **Drôle** (2) et **Golden** (4). Chaque joueur n'a **qu'un seul Golden par manche**. On passe à la réponse suivante dès que tout le monde a noté (au moins 3 s à l'écran, secours à 15 s), avec un petit résultat animé entre deux.
 - **La révélation** montre le classement de la manche et les auteurs de chaque réponse, seulement une fois la manche terminée.
 - **Gorgées.** Le gagnant (les ex æquo aussi) **distribue 2 gorgées** ; le dernier en **boit 2**. Maximum **4 gorgées** reçues par joueur et par manche. Si personne n'a marqué de point, personne ne boit ; s'il n'y a pas de dernier (égalité générale), seul le gagnant distribue.
@@ -493,7 +504,7 @@ Les questions osées restent entre adultes consentants et sur le ton du chambrag
 
 Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélangés quel que soit le niveau. Le champ servira plus tard à choisir l'intensité de la soirée.
 
-**Qui de nous ?** (640 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
+**Qui de nous ?** (782 questions) : dans [`server/questions.json`](server/questions.json), une question par ligne, toujours sous la forme « Qui est le plus susceptible de… ? » :
 
 ```json
 [
@@ -502,7 +513,7 @@ Pour l'instant, toutes les questions (et tous les défis de la roue) sont mélan
 ]
 ```
 
-**Tu préfères ?** (500 dilemmes) : dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… », lisible seule sur sa carte :
+**Tu préfères ?** (647 dilemmes) : dans [`server/questionsPreferes.json`](server/questionsPreferes.json), avec l'option A dans `a` et l'option B dans `b`. Écris chaque option comme une fin de phrase après « Tu préfères… », lisible seule sur sa carte :
 
 ```json
 [
@@ -535,26 +546,34 @@ Les contenus des autres jeux sont dans [`server/content/`](server/content/) :
 
 | Fichier | Jeu | Format d'une entrée |
 |---|---|---|
-| `questions-estimation.json` | Estimation | `{ "question": "…", "reponse": 2007, "unite": "année" }` |
+| `questions-estimation.json` | Estimation | `{ "question": "…", "reponse": 2007, "unite": "année", "source": "https://…" }` : le `source` (URL qui confirme le chiffre) est obligatoire pour tout nouveau contenu ; le chiffre doit être canonique et ne pas changer avec le temps (pas de record, de population, de classement) |
 | `questions-connait.json` | Qui me connaît le mieux ? | `{ "niveau": "chill", "question": "… {nom} … ?", "choix": ["A", "B", "C", "D"] }` (`{nom}` = la cible) |
 | `words-imposteur.json` | L'Imposteur | `{ "mot": "Netflix", "proche": "YouTube", "categorie": "Applis" }` : deux mots de la **même grande catégorie mais clairement différents** (voir ci-dessous) |
 | `defis-roue.json` | La Roue | `{ "texte": "Bois 2 gorgées.", "type": "boire", "n": 2, "niveau": "chill" }`, avec `type` parmi `boire`, `groupe`, `echange` (`n: 0`), `duo`, `distribuer`, `tous`, `vote`, `gage`, et `n` de 1 à 5 |
 | `defis-roue.json` (défis de genre) | La Roue | `{ "texte": "Toutes les femmes boivent 1 gorgée.", "type": "genre-boit", "genre": "femme", "n": 1, "niveau": "chill" }` (ou, pour `genre-distribue`, `"genre": "femme", "vers": "homme"`), avec `type` parmi `genre-boit`, `genre-distribue`, `genre-choisit`, `genre-dernier` ; `genre` = qui agit ; `vers` (`homme` ou `femme`, différent de `genre`) = qui reçoit pour `genre-distribue` et `genre-choisit`. Prévoir autant de défis pour chaque genre, sans nudité, contact, photo ni stigmatisation. |
 | `facts-savant.json` | Le Savant | `{ "id", "question", "reponse", "explication", "categorie", "source" }` (voir [Le Savant](#le-savant)) |
-| `phrases-nbm.json` | Noir Boire Mangue | `{ "niveau": "chill", "texte": "Mon excuse préférée pour quitter une soirée : ___." }` : **un seul trou** `___`, 110 caractères au maximum |
-| `cartes-nbm.json` | Noir Boire Mangue | une simple chaîne : `"Un pigeon en costume"` : 1 à 6 mots, courte, sans trou, qui fait rire dans beaucoup de phrases différentes |
+| `phrases-nbm.json` | Noir Boire Mangue | `{ "niveau": "chill", "forme": "groupe_nominal", "texte": "Au mariage de ma cousine, j’ai surpris ___ derrière le buffet." }` : **un seul trou** `___`, 110 caractères au maximum, `forme` obligatoire (voir ci-dessous) |
+| `cartes-nbm.json` | Noir Boire Mangue | `{ "texte": "un pigeon en costume", "forme": "groupe_nominal" }` : en **minuscules** (la majuscule est ajoutée seulement si le trou ouvre la phrase), 11 mots et 60 caractères au plus, sans trou |
 | `words-feu.json` | Réflexes | `{ "pieges": ["FEUX", "BLEU", …], "neutres": ["PIZZA", …] }` en majuscules, sans « FEU » lui-même |
 | `*-18plus.json` | Mode 18+ | Même format que le fichier normal du jeu, avec `"adulte": true` en plus (voir ci-dessous) |
 
-**Contenu 18+** : `questions-18plus.json` (Qui de nous ?), `preferes-18plus.json` (Tu préfères ?), `connait-18plus.json` (Qui me connaît le mieux ?), `roue-18plus.json` (La Roue), `imposteur-18plus.json` (L'Imposteur), `phrases-nbm-18plus.json` et `cartes-nbm-18plus.json` (Noir Boire Mangue ; les cartes sont de simples chaînes, leur mode se lit au nom du fichier), dans `server/content/`. Chaque entrée porte `"adulte": true` (le test le vérifie, et refuse ce champ dans les fichiers normaux). Registre cash et drôle, une phrase, mais toujours entre adultes consentants : rien qui implique un mineur, de la contrainte, de l'inceste, des animaux, de la violence, quelqu'un d'endormi ou trop ivre pour consentir ; pas de description pornographique, rien de discriminatoire ni de stigmatisant (IST comprises), pas de vraies personnes, pas de traumatisme. `npm test` vérifie aussi qu'aucune entrée 18+ ne double une entrée du mode normal.
+**Contenu 18+** : `questions-18plus.json` (Qui de nous ?), `preferes-18plus.json` (Tu préfères ?), `connait-18plus.json` (Qui me connaît le mieux ?), `roue-18plus.json` (La Roue), `imposteur-18plus.json` (L'Imposteur), `phrases-nbm-18plus.json` et `cartes-nbm-18plus.json` (Noir Boire Mangue), dans `server/content/`. Chaque entrée porte `"adulte": true` (le test le vérifie, et refuse ce champ dans les fichiers normaux). Registre cash et drôle, une phrase, mais toujours entre adultes consentants : rien qui implique un mineur, de la contrainte, de l'inceste, des animaux, de la violence, quelqu'un d'endormi ou trop ivre pour consentir ; pas de description pornographique, rien de discriminatoire ni de stigmatisant (IST comprises), pas de vraies personnes, pas de traumatisme. `npm test` vérifie aussi qu'aucune entrée 18+ ne double une entrée du mode normal.
 
 Pour un défi de la roue adressé au joueur désigné (`boire`, `duo`, `distribuer`, `gage`), écris à la 2e personne : la TV affiche « Ana : bois 2 gorgées. ». Pour les autres, écris pour tout le groupe. Le nombre de gorgées dans le texte doit correspondre à `n`.
 
 **Conseils** : une phrase qui se lit en 3 secondes sur la TV (120 caractères maximum, 75 par option de dilemme), une question qui désigne vraiment quelqu'un ou qui divise la salle, et deux options aussi tentantes ou aussi pénibles l'une que l'autre. Pas de moquerie sur l'origine, la religion, l'orientation, le genre, le physique ou la santé, pas de contenu sexuel explicite, et rien qui pousse à se mettre en danger.
 
-**Ajouter une phrase ou une carte de Noir Boire Mangue.** Une bonne phrase se complète de dix façons drôles et ne dépend d'aucun univers de niche ; une bonne carte est un mot ou un groupe nominal absurde qui marche dans presque toutes les phrases (« Un pigeon en costume », « Ma tante Josette »). Les cartes ne peuvent pas contenir de trou. Contenu **original** uniquement : n'en recopie aucun d'un jeu existant. `npm test` vérifie le format, les doublons (exacts et quasi-doublons) et que le contenu 18+ ne reprend rien du normal, et que le mode normal n'utilise jamais de carte 18+ (avec le vrai contenu).
+**Ajouter une phrase ou une carte de Noir Boire Mangue.** Contenu **original** uniquement : n'en recopie aucun d'un jeu existant.
 
-**Ajouter un fait du Savant.** Voir [Le Savant](#le-savant) : une source fiable ouverte et lue, un seul trou, et le test du devinage à froid.
+- **Structure d'une phrase** : écris une petite scène, pas une étiquette. Répartition visée sur l'ensemble du fichier : trou **au début** ≈ 25 %, **au milieu** ≈ 40 %, **à la fin** ≈ 35 % (± 9 points), et **au plus 5 %** de phrases de la forme « Mon truc : ___ ». Un seul trou, 110 caractères au maximum.
+- **La `forme`** dit ce qui complète la phrase : `groupe_nominal` (« j'ai croisé ___ », « avec ___ »), `infinitif` (« je sais ___ », « Pour ___, je suis prêt à tout ») ou `libre` (une citation entre guillemets, qui accepte toutes les cartes). Avant le trou d'un groupe nominal, **jamais** « de », « du », « des », « à », « au », « en » (« de un pigeon », « à le chien » ne s'écrivent pas) ; avant le trou d'un infinitif, jamais « de » (« de aller »). Préfère un verbe direct, « avec », « pour », « sans », « sur », « dans ».
+- **Une carte** est un groupe nominal absurde (« un pigeon en costume »), un infinitif avec son complément (« chanter du Céline Dion à tue-tête ») ou une réplique entière (`libre`, « Ça sent le brûlé ! »), écrite en minuscules et sans verbe réfléchi (« me cacher » ne s'accorde pas avec tout le monde). Elle doit faire rire dans beaucoup de phrases de sa forme. Garde assez de cartes de chaque forme : 36 infinitifs suffisent à 12 joueurs, il en faut 90 pour 30.
+- Les mains sont tirées avec la forme de la phrase ; si un paquet compte trop peu de cartes d'une forme, on réutilise des cartes plutôt que de rester sous 3 cartes compatibles.
+- **Contrôles** : `npm run check-nbm` affiche la répartition du trou, la part de « texte : ___ », les formes et teste les mains de 3 à 30 joueurs avec le vrai contenu ; `npm test` (fichier `server/nbm-content.test.js`) échoue si l'une de ces règles n'est plus respectée, vérifie aussi le format, les doublons exacts et quasi-doublons, et que le mode normal n'utilise jamais de carte 18+. Le bilan de la refonte est dans [`docs/audit-nbm.md`](docs/audit-nbm.md).
+
+**Ajouter un fait du Savant.** Voir [Le Savant](#le-savant) : une anecdote complète, une réponse jamais numérique, une source ouverte et lue, et les tests « quoi ?! », du devinage à froid et du camouflage.
+
+**Ajouter du contenu en lots, avec les contrôles.** Ajoute 30 à 40 entrées à la fois, puis lance `node scripts/check-content.js` (volumes et doublons de tout le contenu, y compris entre le normal et le 18+), `npm test` (format, mots de niche et de bureau, accords, doublons, fuites normal/18+), `npm run check-genre` (clichés de genre dans les questions réservées) et `npm run sample`, qui écrit [`docs/captures/contenu-echantillon.md`](docs/captures/contenu-echantillon.md) : dix exemples tirés au hasard par jeu et par mode, à relire d'un coup d'œil. Pour *Réflexes*, chaque nouveau mot a besoin de sa voix (`npm run voices`, clé ElevenLabs dans `.env`) : le test des voix échoue tant qu'elle manque.
 
 **Bien choisir une paire de l'Imposteur.** On doit pouvoir donner un indice vrai pour un mot qui ne colle pas parfaitement à l'autre, tout en laissant l'imposteur comprendre vaguement de quoi on parle. Le bon écart : Netflix / YouTube, Fortnite / Minecraft, Vodka / Bière, Coachella / Disneyland, Squeezie / Cyprien, Tinder / Uber Eats, Plage / Montagne. Trop proches (à éviter) : Netflix / Prime Video, Vodka / Gin, TikTok / Reels, deux versions du même produit ou deux objets interchangeables. Le test refuse les paires en double et les mots identiques ou dont l'un contient l'autre.
 
@@ -602,7 +621,7 @@ npm run dev    # serveur (port 3000, redémarrage auto) + site Vite (port 5173, 
 npm test       # tests des règles, des questions et du déroulement (mode auto, minuteurs, pause…)
 ```
 
-Autres commandes utiles : `npm run fairness` (tableau du tirage équitable sur une soirée simulée), `npm run check-facts` (faits du Savant), `node scripts/check-content.js` (doublons et volumes de tout le contenu), `node scripts/audit-genre.js` (décompte du contenu par genre), `npm run nbmsoak` et `npm run savantsoak` (parties de bots), et `npm run captures` (captures d'écran Playwright reproductibles : 12 joueurs mixtes, TV 1920×1080 et téléphone 390×844, dans `docs/captures/`).
+Autres commandes utiles : `npm run fairness` (tableau du tirage équitable sur une soirée simulée), `npm run check-facts` (faits du Savant), `npm run check-nbm` (phrases et cartes de Noir Boire Mangue), `npm run check-genre` (clichés de genre), `npm run sample` (échantillon de contenu), `node scripts/check-content.js` (doublons et volumes de tout le contenu), `node scripts/audit-genre.js` (décompte du contenu par genre), `npm run nbmsoak` et `npm run savantsoak` (parties de bots), et `npm run captures` (captures d'écran Playwright reproductibles : 12 joueurs mixtes, TV 1920×1080 et téléphone 390×844, dans `docs/captures/`).
 
 En mode dev, ouvre http://localhost:5173 ; les téléphones utilisent `http://<IP du PC>:5173`.
 

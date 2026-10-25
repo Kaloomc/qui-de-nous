@@ -24,7 +24,10 @@ Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, t�
 
 ## Rejoindre
 
-- **rejoindre-01-tel-formulaire.png** — Téléphone : « Rejoindre la partie » — prénom, photo et choix obligatoire du genre (Homme / Femme / Je préfère ne pas dire), aucune option présélectionnée.
+- **rejoindre-01-tel-formulaire.png** — Téléphone : « Rejoindre la partie » — prénom, photo et choix obligatoire du genre en trois grosses icônes (♂ bleu, ♀ rose, rond gris à trois points), aucune option présélectionnée.
+- **rejoindre-01a-tel-genre-homme.png** — Téléphone : choix du genre, ♂ bleu sélectionné — coche ✓ et bordure épaisse ; les deux autres icônes restent visibles.
+- **rejoindre-01b-tel-genre-femme.png** — Téléphone : choix du genre, ♀ rose sélectionné — coche ✓ et bordure épaisse ; les deux autres icônes restent visibles.
+- **rejoindre-01c-tel-genre-neutre.png** — Téléphone : choix du genre, rond gris sélectionné (« je préfère ne pas dire ») — coche ✓ et bordure épaisse ; les deux autres icônes restent visibles.
 - **rejoindre-02-tel-attente.png** — Téléphone après avoir rejoint : l’attente du lancement ; le genre peut être modifié ici (jamais en pleine manche).
 - **rejoindre-03-tv-lobby.png** — TV : lobby avec les 12 joueurs mixtes et leurs photos — aucune indication de genre nulle part.
 
@@ -45,8 +48,9 @@ Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, t�
 
 ## Qui me connaît le mieux ?
 
-- **connait-01-tv-question.png** — TV : question réservée aux femmes — la cible est Aïcha, la question et les choix sont accordés à son genre.
+- **connait-01-tv-question.png** — TV : question réservée aux femmes — la cible est Camille, la question et les choix sont accordés à son genre.
 - **connait-02-tel-devineur.png** — Téléphone d’un joueur qui devine la réponse de la cible (4 choix accordés).
+- **connait-03-tel-cible.png** — Téléphone de la cible : elle répond en secret sur elle-même.
 - **connait-04-tv-revelation.png** — TV : « Qu’a répondu la cible ? » — les choix des autres apparaissent, puis la vraie réponse.
 - **connait-05-tv-resultats.png** — TV : résultats — qui a trouvé, qui boit, accordés au genre de la cible.
 - **connait-06-tel-verdict.png** — Téléphone d’un devineur : le verdict de la manche.
@@ -69,8 +73,23 @@ Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, t�
 - **soiree-01-tv-grille.png** — TV : grille des jeux, avec la grosse carte « Mode soirée » en tête.
 - **soiree-02-tv-reglages.png** — TV : réglages de la soirée — durée et jeux inclus.
 - **soiree-03-tv-transition.png** — TV : transition de 5 secondes avant le premier jeu — nom, icône, accroche, classement des gorgées et petit QR code pour les retardataires.
-- **soiree-04-tv-manche.png** — TV : première manche du programme (qui-de-nous) avec la barre de la soirée en haut à gauche (jeu, manche, temps, pause / jeu suivant / terminer).
+- **soiree-04-tv-manche.png** — TV : première manche du programme (tu-preferes) avec la barre de la soirée en haut à gauche (jeu, manche, temps, pause / jeu suivant / terminer).
 - **soiree-05-tv-transition-2.png** — TV : transition vers le jeu suivant, choisi selon les joueurs connectés et les jeux déjà joués (jamais deux fois le même d’affilée).
+
+## Noir Boire Mangue — phrases
+
+- **nbm-phrases-1-tv.png** — TV, manche 1 : « Ma mère m’a surpris à ___ pendant le repas de Noël. » — infinitif, trou au milieu.
+- **nbm-phrases-1-tel.png** — Téléphone de Camille, manche 1 : au moins 3 de ses 5 cartes vont dans la phrase (infinitif) : Mais c’est qui, ce monsieur ? · faire des bulles dans le verre d’un inconnu · faire un discours devant le miroir de la salle de bains · un déguisement de poule · manger avec les mains devant la belle-famille.
+- **nbm-phrases-2-tv.png** — TV, manche 2 : « Ma mère m’a surpris à ___ pendant le repas de Noël. » — infinitif, trou au milieu.
+- **nbm-phrases-2-tel.png** — Téléphone de Camille, manche 2 : au moins 3 de ses 5 cartes vont dans la phrase (infinitif) : un cierge dans le frigo · réparer le robinet avec du scotch et de l’espoir · coller des post-it sur mon chat · un dentiste chantant · mettre du ketchup sur un tiramisu.
+- **nbm-phrases-3-tv.png** — TV, manche 3 : « ___ sans se faire remarquer, c’est mon seul vrai talent. » — infinitif, trou au début.
+- **nbm-phrases-3-tel.png** — Téléphone de Camille, manche 3 : au moins 3 de ses 5 cartes vont dans la phrase (infinitif) : passer la nuit dans un magasin de meubles · Y’a plus de papier · chanter l’hymne national à la caisse du supermarché · arroser les plantes du voisin avec du soda · une dent qui bouge.
+- **nbm-phrases-4-tv.png** — TV, manche 4 : « Dans mon sac, on trouve toujours ___. » — groupe nominal, trou à la fin.
+- **nbm-phrases-4-tel.png** — Téléphone de Camille, manche 4 : au moins 3 de ses 5 cartes vont dans la phrase (groupe nominal) : un pirate au régime · un lapin de Pâques en retard · une sirène enrhumée · un coq qui chante à midi · Je suis pas en retard, c’est vous qui êtes en avance.
+- **nbm-phrases-5-tv.png** — TV, manche 5 : « Au moment de trinquer, mon oncle a crié « ___ » et tout le monde s’est tu. » — libre, trou au milieu.
+- **nbm-phrases-5-tel.png** — Téléphone de Camille, manche 5 : au moins 3 de ses 5 cartes vont dans la phrase (libre) : un feu d’artifice mouillé · la clé introuvable · un nuage de farine · un hérisson câlin · un dessert pour six.
+- **nbm-phrases-6-tv.png** — TV, manche 6 : « Ma mère m’a surpris à ___ pendant le repas de Noël. » — infinitif, trou au milieu.
+- **nbm-phrases-6-tel.png** — Téléphone de Camille, manche 6 : au moins 3 de ses 5 cartes vont dans la phrase (infinitif) : parler à ma plante comme à une vieille amie · souhaiter la bonne année en plein mois d’août · faire semblant de dormir à un dîner · un câlin de koala · une soupe de cailloux.
 
 ## Le Savant
 
@@ -102,6 +121,7 @@ Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, t�
 - **savant-2b-tel-spectateur-verdict.png** — Téléphone d’un spectateur : son verdict et ses gorgées.
 - **savant-3c-tv-bandeau.png** — TV (forme neutre pour « ne préfère pas dire » (COUVERTURE GRILLÉE)) : bandeau plein écran « LE SAVANT ÉTAIT… » avec sa photo et son prénom.
 - **savant-3c-tv-vraie-reponse.png** — TV (forme neutre pour « ne préfère pas dire » (COUVERTURE GRILLÉE)) : la vraie réponse dans un cadre doré, avec son explication ; sur les cartes : couronne du Savant, loupe du Chercheur et pastilles de votes de chaque spectateur.
+  - ⚠️ texte hors de l'écran : h1.savant-verdict-title « ✔ COUVERTURE GRILLÉE ! »
 - **savant-3c-tv-verdict.png** — TV (forme neutre pour « ne préfère pas dire » (COUVERTURE GRILLÉE)) : verdict en plein écran, accordé au genre du Savant.
 - **savant-3c-tv-resultats.png** — TV : résultats de la manche — cartes marquées (vraie réponse, Savant, Chercheur, votes) et gorgées.
 - **savant-3c-tel-chercheur-distribue.png** — Téléphone du Chercheur : fenêtre de distribution des gorgées (8 s), sinon elles sont tirées au hasard.

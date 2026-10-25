@@ -6,6 +6,7 @@
 // Playwright est une dépendance de développement seulement. Si le navigateur ne s'installe pas : `npx playwright install chromium`.
 import fs from 'node:fs';
 import path from 'node:path';
+import { holePosition } from './check-nbm.js';
 import { seeded } from '../server/rules/loupSim.js';
 import { runEvening, spread, table, EVENING } from '../server/rules/spotlightSim.js';
 import { SPOTLIGHT_ROLES } from '../server/spotlight.js';
@@ -242,8 +243,13 @@ section('rejoindre', 'Rejoindre avec le choix du genre', async (env) => {
   let n = 0;
   const first = CAST[0];
   const joinShot = async (page) => {
-    await S.shot(page, 'rejoindre-01-tel-formulaire', 'Téléphone : « Rejoindre la partie » — prénom, photo et choix obligatoire du genre (Homme / Femme / Je préfère ne pas dire), aucune option présélectionnée.', { section: sec });
+    await S.shot(page, 'rejoindre-01-tel-formulaire', 'Téléphone : « Rejoindre la partie » — prénom, photo et choix obligatoire du genre en trois grosses icônes (♂ bleu, ♀ rose, rond gris à trois points), aucune option présélectionnée.', { section: sec });
     n += 1;
+    // Les trois états de sélection : coche, bordure épaisse et libellé accessible.
+    for (const [k, label, what] of [['a', 'Homme', '♂ bleu sélectionné'], ['b', 'Femme', '♀ rose sélectionné'], ['c', 'Je préfère ne pas dire', 'rond gris sélectionné (« je préfère ne pas dire »)']]) {
+      await page.getByRole('radio', { name: label }).click();
+      await S.shot(page, `rejoindre-01${k}-tel-genre-${k === 'a' ? 'homme' : k === 'b' ? 'femme' : 'neutre'}`, `Téléphone : choix du genre, ${what} — coche ✓ et bordure épaisse ; les deux autres icônes restent visibles.`, { section: sec });
+    }
   };
   const phone = await joinPhone(env, tv.code, first, env.avatars[0], { shotJoin: joinShot });
   await S.shot(phone.page, 'rejoindre-02-tel-attente', 'Téléphone après avoir rejoint : l’attente du lancement ; le genre peut être modifié ici (jamais en pleine manche).', { section: sec });
@@ -420,6 +426,48 @@ section('soiree', 'Mode soirée — tirage équitable et enchaînement', async (
   await tv.ctx.close();
 });
 
+section('nbm-phrases', 'Noir Boire Mangue — phrases de structures variées et mains compatibles', async (env) => {
+  const S = env.session;
+  const sec = 'Noir Boire Mangue — phrases';
+  const tv = await openTv(env, 'Noir Boire Mangue');
+  const { game, code } = tv;
+  const all = game.rules.questions;
+  const pick = (forme, position) => all.find((q) => q.forme === forme && holePosition(q.texte) === position && !/[:]\s*(«\s*)?___/.test(q.texte));
+  const chosen = [pick('groupe_nominal', 'debut'), pick('groupe_nominal', 'milieu'), pick('groupe_nominal', 'fin'), pick('infinitif', 'debut'), pick('infinitif', 'milieu'), pick('libre', 'milieu')];
+  force(game, chosen);
+  game.nbmTiming = { announceMs: 3200, writeMs: 4500, writeBeatMs: 300, showMinMs: 700, showMaxMs: 1400, miniMs: 250, allocMs: 700 };
+  const cast = await fill(env, game, code, 6, { real: ['Camille'] });
+  await tv.page.waitForSelector('.lobby-players');
+  game.settings.auto = true;
+  game.settings.resultsMs = 1500;
+  await tv.page.getByRole('button', { name: /Lancer la partie/ }).click();
+  const d = () => game.roundData;
+  const camille = cast.phoneOf('Camille');
+  let last = null;
+  for (let r = 1; r <= 6; r++) {
+    await waitFor(() => d()?.step === 'announce' && d().phaseId !== last, 90000, `annonce ${r}`);
+    last = d().phaseId;
+    const q = game.question;
+    await sleep(400);
+    await S.shot(tv.page, `nbm-phrases-${r}-tv`, `TV, manche ${r} : « ${q.texte} » — ${q.forme.replace('_', ' ')}, trou ${{ debut: 'au début', milieu: 'au milieu', fin: 'à la fin' }[holePosition(q.texte)]}.`, { tv: true, section: sec });
+    await waitFor(() => d().step === 'write', 10000, 'écriture');
+    await sleep(500);
+    const cards = d().hands[idOf(game, 'Camille')] ?? [];
+    await S.shot(camille.page, `nbm-phrases-${r}-tel`, `Téléphone de Camille, manche ${r} : au moins 3 de ses 5 cartes vont dans la phrase (${q.forme.replace('_', ' ')}) : ${cards.join(' · ')}.`, { section: sec });
+    for (const b of cast.bots) await b.act({ type: 'answer', text: ['un pigeon en costume', 'chanter faux', 'Ça sent le brûlé !', 'ma tante Josette', 'dormir debout'][b.id.length % 5], phaseId: d().phaseId });
+    await waitFor(() => game.phase !== 'question' || d().step !== 'write', 15000, 'fin écriture');
+    while (game.phase === 'question' && d().step !== 'done') {
+      if (d().step === 'rate') for (const b of cast.bots) await b.act({ type: 'rate', rating: 'drole', phaseId: d().phaseId });
+      await sleep(200);
+    }
+    if (r < 6) { await waitFor(() => game.phase === 'results' || game.phase === 'question', 40000, 'résultats'); }
+    await waitFor(() => game.phase === 'question' || r === 6, 40000, 'manche suivante').catch(() => {});
+  }
+  for (const b of cast.bots) b.close();
+  await camille.ctx.close();
+  await tv.ctx.close();
+});
+
 section('savant', 'Le Savant — sans réglages, révélation en quatre temps', async (env) => {
   const S = env.session;
   const sec = 'Le Savant';
@@ -427,7 +475,7 @@ section('savant', 'Le Savant — sans réglages, révélation en quatre temps', 
   const { game, page, cast } = ctx;
   const [camille, mehdi, sacha] = ['Camille', 'Mehdi', 'Sacha'].map((n) => cast.phoneOf(n));
   const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'server/content/facts-savant.json'), 'utf8'));
-  game.savantFacts = ['ins-15', 'sci-18', 'pay-21'].map((id) => facts.find((f) => f.id === id));
+  game.savantFacts = ['his-01', 'ani-19', 'cor-12'].map((id) => facts.find((f) => f.id === id));
   await S.shot(page, 'savant-01-tv-lobby', 'TV : lobby du Savant — aucun écran de réglages, on lance directement (« Lancer la partie »).', { tv: true, lobby: true, section: sec });
   await launchGame(ctx);
   const d = () => game.roundData;
@@ -557,7 +605,7 @@ section('limites', 'Cas limites — prénom saisi à 25 caractères et ramené �
     const tv = await openTv(env, 'Le Savant');
     const { game, code } = tv;
     const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'server/content/facts-savant.json'), 'utf8'));
-    game.savantFacts = [facts.find((f) => f.id === 'pay-25')];
+    game.savantFacts = [facts.find((f) => f.id === 'sci-09')];
     game.savantTiming = { announceMs: 2000, writeMs: 12000, readMinMs: 16000, readTailMs: 6000, chooseMs: 12000 };
     const cast = await fill(env, game, code, 30, { people });
     await tv.page.waitForSelector('.lobby-players');
