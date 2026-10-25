@@ -80,7 +80,7 @@ test('au chrono : l’écriture se termine sans tout le monde ; le Savant muet g
   s.toWrite();
   const quiet = s.writers().find((p) => p.id !== d().savantId);
   for (const p of s.writers()) if (p.id !== d().savantId && p.id !== quiet.id) s.act(p, { type: 'answer', text: `texte ${p.name}` });
-  s.tick(20000 - 1);
+  s.tick(T.writeMs - 1);
   assert.equal(d().step, 'write');
   s.tick(1);
   assert.equal(d().step, 'read');
@@ -114,19 +114,21 @@ test('un seul changement de phase à la fois ; le temps d’écriture est régla
   assert.equal(d().phaseId, phase);
 });
 
-test('le réglage du temps d’écriture et du nombre de manches se fait dans le lobby seulement', async () => {
+test('aucun écran de réglages : valeurs fixes (une manche par joueur, 10 au plus ; secours de 30 s à l’écriture et de 20 s au vote ; lecture de 6 s minimum)', async () => {
   const ctx = await makeGame('savant', names(5));
   ctx.game.savantFacts = [FACT(1), FACT(2)];
-  assert.equal(ctx.game.gameHostAction({ type: 'config', rounds: 5, writeMs: 30000 }), null);
-  assert.equal(ctx.game.gameHostAction({ type: 'config', rounds: 999, writeMs: 12345 }), null, 'valeurs inconnues ignorées');
-  const lobby = ctx.game.publicState({ host: true }).lobby;
-  assert.equal(lobby.rounds, 5);
-  assert.equal(lobby.writeMs, 30000);
+  assert.equal(ctx.game.publicState({ host: true }).lobby, null, 'rien à régler dans le lobby');
+  assert.equal(ctx.game.gameHostAction({ type: 'config', rounds: 5, writeMs: 15000 }), 'Action inconnue.', 'plus de réglage côté serveur');
   assert.equal(ctx.game.start(), null);
-  assert.equal(ctx.game.gameHostAction({ type: 'config', rounds: 8 }), 'Les réglages se font avant le lancement.');
   ctx.tick(T.announceMs);
-  const timer = ctx.game.publicState({ host: true }).round.timer;
-  assert.equal(timer.totalMs, 30000);
+  assert.equal(ctx.game.publicState({ host: true }).round.timer.totalMs, 30000, 'secours de 30 s pour écrire');
+  assert.equal(T.chooseMs, 20000, 'secours de 20 s pour choisir et voter');
+  assert.ok(T.readMinMs >= 6000);
+  assert.equal(ctx.game.publicState({ host: true }).round.total, 5, 'une manche par joueur');
+  const big = await makeGame('savant', names(18));
+  big.game.savantFacts = [FACT(1), FACT(2)];
+  big.game.start();
+  assert.equal(big.game.publicState({ host: true }).round.total, 10, 'plafonné à 10');
 });
 
 test('pause : les minuteurs de l’étape se figent et reprennent là où ils étaient', async () => {
@@ -185,7 +187,7 @@ test('Chercheur qui ne choisit pas : révélation au chrono, il boit, aucun Bluf
   assert.equal(game.phase, 'revealing');
   assert.equal(game.results.choice, null);
   assert.equal(game.results.found, false);
-  s.tick(5000);
+  s.tick(game.rules.revealMs);
   assert.equal(game.phase, 'results');
   assert.ok(game.pending, 'le spectateur juste a 1 gorgée à distribuer');
   s.tick(T.allocMs);
@@ -206,7 +208,7 @@ test('Chercheur juste : Bluffeurs 1 gorgée, distribution au choix des joueurs p
   s.voteAll();
   s.tick(T.voteBeatMs);
   assert.equal(game.phase, 'revealing');
-  s.tick(5000);
+  s.tick(game.rules.revealMs);
   assert.equal(game.phase, 'results');
   assert.ok(game.pending);
   // Le Chercheur distribue ses 2 gorgées au Savant (de son choix) ; les autres laissent faire le hasard.
@@ -225,7 +227,7 @@ test('distribution : dès que tous les distributeurs présents ont répondu, le 
   const { game, d } = s;
   s.toChoice();
   s.voteAll();
-  s.tick(T.voteBeatMs + 5000);
+  s.tick(T.voteBeatMs + game.rules.revealMs);
   assert.equal(game.phase, 'results');
   const holders = Object.keys(game.results.credits);
   assert.ok(holders.length >= 1);
@@ -347,7 +349,7 @@ test('hôte : masquer une réponse la rend « censurée » pour tous, un second 
   assert.equal(card({ host: true }).censored, false);
 });
 
-test('nombre de manches : une par joueur (10 au plus) puis « dernière manche », sans fin si choisi', async () => {
+test('nombre de manches : une par joueur (10 au plus) puis « dernière manche »', async () => {
   const s = await setup(5);
   const { game } = s;
   assert.equal(game.isLastRound, false);
@@ -355,12 +357,13 @@ test('nombre de manches : une par joueur (10 au plus) puis « dernière manche �
   assert.equal(game.isLastRound, false);
   game.round = 5;
   assert.equal(game.isLastRound, true, 'cinq joueurs : cinq manches');
-  const e = await makeGame('savant', names(5));
-  e.game.savantFacts = [FACT(1), FACT(2), FACT(3)];
-  e.game.gameHostAction({ type: 'config', rounds: 0 });
-  e.game.start();
-  e.game.round = 50;
-  assert.equal(e.game.isLastRound, false);
+  // Le réglage commun « nombre de questions » (maxRounds) peut raccourcir la partie, jamais l'allonger.
+  game.round = 3;
+  game.setSettings({ maxRounds: 10 });
+  assert.equal(game.isLastRound, false);
+  game.setSettings({ maxRounds: 0 });
+  game.round = 2;
+  assert.equal(game.isLastRound, false);
 });
 
 test('la vraie réponse n’est jamais dans l’état de la TV ni des autres, seulement pour le Savant', async () => {

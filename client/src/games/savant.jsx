@@ -3,8 +3,11 @@
 // action porte ce `phaseId` : le serveur ignore ce qui vient d'une étape passée.
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Avatar, TimerBar } from '../components.jsx';
+import { useElapsed } from '../lib.js';
 import { sipsLabel } from '../sips.jsx';
 import { sounds } from '../sound.js';
+import { fmt } from '../format.js';
+import { REVEAL_STAGES, stageAt } from '../../../shared/savantReveal.js';
 
 export const id = 'savant';
 export const waitingText = 'Un seul d’entre vous connaît la vérité…';
@@ -44,39 +47,55 @@ const sizeFor = (n) => (n > 20 ? 30 : n > 12 ? 40 : 56);
 const densityOf = (n) => (n > 20 ? 'is-xdense' : n > 12 ? 'is-dense' : '');
 
 /**
- * Les réponses, avec leur auteur. mode « read » : elles apparaissent une à une (`--i` × `--step`) ; mode « reveal » / « results » :
- * le Savant est mis en valeur, le choix du Chercheur marqué, et chaque vote est visible sur la réponse choisie.
+ * Les réponses, avec leur auteur. Pendant la lecture elles apparaissent une à une (`--i` × `--step`). À la révélation (`marks`) :
+ * une couronne sur la réponse du Savant, une loupe sur le choix du Chercheur, des pastilles qui montrent qui a voté pour quoi,
+ * et les autres réponses atténuées.
  */
-function Cards({ state, round, results, animate = false, onCensor }) {
+function Cards({ state, round, results, marks = false, animate = false, onCensor }) {
   const cards = round.cards ?? [];
   const n = cards.length;
+  const dense = n > 12;
   return (
-    <div className={`savant-cards ${densityOf(n)}`} style={{ '--step': `${animate ? round.readStepMs : 0}ms` }}>
+    <div className={`savant-cards ${densityOf(n)} ${marks ? 'has-marks' : ''}`} style={{ '--step': `${animate ? round.readStepMs : 0}ms` }}>
       {cards.map((c, i) => {
         const author = playerOf(state, c.id);
         const voters = results ? Object.entries(results.votes).filter(([, target]) => target === c.id).map(([voter]) => voter) : [];
         const dry = c.text == null && !c.censored;
+        const isSavant = marks && results?.savantId === c.id;
+        const isChoice = marks && results?.choice === c.id;
         return (
           <div
             key={c.id}
-            className={`savant-card ${results?.savantId === c.id ? 'is-savant' : ''} ${results?.choice === c.id ? 'is-choice' : ''} ${c.censored ? 'is-censored' : ''} ${dry ? 'is-dry' : ''}`}
+            className={`savant-card ${isSavant ? 'is-savant' : ''} ${isChoice ? 'is-choice' : ''} ${marks && !isSavant && !isChoice ? 'is-dim' : ''} ${c.censored ? 'is-censored' : ''} ${dry ? 'is-dry' : ''}`}
             style={{ '--i': i }}
             onClick={onCensor ? () => onCensor(c.id) : undefined}
             title={onCensor ? 'Touche pour masquer cette réponse' : undefined}
           >
+            {isSavant && (
+              <span className="savant-crown" role="img" aria-label="Réponse du Savant">
+                👑{!dense && <small>Le Savant</small>}
+              </span>
+            )}
+            {isChoice && (
+              <span className="savant-lens" role="img" aria-label={`Choix de ${playerOf(state, results.seekerId).name}`}>
+                🔍{!dense && <small>{playerOf(state, results.seekerId).name}</small>}
+              </span>
+            )}
             <div className="savant-card-head">
               <Avatar player={author} size={sizeFor(n)} />
               <span className="savant-card-name">{author.name}</span>
             </div>
             <span className="savant-card-text">{c.censored ? '🙈 censurée' : dry ? 'a séché…' : c.text}</span>
-            {results && (voters.length > 0 || results.choice === c.id) && (
-              <span className="savant-card-votes">
-                {results.choice === c.id && <em className="savant-pointed">👉 {playerOf(state, results.seekerId).name}</em>}
+            {marks && voters.length > 0 && (
+              <span className="savant-pills" aria-label={`${voters.length} vote${voters.length > 1 ? 's' : ''}`}>
+                <span className="savant-pills-label">{dense ? '' : 'Votes'}</span>
                 {voters.slice(0, 8).map((v) => (
-                  <Avatar key={v} player={playerOf(state, v)} size={22} />
+                  <span key={v} className="savant-pill" title={playerOf(state, v).name}>
+                    <Avatar player={playerOf(state, v)} size={dense ? 18 : 26} />
+                  </span>
                 ))}
                 {voters.length > 8 && <em>+{voters.length - 8}</em>}
-                {voters.length > 0 && <em className="savant-votecount">×{voters.length}</em>}
+                <em className="savant-votecount">×{voters.length}</em>
               </span>
             )}
           </div>
@@ -166,16 +185,142 @@ export function HostQuestion({ state, gameAct }) {
   return <div className={`savant savant-tv savant-step-${round.step}`}>{body}</div>;
 }
 
-/** Révélation (et résultats) : la vraie réponse, l'explication, le Savant démasqué, le choix du Chercheur et tous les votes. */
-function Board({ state, animate }) {
-  const { round, results } = state;
+/** Le verdict de la manche : démasqué (le Chercheur a trouvé) ou passé inaperçu. Le texte et l'icône portent le sens, pas seulement la couleur. */
+function verdictOf(state, results) {
   const seeker = playerOf(state, results.seekerId);
   const savant = playerOf(state, results.savantId);
   const choice = results.choice ? playerOf(state, results.choice) : null;
-  const cls = animate ? 'is-animated' : 'is-static';
+  const fooled = results.choice && !results.found ? [playerOf(state, results.choice)] : [];
+  return { seeker, savant, choice, fooled, found: results.found };
+}
+
+/** Bandeau de verdict dans les résultats (petit, permanent) : même icône et même texte que le plein écran. */
+function VerdictRibbon({ state, results }) {
+  const v = verdictOf(state, results);
   return (
-    <div className={`savant savant-tv savant-reveal ${cls}`}>
-      {animate && (
+    <p className={`savant-ribbon ${v.found ? 'is-found' : 'is-missed'}`} role="status">
+      <span aria-hidden="true">{v.found ? '🔍✔' : '🎭✖'}</span>
+      <strong>{fmt(VERDICT_TITLE[v.found ? 'found' : 'missed'], v.savant)}</strong>
+      <span>
+        {v.choice
+          ? v.found
+            ? `${v.seeker.name} a trouvé ${v.savant.name}`
+            : `${v.seeker.name} a désigné ${v.choice.name}`
+          : `${v.seeker.name} n’a désigné personne`}
+      </span>
+    </p>
+  );
+}
+
+/** Verdict plein écran de la révélation. */
+function VerdictScreen({ state, results }) {
+  const v = verdictOf(state, results);
+  return (
+    <div className={`savant-verdict-screen ${v.found ? 'is-found' : 'is-missed'}`} role="status" aria-live="polite">
+      <div className="savant-verdict-icon" aria-hidden="true">
+        {v.found ? '🔍' : '🎭'}
+      </div>
+      <h1 className="savant-verdict-title">
+        <span aria-hidden="true">{v.found ? '✔ ' : '✖ '}</span>
+        {fmt(VERDICT_TITLE[v.found ? 'found' : 'missed'], v.savant)}
+      </h1>
+      <div className="savant-verdict-front">
+        <Avatar player={v.found ? v.seeker : v.savant} size={220} className="savant-front-avatar" />
+        <p className="savant-verdict-who">
+          {v.found ? (
+            <>
+              <strong>{v.seeker.name}</strong> a trouvé le Savant : {v.savant.name}
+            </>
+          ) : (
+            <>
+              <strong>{v.savant.name}</strong> était le Savant, et personne n’y a cru
+            </>
+          )}
+        </p>
+      </div>
+      {!v.found && (
+        <p className="savant-verdict-fooled">
+          {v.fooled.length ? (
+            <>
+              <span>Bluff réussi · a trompé {v.seeker.name} :</span>
+              {v.fooled.map((p) => (
+                <span key={p.id} className="savant-fooled">
+                  <Avatar player={p} size={64} />
+                  <strong>{p.name}</strong>
+                </span>
+              ))}
+            </>
+          ) : (
+            <span>{v.seeker.name} n’a désigné personne : le bluff est passé comme une lettre à la poste.</span>
+          )}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** Bandeau plein écran « LE SAVANT ÉTAIT … » (photo et prénom). */
+function SavantBanner({ state, results }) {
+  const savant = playerOf(state, results.savantId);
+  return (
+    <div className="savant-banner" role="status" aria-live="polite">
+      <p className="savant-banner-kicker">LE SAVANT ÉTAIT</p>
+      <Avatar player={savant} size={280} className="savant-banner-avatar" />
+      <h1 className="savant-banner-name">
+        <span aria-hidden="true">🧠 </span>
+        {savant.name}
+      </h1>
+    </div>
+  );
+}
+
+/** La vraie réponse, dans un cadre doré, avec l'explication du fait. */
+function TruthFrame({ results }) {
+  return (
+    <div className="savant-gold" aria-label="La vraie réponse">
+      <p className="savant-label">La vraie réponse</p>
+      <p className="savant-answer">{results.answer}</p>
+      <p className="savant-explication">{results.explication}</p>
+    </div>
+  );
+}
+
+/** Résultats (après la révélation) : tout est là d'un coup, avec le verdict en bandeau et les gorgées. */
+function Board({ state }) {
+  const { round, results } = state;
+  return (
+    <div className="savant savant-tv savant-reveal is-static">
+      <div className={`savant-board ${densityOf(round.cards?.length ?? 0)}`}>
+        <div className="savant-side">
+          <Question text={results.question} small />
+          <TruthFrame results={results} />
+          <VerdictRibbon state={state} results={results} />
+          {state.phase === 'results' && !state.pending && <Sips state={state} />}
+          {state.phase === 'results' && state.pending && <p className="lead pulse-text">Les gorgées se distribuent…</p>}
+        </div>
+        <Cards state={state} round={round} results={results} marks />
+      </div>
+    </div>
+  );
+}
+
+/** Révélation en quatre temps (voir shared/savantReveal.js) : suspense, « LE SAVANT ÉTAIT… », vraie réponse, verdict. */
+function Reveal({ state }) {
+  const { round, results, reveal } = state;
+  const elapsed = useElapsed(reveal?.startedAt, state) ?? 0;
+  const stage = stageAt(elapsed);
+  const seen = REVEAL_STAGES.findIndex(([name]) => name === stage);
+  const showTruth = seen >= 2;
+  return (
+    <div className={`savant savant-tv savant-reveal is-stage-${stage}`}>
+      <div className={`savant-board ${densityOf(round.cards?.length ?? 0)}`}>
+        <div className="savant-side">
+          <Question text={results.question} small />
+          {showTruth && <TruthFrame results={results} />}
+        </div>
+        <Cards state={state} round={round} results={results} marks={showTruth} />
+      </div>
+      {stage === 'attention' && (
         <div className="savant-attention" aria-hidden="true">
           <h1>Attention…</h1>
           <div className="suspense-dots">
@@ -185,29 +330,8 @@ function Board({ state, animate }) {
           </div>
         </div>
       )}
-      <div className={`savant-board ${densityOf(round.cards?.length ?? 0)}`}>
-        <div className="savant-side">
-          <Question text={results.question} small />
-          <div className="savant-truth-block">
-            <p className="savant-label">La vraie réponse</p>
-            <p className="savant-answer">{results.answer}</p>
-          </div>
-          <p className="savant-explication">{results.explication}</p>
-          <p className="savant-who">
-            🧠 Le Savant était <Avatar player={savant} size={34} /> <strong>{savant.name}</strong>
-          </p>
-          <p className={`savant-verdict ${results.found ? 'is-found' : 'is-missed'}`}>
-            {choice
-              ? results.found
-                ? `${seeker.name} l’a trouvé !`
-                : `${seeker.name} a désigné ${choice.name}… raté !`
-              : `${seeker.name} n’a désigné personne : raté !`}
-          </p>
-          {state.phase === 'results' && !state.pending && <Sips state={state} />}
-          {state.phase === 'results' && state.pending && <p className="lead pulse-text">Les gorgées se distribuent…</p>}
-        </div>
-        <Cards state={state} round={round} results={results} />
-      </div>
+      {stage === 'savant' && <SavantBanner state={state} results={results} />}
+      {stage === 'verdict' && <VerdictScreen state={state} results={results} />}
     </div>
   );
 }
@@ -243,16 +367,21 @@ function Sips({ state }) {
 }
 
 export function HostReveal({ state }) {
+  // Un son à chaque grande étape : roulement (suspense), annonce du Savant, verdict.
   useEffect(() => {
-    sounds.drumroll(1700);
-    const id = setTimeout(() => sounds.reveal(), 1900);
-    return () => clearTimeout(id);
+    const [attention, savant, truth] = REVEAL_STAGES.map(([, ms]) => ms);
+    sounds.drumroll(attention + savant - 200);
+    const ids = [
+      setTimeout(() => sounds.reveal(), attention + savant - 100),
+      setTimeout(() => sounds.reveal(), attention + savant + truth),
+    ];
+    return () => ids.forEach(clearTimeout);
   }, []);
-  return <Board state={state} animate />;
+  return <Reveal state={state} />;
 }
 
 export function HostResults({ state }) {
-  return <Board state={state} animate={false} />;
+  return <Board state={state} />;
 }
 
 /** Fin de partie : le podium des points, avec un titre moqueur pour chacun. */
@@ -423,6 +552,12 @@ export function PlayerResults({ state, me, act, verdict }) {
   return verdict;
 }
 
+/** « DÉMASQUÉ ! » ou « PASSÉ INAPERÇU ! » (accordé au Savant) : l'icône et le texte portent le sens, pas la couleur seule. */
+export const VERDICT_TITLE = {
+  found: '{m=DÉMASQUÉ|f=DÉMASQUÉE|n=COUVERTURE GRILLÉE} !',
+  missed: '{m=PASSÉ INAPERÇU|f=PASSÉE INAPERÇUE|n=BLUFF RÉUSSI} !',
+};
+
 /** « Tu distribues ! » : une grille de joueurs, une gorgée par tap ; le reste est tiré au hasard à la fin de la fenêtre de 8 s. */
 function Give({ state, me, credits, act }) {
   const [alloc, setAlloc] = useState({});
@@ -461,12 +596,29 @@ export function verdict(state, me) {
   const r = state.results;
   const drinks = (state.roundSips?.[me.id] ?? 0) > 0;
   const points = r.points?.[me.id] ?? 0;
-  const extra = points > 0 ? `+${points} point${points > 1 ? 's' : ''}` : 'Un verre d’eau compte aussi.';
+  const pts = points > 0 ? `+${points} point${points > 1 ? 's' : ''}` : 'Un verre d’eau compte aussi.';
   const gave = Object.keys(r.settled?.given?.[me.id] ?? {}).length > 0;
+  const savant = playerOf(state, r.savantId).name;
+  const myVote = r.votes?.[me.id];
+  // Ce que ce joueur avait voté (le Chercheur a son propre choix) : juste ou faux.
+  let vote = null;
+  if (me.id !== r.seekerId && me.id !== r.savantId) {
+    if (!myVote) vote = 'Tu n’avais pas voté.';
+    else if (myVote === r.savantId) vote = `👍 Tu avais deviné : le Savant, c’était ${savant}.`;
+    else vote = `👎 Tu avais voté pour ${playerOf(state, myVote).name} : le Savant, c’était ${savant}.`;
+  }
   let detail;
-  if (me.id === r.seekerId) detail = r.found ? '🕵️ Tu as trouvé le Savant !' : '🕵️ Mauvais Savant : tu as été bluffé.';
-  else if (me.id === r.savantId) detail = r.found ? '🧠 Tu étais le Savant : {m=démasqué|f=démasquée|n=ton masque est tombé} !' : '🧠 Tu étais le Savant : personne ne t’a cru.';
-  else if (r.bluffers?.includes(me.id)) detail = r.choice === me.id ? '🎭 Le Chercheur est tombé dans ton piège !' : '🎭 Bluffeur';
-  else detail = 'Tu regardais le spectacle.';
-  return { drinks, title: drinks ? 'Tu bois !' : gave ? 'Bien joué !' : 'Tu ne bois pas', detail, extra };
+  if (me.id === r.seekerId) {
+    if (r.found) detail = `🔍 DÉMASQUÉ ! Tu as trouvé le Savant : ${savant}.`;
+    else if (r.choice) detail = `🔍 Raté : tu as désigné ${playerOf(state, r.choice).name}, mais le Savant, c’était ${savant}.`;
+    else detail = `🔍 Tu n’as désigné personne : le Savant, c’était ${savant}.`;
+  } else if (me.id === r.savantId) {
+    detail = r.found ? '🧠 Tu étais le Savant : {m=démasqué|f=démasquée|n=ton masque est tombé} !' : '🧠 Tu étais le Savant : personne ne t’a démasqué !';
+  } else if (r.bluffers?.includes(me.id)) {
+    detail = r.choice === me.id ? '🎭 Bluffeur : le Chercheur est tombé dans ton piège !' : '🎭 Tu étais Bluffeur.';
+  } else detail = 'Tu regardais le spectacle.';
+  const extra = [vote, pts].filter(Boolean).join(' · ');
+  // Bandeau de verdict (icône + texte, accordé au Savant) : même sens que sur la TV, sans dépendre de la couleur.
+  const banner = { kind: r.found ? 'found' : 'missed', icon: r.found ? '🔍✔' : '🎭✖', text: fmt(VERDICT_TITLE[r.found ? 'found' : 'missed'], playerOf(state, r.savantId)) };
+  return { drinks, title: drinks ? 'Tu bois !' : gave ? 'Bien joué !' : 'Tu ne bois pas', detail, extra, banner };
 }

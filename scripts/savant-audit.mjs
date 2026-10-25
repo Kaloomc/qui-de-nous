@@ -115,7 +115,7 @@ async function playGame(browser, srv, { n, tv: tvSize, phone: phoneSize, report 
     await page.screenshot({ path: path.join(dir, `${file}.png`) });
     for (const issue of await page.evaluate(pageChecks, { tv: tvMode, lobby: key === 'lobby' })) report.push({ tag, key: `${who} · ${key}`, issue });
   };
-  await tvPage.waitForSelector('text=Nombre de manches', { timeout: 10000 }).catch(() => {});
+  await tvPage.waitForSelector('.lobby-players', { timeout: 10000 }).catch(() => {});
   await shoot(tvPage, '00-lobby', true, 'lobby', 'TV');
   await tvPage.getByRole('button', { name: /Lancer la partie/ }).click();
 
@@ -128,7 +128,6 @@ async function playGame(browser, srv, { n, tv: tvSize, phone: phoneSize, report 
   d().seekerId = seeker;
   d().savantId = savant;
   d().writers = all.filter((id) => id !== seeker);
-  game.savantRun.rot.done.add(seeker);
 
   const tvSeen = new Set();
   const deadline = Date.now() + 90000;

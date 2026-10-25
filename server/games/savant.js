@@ -6,27 +6,27 @@
 // Savant (`me.truth`) ; la TV et les autres téléphones ne reçoivent que des compteurs et des réponses déjà écrites.
 import * as S from '../rules/savant.js';
 import { SPOTLIGHT_ROLES } from '../spotlight.js';
+import { REVEAL_MS } from '../../shared/savantReveal.js';
 import { TIMING } from '../timing.js';
 import { loadJson } from './load.js';
 
 const FACTS = loadJson('../content/facts-savant.json');
 
+// Valeurs fixes, sans écran de réglages : comme les autres jeux, le Savant se lance directement.
+// Chaque étape avance dès que tout le monde a agi ; les durées « …Ms » ci-dessous sont les minuteurs de secours.
 export const SAVANT_TIMING = {
   announceMs: 3000, // « Au tour de … de chercher ! »
-  writeMs: 20000, // écriture (réglable : 15 / 20 / 30 s)
+  writeMs: 30000, // écriture : secours pour les retardataires (on passe à la lecture dès que tout le monde a envoyé)
   writeBeatMs: 800, // pause après le dernier envoi
-  readMinMs: 8000, // lecture des réponses, au moins ce temps
+  readMinMs: 6000, // lecture des réponses, au moins ce temps (lire et réagir)
   readTailMs: 3500, // temps de lecture après la dernière carte
-  chooseMs: 15000, // choix du Chercheur et vote des autres
+  chooseMs: 20000, // choix du Chercheur et vote des autres : secours (révélation dès que tout le monde a voté)
   voteBeatMs: 1500, // pause après le dernier vote avant la révélation
   allocMs: 8000, // fenêtre de distribution des gorgées
 };
-export const WRITE_CHOICES = [15000, 20000, 30000];
-export const DEFAULT_CONFIG = { rounds: S.DEFAULT_ROUNDS, writeMs: 20000 };
 
 const data = (game) => game.roundData;
 const timing = (game) => ({ ...SAVANT_TIMING, ...game.savantTiming });
-const config = (game) => ({ ...DEFAULT_CONFIG, ...game.savantConfig });
 const facts = (game) => game.savantFacts ?? FACTS;
 const present = (game, id) => !!game.players.get(id)?.sockets.size;
 
@@ -76,7 +76,8 @@ function begin(game, restarted = false) {
   const d = data(game);
   const r = run(game);
   const here = game.connectedPlayers().map((p) => p.id);
-  if (r.total == null) r.total = S.roundsFor(config(game).rounds, here.length);
+  // Une manche par joueur, 10 au plus (valeur fixe).
+  if (r.total == null) r.total = S.roundsFor(S.DEFAULT_ROUNDS, here.length);
   Object.assign(d, { seq: d.seq ?? 0, restarted, answers: {}, hidden: {}, cards: null, allocations: {}, seekerId: null, savantId: null, writers: [] });
   if (here.length < S.MIN_PLAYERS) {
     // Pas assez de joueurs connectés : la manche attend (onPresenceChange la relance dès qu'ils sont là).
@@ -92,7 +93,7 @@ function begin(game, restarted = false) {
 }
 
 function startWrite(game) {
-  go(game, 'write', game.savantTiming?.writeMs ?? config(game).writeMs, () => endWrite(game));
+  go(game, 'write', timing(game).writeMs, () => endWrite(game));
   writeProgress(game);
 }
 
@@ -170,7 +171,8 @@ function myView(game, d, id) {
 
 export default {
   id: 'savant',
-  revealMs: 5000,
+  // « Attention… » 1,5 s, bandeau « Le Savant était… », vraie réponse, verdict plein écran (voir client/src/games/savant.jsx, REVEAL_STAGES).
+  revealMs: REVEAL_MS,
   drawQuestion: (game) => game.history.draw('savant', facts(game)),
   // Le vote (désigner le Savant) n'existe qu'à l'étape de choix, pour le Chercheur et les Écrivains de la manche.
   acceptsVotes: (game) => data(game).step === 'choice',
@@ -189,12 +191,7 @@ export default {
     return null;
   },
 
-  publicLobby(game) {
-    const c = config(game);
-    return { rounds: c.rounds, writeMs: c.writeMs, total: S.roundsFor(c.rounds, game.connectedCount()), roundChoices: S.ROUND_CHOICES, writeChoices: WRITE_CHOICES, facts: facts(game).length };
-  },
-
-  /** Dernière manche : le nombre choisi dans le lobby (une par joueur : 10 au plus), ou le réglage commun s'il est plus court. */
+  /** Dernière manche : une par joueur (10 au plus), ou le réglage commun s'il est plus court. */
   isLastRound(game) {
     const total = game.savantRun?.session === game.session ? game.savantRun.total : null;
     if (total > 0 && game.round >= total) return true;
@@ -207,14 +204,6 @@ export default {
   },
 
   hostAction(game, action) {
-    if (action.type === 'config') {
-      if (game.phase !== 'lobby') return 'Les réglages se font avant le lancement.';
-      const next = { ...config(game) };
-      if (S.ROUND_CHOICES.includes(action.rounds)) next.rounds = action.rounds;
-      if (WRITE_CHOICES.includes(action.writeMs)) next.writeMs = action.writeMs;
-      game.savantConfig = next;
-      return null;
-    }
     // L'hôte masque (ou ré-affiche) une réponse inappropriée : un tap, « censurée » pour la manche.
     if (action.type === 'censor') {
       const d = data(game);

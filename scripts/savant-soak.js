@@ -42,7 +42,6 @@ function playOne(seed) {
   const clock = new FakeClock();
   const game = new Game(`V${seed}`, 'savant', { clock });
   game.savantFacts = FACTS;
-  game.gameHostAction({ type: 'config', rounds: pick([5, 8, 'players', 0]), writeMs: pick([15000, 20000, 30000]) });
   const players = [];
   for (let i = 0; i < n; i++) {
     const { player } = game.upsertPlayer({ name: `J${i}` });

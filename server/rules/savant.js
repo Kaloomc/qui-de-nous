@@ -7,8 +7,7 @@ export const MAX_ANSWER = 60;
 export const SIP_CAP = 6; // gorgées reçues au maximum par joueur et par manche
 export const NO_ANSWER = 'a séché';
 
-/** Nombre de manches proposé à l'hôte : 5, 8, 10, « une par joueur » (10 au plus), ou sans fin (0). */
-export const ROUND_CHOICES = [5, 8, 10, 'players', 0];
+/** Nombre de manches : une par joueur, 10 au plus (valeur fixe, pas de réglage). 0 = sans fin, pour les tests. */
 export const DEFAULT_ROUNDS = 'players';
 export const PLAYER_ROUNDS_CAP = 10;
 

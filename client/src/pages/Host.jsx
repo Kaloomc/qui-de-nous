@@ -9,7 +9,6 @@ import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel }
 import { HostRecap } from '../recap.jsx';
 import { preloadNarration, teardownGame } from '../narrator.js';
 import { LoupSetup } from '../games/loupSetup.jsx';
-import { SavantSetup } from '../games/savantSetup.jsx';
 import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
@@ -123,7 +122,7 @@ export default function Host({ code }) {
           onSettings={() => setSettingsOpen(true)}
           onChangeGame={() => act('host:chooseGame')}
           adultSlot={<AdultButton state={state} act={act} />}
-          extra={mode.id === 'loup' ? <LoupSetup state={state} gameAct={gameAct} /> : mode.id === 'savant' ? <SavantSetup state={state} gameAct={gameAct} /> : null}
+          extra={mode.id === 'loup' ? <LoupSetup state={state} gameAct={gameAct} /> : null}
           blocked={mode.id === 'loup' ? state.lobby?.errors?.[0] : null}
         />
       )}

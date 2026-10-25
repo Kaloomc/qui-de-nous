@@ -105,6 +105,20 @@ export function useRemaining(timer, state, intervalMs = 200) {
   return remaining;
 }
 
+/** Millisecondes écoulées depuis `startedAt` (heure du serveur), rafraîchies régulièrement : pilote les étapes d'une animation. */
+export function useElapsed(startedAt, state, intervalMs = 100) {
+  const compute = () => (startedAt == null ? null : Math.max(0, serverNow(state) - startedAt));
+  const [elapsed, setElapsed] = useState(compute);
+  useEffect(() => {
+    setElapsed(compute());
+    if (startedAt == null) return undefined;
+    const id = setInterval(() => setElapsed(compute()), intervalMs);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startedAt, state?.clockOffset]);
+  return elapsed;
+}
+
 export const storage = {
   get(key) {
     try {
