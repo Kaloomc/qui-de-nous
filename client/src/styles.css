@@ -6415,3 +6415,20 @@ body.loup-night {
 .mg-dilemme-btn.is-trahir { background: #8a1f66; }
 .mg-dilemme-btn.is-picked { box-shadow: 0 0 0 6px var(--yellow); }
 .mg-dilemme-btn:disabled:not(.is-picked) { opacity: 0.45; }
+
+.mg-soleil { display: grid; gap: 14px; justify-items: center; width: 100%; }
+.mg-soleil-word { font-size: clamp(4rem, 14vw, 11rem); font-weight: 800; line-height: 1; }
+.mg-soleil-word.is-small { font-size: 2.6rem; }
+.mg-soleil.is-sun .mg-soleil-word { color: var(--yellow); text-shadow: 0 0 50px #ff7a59; animation: duel-impact 0.45s ease-out; }
+.mg-tracks { display: grid; gap: 10px; width: min(1000px, 94%); }
+.mg-track { display: grid; grid-template-columns: 90px 1fr 190px; align-items: center; gap: 12px; font-size: 1.1rem; }
+.mg-track-bar { height: 34px; border-radius: 17px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.mg-track-bar span { display: block; height: 100%; border-radius: 17px; }
+.mg-track.is-rouge .mg-track-bar span { background: var(--duel-red); }
+.mg-track.is-bleu .mg-track-bar span { background: var(--duel-blue); }
+.mg-soleil-duelist { flex: 1; display: grid; gap: 12px; align-content: center; text-align: center; }
+.mg-soleil-duelist .mg-track { grid-template-columns: 1fr; gap: 2px; }
+.mg-soleil-banner { font-size: 1.6rem; font-weight: 800; padding: 10px; border-radius: 16px; background: rgba(255, 255, 255, 0.1); }
+.mg-soleil-banner.is-sun { background: var(--yellow); color: #14102a; }
+.mg-hold-btn { min-height: 38vh; border-radius: 32px; border: 6px solid #fff8f0; background: radial-gradient(circle, #3ee0c5, #1a8f7d); color: #14102a; font-size: 2.6rem; font-weight: 800; touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer; }
+.mg-hold-btn.is-down { background: radial-gradient(circle, #ffc93c, #ff7a59); transform: scale(0.98); }

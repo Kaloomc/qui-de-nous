@@ -67,15 +67,17 @@ function decodeAll() {
 }
 
 let current = null;
-function playRecorded(text) {
+function playRecorded(text, { cut = true } = {}) {
   const ctx = audioContext();
   const buffer = recorded.get(voiceFile(text));
   if (!ctx || ctx.state !== 'running' || !(buffer instanceof AudioBuffer)) return false;
   // Deux mots très rapprochés : le nouveau coupe l'ancien, comme la synthèse.
-  try {
-    current?.stop();
-  } catch {
-    /* déjà fini */
+  if (cut) {
+    try {
+      current?.stop();
+    } catch {
+      /* déjà fini */
+    }
   }
   const source = ctx.createBufferSource();
   current = source;
@@ -84,7 +86,7 @@ function playRecorded(text) {
   gain.gain.value = getVolume();
   source.connect(gain).connect(ctx.destination);
   source.start();
-  return true;
+  return source;
 }
 
 if (supported) {
@@ -116,6 +118,25 @@ export function unlockSpeech() {
   const u = new SpeechSynthesisUtterance(' ');
   u.volume = 0;
   window.speechSynthesis.speak(u);
+}
+
+/** File unique : chaque clip attend la fin du précédent (jamais coupé ni chevauché). `onStart` : quand ce clip commence vraiment. */
+let queueTail = Promise.resolve();
+export function speakQueued(text, { onStart } = {}) {
+  queueTail = queueTail.then(
+    () =>
+      new Promise((resolve) => {
+        const source = isMuted() ? null : playRecorded(text, { cut: false });
+        if (source) {
+          onStart?.();
+          source.onended = resolve;
+          setTimeout(resolve, 2500);
+        } else {
+          speak(text, { onStart });
+          setTimeout(resolve, 600);
+        }
+      }),
+  );
 }
 
 /**

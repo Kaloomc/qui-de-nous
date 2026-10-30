@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { TimerBar } from '../components.jsx';
 import { serverNow } from '../lib.js';
+import { preloadVoices, speakQueued, useSpeechStatus } from '../speech.js';
 import { useFrameElapsed } from './duelFx.js';
 
 const CAMP_LABEL = { rouge: 'ROUGE', bleu: 'BLEU' };
@@ -360,5 +361,97 @@ const Dilemme = {
 };
 Dilemme.Bettor = Dilemme.Tv;
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme };
+// ---------- 1-2-3 Soleil ----------
+
+const SUN_WORD = { un: 'UN…', deux: 'DEUX…', trois: 'TROIS…', soleil: '☀️ SOLEIL !' };
+
+/** Position affichée : celle du serveur, prolongée sur la durée écoulée tant que le doigt est appuyé. */
+function useRacePos(play, state) {
+  const since = useFrameElapsed(play.at, state);
+  const extra = Number.isFinite(since) ? since : 0;
+  return Object.fromEntries(['rouge', 'bleu'].map((c) => [c, Math.min(1, play.pos[c] + (play.holding[c] ? play.rate * extra : 0))]));
+}
+
+function Tracks({ play, state }) {
+  const pos = useRacePos(play, state);
+  return (
+    <div className="mg-tracks">
+      {['rouge', 'bleu'].map((camp) => (
+        <div key={camp} className={`mg-track is-${camp}`}>
+          <strong>{CAMP_LABEL[camp]}</strong>
+          <div className="mg-track-bar" role="progressbar" aria-valuenow={Math.round(pos[camp] * 100)} aria-valuemin={0} aria-valuemax={100}>
+            <span style={{ width: `${pos[camp] * 100}%` }} />
+          </div>
+          <em>{Math.round(pos[camp] * 100)} %{play.penalties[camp] ? ` · reculé ${play.penalties[camp]} fois` : ''}</em>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const Soleil = {
+  Tv({ play, state, gameAct }) {
+    const status = useSpeechStatus();
+    useEffect(() => {
+      preloadVoices();
+    }, []);
+    useEffect(() => {
+      gameAct?.({ type: 'voice', available: status === 'ok' });
+    }, [status]);
+    const n = play.cue?.n;
+    useEffect(() => {
+      if (!play.cue) return;
+      const word = play.cue.word;
+      speakQueued(word === 'soleil' ? 'Soleil !' : word, {
+        onStart: word === 'soleil' ? () => gameAct?.({ type: 'spoken', word: 'soleil' }) : undefined,
+      });
+    }, [n]);
+    return (
+      <div className={`mg-soleil ${play.sun ? 'is-sun' : ''}`}>
+        {status === 'none' && <p className="feu-sound-warn">Pas de voix sur cet écran : suivez le mot affiché. À « SOLEIL », lâchez !</p>}
+        <p key={n} className="mg-soleil-word">{play.cue ? SUN_WORD[play.cue.word] : 'Prêts…'}</p>
+        <p className="duel-eyebrow">{play.sun ? 'LÂCHEZ TOUT !' : 'Maintenez votre bouton… mais pas à « Soleil »'}</p>
+        <Tracks play={play} state={state} />
+      </div>
+    );
+  },
+  Duelist({ play, act, side, state }) {
+    const [down, setDown] = useState(false);
+    const send = (value) => {
+      setDown(value);
+      navigator.vibrate?.(value ? 15 : 0);
+      act({ type: 'hold', down: value });
+    };
+    // Si l'onglet passe en arrière-plan ou que le doigt glisse hors du bouton, on relâche.
+    useEffect(() => {
+      const off = () => down && send(false);
+      document.addEventListener('visibilitychange', off);
+      return () => document.removeEventListener('visibilitychange', off);
+    }, [down]);
+    return (
+      <div className="mg-soleil-duelist">
+        <p className={`mg-soleil-banner ${play.sun ? 'is-sun' : ''}`}>{play.sun ? '☀️ SOLEIL ! LÂCHE !' : down ? 'Tu avances…' : 'Appuie et maintiens'}</p>
+        <Tracks play={play} state={state} />
+        <button
+          className={`mg-hold-btn ${down ? 'is-down' : ''}`}
+          onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); send(true); }}
+          onPointerUp={() => send(false)}
+          onPointerCancel={() => send(false)}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          {down ? 'MAINTENU' : 'MAINTIENS'}
+        </button>
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.pos ? <p className="duel-cote-line">Avancée : ROUGE {Math.round(details.pos.rouge * 100)} % – {Math.round(details.pos.bleu * 100)} % BLEU</p> : null),
+};
+Soleil.Bettor = ({ play, state }) => (
+  <div className={`mg-soleil ${play.sun ? 'is-sun' : ''}`}>
+    <p className="mg-soleil-word is-small">{play.cue ? SUN_WORD[play.cue.word] : 'Prêts…'}</p>
+    <Tracks play={play} state={state} />
+  </div>
+);
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil };
 export { CAMP_LABEL, Score, useBlocked };

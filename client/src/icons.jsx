@@ -136,6 +136,14 @@ const ICONS = {
       <path d="M52 92 l8 8 l14 -16" fill="none" stroke="#fff8f0" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
     </>
   ),
+  soleil: (
+    <>
+      <circle cx="60" cy="40" r="22" fill="#ffc93c" />
+      <path d="M60 6 v10 M60 64 v10 M26 40 h10 M84 40 h10 M36 16 l7 7 M77 57 l7 7 M84 16 l-7 7 M43 57 l-7 7" stroke="#ffc93c" strokeWidth="5" strokeLinecap="round" />
+      <rect x="14" y="88" width="92" height="12" rx="6" fill="#2a2254" />
+      <rect x="14" y="88" width="54" height="12" rx="6" fill="#3ee0c5" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />
