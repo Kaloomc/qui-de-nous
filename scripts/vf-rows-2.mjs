@@ -26,7 +26,7 @@ export default [
   ['Une femelle manchot empereur a été observée plongeant à 535 m de profondeur.', true, 'C’était près du détroit de McMurdo.', MA],
   ['Le film La Marche de l’empereur a remporté l’Oscar du meilleur documentaire en 2006.', true, 'Il suit les manchots empereurs en Antarctique.', MA],
   ['On comptait plus de 16 000 espèces de fourmis reconnues en 2023.', true, 'Il en reste probablement des milliers à découvrir.', FO],
-  ['On ne connaît qu’environ 500 espèces de fourmis.', false, 'Plus de 16 600 étaient reconnues en 2023.', FO],
+  ['Il existe moins de 1 000 espèces de fourmis dans le monde.', false, 'Plus de 16 000 espèces étaient reconnues en 2023, et il en reste à découvrir.', FO],
   ['Les fourmis représentent 10 à 15 % de la biomasse animale dans beaucoup d’habitats.', true, 'Leur population est estimée à un milliard de milliards d’individus.', FO],
   ['Une reine fourmi a vécu plus de 28 ans en laboratoire.', true, 'Il s’agit d’une reine de Lasius niger : 28 ans et 8 mois.', FO],
   ['À Hokkaidō, une supercolonie de fourmis a compté 45 000 nids.', true, 'Elle abritait 306 millions d’ouvrières sur 1 250 hectares.', FO],

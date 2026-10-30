@@ -106,3 +106,16 @@ test('Course d’obstacles : les boutons SAUTER et SE BAISSER produisent un saut
   const sim = R.simulate(s.mgState().track, s.mgState().events.rouge, f + 10);
   assert.ok(sim.y > 0, 'le saut du bouton SAUTER est bien dans la simulation du serveur');
 });
+
+test('Vrai ou Faux : chaque affirmation a une réponse (vrai / faux) et une courte explication ; les affirmations douteuses ont été retirées', () => {
+  const vf = JSON.parse(readFileSync(new URL('./content/vrai-faux-duel.json', import.meta.url), 'utf8'));
+  assert.ok(vf.length >= 200);
+  for (const x of vf) {
+    assert.equal(typeof x.vrai, 'boolean', x.id);
+    assert.ok(x.explication.length >= 5 && x.explication.length <= 150, `${x.id} : explication de ${x.explication.length} caractères`);
+    assert.match(x.texte, /[.?]$/, `${x.id} : phrase complète`);
+  }
+  const text = vf.map((x) => x.texte).join('\n');
+  for (const retired of ['500 espèces de fourmis', 'troisième plus gros consommateur', 'sept nouvelles merveilles', 'un quart de son eau', 'quatre yeux']) assert.equal(text.includes(retired), false, `affirmation douteuse restée : ${retired}`);
+  assert.ok(vf.some((x) => /moins de 1 000 espèces de fourmis/.test(x.texte) && !x.vrai && /16 000/.test(x.explication)), 'la version claire sur les fourmis');
+});

@@ -400,9 +400,9 @@
  },
  {
   "id": "vf058",
-  "texte": "On ne connaît qu’environ 500 espèces de fourmis.",
+  "texte": "Il existe moins de 1 000 espèces de fourmis dans le monde.",
   "vrai": false,
-  "explication": "Plus de 16 600 étaient reconnues en 2023.",
+  "explication": "Plus de 16 000 espèces étaient reconnues en 2023, et il en reste à découvrir.",
   "source": "https://fr.wikipedia.org/wiki/Fourmi"
  },
  {
@@ -792,734 +792,706 @@
  },
  {
   "id": "vf114",
-  "texte": "En 2018, Internet aurait été le troisième plus gros consommateur d’électricité s’il avait été un pays.",
-  "vrai": true,
-  "explication": "Derrière la Chine et les États-Unis.",
-  "source": "https://fr.wikipedia.org/wiki/Internet"
- },
- {
-  "id": "vf115",
   "texte": "L’Islande a la plus faible densité de population d’Europe.",
   "vrai": true,
   "explication": "Environ 3,7 habitants par km².",
   "source": "https://fr.wikipedia.org/wiki/Islande"
  },
  {
-  "id": "vf116",
+  "id": "vf115",
   "texte": "Plus de 10 % du territoire de l’Islande est recouvert de glaciers.",
   "vrai": true,
   "explication": "Son point culminant, le Hvannadalshnjúkur, atteint 2 109,6 m.",
   "source": "https://fr.wikipedia.org/wiki/Islande"
  },
  {
-  "id": "vf117",
+  "id": "vf116",
   "texte": "L’Islande ne compte aucun reptile ni amphibien indigène.",
   "vrai": true,
   "explication": "Les chevaux islandais, eux, descendent de chevaux importés avant la fin du Xe siècle.",
   "source": "https://fr.wikipedia.org/wiki/Islande"
  },
  {
-  "id": "vf118",
+  "id": "vf117",
   "texte": "Il y a des crocodiles indigènes en Islande.",
   "vrai": false,
   "explication": "L’île ne compte aucun reptile ni amphibien indigène.",
   "source": "https://fr.wikipedia.org/wiki/Islande"
  },
  {
-  "id": "vf119",
+  "id": "vf118",
   "texte": "L’éruption du Bárðarbunga, en 2014, a duré huit mois.",
   "vrai": true,
   "explication": "Elle a produit plus de 1 km³ de lave.",
   "source": "https://fr.wikipedia.org/wiki/Islande"
  },
  {
-  "id": "vf120",
+  "id": "vf119",
   "texte": "Les ancêtres des dauphins ont perdu leurs pattes arrière il y a environ 35 millions d’années.",
   "vrai": true,
   "explication": "Ils descendent d’animaux terrestres.",
   "source": "https://fr.wikipedia.org/wiki/Dauphin"
  },
  {
-  "id": "vf121",
+  "id": "vf120",
   "texte": "La gestation d’un dauphin dure environ 12 mois.",
   "vrai": true,
   "explication": "Les femelles sont matures entre 5 et 7 ans.",
   "source": "https://fr.wikipedia.org/wiki/Dauphin"
  },
  {
-  "id": "vf122",
+  "id": "vf121",
   "texte": "La gestation d’un dauphin dure à peine un mois.",
   "vrai": false,
   "explication": "Elle dure environ 12 mois.",
   "source": "https://fr.wikipedia.org/wiki/Dauphin"
  },
  {
-  "id": "vf123",
+  "id": "vf122",
   "texte": "Le plus vieux cheval connu, Old Billy, est mort à 62 ans.",
   "vrai": true,
   "explication": "Un âge très supérieur à la moyenne des chevaux.",
   "source": "https://fr.wikipedia.org/wiki/Cheval"
  },
  {
-  "id": "vf124",
+  "id": "vf123",
   "texte": "Le cheval domestique possède 32 paires de chromosomes.",
   "vrai": true,
   "explication": "Le cheval de Przewalski en a 33.",
   "source": "https://fr.wikipedia.org/wiki/Cheval"
  },
  {
-  "id": "vf125",
+  "id": "vf124",
   "texte": "Le cheval compte 469 muscles.",
   "vrai": true,
   "explication": "Ils représentent environ la moitié de son poids.",
   "source": "https://fr.wikipedia.org/wiki/Cheval"
  },
  {
-  "id": "vf126",
+  "id": "vf125",
   "texte": "Le galop d’un pur-sang peut atteindre 60 km/h.",
   "vrai": true,
   "explication": "C’est la vitesse du cheval au galop.",
   "source": "https://fr.wikipedia.org/wiki/Cheval"
  },
  {
-  "id": "vf127",
+  "id": "vf126",
   "texte": "Le génome du cheval a été séquencé en 2007.",
   "vrai": true,
   "explication": "Quatre ans après celui de l’être humain.",
   "source": "https://fr.wikipedia.org/wiki/Cheval"
  },
  {
-  "id": "vf128",
+  "id": "vf127",
   "texte": "Le génome du cheval a été séquencé avant celui de l’être humain.",
   "vrai": false,
   "explication": "Il l’a été en 2007, quatre ans après celui de l’humain.",
   "source": "https://fr.wikipedia.org/wiki/Cheval"
  },
  {
-  "id": "vf129",
+  "id": "vf128",
   "texte": "La lumière du Soleil met environ 8 minutes et 19 secondes à atteindre la Terre.",
   "vrai": true,
   "explication": "Soit environ 150 millions de kilomètres.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf130",
+  "id": "vf129",
   "texte": "La lumière du Soleil met environ 8 secondes à atteindre la Terre.",
   "vrai": false,
   "explication": "Elle met 8 minutes et 19 secondes.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf131",
+  "id": "vf130",
   "texte": "Le Soleil représente environ 99,85 % de la masse du Système solaire.",
   "vrai": true,
   "explication": "Tout le reste tient dans 0,15 %.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf132",
+  "id": "vf131",
   "texte": "Chaque seconde, environ 620 millions de tonnes d’hydrogène fusionnent dans le Soleil.",
   "vrai": true,
   "explication": "Elles donnent un peu plus de 615 millions de tonnes d’hélium.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf133",
+  "id": "vf132",
   "texte": "La couronne du Soleil est bien plus chaude que sa surface.",
   "vrai": true,
   "explication": "Environ 1 million de kelvins contre 5 800.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf134",
+  "id": "vf133",
   "texte": "La surface du Soleil est plus chaude que sa couronne.",
   "vrai": false,
   "explication": "La couronne atteint environ 1 million de kelvins, la surface environ 5 800.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf135",
+  "id": "vf134",
   "texte": "Voyager 1 a franchi l’héliopause le 25 août 2012.",
   "vrai": true,
   "explication": "Elle est devenue la première sonde à le faire.",
   "source": "https://fr.wikipedia.org/wiki/Soleil"
  },
  {
-  "id": "vf136",
+  "id": "vf135",
   "texte": "Le mont Fuji culmine à 3 776 mètres.",
   "vrai": true,
   "explication": "C’est le point culminant du Japon.",
   "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
  },
  {
-  "id": "vf137",
+  "id": "vf136",
   "texte": "Le mont Fuji est le plus haut sommet de l’Asie.",
   "vrai": false,
   "explication": "Il culmine à 3 776 m : c’est le point culminant du Japon seulement.",
   "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
  },
  {
-  "id": "vf138",
+  "id": "vf137",
   "texte": "La première ascension connue du mont Fuji remonte à l’an 663.",
   "vrai": true,
   "explication": "Par le moine bouddhiste En no Gyōja.",
   "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
  },
  {
-  "id": "vf139",
+  "id": "vf138",
   "texte": "Le premier non-Japonais à gravir le mont Fuji, en 1860, était un diplomate britannique.",
   "vrai": true,
   "explication": "Il s’appelait Rutherford Alcock.",
   "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
  },
  {
-  "id": "vf140",
+  "id": "vf139",
   "texte": "Environ 300 000 personnes gravissent le mont Fuji chaque année.",
   "vrai": true,
   "explication": "70 % d’entre elles sont japonaises.",
   "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
  },
  {
-  "id": "vf141",
+  "id": "vf140",
   "texte": "Les chutes du Niagara mesurent 57 mètres de haut.",
   "vrai": true,
   "explication": "Pour 945 m de large.",
   "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
  },
  {
-  "id": "vf142",
+  "id": "vf141",
   "texte": "En 1901, Annie Edson Taylor a été la première à descendre les chutes du Niagara dans un tonneau.",
   "vrai": true,
   "explication": "Elle a survécu.",
   "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
  },
  {
-  "id": "vf143",
+  "id": "vf142",
   "texte": "Le 29 mars 1848, le grondement des chutes du Niagara s’est arrêté.",
   "vrai": true,
   "explication": "Il ne restait qu’un mince filet d’eau.",
   "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
  },
  {
-  "id": "vf144",
+  "id": "vf143",
   "texte": "En 1969, on a asséché temporairement les chutes américaines du Niagara.",
   "vrai": true,
   "explication": "Un barrage détournait le cours d’eau pendant plusieurs mois.",
   "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
  },
  {
-  "id": "vf145",
+  "id": "vf144",
   "texte": "En 2012, Nik Wallenda a traversé la chute du Fer-à-Cheval sur un câble.",
   "vrai": true,
   "explication": "Environ 550 m en 40 minutes.",
   "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
  },
  {
-  "id": "vf146",
+  "id": "vf145",
   "texte": "Le Machu Picchu est situé à 2 438 mètres d’altitude.",
   "vrai": true,
   "explication": "Sur la crête entre le Machu Picchu et le Huayna Picchu.",
   "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
  },
  {
-  "id": "vf147",
+  "id": "vf146",
   "texte": "Les ruines du Machu Picchu comptent 172 constructions.",
   "vrai": true,
   "explication": "Sur environ 530 m de long et 200 m de large.",
   "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
  },
  {
-  "id": "vf148",
+  "id": "vf147",
   "texte": "Le Machu Picchu se trouve à plus de 5 000 mètres d’altitude.",
   "vrai": false,
   "explication": "Il se trouve à 2 438 m.",
   "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
  },
  {
-  "id": "vf149",
+  "id": "vf148",
   "texte": "Hiram Bingham a emporté 35 000 pièces du Machu Picchu à Yale.",
   "vrai": true,
   "explication": "L’université ne les a rendues qu’en 2010.",
   "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
  },
  {
-  "id": "vf150",
-  "texte": "En 2007, plus de 100 millions de personnes ont voté sur Internet pour les « sept nouvelles merveilles du monde ».",
-  "vrai": true,
-  "explication": "Le Machu Picchu en fait partie ; le concours a été jugé controversé.",
-  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
- },
- {
-  "id": "vf151",
+  "id": "vf149",
   "texte": "Le calmar colossal a les plus grands yeux du monde.",
   "vrai": true,
   "explication": "27 cm de diamètre.",
   "source": "https://fr.wikipedia.org/wiki/%C5%92il"
  },
  {
-  "id": "vf152",
+  "id": "vf150",
   "texte": "Les plus grands yeux du monde sont ceux de l’éléphant.",
   "vrai": false,
   "explication": "Ce sont ceux du calmar colossal : 27 cm de diamètre.",
   "source": "https://fr.wikipedia.org/wiki/%C5%92il"
  },
  {
-  "id": "vf153",
+  "id": "vf151",
   "texte": "Les crevettes-mantes sont réputées avoir les yeux les plus complexes du règne animal.",
   "vrai": true,
   "explication": "C’est un record parmi les animaux.",
   "source": "https://fr.wikipedia.org/wiki/%C5%92il"
  },
  {
-  "id": "vf154",
-  "texte": "Les plus anciens vertébrés connus, vieux de 518 millions d’années, avaient quatre yeux.",
-  "vrai": true,
-  "explication": "Capables de former des images.",
-  "source": "https://fr.wikipedia.org/wiki/%C5%92il"
- },
- {
-  "id": "vf155",
+  "id": "vf152",
   "texte": "Environ 71 % de la surface de la Terre est recouverte d’eau.",
   "vrai": true,
   "explication": "97 % de cette eau est salée.",
   "source": "https://fr.wikipedia.org/wiki/Eau"
  },
  {
-  "id": "vf156",
+  "id": "vf153",
   "texte": "Au sommet de l’Everest, l’eau bout à environ 68 °C.",
   "vrai": true,
   "explication": "Contre 100 °C au niveau de la mer : la pression est plus faible.",
   "source": "https://fr.wikipedia.org/wiki/Eau"
  },
  {
-  "id": "vf157",
+  "id": "vf154",
   "texte": "Au sommet de l’Everest, l’eau bout à 100 °C comme partout.",
   "vrai": false,
   "explication": "Elle bout à environ 68 °C, car la pression est bien plus faible.",
   "source": "https://fr.wikipedia.org/wiki/Eau"
  },
  {
-  "id": "vf158",
+  "id": "vf155",
   "texte": "Le corps d’un adulte est composé à environ 65 % d’eau.",
   "vrai": true,
   "explication": "Une méduse en contient 98 %.",
   "source": "https://fr.wikipedia.org/wiki/Eau"
  },
  {
-  "id": "vf159",
-  "texte": "La Terre a perdu environ un quart de son eau dans l’espace.",
-  "vrai": true,
-  "explication": "Au cours de son histoire.",
-  "source": "https://fr.wikipedia.org/wiki/Eau"
- },
- {
-  "id": "vf160",
+  "id": "vf156",
   "texte": "La tour Eiffel a été inaugurée le 31 mars 1889.",
   "vrai": true,
   "explication": "Elle a été construite de 1887 à 1889.",
   "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
  },
  {
-  "id": "vf161",
+  "id": "vf157",
   "texte": "Le chantier de la tour Eiffel n’a jamais compté plus de 250 ouvriers.",
   "vrai": true,
   "explication": "Sur ses 2 500 000 rivets, 42 % ont été posés sur le chantier.",
   "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
  },
  {
-  "id": "vf162",
+  "id": "vf158",
   "texte": "La tour Eiffel compte environ 25 000 rivets.",
   "vrai": false,
   "explication": "Elle en compte 2 500 000.",
   "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
  },
  {
-  "id": "vf163",
+  "id": "vf159",
   "texte": "La pyramide de Khéops mesure aujourd’hui 137 m, contre environ 146,58 m à l’origine.",
   "vrai": true,
   "explication": "Elle a perdu de la hauteur avec le temps.",
   "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
  },
  {
-  "id": "vf164",
+  "id": "vf160",
   "texte": "La Grande Pyramide a été construite vers 2560 avant notre ère.",
   "vrai": true,
   "explication": "Pour le pharaon Khéops, de la IVe dynastie.",
   "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
  },
  {
-  "id": "vf165",
+  "id": "vf161",
   "texte": "Le Pacifique couvre environ 165 millions de km².",
   "vrai": true,
   "explication": "C’est le plus grand océan du monde.",
   "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
  },
  {
-  "id": "vf166",
+  "id": "vf162",
   "texte": "La profondeur maximale du Pacifique atteint environ 10 984 m.",
   "vrai": true,
   "explication": "Dans la fosse des Mariannes.",
   "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
  },
  {
-  "id": "vf167",
+  "id": "vf163",
   "texte": "C’est Magellan qui a appelé le Pacifique « pacifique », en 1520.",
   "vrai": true,
   "explication": "À cause de ses eaux calmes.",
   "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
  },
  {
-  "id": "vf168",
+  "id": "vf164",
   "texte": "C’est James Cook qui a donné son nom au Pacifique, au XVIIIe siècle.",
   "vrai": false,
   "explication": "C’est Magellan, en 1520, à cause de ses eaux calmes.",
   "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
  },
  {
-  "id": "vf169",
+  "id": "vf165",
   "texte": "Le point culminant du Sahara, l’Emi Koussi, est au Tchad.",
   "vrai": true,
   "explication": "Il s’élève à 3 415 m, dans le massif du Tibesti.",
   "source": "https://fr.wikipedia.org/wiki/Sahara"
  },
  {
-  "id": "vf170",
+  "id": "vf166",
   "texte": "Le Sahara couvre près de 30 % de l’Afrique.",
   "vrai": true,
   "explication": "Il s’étend sur dix États.",
   "source": "https://fr.wikipedia.org/wiki/Sahara"
  },
  {
-  "id": "vf171",
+  "id": "vf167",
   "texte": "La première Coupe du monde de football s’est jouée en 1930, en Uruguay.",
   "vrai": true,
   "explication": "Le pays hôte a battu l’Argentine 4-2 en finale.",
   "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
  },
  {
-  "id": "vf172",
+  "id": "vf168",
   "texte": "La première Coupe du monde de football a été remportée par le Brésil.",
   "vrai": false,
   "explication": "C’est l’Uruguay, qui a battu l’Argentine 4-2 en 1930.",
   "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
  },
  {
-  "id": "vf173",
+  "id": "vf169",
   "texte": "Le Brésil détient le record de titres mondiaux au football, avec cinq.",
   "vrai": true,
   "explication": "Huit nations différentes ont gagné au moins une fois.",
   "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
  },
  {
-  "id": "vf174",
+  "id": "vf170",
   "texte": "La Coupe du monde de football n’a pas eu lieu en 1942 ni en 1946.",
   "vrai": true,
   "explication": "À cause de la Seconde Guerre mondiale.",
   "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
  },
  {
-  "id": "vf175",
+  "id": "vf171",
   "texte": "Le musée du Louvre a ouvert le 10 août 1793.",
   "vrai": true,
   "explication": "Pour l’anniversaire de la chute de la monarchie.",
   "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
  },
  {
-  "id": "vf176",
+  "id": "vf172",
   "texte": "La pyramide de verre du Louvre a été inaugurée en 1989.",
   "vrai": true,
   "explication": "Elle a été conçue par Ieoh Ming Pei.",
   "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
  },
  {
-  "id": "vf177",
+  "id": "vf173",
   "texte": "La distance moyenne Terre-Lune est d’environ 384 000 km.",
   "vrai": true,
   "explication": "Soit près de trente fois le diamètre de la Terre.",
   "source": "https://fr.wikipedia.org/wiki/Lune"
  },
  {
-  "id": "vf178",
+  "id": "vf174",
   "texte": "La Lune met environ 27,3 jours pour faire le tour de la Terre.",
   "vrai": true,
   "explication": "Mais le cycle des phases dure 29,5 jours.",
   "source": "https://fr.wikipedia.org/wiki/Lune"
  },
  {
-  "id": "vf179",
+  "id": "vf175",
   "texte": "Le cycle des phases de la Lune dure 27,3 jours, comme sa révolution.",
   "vrai": false,
   "explication": "La révolution dure 27,3 jours, mais le cycle des phases 29,5 jours.",
   "source": "https://fr.wikipedia.org/wiki/Lune"
  },
  {
-  "id": "vf180",
+  "id": "vf176",
   "texte": "La sonde soviétique Luna 2 a atteint la Lune en 1959.",
   "vrai": true,
   "explication": "Dix ans avant Apollo 11.",
   "source": "https://fr.wikipedia.org/wiki/Lune"
  },
  {
-  "id": "vf181",
+  "id": "vf177",
   "texte": "Le cou d’une girafe compte sept vertèbres cervicales, comme la plupart des mammifères.",
   "vrai": true,
   "explication": "Chacune mesure environ 40 cm.",
   "source": "https://fr.wikipedia.org/wiki/Girafe"
  },
  {
-  "id": "vf182",
+  "id": "vf178",
   "texte": "Une girafe a deux fois plus de vertèbres cervicales qu’un humain.",
   "vrai": false,
   "explication": "Elle en a sept, comme la plupart des mammifères.",
   "source": "https://fr.wikipedia.org/wiki/Girafe"
  },
  {
-  "id": "vf183",
+  "id": "vf179",
   "texte": "La gestation d’une girafe dure environ 15 mois.",
   "vrai": true,
   "explication": "Le girafon mesure environ 2 m à la naissance.",
   "source": "https://fr.wikipedia.org/wiki/Girafe"
  },
  {
-  "id": "vf184",
+  "id": "vf180",
   "texte": "Le premier Tour de France a eu lieu en 1903.",
   "vrai": true,
   "explication": "Il a été créé pour relancer les ventes du journal L’Auto.",
   "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
  },
  {
-  "id": "vf185",
+  "id": "vf181",
   "texte": "Le premier maillot jaune a été porté en 1919 par Eugène Christophe.",
   "vrai": true,
   "explication": "Il a été créé seize ans après le premier Tour.",
   "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
  },
  {
-  "id": "vf186",
+  "id": "vf182",
   "texte": "Le Tour de France se termine traditionnellement sur les Champs-Élysées.",
   "vrai": true,
   "explication": "À Paris.",
   "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
  },
  {
-  "id": "vf187",
+  "id": "vf183",
   "texte": "Un échiquier compte 64 cases et 32 pièces au départ.",
   "vrai": true,
   "explication": "16 pièces par joueur.",
   "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
  },
  {
-  "id": "vf188",
+  "id": "vf184",
   "texte": "Le mot « échecs » vient d’un mot persan qui signifie « le roi ».",
   "vrai": true,
   "explication": "Le persan « šāh ».",
   "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
  },
  {
-  "id": "vf189",
+  "id": "vf185",
   "texte": "Le jeu d’échecs dérive du chatrang indien, via la Perse.",
   "vrai": true,
   "explication": "Il est arrivé en Europe du Sud par les Arabes à partir du Xe siècle.",
   "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
  },
  {
-  "id": "vf190",
+  "id": "vf186",
   "texte": "La Palme d’or a été créée en 1955.",
   "vrai": true,
   "explication": "Pour remplacer le grand prix du Festival de Cannes.",
   "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
  },
  {
-  "id": "vf191",
+  "id": "vf187",
   "texte": "Le Festival de Cannes se déroule en mai.",
   "vrai": true,
   "explication": "Au Palais des festivals, sur la Croisette.",
   "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
  },
  {
-  "id": "vf192",
+  "id": "vf188",
   "texte": "La première Palme d’or a été décernée à Delbert Mann pour Marty.",
   "vrai": true,
   "explication": "En 1955.",
   "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
  },
  {
-  "id": "vf193",
+  "id": "vf189",
   "texte": "Le cerveau humain compte environ 86 milliards de neurones.",
   "vrai": true,
   "explication": "Parmi près de 170 milliards de cellules.",
   "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
  },
  {
-  "id": "vf194",
+  "id": "vf190",
   "texte": "Le cerveau représente environ 2 % de la masse du corps.",
   "vrai": true,
   "explication": "Mais il consomme 20 à 25 % de son énergie.",
   "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
  },
  {
-  "id": "vf195",
+  "id": "vf191",
   "texte": "Le cerveau consomme environ 2 % de l’énergie du corps.",
   "vrai": false,
   "explication": "Il pèse 2 % de la masse du corps mais consomme 20 à 25 % de son énergie.",
   "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
  },
  {
-  "id": "vf196",
+  "id": "vf192",
   "texte": "Le Vésuve culmine à 1 281 mètres.",
   "vrai": true,
   "explication": "Il domine la baie de Naples.",
   "source": "https://fr.wikipedia.org/wiki/Vesuve"
  },
  {
-  "id": "vf197",
+  "id": "vf193",
   "texte": "À Pompéi, la couche de cendres et de ponces atteint jusqu’à 2,8 mètres d’épaisseur.",
   "vrai": true,
   "explication": "Après l’éruption de l’an 79.",
   "source": "https://fr.wikipedia.org/wiki/Vesuve"
  },
  {
-  "id": "vf198",
+  "id": "vf194",
   "texte": "Le cacaoyer est originaire du bassin amazonien.",
   "vrai": true,
   "explication": "Il y est cultivé depuis plus de 3 500 ans.",
   "source": "https://fr.wikipedia.org/wiki/Chocolat"
  },
  {
-  "id": "vf199",
+  "id": "vf195",
   "texte": "Le mot « chocolat » vient du nahuatl.",
   "vrai": true,
   "explication": "La boisson est d’abord consommée au Mexique et en Amérique centrale.",
   "source": "https://fr.wikipedia.org/wiki/Chocolat"
  },
  {
-  "id": "vf200",
+  "id": "vf196",
   "texte": "Le chocolat au lait date du XIIe siècle.",
   "vrai": false,
   "explication": "Il apparaît vers 1875, quand Daniel Peter y ajoute du lait en poudre.",
   "source": "https://fr.wikipedia.org/wiki/Chocolat"
  },
  {
-  "id": "vf201",
+  "id": "vf197",
   "texte": "Hernán Cortés a rapporté le chocolat en Espagne en 1527.",
   "vrai": true,
   "explication": "La boisson y devient très prisée à la cour.",
   "source": "https://fr.wikipedia.org/wiki/Chocolat"
  },
  {
-  "id": "vf202",
+  "id": "vf198",
   "texte": "Les oiseaux sont les seuls dinosaures encore vivants.",
   "vrai": true,
   "explication": "Ils descendent de petits théropodes.",
   "source": "https://fr.wikipedia.org/wiki/Dinosaure"
  },
  {
-  "id": "vf203",
+  "id": "vf199",
   "texte": "La plupart des dinosaures ont disparu il y a 66 millions d’années.",
   "vrai": true,
   "explication": "Lors de l’extinction Crétacé-Paléogène.",
   "source": "https://fr.wikipedia.org/wiki/Dinosaure"
  },
  {
-  "id": "vf204",
+  "id": "vf200",
   "texte": "Le nom « dinosaure » a été inventé par Richard Owen en 1842.",
   "vrai": true,
   "explication": "Dinosauria.",
   "source": "https://fr.wikipedia.org/wiki/Dinosaure"
  },
  {
-  "id": "vf205",
+  "id": "vf201",
   "texte": "La Terre s’est formée il y a environ 4,54 milliards d’années.",
   "vrai": true,
   "explication": "D’après la datation radiométrique.",
   "source": "https://fr.wikipedia.org/wiki/Terre"
  },
  {
-  "id": "vf206",
+  "id": "vf202",
   "texte": "L’axe de rotation de la Terre est incliné d’environ 23°.",
   "vrai": true,
   "explication": "C’est ce qui provoque les saisons.",
   "source": "https://fr.wikipedia.org/wiki/Terre"
  },
  {
-  "id": "vf207",
+  "id": "vf203",
   "texte": "La Terre met 365,256 jours pour faire le tour du Soleil.",
   "vrai": true,
   "explication": "D’où les années bissextiles.",
   "source": "https://fr.wikipedia.org/wiki/Terre"
  },
  {
-  "id": "vf208",
+  "id": "vf204",
   "texte": "Le règne de Louis XIV a duré 72 ans.",
   "vrai": true,
   "explication": "De 1643 à 1715 : le plus long de l’histoire de France.",
   "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
  },
  {
-  "id": "vf209",
+  "id": "vf205",
   "texte": "Louis XIV est devenu roi à presque cinq ans.",
   "vrai": true,
   "explication": "À la mort de son père Louis XIII.",
   "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
  },
  {
-  "id": "vf210",
+  "id": "vf206",
   "texte": "Louis XIV est monté sur le trône à 25 ans.",
   "vrai": false,
   "explication": "Il avait presque cinq ans.",
   "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
  },
  {
-  "id": "vf211",
+  "id": "vf207",
   "texte": "Marie Curie est la seule femme à avoir reçu deux prix Nobel.",
   "vrai": true,
   "explication": "En physique (1903) et en chimie (1911).",
   "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
  },
  {
-  "id": "vf212",
+  "id": "vf208",
   "texte": "Le polonium a été nommé d’après la Pologne, pays natal de Marie Curie.",
   "vrai": true,
   "explication": "Elle a annoncé sa découverte en 1898.",
   "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
  },
  {
-  "id": "vf213",
+  "id": "vf209",
   "texte": "Le catalogue Köchel répertorie 893 œuvres de Mozart.",
   "vrai": true,
   "explication": "Mozart est mort à 35 ans.",
   "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
  },
  {
-  "id": "vf214",
+  "id": "vf210",
   "texte": "Picasso a réalisé près de 50 000 œuvres.",
   "vrai": true,
   "explication": "Il est mort en 1973, à 91 ans.",
   "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
  },
  {
-  "id": "vf215",
+  "id": "vf211",
   "texte": "Le tableau Guernica de Picasso date de 1937.",
   "vrai": true,
   "explication": "Il dénonce le bombardement d’une ville basque.",
   "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
  },
  {
-  "id": "vf216",
+  "id": "vf212",
   "texte": "Le Nil se jette dans la mer Méditerranée.",
   "vrai": true,
   "explication": "Il forme un delta au nord du Caire.",
   "source": "https://fr.wikipedia.org/wiki/Nil"
  },
  {
-  "id": "vf217",
+  "id": "vf213",
   "texte": "Le Nil traverse huit pays.",
   "vrai": true,
   "explication": "De la forêt de Nyungwe au Rwanda jusqu’à l’Égypte.",
   "source": "https://fr.wikipedia.org/wiki/Nil"
  },
  {
-  "id": "vf218",
+  "id": "vf214",
   "texte": "Le Nil se jette dans la mer Rouge.",
   "vrai": false,
   "explication": "Il se jette dans la Méditerranée.",

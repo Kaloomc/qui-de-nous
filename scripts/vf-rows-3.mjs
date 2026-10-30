@@ -39,7 +39,6 @@ export default [
   ['Le premier équipement du réseau ARPANET a été installé en 1989.', false, 'C’était le 20 septembre 1969, à l’UCLA.', IN],
   ['Le courrier électronique a été mis au point en 1972 par Ray Tomlinson.', true, 'C’est la première application importante du réseau.', IN],
   ['Le World Wide Web est tombé dans le domaine public le 30 avril 1993.', true, 'Il n’est donc la propriété de personne.', IN],
-  ['En 2018, Internet aurait été le troisième plus gros consommateur d’électricité s’il avait été un pays.', true, 'Derrière la Chine et les États-Unis.', IN],
   ['L’Islande a la plus faible densité de population d’Europe.', true, 'Environ 3,7 habitants par km².', IS],
   ['Plus de 10 % du territoire de l’Islande est recouvert de glaciers.', true, 'Son point culminant, le Hvannadalshnjúkur, atteint 2 109,6 m.', IS],
   ['L’Islande ne compte aucun reptile ni amphibien indigène.', true, 'Les chevaux islandais, eux, descendent de chevaux importés avant la fin du Xe siècle.', IS],

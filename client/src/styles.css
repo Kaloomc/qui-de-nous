@@ -6624,3 +6624,11 @@ body.loup-night {
 .mg-run-btn.is-jump { background: radial-gradient(circle, #3ee0c5, #1a8f7d); color: #14102a; }
 .mg-run-btn.is-duck { background: radial-gradient(circle, #b46cff, #6a3fb0); }
 .mg-run-btn:active { transform: scale(0.96); }
+
+/* ---------- Désamorçage : fils bien lisibles sur la TV ---------- */
+.mg-defuse-tv .mg-wires { gap: clamp(14px, 2.4vw, 36px); }
+.mg-defuse-tv .mg-wire { min-width: clamp(96px, 9vw, 150px); min-height: clamp(250px, 34vh, 380px); border-width: 4px; }
+.mg-defuse-tv .mg-wire b { font-size: clamp(2.2rem, 3.4vw, 3.4rem); }
+.mg-defuse-tv .mg-wire small { font-size: clamp(1.1rem, 1.6vw, 1.6rem); }
+.mg-defuse-tv .mg-wire-line { width: clamp(34px, 3.4vw, 54px); min-height: clamp(150px, 22vh, 250px); }
+.mg-defuse-tv .mg-clues { font-size: clamp(1.6rem, 2.4vw, 2.6rem); }
