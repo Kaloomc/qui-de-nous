@@ -11,6 +11,7 @@
 // ctx : seed, rng, red, blue, now(), later(ms, fn), latency(id) (aller-retour en ms), draw(clé, liste), content, voice.
 // Le moteur (server/games/duel.js) gère les étapes, les minuteurs, les « prêts », les paris et les gorgées.
 import code from './code.js';
+import chrono from './chrono.js';
 import couleur from './couleur.js';
 import course from './course.js';
 import crash from './crash.js';
@@ -21,8 +22,10 @@ import feu from './feu.js';
 import geo from './geo.js';
 import pfc from './pfc.js';
 import plateau from './plateau.js';
+import quisuisje from './quisuisje.js';
 import simon from './simon.js';
 import soleil from './soleil.js';
+import vf from './vf.js';
 import simon2 from './simon2.js';
 
-export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse, code, simon2, crash, dilemme, soleil, plateau, course, geo].map((m) => [m.id, m]));
+export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse, code, simon2, crash, dilemme, soleil, plateau, course, geo, quisuisje, chrono, vf].map((m) => [m.id, m]));

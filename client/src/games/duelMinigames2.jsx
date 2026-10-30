@@ -817,5 +817,197 @@ Geo.Bettor = ({ play }) => (
   </div>
 );
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil, plateau: Plateau, course: Course, geo: Geo };
+// ---------- Qui suis-je ? ----------
+
+function Clues({ play }) {
+  return (
+    <ol className="mg-qui-clues">
+      {play.clues.map((c, i) => (
+        <li key={i} className="pop-in">
+          <b>Indice {i + 1}</b> {c}
+        </li>
+      ))}
+      {Array.from({ length: 4 - play.clues.length }, (_, i) => (
+        <li key={`x${i}`} className="is-hidden">
+          <b>Indice {play.clues.length + i + 1}</b> …
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function QuiChoices({ play, onPick = null, blocked = false }) {
+  return (
+    <div className="mg-choices">
+      {play.choices.map((c, i) => (
+        <button key={i} className={`mg-choice ${play.reveal ? (i === play.reveal.right ? 'is-right' : 'is-dim') : ''}`} disabled={!onPick || blocked || !!play.reveal} onClick={() => onPick?.(i)}>
+          <b>{'ABCD'[i]}</b> {c}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const Qui = {
+  Tv({ play, state }) {
+    // L'heure d'affichage du prochain indice : la TV se rafraîchit à chaque indice (le serveur diffuse à chaque minuteur).
+    return (
+      <div className="mg-qui">
+        <Score a={play.score.rouge} b={play.score.bleu} unit=" pts" />
+        <p className="duel-eyebrow">Énigme {play.n} · plus tu réponds tôt, plus tu gagnes de points (4, 3, 2, 1)</p>
+        <Clues play={play} />
+        <QuiChoices play={play} />
+        {play.reveal && <p className="duel-eyebrow">C’était : {play.reveal.answer}</p>}
+        <TimerBar timer={{ endsAt: play.startedAt + play.clueMs * 3 + 5000, totalMs: play.clueMs * 3 + 5000, paused: false }} state={state} small>
+          {(s) => `${s} s`}
+        </TimerBar>
+      </div>
+    );
+  },
+  Duelist({ play, act, state }) {
+    const [, tick] = useState(0);
+    useEffect(() => {
+      const id = setInterval(() => tick((n) => n + 1), 500);
+      return () => clearInterval(id);
+    }, []);
+    const seen = play.clues.length;
+    const blocked = play.blockedUntilClue != null && seen <= play.blockedUntilClue;
+    return (
+      <div className="mg-qui-duelist">
+        <Score a={play.score.rouge} b={play.score.bleu} unit=" pts" />
+        <Clues play={play} />
+        {blocked && <p className="duel-notice">Mauvaise réponse : −1 point, bloqué jusqu’au prochain indice</p>}
+        <QuiChoices play={play} blocked={blocked} onPick={(i) => act({ choice: i, n: play.n })} />
+        {play.reveal && <p className="duel-eyebrow">C’était : {play.reveal.answer}</p>}
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.score ? <p className="duel-cote-line">Points : ROUGE {details.score.rouge} – {details.score.bleu} BLEU</p> : null),
+};
+Qui.Bettor = ({ play }) => (
+  <div className="mg-qui">
+    <Score a={play.score.rouge} b={play.score.bleu} unit=" pts" />
+    <Clues play={play} />
+  </div>
+);
+
+// ---------- Ordre chronologique ----------
+
+function ChronoCards({ play, onPick = null, placed = [], blocked = false, years = null }) {
+  return (
+    <div className="mg-chrono-cards">
+      {play.cards.map((c, i) => {
+        const pos = placed.indexOf(c.i);
+        return (
+          <button key={c.i} className={`mg-chrono-card ${pos >= 0 ? 'is-placed' : ''}`} disabled={!onPick || blocked || pos >= 0} onClick={() => onPick?.(c.i)}>
+            <b>{pos >= 0 ? `${pos + 1}` : '?'}</b>
+            <span>{c.texte}</span>
+            {years && <em>{years[i]}</em>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+const Chrono = {
+  Tv({ play, state }) {
+    return (
+      <div className="mg-chrono">
+        <p className="duel-eyebrow">Touche les événements du plus ancien au plus récent · une erreur = 3 s de blocage</p>
+        <ChronoCards play={play} years={play.years} />
+        <div className="mg-chrono-progress">
+          {['rouge', 'bleu'].map((camp) => (
+            <span key={camp} className={`is-${camp}`}>
+              {CAMP_LABEL[camp]} : {play.count[camp]} / 5 bien placées
+            </span>
+          ))}
+        </div>
+        <TimerBar timer={{ endsAt: play.startedAt + play.limitMs, totalMs: play.limitMs, paused: false }} state={state} small>
+          {(s) => `${s} s`}
+        </TimerBar>
+      </div>
+    );
+  },
+  Duelist({ play, act, state }) {
+    const left = useBlocked(play.blockedUntil, state);
+    return (
+      <div className="mg-chrono-duelist">
+        <p className="muted">Du plus ancien au plus récent : {play.mine.length} / 5</p>
+        {left > 0 && <p className="duel-notice">Erreur : bloqué 3 s</p>}
+        <ChronoCards play={play} placed={play.mine} blocked={left > 0} onPick={(i) => act({ card: i })} years={play.years} />
+      </div>
+    );
+  },
+  Summary: ({ details }) =>
+    details?.order ? (
+      <ol className="mg-chrono-order">
+        {details.order.map((e) => (
+          <li key={e.annee}>
+            <b>{e.annee}</b> {e.texte}
+          </li>
+        ))}
+      </ol>
+    ) : null,
+};
+Chrono.Bettor = Chrono.Tv;
+
+// ---------- Vrai ou Faux en survie ----------
+
+const Vf = {
+  Tv({ play, state }) {
+    const r = play.reveal;
+    return (
+      <div className="mg-vf">
+        <p className="duel-eyebrow">Affirmation {play.n} sur {play.max} · la première erreur ou absence élimine</p>
+        <h2 className="mg-vf-text">{play.texte}</h2>
+        <div className="mg-vf-status">
+          {['rouge', 'bleu'].map((camp) => (
+            <span key={camp} className={`is-${camp}`}>
+              {CAMP_LABEL[camp]} : {r ? (r.ok[camp] ? '✔ juste' : '✖ éliminé') : play.answered[camp] ? '✔ a répondu' : 'réfléchit…'}
+            </span>
+          ))}
+        </div>
+        {r && (
+          <p className="mg-vf-answer">
+            {r.vrai ? '✔ VRAI' : '✖ FAUX'} — {r.explication}
+          </p>
+        )}
+        {!r && (
+          <TimerBar timer={{ endsAt: play.startedAt + play.limitMs, totalMs: play.limitMs, paused: false }} state={state} small>
+            {(s) => `${s} s`}
+          </TimerBar>
+        )}
+      </div>
+    );
+  },
+  Duelist({ play, act, state }) {
+    const locked = play.mine != null;
+    return (
+      <div className="mg-vf-duelist">
+        <h2 className="mg-vf-text is-small">{play.texte}</h2>
+        {['true', 'false'].map((v) => (
+          <button key={v} className={`mg-vf-btn is-${v} ${play.mine === (v === 'true') ? 'is-picked' : ''}`} disabled={locked || !!play.reveal} onClick={() => act({ value: v === 'true', n: play.n })}>
+            {v === 'true' ? '✔ VRAI' : '✖ FAUX'}
+          </button>
+        ))}
+        {!play.reveal && (
+          <TimerBar timer={{ endsAt: play.startedAt + play.limitMs, totalMs: play.limitMs, paused: false }} state={state} small>
+            {(s) => `${s} s`}
+          </TimerBar>
+        )}
+        {play.reveal && <p className="duel-eyebrow">{play.reveal.vrai ? '✔ C’était VRAI' : '✖ C’était FAUX'}</p>}
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.statements ? <p className="duel-cote-line">{details.statements} affirmation{details.statements > 1 ? 's' : ''} jouée{details.statements > 1 ? 's' : ''}</p> : null),
+};
+Vf.Bettor = ({ play }) => (
+  <div className="mg-vf">
+    <h2 className="mg-vf-text is-small">{play.texte}</h2>
+    {play.reveal && <p className="mg-vf-answer">{play.reveal.vrai ? '✔ VRAI' : '✖ FAUX'}</p>}
+  </div>
+);
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil, plateau: Plateau, course: Course, geo: Geo, quisuisje: Qui, chrono: Chrono, vf: Vf };
 export { CAMP_LABEL, Score, useBlocked };

@@ -1,0 +1,1528 @@
+[
+ {
+  "id": "vf001",
+  "texte": "Un poulpe possède trois cœurs.",
+  "vrai": true,
+  "explication": "Deux servent à la respiration, le troisième irrigue le reste du corps.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf002",
+  "texte": "Un poulpe n’a qu’un seul cœur, comme nous.",
+  "vrai": false,
+  "explication": "Le poulpe a trois cœurs, dont deux pour la respiration.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf003",
+  "texte": "Le sang du poulpe est bleuté.",
+  "vrai": true,
+  "explication": "Son pigment, l’hémocyanine, est à base de cuivre.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf004",
+  "texte": "Le sang du poulpe est vert à cause du cuivre.",
+  "vrai": false,
+  "explication": "Il est bleuté : l’hémocyanine à base de cuivre le colore ainsi.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf005",
+  "texte": "Le poulpe possède neuf centres nerveux : un cerveau et un par bras.",
+  "vrai": true,
+  "explication": "Avec ses huit bras, cela fait neuf centres nerveux.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf006",
+  "texte": "Le mot « pieuvre » a été popularisé par Victor Hugo en 1866.",
+  "vrai": true,
+  "explication": "Dans Les Travailleurs de la mer, il a supplanté « poulpe » dans l’usage courant.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf007",
+  "texte": "C’est Jules Verne qui a popularisé le mot « pieuvre » en français.",
+  "vrai": false,
+  "explication": "C’est Victor Hugo, en 1866, avec Les Travailleurs de la mer.",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "vf008",
+  "texte": "Le cœur humain peut battre plus de 2 milliards de fois au cours d’une vie.",
+  "vrai": true,
+  "explication": "Environ 70 battements par minute pendant des décennies suffisent à y arriver.",
+  "source": "https://fr.wikipedia.org/wiki/C%C5%93ur_humain"
+ },
+ {
+  "id": "vf009",
+  "texte": "Le cœur d’un adulte pèse environ 3 kilos.",
+  "vrai": false,
+  "explication": "Il pèse environ 300 g chez l’homme et 250 g chez la femme.",
+  "source": "https://fr.wikipedia.org/wiki/C%C5%93ur_humain"
+ },
+ {
+  "id": "vf010",
+  "texte": "La première transplantation cardiaque a eu lieu au Cap, en 1967.",
+  "vrai": true,
+  "explication": "Le 3 décembre 1967 : le patient, Louis Washkansky, a survécu 18 jours.",
+  "source": "https://fr.wikipedia.org/wiki/C%C5%93ur_humain"
+ },
+ {
+  "id": "vf011",
+  "texte": "La première transplantation cardiaque a eu lieu à New York.",
+  "vrai": false,
+  "explication": "Elle a eu lieu au Cap, en Afrique du Sud, le 3 décembre 1967.",
+  "source": "https://fr.wikipedia.org/wiki/C%C5%93ur_humain"
+ },
+ {
+  "id": "vf012",
+  "texte": "Le cœur d’un embryon humain commence à battre vers le 22e jour après la conception.",
+  "vrai": true,
+  "explication": "Il atteint ensuite 165 à 185 battements par minute au début de la 7e semaine.",
+  "source": "https://fr.wikipedia.org/wiki/C%C5%93ur_humain"
+ },
+ {
+  "id": "vf013",
+  "texte": "Les premiers requins sont apparus il y a environ 420 millions d’années.",
+  "vrai": true,
+  "explication": "Au Dévonien, bien avant les dinosaures.",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "vf014",
+  "texte": "Les premiers requins sont apparus après les dinosaures.",
+  "vrai": false,
+  "explication": "Ils sont apparus il y a environ 420 millions d’années, au Dévonien.",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "vf015",
+  "texte": "Le requin-baleine se nourrit surtout de plancton.",
+  "vrai": true,
+  "explication": "Il le filtre dans l’eau de mer malgré sa taille.",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "vf016",
+  "texte": "Le requin-baleine se nourrit surtout de gros poissons et de phoques.",
+  "vrai": false,
+  "explication": "Il se nourrit surtout de plancton qu’il filtre.",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "vf017",
+  "texte": "Certains requins perdent plus de 30 000 dents au cours de leur vie.",
+  "vrai": true,
+  "explication": "Leurs dents repoussent en permanence.",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "vf018",
+  "texte": "Chez beaucoup de requins, le centre de l’odorat occupe près de la moitié du cerveau.",
+  "vrai": true,
+  "explication": "Ils peuvent sentir des proies à 75 m de distance.",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "vf019",
+  "texte": "Olympus Mons, sur Mars, est le plus haut volcan du Système solaire.",
+  "vrai": true,
+  "explication": "Il s’élève à 21 229 m au-dessus du niveau de référence martien.",
+  "source": "https://fr.wikipedia.org/wiki/Mars_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf020",
+  "texte": "Le plus haut volcan du Système solaire se trouve sur Vénus.",
+  "vrai": false,
+  "explication": "C’est Olympus Mons, sur Mars (21 229 m).",
+  "source": "https://fr.wikipedia.org/wiki/Mars_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf021",
+  "texte": "La gravité à la surface de Mars représente environ 0,38 fois celle de la Terre.",
+  "vrai": true,
+  "explication": "Soit environ 3,7 m/s² contre 9,8 sur Terre.",
+  "source": "https://fr.wikipedia.org/wiki/Mars_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf022",
+  "texte": "L’atmosphère de Mars est plus dense que celle de la Terre.",
+  "vrai": false,
+  "explication": "Elle est plus de 150 fois moins dense.",
+  "source": "https://fr.wikipedia.org/wiki/Mars_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf023",
+  "texte": "Le record de froid mesuré en Antarctique est de −89,2 °C.",
+  "vrai": true,
+  "explication": "Relevé à Vostok, le 21 juillet 1983.",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "vf024",
+  "texte": "Le record de froid mesuré en Antarctique est d’environ −40 °C.",
+  "vrai": false,
+  "explication": "Il est de −89,2 °C, relevé à Vostok en 1983.",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "vf025",
+  "texte": "Le point culminant de l’Antarctique est le massif Vinson.",
+  "vrai": true,
+  "explication": "Il s’élève à 4 892 m.",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "vf026",
+  "texte": "L’Antarctique renferme environ 90 % de la glace terrestre.",
+  "vrai": true,
+  "explication": "Sa fonte élèverait le niveau des mers d’environ 60 m.",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "vf027",
+  "texte": "L’Antarctique renferme environ 10 % de la glace terrestre.",
+  "vrai": false,
+  "explication": "Il en renferme environ 90 %.",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "vf028",
+  "texte": "Le mont Erebus, en Antarctique, est le volcan actif le plus austral du monde.",
+  "vrai": true,
+  "explication": "Il se trouve sur l’île de Ross.",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "vf029",
+  "texte": "La température dans le canal d’un éclair dépasse 30 000 °C.",
+  "vrai": true,
+  "explication": "C’est plusieurs fois la température de la surface du Soleil.",
+  "source": "https://fr.wikipedia.org/wiki/Foudre"
+ },
+ {
+  "id": "vf030",
+  "texte": "La température dans un éclair ne dépasse pas 1 000 °C.",
+  "vrai": false,
+  "explication": "Elle dépasse 30 000 °C à l’intérieur du canal.",
+  "source": "https://fr.wikipedia.org/wiki/Foudre"
+ },
+ {
+  "id": "vf031",
+  "texte": "En 1752, Dalibard a attiré la foudre avec une tige de fer isolée, à Marly-la-Ville.",
+  "vrai": true,
+  "explication": "C’était une vérification de l’idée de Benjamin Franklin.",
+  "source": "https://fr.wikipedia.org/wiki/Foudre"
+ },
+ {
+  "id": "vf032",
+  "texte": "Pour produire une livre de miel, les abeilles visitent plusieurs millions de fleurs.",
+  "vrai": true,
+  "explication": "Environ 8,7 millions de fleurs, avec plus de 17 300 voyages.",
+  "source": "https://fr.wikipedia.org/wiki/Miel"
+ },
+ {
+  "id": "vf033",
+  "texte": "Le premier producteur mondial de miel est la Chine.",
+  "vrai": true,
+  "explication": "446 900 tonnes en 2018, sur 1 851 540 tonnes au total.",
+  "source": "https://fr.wikipedia.org/wiki/Miel"
+ },
+ {
+  "id": "vf034",
+  "texte": "Le premier producteur mondial de miel est la Nouvelle-Zélande.",
+  "vrai": false,
+  "explication": "C’est la Chine, avec 446 900 tonnes en 2018.",
+  "source": "https://fr.wikipedia.org/wiki/Miel"
+ },
+ {
+  "id": "vf035",
+  "texte": "Le miel d’acacia a un indice glycémique bas, autour de 32.",
+  "vrai": true,
+  "explication": "Un mélange d’origines différentes peut atteindre 62.",
+  "source": "https://fr.wikipedia.org/wiki/Miel"
+ },
+ {
+  "id": "vf036",
+  "texte": "On a retrouvé en Afrique du Sud de la cire d’abeille vieille d’environ 40 000 ans.",
+  "vrai": true,
+  "explication": "Elle était dans une grotte.",
+  "source": "https://fr.wikipedia.org/wiki/Miel"
+ },
+ {
+  "id": "vf037",
+  "texte": "Les oiseaux ont quatre types de cônes pour voir les couleurs.",
+  "vrai": true,
+  "explication": "C’est un de plus que l’être humain.",
+  "source": "https://fr.wikipedia.org/wiki/Colibri"
+ },
+ {
+  "id": "vf038",
+  "texte": "Les oiseaux n’ont que deux types de cônes pour voir les couleurs.",
+  "vrai": false,
+  "explication": "Ils en ont quatre, un de plus que l’être humain.",
+  "source": "https://fr.wikipedia.org/wiki/Colibri"
+ },
+ {
+  "id": "vf039",
+  "texte": "Le médecin Ibn Al-Nafis a émis l’hypothèse de la circulation sanguine environ trois siècles avant William Harvey.",
+  "vrai": true,
+  "explication": "Il est né en 1210.",
+  "source": "https://fr.wikipedia.org/wiki/C%C5%93ur_humain"
+ },
+ {
+  "id": "vf040",
+  "texte": "Sur Vénus, un jour (une rotation sur elle-même) dure plus longtemps que sur toute autre planète du Système solaire.",
+  "vrai": true,
+  "explication": "Environ 243 jours terrestres.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf041",
+  "texte": "Sur Vénus, le Soleil se lève à l’ouest.",
+  "vrai": true,
+  "explication": "Sa rotation est rétrograde : il se couche à l’est.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf042",
+  "texte": "Sur Vénus, le Soleil se lève à l’est, comme sur Terre.",
+  "vrai": false,
+  "explication": "Sa rotation est rétrograde : il s’y lève à l’ouest.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf043",
+  "texte": "Vénus est la planète la plus chaude du Système solaire, plus que Mercure.",
+  "vrai": true,
+  "explication": "Environ 462 °C en surface, malgré Mercure, plus proche du Soleil.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf044",
+  "texte": "Mercure, la plus proche du Soleil, est la planète la plus chaude.",
+  "vrai": false,
+  "explication": "C’est Vénus, avec environ 462 °C en surface.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf045",
+  "texte": "La première sonde posée avec succès sur une autre planète est Venera 7, sur Vénus.",
+  "vrai": true,
+  "explication": "C’était en 1970.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf046",
+  "texte": "La pression à la surface de Vénus est environ 92 fois celle de la Terre.",
+  "vrai": true,
+  "explication": "Comme à près de 900 m sous l’eau.",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf047",
+  "texte": "La masse de Jupiter est environ 318 fois celle de la Terre.",
+  "vrai": true,
+  "explication": "Elle vaut aussi 2,5 fois celle de toutes les autres planètes réunies.",
+  "source": "https://fr.wikipedia.org/wiki/Jupiter_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf048",
+  "texte": "Jupiter pèse moins que toutes les autres planètes du Système solaire réunies.",
+  "vrai": false,
+  "explication": "Elle pèse 2,5 fois plus qu’elles toutes réunies.",
+  "source": "https://fr.wikipedia.org/wiki/Jupiter_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf049",
+  "texte": "Le centre de gravité du couple Soleil-Jupiter se trouve à l’extérieur du Soleil.",
+  "vrai": true,
+  "explication": "À environ 1,068 rayon solaire de son centre.",
+  "source": "https://fr.wikipedia.org/wiki/Jupiter_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf050",
+  "texte": "Ganymède, satellite de Jupiter, est plus grand que la planète Mercure.",
+  "vrai": true,
+  "explication": "C’est le plus grand satellite naturel du Système solaire.",
+  "source": "https://fr.wikipedia.org/wiki/Jupiter_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf051",
+  "texte": "Ganymède, satellite de Jupiter, est plus petit que la Lune.",
+  "vrai": false,
+  "explication": "Il est le plus grand satellite du Système solaire, plus grand même que Mercure.",
+  "source": "https://fr.wikipedia.org/wiki/Jupiter_(plan%C3%A8te)"
+ },
+ {
+  "id": "vf052",
+  "texte": "Le manchot empereur est le plus grand et le plus lourd de tous les manchots.",
+  "vrai": true,
+  "explication": "Il mesure jusqu’à 122 cm et pèse de 20 à 40 kg.",
+  "source": "https://fr.wikipedia.org/wiki/Manchot_empereur"
+ },
+ {
+  "id": "vf053",
+  "texte": "Le manchot empereur est la seule espèce de manchot qui se reproduit pendant l’hiver antarctique.",
+  "vrai": true,
+  "explication": "Le mâle couve seul l’œuf pendant 64 jours.",
+  "source": "https://fr.wikipedia.org/wiki/Manchot_empereur"
+ },
+ {
+  "id": "vf054",
+  "texte": "Chez le manchot empereur, c’est la femelle qui couve l’œuf tout l’hiver.",
+  "vrai": false,
+  "explication": "C’est le mâle qui le couve seul, pendant 64 jours consécutifs.",
+  "source": "https://fr.wikipedia.org/wiki/Manchot_empereur"
+ },
+ {
+  "id": "vf055",
+  "texte": "Une femelle manchot empereur a été observée plongeant à 535 m de profondeur.",
+  "vrai": true,
+  "explication": "C’était près du détroit de McMurdo.",
+  "source": "https://fr.wikipedia.org/wiki/Manchot_empereur"
+ },
+ {
+  "id": "vf056",
+  "texte": "Le film La Marche de l’empereur a remporté l’Oscar du meilleur documentaire en 2006.",
+  "vrai": true,
+  "explication": "Il suit les manchots empereurs en Antarctique.",
+  "source": "https://fr.wikipedia.org/wiki/Manchot_empereur"
+ },
+ {
+  "id": "vf057",
+  "texte": "On comptait plus de 16 000 espèces de fourmis reconnues en 2023.",
+  "vrai": true,
+  "explication": "Il en reste probablement des milliers à découvrir.",
+  "source": "https://fr.wikipedia.org/wiki/Fourmi"
+ },
+ {
+  "id": "vf058",
+  "texte": "On ne connaît qu’environ 500 espèces de fourmis.",
+  "vrai": false,
+  "explication": "Plus de 16 600 étaient reconnues en 2023.",
+  "source": "https://fr.wikipedia.org/wiki/Fourmi"
+ },
+ {
+  "id": "vf059",
+  "texte": "Les fourmis représentent 10 à 15 % de la biomasse animale dans beaucoup d’habitats.",
+  "vrai": true,
+  "explication": "Leur population est estimée à un milliard de milliards d’individus.",
+  "source": "https://fr.wikipedia.org/wiki/Fourmi"
+ },
+ {
+  "id": "vf060",
+  "texte": "Une reine fourmi a vécu plus de 28 ans en laboratoire.",
+  "vrai": true,
+  "explication": "Il s’agit d’une reine de Lasius niger : 28 ans et 8 mois.",
+  "source": "https://fr.wikipedia.org/wiki/Fourmi"
+ },
+ {
+  "id": "vf061",
+  "texte": "À Hokkaidō, une supercolonie de fourmis a compté 45 000 nids.",
+  "vrai": true,
+  "explication": "Elle abritait 306 millions d’ouvrières sur 1 250 hectares.",
+  "source": "https://fr.wikipedia.org/wiki/Fourmi"
+ },
+ {
+  "id": "vf062",
+  "texte": "Un kangourou peut faire des bonds de 13 mètres de long.",
+  "vrai": true,
+  "explication": "Et jusqu’à 3,5 mètres de haut.",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "vf063",
+  "texte": "Les kangourous ne savent pas reculer.",
+  "vrai": true,
+  "explication": "Leurs grandes pattes et leur puissante queue les en empêchent.",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "vf064",
+  "texte": "Les kangourous reculent très bien grâce à leur queue.",
+  "vrai": false,
+  "explication": "Ils ne peuvent pas reculer.",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "vf065",
+  "texte": "À sa naissance, un bébé kangourou mesure environ 2 cm.",
+  "vrai": true,
+  "explication": "Il pèse environ 1 gramme.",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "vf066",
+  "texte": "À sa naissance, un bébé kangourou mesure environ 30 cm.",
+  "vrai": false,
+  "explication": "Il ne mesure qu’environ 2 cm pour 1 gramme.",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "vf067",
+  "texte": "La gestation d’un kangourou dure à peu près un mois.",
+  "vrai": true,
+  "explication": "Entre 30 et 38 jours.",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "vf068",
+  "texte": "La peau d’un adulte a une surface d’environ 1,8 m².",
+  "vrai": true,
+  "explication": "Elle pèse 5 à 10 % de la masse corporelle.",
+  "source": "https://fr.wikipedia.org/wiki/Peau_humaine"
+ },
+ {
+  "id": "vf069",
+  "texte": "La peau de l’adulte couvre environ 18 m².",
+  "vrai": false,
+  "explication": "Sa surface est d’environ 1,8 m².",
+  "source": "https://fr.wikipedia.org/wiki/Peau_humaine"
+ },
+ {
+  "id": "vf070",
+  "texte": "L’épaisseur de la peau varie d’environ 0,5 mm aux paupières à 4-5 mm sur le haut du dos.",
+  "vrai": true,
+  "explication": "Elle est la plus fine au niveau des paupières.",
+  "source": "https://fr.wikipedia.org/wiki/Peau_humaine"
+ },
+ {
+  "id": "vf071",
+  "texte": "Le bout des doigts compte environ 2 000 récepteurs tactiles par cm².",
+  "vrai": true,
+  "explication": "Ils détectent des reliefs de 75 nanomètres.",
+  "source": "https://fr.wikipedia.org/wiki/Peau_humaine"
+ },
+ {
+  "id": "vf072",
+  "texte": "La peau est composée à environ 70 % d’eau.",
+  "vrai": true,
+  "explication": "Comme beaucoup de tissus du corps.",
+  "source": "https://fr.wikipedia.org/wiki/Peau_humaine"
+ },
+ {
+  "id": "vf073",
+  "texte": "Les doigts se rident après plus de cinq minutes dans l’eau, sous la commande du système nerveux.",
+  "vrai": true,
+  "explication": "Il s’agit du système nerveux sympathique.",
+  "source": "https://fr.wikipedia.org/wiki/Peau_humaine"
+ },
+ {
+  "id": "vf074",
+  "texte": "Le diamant est le matériau naturel le plus dur, 10 sur l’échelle de Mohs.",
+  "vrai": true,
+  "explication": "Au-dessus de 1 700 °C, sans air, il se transforme en graphite.",
+  "source": "https://fr.wikipedia.org/wiki/Diamant"
+ },
+ {
+  "id": "vf075",
+  "texte": "Le diamant est fait de carbone.",
+  "vrai": true,
+  "explication": "Lavoisier l’a montré en 1772 en le brûlant : il a obtenu du dioxyde de carbone.",
+  "source": "https://fr.wikipedia.org/wiki/Diamant"
+ },
+ {
+  "id": "vf076",
+  "texte": "Le diamant est un cristal de silice, comme le quartz.",
+  "vrai": false,
+  "explication": "Il est fait de carbone, comme l’a montré Lavoisier en 1772.",
+  "source": "https://fr.wikipedia.org/wiki/Diamant"
+ },
+ {
+  "id": "vf077",
+  "texte": "En 1270, Louis IX a réservé le port des diamants au seul souverain.",
+  "vrai": true,
+  "explication": "C’étaient des lois somptuaires.",
+  "source": "https://fr.wikipedia.org/wiki/Diamant"
+ },
+ {
+  "id": "vf078",
+  "texte": "La statue de la Liberté a été inaugurée le 28 octobre 1886.",
+  "vrai": true,
+  "explication": "Dix ans après la date prévue pour le centenaire de l’Indépendance.",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "vf079",
+  "texte": "La statue de la Liberté a été inaugurée en 1776.",
+  "vrai": false,
+  "explication": "Elle l’a été le 28 octobre 1886.",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "vf080",
+  "texte": "La statue de la Liberté mesure 93 m socle compris.",
+  "vrai": true,
+  "explication": "46,05 m sans le socle.",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "vf081",
+  "texte": "Pour la traversée, la statue de la Liberté a été démontée en 350 pièces.",
+  "vrai": true,
+  "explication": "Elles étaient réparties dans 214 caisses.",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "vf082",
+  "texte": "Depuis 1916, le public n’a plus accès au balcon qui entoure la torche de la statue de la Liberté.",
+  "vrai": true,
+  "explication": "Pour des raisons de sécurité.",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "vf083",
+  "texte": "La construction de la tour de Pise a commencé en 1173 et s’est étalée sur près de deux siècles.",
+  "vrai": true,
+  "explication": "Le dernier étage n’a été achevé qu’en 1372.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_Pise"
+ },
+ {
+  "id": "vf084",
+  "texte": "La tour de Pise a été construite en moins de dix ans.",
+  "vrai": false,
+  "explication": "Elle s’est étalée sur deux siècles, de 1173 à 1372.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_Pise"
+ },
+ {
+  "id": "vf085",
+  "texte": "Un escalier de 293 marches s’enroule à l’intérieur de la tour de Pise.",
+  "vrai": true,
+  "explication": "Il tourne entre deux cylindres de pierre concentriques.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_Pise"
+ },
+ {
+  "id": "vf086",
+  "texte": "Les travaux de consolidation de la tour de Pise l’ont redressée d’environ 40 cm.",
+  "vrai": true,
+  "explication": "Ils ont duré de 1990 à 2001.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_Pise"
+ },
+ {
+  "id": "vf087",
+  "texte": "Les quatre minarets du Taj Mahal sont inclinés vers l’extérieur.",
+  "vrai": true,
+  "explication": "Ainsi, en cas de séisme, ils tomberaient à l’opposé du tombeau.",
+  "source": "https://fr.wikipedia.org/wiki/Taj_Mahal"
+ },
+ {
+  "id": "vf088",
+  "texte": "Le dôme central du Taj Mahal atteint 74 mètres de hauteur.",
+  "vrai": true,
+  "explication": "Les minarets en font 42.",
+  "source": "https://fr.wikipedia.org/wiki/Taj_Mahal"
+ },
+ {
+  "id": "vf089",
+  "texte": "Le Taj Mahal est entouré d’une zone de protection de 10 400 km².",
+  "vrai": true,
+  "explication": "Elle limite la circulation et les émissions industrielles autour du monument.",
+  "source": "https://fr.wikipedia.org/wiki/Taj_Mahal"
+ },
+ {
+  "id": "vf090",
+  "texte": "Le chat peut sauter à une hauteur cinq fois supérieure à sa taille.",
+  "vrai": true,
+  "explication": "Sa vitesse moyenne à la course est d’environ 40 km/h.",
+  "source": "https://fr.wikipedia.org/wiki/Chat_domestique"
+ },
+ {
+  "id": "vf091",
+  "texte": "Un chat peut sauter à une hauteur de dix fois sa taille.",
+  "vrai": false,
+  "explication": "Il saute à environ cinq fois sa taille.",
+  "source": "https://fr.wikipedia.org/wiki/Chat_domestique"
+ },
+ {
+  "id": "vf092",
+  "texte": "Le squelette d’un chat compte environ 250 os.",
+  "vrai": true,
+  "explication": "Soit plus que les 206 os d’un humain adulte.",
+  "source": "https://fr.wikipedia.org/wiki/Chat_domestique"
+ },
+ {
+  "id": "vf093",
+  "texte": "L’ouïe du chat perçoit des ultrasons jusqu’à 50 000 Hz.",
+  "vrai": true,
+  "explication": "L’oreille humaine s’arrête vers 20 000 Hz.",
+  "source": "https://fr.wikipedia.org/wiki/Chat_domestique"
+ },
+ {
+  "id": "vf094",
+  "texte": "Le chat possède environ 200 millions de terminaisons olfactives.",
+  "vrai": true,
+  "explication": "L’homme en a environ 5 millions.",
+  "source": "https://fr.wikipedia.org/wiki/Chat_domestique"
+ },
+ {
+  "id": "vf095",
+  "texte": "Un chat mange entre 10 et 16 fois par jour, en petites quantités.",
+  "vrai": true,
+  "explication": "Son estomac ne contient qu’environ 300 ml.",
+  "source": "https://fr.wikipedia.org/wiki/Chat_domestique"
+ },
+ {
+  "id": "vf096",
+  "texte": "La peau de l’ours polaire est noire.",
+  "vrai": true,
+  "explication": "Ce qui favorise l’absorption de la chaleur du soleil ; sa fourrure paraît blanche, mais ses poils ne sont pas pigmentés.",
+  "source": "https://fr.wikipedia.org/wiki/Ours_polaire"
+ },
+ {
+  "id": "vf097",
+  "texte": "La peau de l’ours polaire est blanche, comme sa fourrure.",
+  "vrai": false,
+  "explication": "Sa peau est noire ; ses poils ne sont pas pigmentés.",
+  "source": "https://fr.wikipedia.org/wiki/Ours_polaire"
+ },
+ {
+  "id": "vf098",
+  "texte": "L’ours polaire peut rester plus de trois minutes en apnée.",
+  "vrai": true,
+  "explication": "Il est aussi capable de nager plusieurs jours d’affilée.",
+  "source": "https://fr.wikipedia.org/wiki/Ours_polaire"
+ },
+ {
+  "id": "vf099",
+  "texte": "Le plus grand ours polaire répertorié pesait 1 002 kg.",
+  "vrai": true,
+  "explication": "C’était un mâle abattu en Alaska en 1960.",
+  "source": "https://fr.wikipedia.org/wiki/Ours_polaire"
+ },
+ {
+  "id": "vf100",
+  "texte": "Les chauves-souris représentent environ un cinquième des espèces de mammifères.",
+  "vrai": true,
+  "explication": "Près de 1 400 espèces.",
+  "source": "https://fr.wikipedia.org/wiki/Chauve-souris"
+ },
+ {
+  "id": "vf101",
+  "texte": "Les chauves-souris sont les seuls mammifères capables de vol battu.",
+  "vrai": true,
+  "explication": "Les écureuils volants, eux, planent.",
+  "source": "https://fr.wikipedia.org/wiki/Chauve-souris"
+ },
+ {
+  "id": "vf102",
+  "texte": "Les écureuils volants volent en battant des ailes, comme les chauves-souris.",
+  "vrai": false,
+  "explication": "Ils planent : seules les chauves-souris pratiquent le vol battu chez les mammifères.",
+  "source": "https://fr.wikipedia.org/wiki/Chauve-souris"
+ },
+ {
+  "id": "vf103",
+  "texte": "Une pipistrelle peut manger plus de 2 000 moustiques en une nuit.",
+  "vrai": true,
+  "explication": "Certaines chauves-souris avalent jusqu’à 120 % de leur poids en insectes.",
+  "source": "https://fr.wikipedia.org/wiki/Chauve-souris"
+ },
+ {
+  "id": "vf104",
+  "texte": "En 1794, Spallanzani a montré qu’une chauve-souris aveuglée vole normalement.",
+  "vrai": true,
+  "explication": "Alors qu’en lui bouchant les oreilles, elle ne sait plus se déplacer.",
+  "source": "https://fr.wikipedia.org/wiki/Chauve-souris"
+ },
+ {
+  "id": "vf105",
+  "texte": "La pomme de terre est cultivée dans plus de 150 pays.",
+  "vrai": true,
+  "explication": "Sous presque toutes les latitudes habitées.",
+  "source": "https://fr.wikipedia.org/wiki/Pomme_de_terre"
+ },
+ {
+  "id": "vf106",
+  "texte": "Son utilisation remonte à environ 8 000 ans, dans le sud du Pérou et le nord-ouest de la Bolivie.",
+  "vrai": true,
+  "explication": "Les premières cultures y sont nées.",
+  "source": "https://fr.wikipedia.org/wiki/Pomme_de_terre"
+ },
+ {
+  "id": "vf107",
+  "texte": "La pomme de terre est originaire d’Irlande.",
+  "vrai": false,
+  "explication": "Elle vient du sud du Pérou et du nord-ouest de la Bolivie.",
+  "source": "https://fr.wikipedia.org/wiki/Pomme_de_terre"
+ },
+ {
+  "id": "vf108",
+  "texte": "Le génome de la pomme de terre compte 48 chromosomes.",
+  "vrai": true,
+  "explication": "Il est tétraploïde et a été séquencé entre 2006 et 2011.",
+  "source": "https://fr.wikipedia.org/wiki/Pomme_de_terre"
+ },
+ {
+  "id": "vf109",
+  "texte": "Environ 85 % de la matière sèche de la pomme de terre est comestible, contre environ 50 % pour les céréales.",
+  "vrai": true,
+  "explication": "C’est l’un de ses atouts agricoles.",
+  "source": "https://fr.wikipedia.org/wiki/Pomme_de_terre"
+ },
+ {
+  "id": "vf110",
+  "texte": "Le premier équipement du réseau ARPANET a été installé à l’UCLA en 1969.",
+  "vrai": true,
+  "explication": "Le 20 septembre 1969.",
+  "source": "https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "vf111",
+  "texte": "Le premier équipement du réseau ARPANET a été installé en 1989.",
+  "vrai": false,
+  "explication": "C’était le 20 septembre 1969, à l’UCLA.",
+  "source": "https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "vf112",
+  "texte": "Le courrier électronique a été mis au point en 1972 par Ray Tomlinson.",
+  "vrai": true,
+  "explication": "C’est la première application importante du réseau.",
+  "source": "https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "vf113",
+  "texte": "Le World Wide Web est tombé dans le domaine public le 30 avril 1993.",
+  "vrai": true,
+  "explication": "Il n’est donc la propriété de personne.",
+  "source": "https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "vf114",
+  "texte": "En 2018, Internet aurait été le troisième plus gros consommateur d’électricité s’il avait été un pays.",
+  "vrai": true,
+  "explication": "Derrière la Chine et les États-Unis.",
+  "source": "https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "vf115",
+  "texte": "L’Islande a la plus faible densité de population d’Europe.",
+  "vrai": true,
+  "explication": "Environ 3,7 habitants par km².",
+  "source": "https://fr.wikipedia.org/wiki/Islande"
+ },
+ {
+  "id": "vf116",
+  "texte": "Plus de 10 % du territoire de l’Islande est recouvert de glaciers.",
+  "vrai": true,
+  "explication": "Son point culminant, le Hvannadalshnjúkur, atteint 2 109,6 m.",
+  "source": "https://fr.wikipedia.org/wiki/Islande"
+ },
+ {
+  "id": "vf117",
+  "texte": "L’Islande ne compte aucun reptile ni amphibien indigène.",
+  "vrai": true,
+  "explication": "Les chevaux islandais, eux, descendent de chevaux importés avant la fin du Xe siècle.",
+  "source": "https://fr.wikipedia.org/wiki/Islande"
+ },
+ {
+  "id": "vf118",
+  "texte": "Il y a des crocodiles indigènes en Islande.",
+  "vrai": false,
+  "explication": "L’île ne compte aucun reptile ni amphibien indigène.",
+  "source": "https://fr.wikipedia.org/wiki/Islande"
+ },
+ {
+  "id": "vf119",
+  "texte": "L’éruption du Bárðarbunga, en 2014, a duré huit mois.",
+  "vrai": true,
+  "explication": "Elle a produit plus de 1 km³ de lave.",
+  "source": "https://fr.wikipedia.org/wiki/Islande"
+ },
+ {
+  "id": "vf120",
+  "texte": "Les ancêtres des dauphins ont perdu leurs pattes arrière il y a environ 35 millions d’années.",
+  "vrai": true,
+  "explication": "Ils descendent d’animaux terrestres.",
+  "source": "https://fr.wikipedia.org/wiki/Dauphin"
+ },
+ {
+  "id": "vf121",
+  "texte": "La gestation d’un dauphin dure environ 12 mois.",
+  "vrai": true,
+  "explication": "Les femelles sont matures entre 5 et 7 ans.",
+  "source": "https://fr.wikipedia.org/wiki/Dauphin"
+ },
+ {
+  "id": "vf122",
+  "texte": "La gestation d’un dauphin dure à peine un mois.",
+  "vrai": false,
+  "explication": "Elle dure environ 12 mois.",
+  "source": "https://fr.wikipedia.org/wiki/Dauphin"
+ },
+ {
+  "id": "vf123",
+  "texte": "Le plus vieux cheval connu, Old Billy, est mort à 62 ans.",
+  "vrai": true,
+  "explication": "Un âge très supérieur à la moyenne des chevaux.",
+  "source": "https://fr.wikipedia.org/wiki/Cheval"
+ },
+ {
+  "id": "vf124",
+  "texte": "Le cheval domestique possède 32 paires de chromosomes.",
+  "vrai": true,
+  "explication": "Le cheval de Przewalski en a 33.",
+  "source": "https://fr.wikipedia.org/wiki/Cheval"
+ },
+ {
+  "id": "vf125",
+  "texte": "Le cheval compte 469 muscles.",
+  "vrai": true,
+  "explication": "Ils représentent environ la moitié de son poids.",
+  "source": "https://fr.wikipedia.org/wiki/Cheval"
+ },
+ {
+  "id": "vf126",
+  "texte": "Le galop d’un pur-sang peut atteindre 60 km/h.",
+  "vrai": true,
+  "explication": "C’est la vitesse du cheval au galop.",
+  "source": "https://fr.wikipedia.org/wiki/Cheval"
+ },
+ {
+  "id": "vf127",
+  "texte": "Le génome du cheval a été séquencé en 2007.",
+  "vrai": true,
+  "explication": "Quatre ans après celui de l’être humain.",
+  "source": "https://fr.wikipedia.org/wiki/Cheval"
+ },
+ {
+  "id": "vf128",
+  "texte": "Le génome du cheval a été séquencé avant celui de l’être humain.",
+  "vrai": false,
+  "explication": "Il l’a été en 2007, quatre ans après celui de l’humain.",
+  "source": "https://fr.wikipedia.org/wiki/Cheval"
+ },
+ {
+  "id": "vf129",
+  "texte": "La lumière du Soleil met environ 8 minutes et 19 secondes à atteindre la Terre.",
+  "vrai": true,
+  "explication": "Soit environ 150 millions de kilomètres.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf130",
+  "texte": "La lumière du Soleil met environ 8 secondes à atteindre la Terre.",
+  "vrai": false,
+  "explication": "Elle met 8 minutes et 19 secondes.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf131",
+  "texte": "Le Soleil représente environ 99,85 % de la masse du Système solaire.",
+  "vrai": true,
+  "explication": "Tout le reste tient dans 0,15 %.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf132",
+  "texte": "Chaque seconde, environ 620 millions de tonnes d’hydrogène fusionnent dans le Soleil.",
+  "vrai": true,
+  "explication": "Elles donnent un peu plus de 615 millions de tonnes d’hélium.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf133",
+  "texte": "La couronne du Soleil est bien plus chaude que sa surface.",
+  "vrai": true,
+  "explication": "Environ 1 million de kelvins contre 5 800.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf134",
+  "texte": "La surface du Soleil est plus chaude que sa couronne.",
+  "vrai": false,
+  "explication": "La couronne atteint environ 1 million de kelvins, la surface environ 5 800.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf135",
+  "texte": "Voyager 1 a franchi l’héliopause le 25 août 2012.",
+  "vrai": true,
+  "explication": "Elle est devenue la première sonde à le faire.",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "vf136",
+  "texte": "Le mont Fuji culmine à 3 776 mètres.",
+  "vrai": true,
+  "explication": "C’est le point culminant du Japon.",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
+ },
+ {
+  "id": "vf137",
+  "texte": "Le mont Fuji est le plus haut sommet de l’Asie.",
+  "vrai": false,
+  "explication": "Il culmine à 3 776 m : c’est le point culminant du Japon seulement.",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
+ },
+ {
+  "id": "vf138",
+  "texte": "La première ascension connue du mont Fuji remonte à l’an 663.",
+  "vrai": true,
+  "explication": "Par le moine bouddhiste En no Gyōja.",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
+ },
+ {
+  "id": "vf139",
+  "texte": "Le premier non-Japonais à gravir le mont Fuji, en 1860, était un diplomate britannique.",
+  "vrai": true,
+  "explication": "Il s’appelait Rutherford Alcock.",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
+ },
+ {
+  "id": "vf140",
+  "texte": "Environ 300 000 personnes gravissent le mont Fuji chaque année.",
+  "vrai": true,
+  "explication": "70 % d’entre elles sont japonaises.",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
+ },
+ {
+  "id": "vf141",
+  "texte": "Les chutes du Niagara mesurent 57 mètres de haut.",
+  "vrai": true,
+  "explication": "Pour 945 m de large.",
+  "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
+ },
+ {
+  "id": "vf142",
+  "texte": "En 1901, Annie Edson Taylor a été la première à descendre les chutes du Niagara dans un tonneau.",
+  "vrai": true,
+  "explication": "Elle a survécu.",
+  "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
+ },
+ {
+  "id": "vf143",
+  "texte": "Le 29 mars 1848, le grondement des chutes du Niagara s’est arrêté.",
+  "vrai": true,
+  "explication": "Il ne restait qu’un mince filet d’eau.",
+  "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
+ },
+ {
+  "id": "vf144",
+  "texte": "En 1969, on a asséché temporairement les chutes américaines du Niagara.",
+  "vrai": true,
+  "explication": "Un barrage détournait le cours d’eau pendant plusieurs mois.",
+  "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
+ },
+ {
+  "id": "vf145",
+  "texte": "En 2012, Nik Wallenda a traversé la chute du Fer-à-Cheval sur un câble.",
+  "vrai": true,
+  "explication": "Environ 550 m en 40 minutes.",
+  "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
+ },
+ {
+  "id": "vf146",
+  "texte": "Le Machu Picchu est situé à 2 438 mètres d’altitude.",
+  "vrai": true,
+  "explication": "Sur la crête entre le Machu Picchu et le Huayna Picchu.",
+  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
+ },
+ {
+  "id": "vf147",
+  "texte": "Les ruines du Machu Picchu comptent 172 constructions.",
+  "vrai": true,
+  "explication": "Sur environ 530 m de long et 200 m de large.",
+  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
+ },
+ {
+  "id": "vf148",
+  "texte": "Le Machu Picchu se trouve à plus de 5 000 mètres d’altitude.",
+  "vrai": false,
+  "explication": "Il se trouve à 2 438 m.",
+  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
+ },
+ {
+  "id": "vf149",
+  "texte": "Hiram Bingham a emporté 35 000 pièces du Machu Picchu à Yale.",
+  "vrai": true,
+  "explication": "L’université ne les a rendues qu’en 2010.",
+  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
+ },
+ {
+  "id": "vf150",
+  "texte": "En 2007, plus de 100 millions de personnes ont voté sur Internet pour les « sept nouvelles merveilles du monde ».",
+  "vrai": true,
+  "explication": "Le Machu Picchu en fait partie ; le concours a été jugé controversé.",
+  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
+ },
+ {
+  "id": "vf151",
+  "texte": "Le calmar colossal a les plus grands yeux du monde.",
+  "vrai": true,
+  "explication": "27 cm de diamètre.",
+  "source": "https://fr.wikipedia.org/wiki/%C5%92il"
+ },
+ {
+  "id": "vf152",
+  "texte": "Les plus grands yeux du monde sont ceux de l’éléphant.",
+  "vrai": false,
+  "explication": "Ce sont ceux du calmar colossal : 27 cm de diamètre.",
+  "source": "https://fr.wikipedia.org/wiki/%C5%92il"
+ },
+ {
+  "id": "vf153",
+  "texte": "Les crevettes-mantes sont réputées avoir les yeux les plus complexes du règne animal.",
+  "vrai": true,
+  "explication": "C’est un record parmi les animaux.",
+  "source": "https://fr.wikipedia.org/wiki/%C5%92il"
+ },
+ {
+  "id": "vf154",
+  "texte": "Les plus anciens vertébrés connus, vieux de 518 millions d’années, avaient quatre yeux.",
+  "vrai": true,
+  "explication": "Capables de former des images.",
+  "source": "https://fr.wikipedia.org/wiki/%C5%92il"
+ },
+ {
+  "id": "vf155",
+  "texte": "Environ 71 % de la surface de la Terre est recouverte d’eau.",
+  "vrai": true,
+  "explication": "97 % de cette eau est salée.",
+  "source": "https://fr.wikipedia.org/wiki/Eau"
+ },
+ {
+  "id": "vf156",
+  "texte": "Au sommet de l’Everest, l’eau bout à environ 68 °C.",
+  "vrai": true,
+  "explication": "Contre 100 °C au niveau de la mer : la pression est plus faible.",
+  "source": "https://fr.wikipedia.org/wiki/Eau"
+ },
+ {
+  "id": "vf157",
+  "texte": "Au sommet de l’Everest, l’eau bout à 100 °C comme partout.",
+  "vrai": false,
+  "explication": "Elle bout à environ 68 °C, car la pression est bien plus faible.",
+  "source": "https://fr.wikipedia.org/wiki/Eau"
+ },
+ {
+  "id": "vf158",
+  "texte": "Le corps d’un adulte est composé à environ 65 % d’eau.",
+  "vrai": true,
+  "explication": "Une méduse en contient 98 %.",
+  "source": "https://fr.wikipedia.org/wiki/Eau"
+ },
+ {
+  "id": "vf159",
+  "texte": "La Terre a perdu environ un quart de son eau dans l’espace.",
+  "vrai": true,
+  "explication": "Au cours de son histoire.",
+  "source": "https://fr.wikipedia.org/wiki/Eau"
+ },
+ {
+  "id": "vf160",
+  "texte": "La tour Eiffel a été inaugurée le 31 mars 1889.",
+  "vrai": true,
+  "explication": "Elle a été construite de 1887 à 1889.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "vf161",
+  "texte": "Le chantier de la tour Eiffel n’a jamais compté plus de 250 ouvriers.",
+  "vrai": true,
+  "explication": "Sur ses 2 500 000 rivets, 42 % ont été posés sur le chantier.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "vf162",
+  "texte": "La tour Eiffel compte environ 25 000 rivets.",
+  "vrai": false,
+  "explication": "Elle en compte 2 500 000.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "vf163",
+  "texte": "La pyramide de Khéops mesure aujourd’hui 137 m, contre environ 146,58 m à l’origine.",
+  "vrai": true,
+  "explication": "Elle a perdu de la hauteur avec le temps.",
+  "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
+ },
+ {
+  "id": "vf164",
+  "texte": "La Grande Pyramide a été construite vers 2560 avant notre ère.",
+  "vrai": true,
+  "explication": "Pour le pharaon Khéops, de la IVe dynastie.",
+  "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
+ },
+ {
+  "id": "vf165",
+  "texte": "Le Pacifique couvre environ 165 millions de km².",
+  "vrai": true,
+  "explication": "C’est le plus grand océan du monde.",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "vf166",
+  "texte": "La profondeur maximale du Pacifique atteint environ 10 984 m.",
+  "vrai": true,
+  "explication": "Dans la fosse des Mariannes.",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "vf167",
+  "texte": "C’est Magellan qui a appelé le Pacifique « pacifique », en 1520.",
+  "vrai": true,
+  "explication": "À cause de ses eaux calmes.",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "vf168",
+  "texte": "C’est James Cook qui a donné son nom au Pacifique, au XVIIIe siècle.",
+  "vrai": false,
+  "explication": "C’est Magellan, en 1520, à cause de ses eaux calmes.",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "vf169",
+  "texte": "Le point culminant du Sahara, l’Emi Koussi, est au Tchad.",
+  "vrai": true,
+  "explication": "Il s’élève à 3 415 m, dans le massif du Tibesti.",
+  "source": "https://fr.wikipedia.org/wiki/Sahara"
+ },
+ {
+  "id": "vf170",
+  "texte": "Le Sahara couvre près de 30 % de l’Afrique.",
+  "vrai": true,
+  "explication": "Il s’étend sur dix États.",
+  "source": "https://fr.wikipedia.org/wiki/Sahara"
+ },
+ {
+  "id": "vf171",
+  "texte": "La première Coupe du monde de football s’est jouée en 1930, en Uruguay.",
+  "vrai": true,
+  "explication": "Le pays hôte a battu l’Argentine 4-2 en finale.",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "vf172",
+  "texte": "La première Coupe du monde de football a été remportée par le Brésil.",
+  "vrai": false,
+  "explication": "C’est l’Uruguay, qui a battu l’Argentine 4-2 en 1930.",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "vf173",
+  "texte": "Le Brésil détient le record de titres mondiaux au football, avec cinq.",
+  "vrai": true,
+  "explication": "Huit nations différentes ont gagné au moins une fois.",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "vf174",
+  "texte": "La Coupe du monde de football n’a pas eu lieu en 1942 ni en 1946.",
+  "vrai": true,
+  "explication": "À cause de la Seconde Guerre mondiale.",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "vf175",
+  "texte": "Le musée du Louvre a ouvert le 10 août 1793.",
+  "vrai": true,
+  "explication": "Pour l’anniversaire de la chute de la monarchie.",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "vf176",
+  "texte": "La pyramide de verre du Louvre a été inaugurée en 1989.",
+  "vrai": true,
+  "explication": "Elle a été conçue par Ieoh Ming Pei.",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "vf177",
+  "texte": "La distance moyenne Terre-Lune est d’environ 384 000 km.",
+  "vrai": true,
+  "explication": "Soit près de trente fois le diamètre de la Terre.",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "vf178",
+  "texte": "La Lune met environ 27,3 jours pour faire le tour de la Terre.",
+  "vrai": true,
+  "explication": "Mais le cycle des phases dure 29,5 jours.",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "vf179",
+  "texte": "Le cycle des phases de la Lune dure 27,3 jours, comme sa révolution.",
+  "vrai": false,
+  "explication": "La révolution dure 27,3 jours, mais le cycle des phases 29,5 jours.",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "vf180",
+  "texte": "La sonde soviétique Luna 2 a atteint la Lune en 1959.",
+  "vrai": true,
+  "explication": "Dix ans avant Apollo 11.",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "vf181",
+  "texte": "Le cou d’une girafe compte sept vertèbres cervicales, comme la plupart des mammifères.",
+  "vrai": true,
+  "explication": "Chacune mesure environ 40 cm.",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "vf182",
+  "texte": "Une girafe a deux fois plus de vertèbres cervicales qu’un humain.",
+  "vrai": false,
+  "explication": "Elle en a sept, comme la plupart des mammifères.",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "vf183",
+  "texte": "La gestation d’une girafe dure environ 15 mois.",
+  "vrai": true,
+  "explication": "Le girafon mesure environ 2 m à la naissance.",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "vf184",
+  "texte": "Le premier Tour de France a eu lieu en 1903.",
+  "vrai": true,
+  "explication": "Il a été créé pour relancer les ventes du journal L’Auto.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "vf185",
+  "texte": "Le premier maillot jaune a été porté en 1919 par Eugène Christophe.",
+  "vrai": true,
+  "explication": "Il a été créé seize ans après le premier Tour.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "vf186",
+  "texte": "Le Tour de France se termine traditionnellement sur les Champs-Élysées.",
+  "vrai": true,
+  "explication": "À Paris.",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "vf187",
+  "texte": "Un échiquier compte 64 cases et 32 pièces au départ.",
+  "vrai": true,
+  "explication": "16 pièces par joueur.",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "vf188",
+  "texte": "Le mot « échecs » vient d’un mot persan qui signifie « le roi ».",
+  "vrai": true,
+  "explication": "Le persan « šāh ».",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "vf189",
+  "texte": "Le jeu d’échecs dérive du chatrang indien, via la Perse.",
+  "vrai": true,
+  "explication": "Il est arrivé en Europe du Sud par les Arabes à partir du Xe siècle.",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "vf190",
+  "texte": "La Palme d’or a été créée en 1955.",
+  "vrai": true,
+  "explication": "Pour remplacer le grand prix du Festival de Cannes.",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "vf191",
+  "texte": "Le Festival de Cannes se déroule en mai.",
+  "vrai": true,
+  "explication": "Au Palais des festivals, sur la Croisette.",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "vf192",
+  "texte": "La première Palme d’or a été décernée à Delbert Mann pour Marty.",
+  "vrai": true,
+  "explication": "En 1955.",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "vf193",
+  "texte": "Le cerveau humain compte environ 86 milliards de neurones.",
+  "vrai": true,
+  "explication": "Parmi près de 170 milliards de cellules.",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "vf194",
+  "texte": "Le cerveau représente environ 2 % de la masse du corps.",
+  "vrai": true,
+  "explication": "Mais il consomme 20 à 25 % de son énergie.",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "vf195",
+  "texte": "Le cerveau consomme environ 2 % de l’énergie du corps.",
+  "vrai": false,
+  "explication": "Il pèse 2 % de la masse du corps mais consomme 20 à 25 % de son énergie.",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "vf196",
+  "texte": "Le Vésuve culmine à 1 281 mètres.",
+  "vrai": true,
+  "explication": "Il domine la baie de Naples.",
+  "source": "https://fr.wikipedia.org/wiki/Vesuve"
+ },
+ {
+  "id": "vf197",
+  "texte": "À Pompéi, la couche de cendres et de ponces atteint jusqu’à 2,8 mètres d’épaisseur.",
+  "vrai": true,
+  "explication": "Après l’éruption de l’an 79.",
+  "source": "https://fr.wikipedia.org/wiki/Vesuve"
+ },
+ {
+  "id": "vf198",
+  "texte": "Le cacaoyer est originaire du bassin amazonien.",
+  "vrai": true,
+  "explication": "Il y est cultivé depuis plus de 3 500 ans.",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "vf199",
+  "texte": "Le mot « chocolat » vient du nahuatl.",
+  "vrai": true,
+  "explication": "La boisson est d’abord consommée au Mexique et en Amérique centrale.",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "vf200",
+  "texte": "Le chocolat au lait date du XIIe siècle.",
+  "vrai": false,
+  "explication": "Il apparaît vers 1875, quand Daniel Peter y ajoute du lait en poudre.",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "vf201",
+  "texte": "Hernán Cortés a rapporté le chocolat en Espagne en 1527.",
+  "vrai": true,
+  "explication": "La boisson y devient très prisée à la cour.",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "vf202",
+  "texte": "Les oiseaux sont les seuls dinosaures encore vivants.",
+  "vrai": true,
+  "explication": "Ils descendent de petits théropodes.",
+  "source": "https://fr.wikipedia.org/wiki/Dinosaure"
+ },
+ {
+  "id": "vf203",
+  "texte": "La plupart des dinosaures ont disparu il y a 66 millions d’années.",
+  "vrai": true,
+  "explication": "Lors de l’extinction Crétacé-Paléogène.",
+  "source": "https://fr.wikipedia.org/wiki/Dinosaure"
+ },
+ {
+  "id": "vf204",
+  "texte": "Le nom « dinosaure » a été inventé par Richard Owen en 1842.",
+  "vrai": true,
+  "explication": "Dinosauria.",
+  "source": "https://fr.wikipedia.org/wiki/Dinosaure"
+ },
+ {
+  "id": "vf205",
+  "texte": "La Terre s’est formée il y a environ 4,54 milliards d’années.",
+  "vrai": true,
+  "explication": "D’après la datation radiométrique.",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "vf206",
+  "texte": "L’axe de rotation de la Terre est incliné d’environ 23°.",
+  "vrai": true,
+  "explication": "C’est ce qui provoque les saisons.",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "vf207",
+  "texte": "La Terre met 365,256 jours pour faire le tour du Soleil.",
+  "vrai": true,
+  "explication": "D’où les années bissextiles.",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "vf208",
+  "texte": "Le règne de Louis XIV a duré 72 ans.",
+  "vrai": true,
+  "explication": "De 1643 à 1715 : le plus long de l’histoire de France.",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "vf209",
+  "texte": "Louis XIV est devenu roi à presque cinq ans.",
+  "vrai": true,
+  "explication": "À la mort de son père Louis XIII.",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "vf210",
+  "texte": "Louis XIV est monté sur le trône à 25 ans.",
+  "vrai": false,
+  "explication": "Il avait presque cinq ans.",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "vf211",
+  "texte": "Marie Curie est la seule femme à avoir reçu deux prix Nobel.",
+  "vrai": true,
+  "explication": "En physique (1903) et en chimie (1911).",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "vf212",
+  "texte": "Le polonium a été nommé d’après la Pologne, pays natal de Marie Curie.",
+  "vrai": true,
+  "explication": "Elle a annoncé sa découverte en 1898.",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "vf213",
+  "texte": "Le catalogue Köchel répertorie 893 œuvres de Mozart.",
+  "vrai": true,
+  "explication": "Mozart est mort à 35 ans.",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "vf214",
+  "texte": "Picasso a réalisé près de 50 000 œuvres.",
+  "vrai": true,
+  "explication": "Il est mort en 1973, à 91 ans.",
+  "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "vf215",
+  "texte": "Le tableau Guernica de Picasso date de 1937.",
+  "vrai": true,
+  "explication": "Il dénonce le bombardement d’une ville basque.",
+  "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "vf216",
+  "texte": "Le Nil se jette dans la mer Méditerranée.",
+  "vrai": true,
+  "explication": "Il forme un delta au nord du Caire.",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "vf217",
+  "texte": "Le Nil traverse huit pays.",
+  "vrai": true,
+  "explication": "De la forêt de Nyungwe au Rwanda jusqu’à l’Égypte.",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "vf218",
+  "texte": "Le Nil se jette dans la mer Rouge.",
+  "vrai": false,
+  "explication": "Il se jette dans la Méditerranée.",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ }
+]

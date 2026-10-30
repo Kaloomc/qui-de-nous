@@ -170,6 +170,30 @@ const ICONS = {
       <circle cx="92" cy="25" r="6" fill="#fff8f0" />
     </>
   ),
+  quisuisje: (
+    <>
+      <circle cx="60" cy="60" r="48" fill="#2a2254" stroke="#fff8f0" strokeWidth="5" />
+      <circle cx="60" cy="44" r="16" fill="#b3a9d6" />
+      <path d="M28 96 q4 -30 32 -30 q28 0 32 30 Z" fill="#b3a9d6" />
+      <text x="60" y="62" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="40" fill="#ffc93c">?</text>
+    </>
+  ),
+  chrono: (
+    <>
+      <rect x="14" y="14" width="92" height="22" rx="8" fill="#ff4f8b" />
+      <rect x="14" y="48" width="92" height="22" rx="8" fill="#ffc93c" />
+      <rect x="14" y="82" width="92" height="22" rx="8" fill="#3ee0c5" />
+      <path d="M96 20 v10 M96 54 v10 M96 88 v10" stroke="#14102a" strokeWidth="5" strokeLinecap="round" />
+    </>
+  ),
+  vf: (
+    <>
+      <circle cx="38" cy="60" r="30" fill="#3ee0c5" />
+      <path d="M24 60 l10 11 l20 -22" fill="none" stroke="#14102a" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="84" cy="60" r="26" fill="#ff4d5e" />
+      <path d="M73 49 l22 22 M95 49 l-22 22" stroke="#fff8f0" strokeWidth="8" strokeLinecap="round" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

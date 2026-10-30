@@ -1,0 +1,1622 @@
+[
+ {
+  "id": "oc001",
+  "evenements": [
+   {
+    "texte": "Des êtres humains s’élèvent dans les airs à bord d’une montgolfière",
+    "annee": 1783
+   },
+   {
+    "texte": "La voiture électrique La Jamais contente dépasse les 100 km/h",
+    "annee": 1899
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Anvers",
+    "annee": 1920
+   },
+   {
+    "texte": "Le langage Java est lancé",
+    "annee": 1997
+   },
+   {
+    "texte": "Le nom « Amérique » apparaît sur une carte de Waldseemüller",
+    "annee": 1507
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc002",
+  "evenements": [
+   {
+    "texte": "La statue de la Liberté est inaugurée à New York",
+    "annee": 1886
+   },
+   {
+    "texte": "Le nom « Amérique » apparaît sur une carte de Waldseemüller",
+    "annee": 1507
+   },
+   {
+    "texte": "Adolphe Pégoud réalise les premiers loopings",
+    "annee": 1913
+   },
+   {
+    "texte": "La course Paris-Rouen, première compétition automobile, a lieu",
+    "annee": 1894
+   },
+   {
+    "texte": "Mort de Mozart à Vienne",
+    "annee": 1791
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9 ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "oc003",
+  "evenements": [
+   {
+    "texte": "Mort de Mozart à Vienne",
+    "annee": 1791
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Los Angeles",
+    "annee": 1984
+   },
+   {
+    "texte": "Premiers Jeux olympiques d’hiver, à Chamonix",
+    "annee": 1924
+   },
+   {
+    "texte": "Apollo 11 pose les premiers humains sur la Lune",
+    "annee": 1969
+   },
+   {
+    "texte": "Premier Tour de France cycliste",
+    "annee": 1903
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Jeux_olympiques ; https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "oc004",
+  "evenements": [
+   {
+    "texte": "Le langage Java est lancé",
+    "annee": 1997
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris",
+    "annee": 1900
+   },
+   {
+    "texte": "Zheng He lance ses expéditions maritimes dans l’océan Indien",
+    "annee": 1405
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Anvers",
+    "annee": 1920
+   },
+   {
+    "texte": "Pedro Álvares Cabral aborde la côte du Brésil",
+    "annee": 1500
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc005",
+  "evenements": [
+   {
+    "texte": "Charles Lindbergh traverse l’Atlantique en solitaire",
+    "annee": 1927
+   },
+   {
+    "texte": "Richard Owen invente le mot « dinosaure »",
+    "annee": 1842
+   },
+   {
+    "texte": "Marie Curie annonce la découverte du polonium",
+    "annee": 1898
+   },
+   {
+    "texte": "Le coup d’État du 18 Brumaire met fin à la Révolution française",
+    "annee": 1799
+   },
+   {
+    "texte": "Victor Hugo publie Notre-Dame de Paris",
+    "annee": 1831
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Dinosaure ; https://fr.wikipedia.org/wiki/Marie_Curie ; https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise ; https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "oc006",
+  "evenements": [
+   {
+    "texte": "Sort Le Magicien d’Oz",
+    "annee": 1939
+   },
+   {
+    "texte": "Hillary et Tensing atteignent le sommet de l’Everest",
+    "annee": 1953
+   },
+   {
+    "texte": "Ray Tomlinson met au point le courrier électronique",
+    "annee": 1972
+   },
+   {
+    "texte": "Apple popularise l’interface graphique avec le Macintosh",
+    "annee": 1984
+   },
+   {
+    "texte": "Les frères Wright réussissent le premier vol motorisé et contrôlé",
+    "annee": 1903
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Mont_Everest ; https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation"
+ },
+ {
+  "id": "oc007",
+  "evenements": [
+   {
+    "texte": "Le coup d’État du 18 Brumaire met fin à la Révolution française",
+    "annee": 1799
+   },
+   {
+    "texte": "Louis Blériot traverse la Manche en avion",
+    "annee": 1909
+   },
+   {
+    "texte": "George Eastman commercialise le film souple en celluloïd",
+    "annee": 1888
+   },
+   {
+    "texte": "Le langage Java est lancé",
+    "annee": 1997
+   },
+   {
+    "texte": "Picasso peint Guernica",
+    "annee": 1937
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "oc008",
+  "evenements": [
+   {
+    "texte": "Apollo 11 pose les premiers humains sur la Lune",
+    "annee": 1969
+   },
+   {
+    "texte": "Mort de Mozart à Vienne",
+    "annee": 1791
+   },
+   {
+    "texte": "Benz construit la Motorwagen, première automobile à moteur à explosion produite",
+    "annee": 1886
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Londres",
+    "annee": 1908
+   },
+   {
+    "texte": "Le langage COBOL est créé pour la gestion des entreprises",
+    "annee": 1959
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique"
+ },
+ {
+  "id": "oc009",
+  "evenements": [
+   {
+    "texte": "Benz construit la Motorwagen, première automobile à moteur à explosion produite",
+    "annee": 1886
+   },
+   {
+    "texte": "Apollo 11 pose les premiers humains sur la Lune",
+    "annee": 1969
+   },
+   {
+    "texte": "Le langage COBOL est créé pour la gestion des entreprises",
+    "annee": 1959
+   },
+   {
+    "texte": "Des êtres humains s’élèvent dans les airs à bord d’une montgolfière",
+    "annee": 1783
+   },
+   {
+    "texte": "Le traité de Tordesillas partage le monde entre l’Espagne et le Portugal",
+    "annee": 1494
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc010",
+  "evenements": [
+   {
+    "texte": "Première édition des 24 Heures du Mans",
+    "annee": 1923
+   },
+   {
+    "texte": "Les Parisiens prennent la Bastille",
+    "annee": 1789
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Berlin",
+    "annee": 1936
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Munich",
+    "annee": 1972
+   },
+   {
+    "texte": "Mort de Chopin à Paris",
+    "annee": 1849
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "oc011",
+  "evenements": [
+   {
+    "texte": "Dalibard attire la foudre avec une tige de fer à Marly-la-Ville",
+    "annee": 1752
+   },
+   {
+    "texte": "Le Leica, premier appareil au format 24 × 36 mm, est commercialisé",
+    "annee": 1925
+   },
+   {
+    "texte": "Cugnot présente son « fardier », chariot à vapeur",
+    "annee": 1769
+   },
+   {
+    "texte": "Pedro Álvares Cabral aborde la côte du Brésil",
+    "annee": 1500
+   },
+   {
+    "texte": "Ray Tomlinson met au point le courrier électronique",
+    "annee": 1972
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Foudre ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "oc012",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Moscou",
+    "annee": 1980
+   },
+   {
+    "texte": "Amelia Earhart devient la première femme à traverser l’Atlantique en solitaire",
+    "annee": 1932
+   },
+   {
+    "texte": "Le traité de Tordesillas partage le monde entre l’Espagne et le Portugal",
+    "annee": 1494
+   },
+   {
+    "texte": "Cugnot présente son « fardier », chariot à vapeur",
+    "annee": 1769
+   },
+   {
+    "texte": "Zheng He lance ses expéditions maritimes dans l’océan Indien",
+    "annee": 1405
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile"
+ },
+ {
+  "id": "oc013",
+  "evenements": [
+   {
+    "texte": "Pedro Álvares Cabral aborde la côte du Brésil",
+    "annee": 1500
+   },
+   {
+    "texte": "Amelia Earhart devient la première femme à traverser l’Atlantique en solitaire",
+    "annee": 1932
+   },
+   {
+    "texte": "George Eastman commercialise le film souple en celluloïd",
+    "annee": 1888
+   },
+   {
+    "texte": "Voyager 1 franchit l’héliopause",
+    "annee": 2012
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Los Angeles",
+    "annee": 1984
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Soleil ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9"
+ },
+ {
+  "id": "oc014",
+  "evenements": [
+   {
+    "texte": "Amelia Earhart devient la première femme à traverser l’Atlantique en solitaire",
+    "annee": 1932
+   },
+   {
+    "texte": "Les Ottomans prennent Constantinople",
+    "annee": 1453
+   },
+   {
+    "texte": "Le musée du Louvre ouvre ses portes",
+    "annee": 1793
+   },
+   {
+    "texte": "Edwin Land met au point le Polaroid, premier appareil à développement instantané",
+    "annee": 1948
+   },
+   {
+    "texte": "Christophe Colomb atteint les Bahamas",
+    "annee": 1492
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie"
+ },
+ {
+  "id": "oc015",
+  "evenements": [
+   {
+    "texte": "Sort Le Magicien d’Oz",
+    "annee": 1939
+   },
+   {
+    "texte": "Des êtres humains s’élèvent dans les airs à bord d’une montgolfière",
+    "annee": 1783
+   },
+   {
+    "texte": "Les frères Wright réussissent le premier vol motorisé et contrôlé",
+    "annee": 1903
+   },
+   {
+    "texte": "Edwin Land met au point le Polaroid, premier appareil à développement instantané",
+    "annee": 1948
+   },
+   {
+    "texte": "Apple popularise l’interface graphique avec le Macintosh",
+    "annee": 1984
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique"
+ },
+ {
+  "id": "oc016",
+  "evenements": [
+   {
+    "texte": "Apple popularise l’interface graphique avec le Macintosh",
+    "annee": 1984
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Rio de Janeiro",
+    "annee": 2016
+   },
+   {
+    "texte": "Première édition des 24 Heures du Mans",
+    "annee": 1923
+   },
+   {
+    "texte": "Cugnot présente son « fardier », chariot à vapeur",
+    "annee": 1769
+   },
+   {
+    "texte": "La statue de la Liberté est inaugurée à New York",
+    "annee": 1886
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "oc017",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Los Angeles",
+    "annee": 1984
+   },
+   {
+    "texte": "La bataille d’Hernani agite le Théâtre-Français",
+    "annee": 1830
+   },
+   {
+    "texte": "Première édition effective du Festival de Cannes",
+    "annee": 1946
+   },
+   {
+    "texte": "Cugnot présente son « fardier », chariot à vapeur",
+    "annee": 1769
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris",
+    "annee": 1900
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Victor_Hugo ; https://fr.wikipedia.org/wiki/Festival_de_Cannes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile"
+ },
+ {
+  "id": "oc018",
+  "evenements": [
+   {
+    "texte": "Le premier équipement du réseau ARPANET est installé à l’UCLA",
+    "annee": 1969
+   },
+   {
+    "texte": "Des êtres humains s’élèvent dans les airs à bord d’une montgolfière",
+    "annee": 1783
+   },
+   {
+    "texte": "Le nom « Amérique » apparaît sur une carte de Waldseemüller",
+    "annee": 1507
+   },
+   {
+    "texte": "La statue de la Liberté est inaugurée à New York",
+    "annee": 1886
+   },
+   {
+    "texte": "Le musée du Louvre ouvre ses portes",
+    "annee": 1793
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9 ; https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "oc019",
+  "evenements": [
+   {
+    "texte": "Début de la construction de la tour de Pise",
+    "annee": 1173
+   },
+   {
+    "texte": "Apple popularise l’interface graphique avec le Macintosh",
+    "annee": 1984
+   },
+   {
+    "texte": "Pedro Álvares Cabral aborde la côte du Brésil",
+    "annee": 1500
+   },
+   {
+    "texte": "La voiture électrique La Jamais contente dépasse les 100 km/h",
+    "annee": 1899
+   },
+   {
+    "texte": "Les Ottomans prennent Constantinople",
+    "annee": 1453
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_Pise ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile"
+ },
+ {
+  "id": "oc020",
+  "evenements": [
+   {
+    "texte": "Premiers Jeux olympiques d’hiver, à Chamonix",
+    "annee": 1924
+   },
+   {
+    "texte": "Christophe Colomb atteint les Bahamas",
+    "annee": 1492
+   },
+   {
+    "texte": "Von Neumann et ses collègues formulent le programme enregistré en mémoire",
+    "annee": 1945
+   },
+   {
+    "texte": "Nadar réalise la première photographie aérienne",
+    "annee": 1858
+   },
+   {
+    "texte": "Le World Wide Web tombe dans le domaine public",
+    "annee": 1993
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "oc021",
+  "evenements": [
+   {
+    "texte": "Victor Hugo publie Notre-Dame de Paris",
+    "annee": 1831
+   },
+   {
+    "texte": "Vasco de Gama arrive à Calicut",
+    "annee": 1498
+   },
+   {
+    "texte": "Balboa aperçoit l’océan Pacifique depuis l’isthme de Panama",
+    "annee": 1513
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris",
+    "annee": 1900
+   },
+   {
+    "texte": "Hillary et Tensing atteignent le sommet de l’Everest",
+    "annee": 1953
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "oc022",
+  "evenements": [
+   {
+    "texte": "Apollo 11 pose les premiers humains sur la Lune",
+    "annee": 1969
+   },
+   {
+    "texte": "John Cobb établit le dernier record de vitesse terrestre d’une voiture à moteur à explosion, à 634 km/h",
+    "annee": 1947
+   },
+   {
+    "texte": "Niépce obtient la plus ancienne photographie conservée",
+    "annee": 1827
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Anvers",
+    "annee": 1920
+   },
+   {
+    "texte": "La voiture électrique La Jamais contente dépasse les 100 km/h",
+    "annee": 1899
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9"
+ },
+ {
+  "id": "oc023",
+  "evenements": [
+   {
+    "texte": "Le Leica, premier appareil au format 24 × 36 mm, est commercialisé",
+    "annee": 1925
+   },
+   {
+    "texte": "Newton publie les Principia",
+    "annee": 1687
+   },
+   {
+    "texte": "La Ford T apparaît",
+    "annee": 1914
+   },
+   {
+    "texte": "Balboa aperçoit l’océan Pacifique depuis l’isthme de Panama",
+    "annee": 1513
+   },
+   {
+    "texte": "Les frères Wright réussissent le premier vol motorisé et contrôlé",
+    "annee": 1903
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Isaac_Newton ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation"
+ },
+ {
+  "id": "oc024",
+  "evenements": [
+   {
+    "texte": "Balboa aperçoit l’océan Pacifique depuis l’isthme de Panama",
+    "annee": 1513
+   },
+   {
+    "texte": "Amelia Earhart devient la première femme à traverser l’Atlantique en solitaire",
+    "annee": 1932
+   },
+   {
+    "texte": "Le World Wide Web tombe dans le domaine public",
+    "annee": 1993
+   },
+   {
+    "texte": "Apple popularise l’interface graphique avec le Macintosh",
+    "annee": 1984
+   },
+   {
+    "texte": "Nadar réalise la première photographie aérienne",
+    "annee": 1858
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie"
+ },
+ {
+  "id": "oc025",
+  "evenements": [
+   {
+    "texte": "Eadweard Muybridge photographie le galop d’un cheval image par image",
+    "annee": 1878
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Moscou",
+    "annee": 1980
+   },
+   {
+    "texte": "Adolphe Pégoud réalise les premiers loopings",
+    "annee": 1913
+   },
+   {
+    "texte": "Napoléon est sacré empereur à Notre-Dame de Paris",
+    "annee": 1804
+   },
+   {
+    "texte": "John McCarthy conçoit le langage Lisp",
+    "annee": 1960
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique"
+ },
+ {
+  "id": "oc026",
+  "evenements": [
+   {
+    "texte": "Victor Hugo publie Notre-Dame de Paris",
+    "annee": 1831
+   },
+   {
+    "texte": "Voyager 1 franchit l’héliopause",
+    "annee": 2012
+   },
+   {
+    "texte": "Le World Wide Web tombe dans le domaine public",
+    "annee": 1993
+   },
+   {
+    "texte": "Le langage COBOL est créé pour la gestion des entreprises",
+    "annee": 1959
+   },
+   {
+    "texte": "Mort de Chopin à Paris",
+    "annee": 1849
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo ; https://fr.wikipedia.org/wiki/Soleil ; https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "oc027",
+  "evenements": [
+   {
+    "texte": "Le premier équipement du réseau ARPANET est installé à l’UCLA",
+    "annee": 1969
+   },
+   {
+    "texte": "Zheng He lance ses expéditions maritimes dans l’océan Indien",
+    "annee": 1405
+   },
+   {
+    "texte": "Première édition des 24 Heures du Mans",
+    "annee": 1923
+   },
+   {
+    "texte": "John McCarthy conçoit le langage Lisp",
+    "annee": 1960
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Londres",
+    "annee": 1908
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9"
+ },
+ {
+  "id": "oc028",
+  "evenements": [
+   {
+    "texte": "Le premier équipement du réseau ARPANET est installé à l’UCLA",
+    "annee": 1969
+   },
+   {
+    "texte": "Picasso peint Guernica",
+    "annee": 1937
+   },
+   {
+    "texte": "John Cobb établit le dernier record de vitesse terrestre d’une voiture à moteur à explosion, à 634 km/h",
+    "annee": 1947
+   },
+   {
+    "texte": "Le musée du Louvre ouvre ses portes",
+    "annee": 1793
+   },
+   {
+    "texte": "Einstein publie la relativité générale",
+    "annee": 1915
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Pablo_Picasso ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre ; https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "oc029",
+  "evenements": [
+   {
+    "texte": "Victor Hugo publie Notre-Dame de Paris",
+    "annee": 1831
+   },
+   {
+    "texte": "Einstein publie la relativité générale",
+    "annee": 1915
+   },
+   {
+    "texte": "Premiers Jeux olympiques d’hiver, à Chamonix",
+    "annee": 1924
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Berlin",
+    "annee": 1936
+   },
+   {
+    "texte": "Des êtres humains s’élèvent dans les airs à bord d’une montgolfière",
+    "annee": 1783
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo ; https://fr.wikipedia.org/wiki/Albert_Einstein ; https://fr.wikipedia.org/wiki/Jeux_olympiques ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation"
+ },
+ {
+  "id": "oc030",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Moscou",
+    "annee": 1980
+   },
+   {
+    "texte": "Des êtres humains s’élèvent dans les airs à bord d’une montgolfière",
+    "annee": 1783
+   },
+   {
+    "texte": "Le langage COBOL est créé pour la gestion des entreprises",
+    "annee": 1959
+   },
+   {
+    "texte": "Le premier équipement du réseau ARPANET est installé à l’UCLA",
+    "annee": 1969
+   },
+   {
+    "texte": "La machine de Turing définit abstraitement la notion de calcul",
+    "annee": 1936
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "oc031",
+  "evenements": [
+   {
+    "texte": "Nadar réalise la première photographie aérienne",
+    "annee": 1858
+   },
+   {
+    "texte": "Premiers Jeux olympiques modernes, à Athènes",
+    "annee": 1896
+   },
+   {
+    "texte": "Sort Le Magicien d’Oz",
+    "annee": 1939
+   },
+   {
+    "texte": "Christophe Colomb atteint les Bahamas",
+    "annee": 1492
+   },
+   {
+    "texte": "Eadweard Muybridge photographie le galop d’un cheval image par image",
+    "annee": 1878
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc032",
+  "evenements": [
+   {
+    "texte": "Christophe Colomb atteint les Bahamas",
+    "annee": 1492
+   },
+   {
+    "texte": "Hillary et Tensing atteignent le sommet de l’Everest",
+    "annee": 1953
+   },
+   {
+    "texte": "Les Ottomans prennent Constantinople",
+    "annee": 1453
+   },
+   {
+    "texte": "Magellan donne le nom de « Pacifique » à l’océan",
+    "annee": 1520
+   },
+   {
+    "texte": "Charles Lindbergh traverse l’Atlantique en solitaire",
+    "annee": 1927
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Mont_Everest ; https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation"
+ },
+ {
+  "id": "oc033",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Los Angeles",
+    "annee": 1984
+   },
+   {
+    "texte": "Le premier équipement du réseau ARPANET est installé à l’UCLA",
+    "annee": 1969
+   },
+   {
+    "texte": "La course Paris-Rouen, première compétition automobile, a lieu",
+    "annee": 1894
+   },
+   {
+    "texte": "Amelia Earhart devient la première femme à traverser l’Atlantique en solitaire",
+    "annee": 1932
+   },
+   {
+    "texte": "Balboa aperçoit l’océan Pacifique depuis l’isthme de Panama",
+    "annee": 1513
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc034",
+  "evenements": [
+   {
+    "texte": "La sonde Venera 7 se pose sur Vénus",
+    "annee": 1970
+   },
+   {
+    "texte": "Amelia Earhart devient la première femme à traverser l’Atlantique en solitaire",
+    "annee": 1932
+   },
+   {
+    "texte": "Nadar réalise la première photographie aérienne",
+    "annee": 1858
+   },
+   {
+    "texte": "Elcano termine le premier tour du monde",
+    "annee": 1522
+   },
+   {
+    "texte": "Les frères Wright réussissent le premier vol motorisé et contrôlé",
+    "annee": 1903
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te) ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc035",
+  "evenements": [
+   {
+    "texte": "Christophe Colomb atteint les Bahamas",
+    "annee": 1492
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Munich",
+    "annee": 1972
+   },
+   {
+    "texte": "Voyager 1 franchit l’héliopause",
+    "annee": 2012
+   },
+   {
+    "texte": "Apple popularise l’interface graphique avec le Macintosh",
+    "annee": 1984
+   },
+   {
+    "texte": "Naissance de Chopin en Pologne",
+    "annee": 1810
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Soleil ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "oc036",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Munich",
+    "annee": 1972
+   },
+   {
+    "texte": "Pedro Álvares Cabral aborde la côte du Brésil",
+    "annee": 1500
+   },
+   {
+    "texte": "La sonde Luna 2 atteint la Lune",
+    "annee": 1959
+   },
+   {
+    "texte": "Le premier maillot jaune est porté sur le Tour de France",
+    "annee": 1919
+   },
+   {
+    "texte": "La voiture électrique La Jamais contente dépasse les 100 km/h",
+    "annee": 1899
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Tour_de_France_cycliste ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile"
+ },
+ {
+  "id": "oc037",
+  "evenements": [
+   {
+    "texte": "Les Ottomans prennent Constantinople",
+    "annee": 1453
+   },
+   {
+    "texte": "Première édition des 24 Heures du Mans",
+    "annee": 1923
+   },
+   {
+    "texte": "La Ford T apparaît",
+    "annee": 1914
+   },
+   {
+    "texte": "Einstein publie la relativité restreinte",
+    "annee": 1905
+   },
+   {
+    "texte": "La statue de la Liberté est inaugurée à New York",
+    "annee": 1886
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Albert_Einstein ; https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "oc038",
+  "evenements": [
+   {
+    "texte": "Adolphe Pégoud réalise les premiers loopings",
+    "annee": 1913
+   },
+   {
+    "texte": "Victor Hugo publie Notre-Dame de Paris",
+    "annee": 1831
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Los Angeles",
+    "annee": 1984
+   },
+   {
+    "texte": "Apollo 11 pose les premiers humains sur la Lune",
+    "annee": 1969
+   },
+   {
+    "texte": "La sonde Luna 2 atteint la Lune",
+    "annee": 1959
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Victor_Hugo ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "oc039",
+  "evenements": [
+   {
+    "texte": "Voyager 1 franchit l’héliopause",
+    "annee": 2012
+   },
+   {
+    "texte": "Adolphe Pégoud réalise les premiers loopings",
+    "annee": 1913
+   },
+   {
+    "texte": "George Eastman commercialise le film souple en celluloïd",
+    "annee": 1888
+   },
+   {
+    "texte": "Le nom « Amérique » apparaît sur une carte de Waldseemüller",
+    "annee": 1507
+   },
+   {
+    "texte": "La voiture électrique La Jamais contente dépasse les 100 km/h",
+    "annee": 1899
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Soleil ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile"
+ },
+ {
+  "id": "oc040",
+  "evenements": [
+   {
+    "texte": "Napoléon est sacré empereur à Notre-Dame de Paris",
+    "annee": 1804
+   },
+   {
+    "texte": "Newton publie les Principia",
+    "annee": 1687
+   },
+   {
+    "texte": "Zheng He lance ses expéditions maritimes dans l’océan Indien",
+    "annee": 1405
+   },
+   {
+    "texte": "Premiers Jeux olympiques modernes, à Athènes",
+    "annee": 1896
+   },
+   {
+    "texte": "Le World Wide Web tombe dans le domaine public",
+    "annee": 1993
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier ; https://fr.wikipedia.org/wiki/Isaac_Newton ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Internet"
+ },
+ {
+  "id": "oc041",
+  "evenements": [
+   {
+    "texte": "Apollo 11 pose les premiers humains sur la Lune",
+    "annee": 1969
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Moscou",
+    "annee": 1980
+   },
+   {
+    "texte": "Naissance de Mozart à Salzbourg",
+    "annee": 1756
+   },
+   {
+    "texte": "Victor Hugo publie Notre-Dame de Paris",
+    "annee": 1831
+   },
+   {
+    "texte": "La première Palme d’or est décernée à Cannes",
+    "annee": 1955
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart ; https://fr.wikipedia.org/wiki/Victor_Hugo ; https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "oc042",
+  "evenements": [
+   {
+    "texte": "Les frères Wright réussissent le premier vol motorisé et contrôlé",
+    "annee": 1903
+   },
+   {
+    "texte": "Vasco de Gama arrive à Calicut",
+    "annee": 1498
+   },
+   {
+    "texte": "Nadar réalise la première photographie aérienne",
+    "annee": 1858
+   },
+   {
+    "texte": "Le Leica, premier appareil au format 24 × 36 mm, est commercialisé",
+    "annee": 1925
+   },
+   {
+    "texte": "La bataille d’Hernani agite le Théâtre-Français",
+    "annee": 1830
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "oc043",
+  "evenements": [
+   {
+    "texte": "Einstein publie la relativité générale",
+    "annee": 1915
+   },
+   {
+    "texte": "John McCarthy conçoit le langage Lisp",
+    "annee": 1960
+   },
+   {
+    "texte": "Le coup d’État du 18 Brumaire met fin à la Révolution française",
+    "annee": 1799
+   },
+   {
+    "texte": "Daniel Peter invente le chocolat au lait",
+    "annee": 1875
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Berlin",
+    "annee": 1936
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise ; https://fr.wikipedia.org/wiki/Chocolat ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9"
+ },
+ {
+  "id": "oc044",
+  "evenements": [
+   {
+    "texte": "La sonde Venera 7 se pose sur Vénus",
+    "annee": 1970
+   },
+   {
+    "texte": "La course Paris-Rouen, première compétition automobile, a lieu",
+    "annee": 1894
+   },
+   {
+    "texte": "Le World Wide Web tombe dans le domaine public",
+    "annee": 1993
+   },
+   {
+    "texte": "Bartolomeu Dias franchit la pointe sud de l’Afrique",
+    "annee": 1488
+   },
+   {
+    "texte": "Zheng He lance ses expéditions maritimes dans l’océan Indien",
+    "annee": 1405
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te) ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc045",
+  "evenements": [
+   {
+    "texte": "Le World Wide Web tombe dans le domaine public",
+    "annee": 1993
+   },
+   {
+    "texte": "La sonde Luna 2 atteint la Lune",
+    "annee": 1959
+   },
+   {
+    "texte": "Cugnot présente son « fardier », chariot à vapeur",
+    "annee": 1769
+   },
+   {
+    "texte": "Nadar réalise la première photographie aérienne",
+    "annee": 1858
+   },
+   {
+    "texte": "Charles Lindbergh traverse l’Atlantique en solitaire",
+    "annee": 1927
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Lune ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation"
+ },
+ {
+  "id": "oc046",
+  "evenements": [
+   {
+    "texte": "Vasco de Gama arrive à Calicut",
+    "annee": 1498
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Los Angeles",
+    "annee": 1984
+   },
+   {
+    "texte": "Louis Blériot traverse la Manche en avion",
+    "annee": 1909
+   },
+   {
+    "texte": "George Eastman commercialise le film souple en celluloïd",
+    "annee": 1888
+   },
+   {
+    "texte": "Marie Curie annonce la découverte du polonium",
+    "annee": 1898
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "oc047",
+  "evenements": [
+   {
+    "texte": "Magellan donne le nom de « Pacifique » à l’océan",
+    "annee": 1520
+   },
+   {
+    "texte": "Christophe Colomb atteint les Bahamas",
+    "annee": 1492
+   },
+   {
+    "texte": "Edwin Land met au point le Polaroid, premier appareil à développement instantané",
+    "annee": 1948
+   },
+   {
+    "texte": "La voiture électrique La Jamais contente dépasse les 100 km/h",
+    "annee": 1899
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Rio de Janeiro",
+    "annee": 2016
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9"
+ },
+ {
+  "id": "oc048",
+  "evenements": [
+   {
+    "texte": "La tour Eiffel est inaugurée",
+    "annee": 1889
+   },
+   {
+    "texte": "Le langage Java est lancé",
+    "annee": 1997
+   },
+   {
+    "texte": "Dalibard attire la foudre avec une tige de fer à Marly-la-Ville",
+    "annee": 1752
+   },
+   {
+    "texte": "Einstein publie la relativité restreinte",
+    "annee": 1905
+   },
+   {
+    "texte": "Bartolomeu Dias franchit la pointe sud de l’Afrique",
+    "annee": 1488
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Foudre ; https://fr.wikipedia.org/wiki/Albert_Einstein ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes"
+ },
+ {
+  "id": "oc049",
+  "evenements": [
+   {
+    "texte": "Einstein publie la relativité restreinte",
+    "annee": 1905
+   },
+   {
+    "texte": "Einstein publie la relativité générale",
+    "annee": 1915
+   },
+   {
+    "texte": "La course Paris-Rouen, première compétition automobile, a lieu",
+    "annee": 1894
+   },
+   {
+    "texte": "John Cobb établit le dernier record de vitesse terrestre d’une voiture à moteur à explosion, à 634 km/h",
+    "annee": 1947
+   },
+   {
+    "texte": "Début de la construction de la tour de Pise",
+    "annee": 1173
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Tour_de_Pise"
+ },
+ {
+  "id": "oc050",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Moscou",
+    "annee": 1980
+   },
+   {
+    "texte": "Le musée du Louvre ouvre ses portes",
+    "annee": 1793
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Munich",
+    "annee": 1972
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Berlin",
+    "annee": 1936
+   },
+   {
+    "texte": "La pyramide de verre du Louvre est inaugurée",
+    "annee": 1989
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "oc051",
+  "evenements": [
+   {
+    "texte": "Le premier équipement du réseau ARPANET est installé à l’UCLA",
+    "annee": 1969
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Berlin",
+    "annee": 1936
+   },
+   {
+    "texte": "La Ford T apparaît",
+    "annee": 1914
+   },
+   {
+    "texte": "Arago présente le daguerréotype à l’Académie des sciences",
+    "annee": 1839
+   },
+   {
+    "texte": "Eadweard Muybridge photographie le galop d’un cheval image par image",
+    "annee": 1878
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Internet ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma"
+ },
+ {
+  "id": "oc052",
+  "evenements": [
+   {
+    "texte": "Magellan donne le nom de « Pacifique » à l’océan",
+    "annee": 1520
+   },
+   {
+    "texte": "La Ford T apparaît",
+    "annee": 1914
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris, pour la troisième fois",
+    "annee": 2024
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris",
+    "annee": 1900
+   },
+   {
+    "texte": "Benz construit la Motorwagen, première automobile à moteur à explosion produite",
+    "annee": 1886
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9"
+ },
+ {
+  "id": "oc053",
+  "evenements": [
+   {
+    "texte": "La tour Eiffel est inaugurée",
+    "annee": 1889
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris, pour la troisième fois",
+    "annee": 2024
+   },
+   {
+    "texte": "La sonde Venera 7 se pose sur Vénus",
+    "annee": 1970
+   },
+   {
+    "texte": "Naissance de Chopin en Pologne",
+    "annee": 1810
+   },
+   {
+    "texte": "Newton publie les Principia",
+    "annee": 1687
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te) ; https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin ; https://fr.wikipedia.org/wiki/Isaac_Newton"
+ },
+ {
+  "id": "oc054",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Paris, pour la troisième fois",
+    "annee": 2024
+   },
+   {
+    "texte": "Alcock et Brown traversent l’Atlantique sans escale",
+    "annee": 1919
+   },
+   {
+    "texte": "Les Parisiens prennent la Bastille",
+    "annee": 1789
+   },
+   {
+    "texte": "Louis Blériot traverse la Manche en avion",
+    "annee": 1909
+   },
+   {
+    "texte": "Edwin Land met au point le Polaroid, premier appareil à développement instantané",
+    "annee": 1948
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27aviation ; https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie"
+ },
+ {
+  "id": "oc055",
+  "evenements": [
+   {
+    "texte": "Le traité de Tordesillas partage le monde entre l’Espagne et le Portugal",
+    "annee": 1494
+   },
+   {
+    "texte": "Arago présente le daguerréotype à l’Académie des sciences",
+    "annee": 1839
+   },
+   {
+    "texte": "Balboa aperçoit l’océan Pacifique depuis l’isthme de Panama",
+    "annee": 1513
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Munich",
+    "annee": 1972
+   },
+   {
+    "texte": "La course Paris-Rouen, première compétition automobile, a lieu",
+    "annee": 1894
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile"
+ },
+ {
+  "id": "oc056",
+  "evenements": [
+   {
+    "texte": "La machine de Turing définit abstraitement la notion de calcul",
+    "annee": 1936
+   },
+   {
+    "texte": "Les Jeux olympiques ont lieu à Moscou",
+    "annee": 1980
+   },
+   {
+    "texte": "Marie Curie annonce la découverte du polonium",
+    "annee": 1898
+   },
+   {
+    "texte": "Naissance de Mozart à Salzbourg",
+    "annee": 1756
+   },
+   {
+    "texte": "La sonde Luna 2 atteint la Lune",
+    "annee": 1959
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Marie_Curie ; https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart ; https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "oc057",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Anvers",
+    "annee": 1920
+   },
+   {
+    "texte": "La première transplantation cardiaque est réalisée au Cap",
+    "annee": 1967
+   },
+   {
+    "texte": "Elcano termine le premier tour du monde",
+    "annee": 1522
+   },
+   {
+    "texte": "Le langage COBOL est créé pour la gestion des entreprises",
+    "annee": 1959
+   },
+   {
+    "texte": "Niépce obtient la plus ancienne photographie conservée",
+    "annee": 1827
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/C%C5%93ur_humain ; https://fr.wikipedia.org/wiki/Grandes_d%C3%A9couvertes ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie"
+ },
+ {
+  "id": "oc058",
+  "evenements": [
+   {
+    "texte": "Les Jeux olympiques ont lieu à Berlin",
+    "annee": 1936
+   },
+   {
+    "texte": "La tour Eiffel est inaugurée",
+    "annee": 1889
+   },
+   {
+    "texte": "Eadweard Muybridge photographie le galop d’un cheval image par image",
+    "annee": 1878
+   },
+   {
+    "texte": "Début de la construction de la tour de Pise",
+    "annee": 1173
+   },
+   {
+    "texte": "Einstein publie la relativité générale",
+    "annee": 1915
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques_d%27%C3%A9t%C3%A9 ; https://fr.wikipedia.org/wiki/Tour_Eiffel ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma ; https://fr.wikipedia.org/wiki/Tour_de_Pise ; https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "oc059",
+  "evenements": [
+   {
+    "texte": "La Ford T apparaît",
+    "annee": 1914
+   },
+   {
+    "texte": "Edwin Land met au point le Polaroid, premier appareil à développement instantané",
+    "annee": 1948
+   },
+   {
+    "texte": "Première édition des 24 Heures du Mans",
+    "annee": 1923
+   },
+   {
+    "texte": "La machine de Turing définit abstraitement la notion de calcul",
+    "annee": 1936
+   },
+   {
+    "texte": "Niépce obtient la plus ancienne photographie conservée",
+    "annee": 1827
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Histoire_de_la_photographie ; https://fr.wikipedia.org/wiki/Histoire_de_l%27informatique"
+ },
+ {
+  "id": "oc060",
+  "evenements": [
+   {
+    "texte": "Cugnot présente son « fardier », chariot à vapeur",
+    "annee": 1769
+   },
+   {
+    "texte": "Naissance de Mozart à Salzbourg",
+    "annee": 1756
+   },
+   {
+    "texte": "La pyramide de verre du Louvre est inaugurée",
+    "annee": 1989
+   },
+   {
+    "texte": "Les frères Lumière organisent à Paris les premières projections publiques payantes",
+    "annee": 1895
+   },
+   {
+    "texte": "Mort de Mozart à Vienne",
+    "annee": 1791
+   }
+  ],
+  "categorie": "mélange",
+  "source": "https://fr.wikipedia.org/wiki/Histoire_de_l%27automobile ; https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart ; https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre ; https://fr.wikipedia.org/wiki/Histoire_du_cin%C3%A9ma"
+ }
+]

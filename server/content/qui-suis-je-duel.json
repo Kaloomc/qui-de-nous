@@ -1,0 +1,974 @@
+[
+ {
+  "id": "qs001",
+  "indices": [
+   "J’ai été construite en deux ans, à peine plus.",
+   "Je compte environ 2,5 millions de rivets.",
+   "On a failli me démonter après mon inauguration en 1889.",
+   "Je suis la dame de fer de Paris."
+  ],
+  "choix": [
+   "La tour de Pise",
+   "La tour Eiffel",
+   "La statue de la Liberté",
+   "Le Colisée"
+  ],
+  "bonne": 1,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "qs002",
+  "indices": [
+   "Pendant plus de deux siècles, des ouvriers ont continué mon chantier.",
+   "Je mesure environ 58 m d’un côté et 56 m de l’autre.",
+   "On peut monter mes 293 marches en colimaçon.",
+   "Je penche, en Toscane."
+  ],
+  "choix": [
+   "La tour Eiffel",
+   "Le Colisée",
+   "La tour de Pise",
+   "Le campanile de Venise"
+  ],
+  "bonne": 2,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_Pise"
+ },
+ {
+  "id": "qs003",
+  "indices": [
+   "Ma peau de cuivre est faite de 300 feuilles martelées à la main.",
+   "J’ai voyagé en 350 pièces, rangées dans 214 caisses.",
+   "Un sculpteur français m’a offerte aux États-Unis.",
+   "Je tiens une torche à l’entrée du port de New York."
+  ],
+  "choix": [
+   "Le Christ rédempteur",
+   "La Sirène de Copenhague",
+   "Le Penseur",
+   "La statue de la Liberté"
+  ],
+  "bonne": 3,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Statue_de_la_Libert%C3%A9"
+ },
+ {
+  "id": "qs004",
+  "indices": [
+   "J’ai été construite vers 2560 avant notre ère.",
+   "Je mesurais environ 146 m à l’origine, et aujourd’hui 137.",
+   "Je suis l’une des sept merveilles de l’Antiquité.",
+   "Je suis la plus grande pyramide de Gizeh."
+  ],
+  "choix": [
+   "La pyramide de Khéops",
+   "Le Parthénon",
+   "Le Colosse de Rhodes",
+   "Le Taj Mahal"
+  ],
+  "bonne": 0,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
+ },
+ {
+  "id": "qs005",
+  "indices": [
+   "Mes fondations reposent sur des pilotis, dans la boue d’un fleuve.",
+   "Mes quatre minarets sont inclinés vers l’extérieur, pour ne pas tomber sur moi en cas de séisme.",
+   "Mon dôme central atteint 74 mètres.",
+   "Un empereur m’a fait construire en marbre blanc, en Inde."
+  ],
+  "choix": [
+   "La Grande Mosquée de Damas",
+   "Le Taj Mahal",
+   "Le Palais des vents",
+   "Le Fort rouge"
+  ],
+  "bonne": 1,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Taj_Mahal"
+ },
+ {
+  "id": "qs006",
+  "indices": [
+   "Je suis inscrite à l’UNESCO depuis 1987.",
+   "J’ai été construite, détruite et reconstruite pendant près de vingt siècles.",
+   "Ma partie la plus connue date des Ming.",
+   "Je serpente sur des milliers de kilomètres, dans le nord de la Chine."
+  ],
+  "choix": [
+   "Le mur d’Hadrien",
+   "Le mur de Berlin",
+   "La Grande Muraille de Chine",
+   "La Cité interdite"
+  ],
+  "bonne": 2,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Grande_Muraille_de_Chine"
+ },
+ {
+  "id": "qs007",
+  "indices": [
+   "Je compte 172 constructions, à 2 438 mètres d’altitude.",
+   "Un explorateur a emporté 35 000 pièces de chez moi vers une université américaine.",
+   "Ma fréquentation est passée de 70 000 à plus d’un million de visiteurs par an.",
+   "Cité perdue des Incas, je domine la vallée de l’Urubamba, au Pérou."
+  ],
+  "choix": [
+   "Chichén Itzá",
+   "Angkor Vat",
+   "Pétra",
+   "Le Machu Picchu"
+  ],
+  "bonne": 3,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Machu_Picchu"
+ },
+ {
+  "id": "qs008",
+  "indices": [
+   "J’ai ouvert en 1793, dans un ancien palais royal.",
+   "Une pyramide de verre signée Ieoh Ming Pei garde mon entrée depuis 1989.",
+   "En 2024, 8,7 millions de personnes m’ont visité.",
+   "La Joconde et la Vénus de Milo vivent chez moi, à Paris."
+  ],
+  "choix": [
+   "Le musée du Louvre",
+   "Le musée d’Orsay",
+   "Le British Museum",
+   "Le Prado"
+  ],
+  "bonne": 0,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "qs009",
+  "indices": [
+   "Je suis né dans un village de Toscane en 1452.",
+   "François Ier m’a invité en France.",
+   "Je suis mort au Clos-Lucé, à Amboise.",
+   "J’ai peint la Joconde et dessiné l’Homme de Vitruve."
+  ],
+  "choix": [
+   "Michel-Ange",
+   "Léonard de Vinci",
+   "Raphaël",
+   "Botticelli"
+  ],
+  "bonne": 1,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/L%C3%A9onard_de_Vinci"
+ },
+ {
+  "id": "qs010",
+  "indices": [
+   "Je suis née à Varsovie en 1867.",
+   "J’ai reçu deux prix Nobel, dans deux disciplines différentes.",
+   "J’ai donné à un élément le nom de mon pays natal : le polonium.",
+   "Avec mon mari Pierre, j’ai découvert le radium."
+  ],
+  "choix": [
+   "Rosalind Franklin",
+   "Lise Meitner",
+   "Marie Curie",
+   "Ada Lovelace"
+  ],
+  "bonne": 2,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "qs011",
+  "indices": [
+   "Je suis né à Salzbourg en 1756.",
+   "Je suis mort à 35 ans, à Vienne.",
+   "Mes œuvres sont recensées dans un catalogue de 893 numéros.",
+   "Enfant prodige, j’ai composé La Flûte enchantée."
+  ],
+  "choix": [
+   "Ludwig van Beethoven",
+   "Johann Sebastian Bach",
+   "Joseph Haydn",
+   "Wolfgang Amadeus Mozart"
+  ],
+  "bonne": 3,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "qs012",
+  "indices": [
+   "Ma fille Léopoldine s’est noyée à Villequier en 1843.",
+   "Je suis entré à l’Académie française en 1841.",
+   "Mon cercueil a été porté au Panthéon en 1885.",
+   "J’ai écrit Notre-Dame de Paris et Les Misérables."
+  ],
+  "choix": [
+   "Victor Hugo",
+   "Alexandre Dumas",
+   "Émile Zola",
+   "Honoré de Balzac"
+  ],
+  "bonne": 0,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "qs013",
+  "indices": [
+   "Je suis né en Corse en 1769.",
+   "Je me suis fait sacrer à Notre-Dame, en présence du pape.",
+   "Une lourde défaite à Waterloo a mis fin à mon règne.",
+   "Je suis mort en exil à Sainte-Hélène, en 1821."
+  ],
+  "choix": [
+   "Louis XVI",
+   "Napoléon Ier",
+   "Charlemagne",
+   "Henri IV"
+  ],
+  "bonne": 1,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier"
+ },
+ {
+  "id": "qs014",
+  "indices": [
+   "Je suis monté sur le trône à presque cinq ans.",
+   "Mon règne a duré soixante-douze ans.",
+   "J’ai installé la cour dans un château à partir de 1682.",
+   "On m’appelait le Roi-Soleil."
+  ],
+  "choix": [
+   "Louis XVI",
+   "François Ier",
+   "Louis XIV",
+   "Henri III"
+  ],
+  "bonne": 2,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "qs015",
+  "indices": [
+   "Je suis né aux Pays-Bas en 1853.",
+   "Je suis mort à 37 ans à Auvers-sur-Oise.",
+   "J’ai peint Les Mangeurs de pommes de terre.",
+   "Mes tournesols et ma Nuit étoilée sont célèbres."
+  ],
+  "choix": [
+   "Claude Monet",
+   "Paul Gauguin",
+   "Rembrandt",
+   "Vincent van Gogh"
+  ],
+  "bonne": 3,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Vincent_van_Gogh"
+ },
+ {
+  "id": "qs016",
+  "indices": [
+   "Je suis né à Malaga en 1881.",
+   "J’ai passé l’essentiel de ma vie en France.",
+   "Avec Georges Braque, j’ai fondé un mouvement.",
+   "Mon tableau Guernica dénonce un bombardement."
+  ],
+  "choix": [
+   "Pablo Picasso",
+   "Salvador Dalí",
+   "Joan Miró",
+   "Diego Rivera"
+  ],
+  "bonne": 0,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "qs017",
+  "indices": [
+   "Je suis né à Ulm en 1879.",
+   "J’ai publié deux théories de la relativité, en 1905 puis 1915.",
+   "J’ai reçu le Nobel de physique pour l’effet photoélectrique.",
+   "On me connaît pour la formule E = mc², avec ma langue tirée sur une photo."
+  ],
+  "choix": [
+   "Niels Bohr",
+   "Albert Einstein",
+   "Max Planck",
+   "Stephen Hawking"
+  ],
+  "bonne": 1,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "qs018",
+  "indices": [
+   "Je suis né en 1642 à Woolsthorpe, en Angleterre.",
+   "J’ai publié mes Principia en 1687.",
+   "J’ai montré que la lumière blanche est composée de plusieurs couleurs.",
+   "Une pomme m’aurait inspiré la gravitation universelle."
+  ],
+  "choix": [
+   "Galilée",
+   "Johannes Kepler",
+   "Isaac Newton",
+   "Robert Hooke"
+  ],
+  "bonne": 2,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Isaac_Newton"
+ },
+ {
+  "id": "qs019",
+  "indices": [
+   "Je suis né en 1810 en Pologne, à Żelazowa Wola.",
+   "Je suis mort à Paris à 39 ans.",
+   "Presque toute mon œuvre est pour un seul instrument.",
+   "Compositeur romantique, j’étais un virtuose du piano."
+  ],
+  "choix": [
+   "Franz Liszt",
+   "Robert Schumann",
+   "Claude Debussy",
+   "Frédéric Chopin"
+  ],
+  "bonne": 3,
+  "categorie": "personnages",
+  "source": "https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "qs020",
+  "indices": [
+   "Je mesure environ 8 849 mètres.",
+   "Mon nom tibétain est Chomolungma.",
+   "Hillary et Tensing m’ont gravi en 1953.",
+   "Je suis le plus haut sommet du monde, à la frontière du Népal et de la Chine."
+  ],
+  "choix": [
+   "L’Everest",
+   "Le K2",
+   "Le Kilimandjaro",
+   "Le mont Blanc"
+  ],
+  "bonne": 0,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "qs021",
+  "indices": [
+   "Deux hommes de Chamonix sont montés sur moi en 1786.",
+   "Ma hauteur est mesurée à nouveau tous les deux ans, car la neige la change.",
+   "Je suis le point culminant des Alpes.",
+   "Je culmine à environ 4 807 mètres, entre la France et l’Italie."
+  ],
+  "choix": [
+   "Le Cervin",
+   "Le mont Blanc",
+   "L’Etna",
+   "Le Mont-Saint-Michel"
+  ],
+  "bonne": 1,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Blanc"
+ },
+ {
+  "id": "qs022",
+  "indices": [
+   "Je mesure 3 776 mètres.",
+   "Un moine m’a gravi pour la première fois en 663.",
+   "Mon éruption de 1707 a couvert d’obscurité une ville située à une centaine de kilomètres.",
+   "Je suis le volcan sacré du Japon."
+  ],
+  "choix": [
+   "Le mont Kenya",
+   "Le Vésuve",
+   "Le mont Fuji",
+   "Le mont Olympe"
+  ],
+  "bonne": 2,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Fuji"
+ },
+ {
+  "id": "qs023",
+  "indices": [
+   "En l’an 79, j’ai enseveli une ville sous 2,8 mètres de cendres.",
+   "Je domine une baie italienne.",
+   "Je culmine à 1 281 mètres.",
+   "Pompéi n’a pas survécu à ma colère."
+  ],
+  "choix": [
+   "L’Etna",
+   "Le Stromboli",
+   "Le Teide",
+   "Le Vésuve"
+  ],
+  "bonne": 3,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Vesuve"
+ },
+ {
+  "id": "qs024",
+  "indices": [
+   "Je suis le plus long fleuve d’Afrique, plus de 6 700 km.",
+   "Je traverse huit pays, du Rwanda à l’Égypte.",
+   "Je forme un delta au nord du Caire.",
+   "Les pharaons vivaient sur mes rives et je me jette dans la Méditerranée."
+  ],
+  "choix": [
+   "Le Nil",
+   "Le Congo",
+   "Le Niger",
+   "Le Zambèze"
+  ],
+  "bonne": 0,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "qs025",
+  "indices": [
+   "Je représente environ un cinquième du débit des fleuves du monde.",
+   "Je traverse le Pérou, la Colombie et le Brésil.",
+   "Mon estuaire est près de l’équateur.",
+   "Je donne mon nom à la plus grande forêt tropicale."
+  ],
+  "choix": [
+   "Le Mississippi",
+   "L’Amazone",
+   "Le Yangtsé",
+   "Le Mékong"
+  ],
+  "bonne": 1,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Amazone_(fleuve)"
+ },
+ {
+  "id": "qs026",
+  "indices": [
+   "Je couvre près de 30 % d’un continent.",
+   "Mon point culminant, l’Emi Koussi, est au Tchad.",
+   "Je m’étends sur dix États.",
+   "Je suis le plus grand désert chaud du monde."
+  ],
+  "choix": [
+   "Le désert de Gobi",
+   "Le Kalahari",
+   "Le Sahara",
+   "Le désert d’Atacama"
+  ],
+  "bonne": 2,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Sahara"
+ },
+ {
+  "id": "qs027",
+  "indices": [
+   "Je couvre environ 165 millions de km².",
+   "Un navigateur m’a donné mon nom en 1520.",
+   "Ma fosse la plus profonde dépasse 10 000 m.",
+   "Je suis le plus grand océan du monde."
+  ],
+  "choix": [
+   "L’océan Atlantique",
+   "L’océan Indien",
+   "L’océan Arctique",
+   "L’océan Pacifique"
+  ],
+  "bonne": 3,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "qs028",
+  "indices": [
+   "Je recouvre environ 98 % de mon continent.",
+   "Mon point culminant est le massif Vinson.",
+   "Mon record de froid est de −89,2 °C.",
+   "Les manchots empereurs y vivent, au pôle Sud."
+  ],
+  "choix": [
+   "L’Antarctique",
+   "L’Arctique",
+   "Le Groenland",
+   "La Sibérie"
+  ],
+  "bonne": 0,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Antarctique"
+ },
+ {
+  "id": "qs029",
+  "indices": [
+   "J’ai la plus faible densité de population d’Europe.",
+   "Mon parlement, l’Althing, date de 930.",
+   "Plus de 10 % de mon territoire est sous les glaciers.",
+   "Je suis une île volcanique dont la capitale est Reykjavik."
+  ],
+  "choix": [
+   "L’Irlande",
+   "L’Islande",
+   "La Norvège",
+   "Le Groenland"
+  ],
+  "bonne": 1,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Islande"
+ },
+ {
+  "id": "qs030",
+  "indices": [
+   "Je mesure 57 mètres de haut et 945 m de large.",
+   "Un soir de mars 1848, mon grondement s’est tu.",
+   "En 1901, une femme m’a descendue dans un tonneau.",
+   "Je sépare le Canada des États-Unis."
+  ],
+  "choix": [
+   "Les chutes Victoria",
+   "Les chutes d’Iguazú",
+   "Les chutes du Niagara",
+   "Les chutes du Rhin"
+  ],
+  "bonne": 2,
+  "categorie": "lieux",
+  "source": "https://fr.wikipedia.org/wiki/Chutes_du_Niagara"
+ },
+ {
+  "id": "qs031",
+  "indices": [
+   "Je suis à environ 384 000 km de ma voisine.",
+   "Je tourne autour d’elle en 27,3 jours.",
+   "Neil Armstrong m’a marchée dessus en 1969.",
+   "Je suis le satellite naturel de la Terre."
+  ],
+  "choix": [
+   "Phobos",
+   "Titan",
+   "Europe",
+   "La Lune"
+  ],
+  "bonne": 3,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "qs032",
+  "indices": [
+   "Je suis âgé de 4,57 milliards d’années.",
+   "Ma lumière met 8 minutes et 19 secondes à vous atteindre.",
+   "Je représente 99,85 % de la masse de mon système.",
+   "Je suis l’étoile de la Terre."
+  ],
+  "choix": [
+   "Le Soleil",
+   "Sirius",
+   "Proxima du Centaure",
+   "Bételgeuse"
+  ],
+  "bonne": 0,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Soleil"
+ },
+ {
+  "id": "qs033",
+  "indices": [
+   "Ma masse vaut 318 fois celle de la Terre.",
+   "Ma Grande Tache rouge est connue depuis 1831 au moins.",
+   "Mon satellite Ganymède dépasse la taille de Mercure.",
+   "Je suis la plus grosse planète du Système solaire."
+  ],
+  "choix": [
+   "Saturne",
+   "Jupiter",
+   "Neptune",
+   "Uranus"
+  ],
+  "bonne": 1,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Jupiter_(plan%C3%A8te)"
+ },
+ {
+  "id": "qs034",
+  "indices": [
+   "Mon jour dure environ 243 jours terrestres.",
+   "Chez moi, le Soleil se lève à l’ouest.",
+   "La sonde Venera 7 s’est posée sur moi en 1970.",
+   "Avec 462 °C, je suis la planète la plus chaude du Système solaire."
+  ],
+  "choix": [
+   "Mercure",
+   "Mars",
+   "Vénus",
+   "Jupiter"
+  ],
+  "bonne": 2,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/V%C3%A9nus_(plan%C3%A8te)"
+ },
+ {
+  "id": "qs035",
+  "indices": [
+   "Ma gravité représente environ 0,38 fois celle de la Terre.",
+   "Mon atmosphère est plus de 150 fois moins dense que la sienne.",
+   "J’abrite le volcan Olympus Mons, haut de 21 229 m.",
+   "On m’appelle la planète rouge."
+  ],
+  "choix": [
+   "Vénus",
+   "Mercure",
+   "Saturne",
+   "Mars"
+  ],
+  "bonne": 3,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Mars_(plan%C3%A8te)"
+ },
+ {
+  "id": "qs036",
+  "indices": [
+   "Je mesure en moyenne 25 à 27 mètres.",
+   "Mon cœur pèse environ 181 kg.",
+   "Je me nourris presque uniquement de krill.",
+   "Je suis le plus gros animal de la Terre."
+  ],
+  "choix": [
+   "La baleine bleue",
+   "Le requin-baleine",
+   "Le cachalot",
+   "L’éléphant d’Afrique"
+  ],
+  "bonne": 0,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Baleine_bleue"
+ },
+ {
+  "id": "qs037",
+  "indices": [
+   "Mon cou compte sept vertèbres.",
+   "Ma gestation dure environ 15 mois.",
+   "Je passe plus de douze heures par jour à brouter les arbres.",
+   "Je suis l’animal le plus grand de la savane, avec un très long cou."
+  ],
+  "choix": [
+   "L’autruche",
+   "La girafe",
+   "Le chameau",
+   "L’éléphant"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "qs038",
+  "indices": [
+   "J’ai trois cœurs.",
+   "Mon sang est bleuté.",
+   "Mes huit bras ont chacun leur propre centre nerveux.",
+   "Victor Hugo a rendu mon nom célèbre en 1866."
+  ],
+  "choix": [
+   "Le calmar",
+   "La seiche",
+   "Le poulpe",
+   "La méduse"
+  ],
+  "bonne": 2,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Pieuvre"
+ },
+ {
+  "id": "qs039",
+  "indices": [
+   "Je suis apparu il y a environ 420 millions d’années.",
+   "Je peux perdre plus de 30 000 dents.",
+   "Mon odorat occupe près de la moitié de mon cerveau.",
+   "On dit que je sens une goutte de sang de très loin."
+  ],
+  "choix": [
+   "Le dauphin",
+   "La raie",
+   "L’espadon",
+   "Le requin"
+  ],
+  "bonne": 3,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Requin"
+ },
+ {
+  "id": "qs040",
+  "indices": [
+   "Mon œuf est couvé par le mâle pendant 64 jours.",
+   "Je peux plonger à plus de 500 mètres.",
+   "Mon plumage est le plus dense de tous les oiseaux.",
+   "Je suis le plus grand des manchots."
+  ],
+  "choix": [
+   "Le manchot empereur",
+   "Le manchot royal",
+   "Le pingouin torda",
+   "L’albatros"
+  ],
+  "bonne": 0,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Manchot_empereur"
+ },
+ {
+  "id": "qs041",
+  "indices": [
+   "Ma peau est noire sous mes poils blancs.",
+   "Je peux rester plus de trois minutes en apnée.",
+   "Je nage parfois plusieurs jours d’affilée.",
+   "Je vis sur la banquise, tout en haut du globe."
+  ],
+  "choix": [
+   "Le loup arctique",
+   "L’ours polaire",
+   "Le renard polaire",
+   "Le morse"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Ours_polaire"
+ },
+ {
+  "id": "qs042",
+  "indices": [
+   "Je peux bondir de 13 mètres de long.",
+   "Je ne sais pas reculer.",
+   "À la naissance, je mesure environ 2 cm.",
+   "Je porte mon petit dans une poche, en Australie."
+  ],
+  "choix": [
+   "Le koala",
+   "Le wombat",
+   "Le kangourou",
+   "Le diable de Tasmanie"
+  ],
+  "bonne": 2,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Kangourou"
+ },
+ {
+  "id": "qs043",
+  "indices": [
+   "Nous sommes près de 1 400 espèces.",
+   "Une seule d’entre nous peut avaler plus de 2 000 moustiques en une nuit.",
+   "Nous sommes les seuls mammifères à voler en battant des ailes.",
+   "Nous dormons la tête en bas."
+  ],
+  "choix": [
+   "L’écureuil volant",
+   "Le hibou",
+   "Le colibri",
+   "La chauve-souris"
+  ],
+  "bonne": 3,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Chauve-souris"
+ },
+ {
+  "id": "qs044",
+  "indices": [
+   "Nous sommes plus de 16 000 espèces connues.",
+   "Notre population est estimée à un milliard de milliards.",
+   "Certaines reines vivent près de trente ans.",
+   "Nous défilons en colonne et nos nids s’appellent fourmilières."
+  ],
+  "choix": [
+   "Les fourmis",
+   "Les termites",
+   "Les abeilles",
+   "Les guêpes"
+  ],
+  "bonne": 0,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Fourmi"
+ },
+ {
+  "id": "qs045",
+  "indices": [
+   "Une reine peut pondre plus de 2 500 œufs par jour.",
+   "Une colonie compte jusqu’à 80 000 individus en été.",
+   "Nous dansons pour indiquer la direction de la nourriture.",
+   "Nous fabriquons le miel."
+  ],
+  "choix": [
+   "Les guêpes",
+   "Les abeilles",
+   "Les bourdons",
+   "Les papillons"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Abeille_domestique"
+ },
+ {
+  "id": "qs046",
+  "indices": [
+   "Mes ancêtres ont perdu leurs pattes arrière il y a 35 millions d’années.",
+   "Ma gestation dure environ douze mois.",
+   "Certains d’entre nous ont servi dans les marines militaires.",
+   "Je suis un mammifère marin sociable qui saute hors de l’eau."
+  ],
+  "choix": [
+   "Le phoque",
+   "Le lamantin",
+   "Le dauphin",
+   "Le requin"
+  ],
+  "bonne": 2,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Dauphin"
+ },
+ {
+  "id": "qs047",
+  "indices": [
+   "Je suis le matériau naturel le plus dur.",
+   "Au-dessus de 1 700 °C, sans air, je deviens du graphite.",
+   "Lavoisier m’a brûlé en 1772 pour découvrir de quoi je suis fait.",
+   "Je suis du carbone pur, et je brille sur les bagues de fiançailles."
+  ],
+  "choix": [
+   "Le rubis",
+   "Le quartz",
+   "L’émeraude",
+   "Le diamant"
+  ],
+  "bonne": 3,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Diamant"
+ },
+ {
+  "id": "qs048",
+  "indices": [
+   "Mon arbre est originaire du bassin amazonien.",
+   "Les Mayas m’appelaient « kakaw ».",
+   "Hernán Cortés m’a rapporté en Espagne en 1527.",
+   "Je me présente en tablettes et je suis fait avec des fèves de cacao."
+  ],
+  "choix": [
+   "Le chocolat",
+   "Le café",
+   "La vanille",
+   "Le caramel"
+  ],
+  "bonne": 0,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "qs049",
+  "indices": [
+   "Pour faire une livre de moi, il faut visiter des millions de fleurs.",
+   "La Chine est mon premier producteur.",
+   "On a retrouvé de la cire de mes fabricantes vieille de 40 000 ans.",
+   "Je suis doré, sucré et produit par des abeilles."
+  ],
+  "choix": [
+   "Le sirop d’érable",
+   "Le miel",
+   "La confiture",
+   "Le nectar"
+  ],
+  "bonne": 1,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Miel"
+ },
+ {
+  "id": "qs050",
+  "indices": [
+   "On m’utilise depuis environ 8 000 ans, dans les Andes.",
+   "Mon génome compte 48 chromosomes.",
+   "Je suis cultivée dans plus de 150 pays.",
+   "On me mange en frites, en purée ou en gratin."
+  ],
+  "choix": [
+   "Le manioc",
+   "La patate douce",
+   "La pomme de terre",
+   "Le navet"
+  ],
+  "bonne": 2,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Pomme_de_terre"
+ },
+ {
+  "id": "qs051",
+  "indices": [
+   "Mon nom vient d’un mot persan qui veut dire « le roi ».",
+   "Je dérive d’un jeu indien, passé par la Perse.",
+   "Mon plateau compte 64 cases.",
+   "Dans mon camp, il y a une dame, un roi, des fous, des tours et des pions."
+  ],
+  "choix": [
+   "Les dames",
+   "Le go",
+   "Le backgammon",
+   "Les échecs"
+  ],
+  "bonne": 3,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "qs052",
+  "indices": [
+   "On m’a créé pour relancer les ventes d’un journal, en 1903.",
+   "Mon premier maillot jaune a été porté en 1919.",
+   "Cinq coureurs m’ont remporté cinq fois.",
+   "Je me termine sur les Champs-Élysées, après les Alpes et les Pyrénées."
+  ],
+  "choix": [
+   "Le Tour de France",
+   "Le Giro",
+   "Paris-Roubaix",
+   "La Vuelta"
+  ],
+  "bonne": 0,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "qs053",
+  "indices": [
+   "Mon premier essai a été annulé en 1939.",
+   "Je me tiens en mai, sur la Croisette.",
+   "Ma récompense suprême date de 1955.",
+   "Ma Palme d’or est la plus célèbre du cinéma."
+  ],
+  "choix": [
+   "La Mostra de Venise",
+   "Le Festival de Cannes",
+   "La Berlinale",
+   "Les Oscars"
+  ],
+  "bonne": 1,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "qs054",
+  "indices": [
+   "Mon réseau a démarré à l’UCLA en 1969.",
+   "En 1972, on y a envoyé le premier courriel.",
+   "Le Web est tombé dans le domaine public en 1993.",
+   "Je relie des milliards d’appareils partout dans le monde."
+  ],
+  "choix": [
+   "Le minitel",
+   "La radio",
+   "Internet",
+   "Le télégraphe"
+  ],
+  "bonne": 2,
+  "categorie": "objets",
+  "source": "https://fr.wikipedia.org/wiki/Internet"
+ }
+]

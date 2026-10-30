@@ -6472,3 +6472,32 @@ body.loup-night {
 .mg-geo-status { display: flex; gap: 24px; font-weight: 700; font-size: clamp(1rem, 1.8vw, 1.5rem); flex-wrap: wrap; justify-content: center; }
 .mg-geo-status .is-rouge { color: #ff8a93; }
 .mg-geo-status .is-bleu { color: #8fb8ff; }
+
+.mg-qui, .mg-chrono, .mg-vf { display: grid; gap: 12px; justify-items: center; width: 100%; }
+.mg-qui-clues { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; width: min(1100px, 100%); font-size: clamp(1.1rem, 2.1vw, 1.8rem); }
+.mg-qui-clues li { padding: 10px 16px; border-radius: 14px; background: rgba(255, 255, 255, 0.1); }
+.mg-qui-clues li.is-hidden { opacity: 0.35; }
+.mg-qui-clues b { color: var(--yellow); margin-right: 8px; }
+.mg-qui-duelist, .mg-chrono-duelist, .mg-vf-duelist { display: grid; gap: 10px; }
+.mg-qui-duelist .mg-choices { grid-template-columns: 1fr; }
+.mg-chrono-cards { display: grid; gap: 10px; width: min(1100px, 100%); }
+.mg-chrono-card { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 14px; border-radius: 16px; border: 3px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: #fff; text-align: left; font-size: clamp(1rem, 1.9vw, 1.6rem); font-weight: 700; cursor: pointer; }
+.mg-chrono-card b { display: grid; place-items: center; min-width: 38px; height: 38px; border-radius: 50%; background: var(--yellow); color: #14102a; }
+.mg-chrono-card.is-placed { border-color: var(--green); background: rgba(47, 209, 138, 0.2); }
+.mg-chrono-card em { margin-left: auto; font-style: normal; color: var(--yellow); }
+.mg-chrono-progress { display: flex; gap: 24px; font-weight: 700; font-size: 1.3rem; }
+.mg-chrono-progress .is-rouge { color: #ff8a93; }
+.mg-chrono-progress .is-bleu { color: #8fb8ff; }
+.mg-chrono-order { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 1.1rem; }
+.mg-chrono-order b { color: var(--yellow); margin-right: 8px; }
+.mg-vf-text { font-size: clamp(1.8rem, 4vw, 3.4rem); text-align: center; max-width: 1200px; line-height: 1.15; }
+.mg-vf-text.is-small { font-size: 1.5rem; }
+.mg-vf-status { display: flex; gap: 28px; font-weight: 700; font-size: 1.3rem; }
+.mg-vf-status .is-rouge { color: #ff8a93; }
+.mg-vf-status .is-bleu { color: #8fb8ff; }
+.mg-vf-answer { font-size: clamp(1.2rem, 2.4vw, 2rem); text-align: center; max-width: 1100px; color: var(--yellow); }
+.mg-vf-btn { min-height: 22vh; border-radius: 26px; border: 5px solid #fff8f0; font-size: 2.4rem; font-weight: 800; color: #fff; cursor: pointer; }
+.mg-vf-btn.is-true { background: #1a8f7d; }
+.mg-vf-btn.is-false { background: #8a1f66; }
+.mg-vf-btn.is-picked { box-shadow: 0 0 0 6px var(--yellow); }
+.mg-vf-btn:disabled:not(.is-picked) { opacity: 0.5; }
