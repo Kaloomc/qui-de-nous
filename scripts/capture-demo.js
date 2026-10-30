@@ -20,8 +20,10 @@ try {
   process.exit(1);
 }
 
-const OUT = path.join(ROOT, 'docs/captures');
 const wanted = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+// `npm run captures -- duel` : les captures du mode Duel vont dans leur propre dossier, avec leur INDEX.md.
+const DUEL_ONLY = wanted.length === 1 && wanted[0] === 'duel';
+const OUT = path.join(ROOT, DUEL_ONLY ? 'docs/captures/duel-partie1' : 'docs/captures');
 const SECTIONS = {};
 const section = (name, title, fn) => (SECTIONS[name] = { title, fn });
 
@@ -690,6 +692,286 @@ section('limites', 'Cas limites — prénom saisi à 25 caractères et ramené �
   }
 });
 
+// ---------- Mode Duel (partie 1) ----------
+
+section('duel', 'Mode Duel — moteur, roulettes, paris, 5 mini-jeux, gorgées, roi, cas limites', async (env) => {
+  const S = env.session;
+  const sec = 'Mode Duel';
+  const REAL = ['Camille', 'Mehdi', 'Sacha', 'Inès'];
+  const tv = await openTv(env, null);
+  const { game, code } = tv;
+  const page = tv.page;
+  await page.waitForSelector('.game-grid');
+  await S.shot(page, 'duel-01-grille', 'Grille des jeux : la carte « Mode Duel » (icône ROUGE / BLEU) est en haut, comme « Mode soirée ».', { tv: true, lobby: true, section: sec });
+  await page.getByRole('button', { name: /Mode Duel/ }).first().click();
+  await page.waitForSelector('.duel-setup');
+  const cast = await fill(env, game, code, 12, { real: REAL });
+  const idByName = (n) => idOf(game, n);
+  const phoneOfId = (pid) => cast.phones.find((p) => idByName(p.name) === pid);
+  // Les 4 vrais téléphones passent d'abord : leurs compteurs sont au plus bas, les 8 autres joueurs sont des bots.
+  const role = 'duel:duelliste';
+  game.spotlight.pick(role, [...game.players.keys()]);
+  const counts = game.spotlight.counts.get(role);
+  for (const [pid] of counts) counts.set(pid, cast.phones.some((p) => idByName(p.name) === pid) ? 0 : 6);
+  game.settings.auto = true;
+  game.settings.resultsMs = 5000;
+  await sleep(500);
+  await S.shot(page, 'duel-02-options', 'Écran d’options du lobby : Roi de la colline (non par défaut), cote Standard avec sa règle en une ligne, les 5 mini-jeux cochés, gros bouton « Lancer ».', { tv: true, lobby: true, section: sec });
+  await page.getByRole('radio', { name: 'Hardcore' }).click();
+  await sleep(300);
+  await S.shot(page, 'duel-03-options-hardcore', 'Cote Hardcore choisie : la règle affichée change.', { tv: true, lobby: true, section: sec });
+  await page.getByRole('radio', { name: 'Standard' }).click();
+  game.duelOptions = { ...game.duelOptions, games: ['pfc'] };
+  const d = () => game.roundData;
+  const toStep = (s, ms = 40000) => waitFor(() => game.phase === 'question' && d().step === s, ms, `étape ${s}`);
+  const dPhone = (camp) => phoneOfId(camp === 'rouge' ? d().red : d().blue);
+  const bettorPhone = () => cast.phones.find((p) => d().bettors?.includes(idByName(p.name)));
+  const bet = (pick) => {
+    let k = 0;
+    for (const pid of d().bettors) game.vote(pid, pick(k++));
+  };
+  const readyBoth = () => {
+    game.action(d().red, { type: 'ready' });
+    game.action(d().blue, { type: 'ready' });
+  };
+  const playAs = (camp, data) => game.action(camp === 'rouge' ? d().red : d().blue, { type: 'play', data });
+  const afterDuel = async () => {
+    await waitFor(() => game.phase === 'results', 40000, 'résultats');
+    await sleep(900);
+  };
+  const nextDuel = (games, extra = {}) => {
+    game.duelOptions = { ...game.duelOptions, games, ...extra };
+  };
+  // Duel suivant jusqu'au début du jeu : paris des parieurs, puis les deux duellistes sont prêts.
+  const startPlay = async (games, extra = {}) => {
+    nextDuel(games, extra);
+    await waitFor(() => game.phase === 'question' && d().step === 'bets', 60000, 'paris');
+    bet((k) => (k % 3 === 0 ? 'bleu' : 'rouge'));
+    await toStep('ready', 40000);
+    readyBoth();
+    await toStep('play', 40000);
+  };
+
+  await page.getByRole('button', { name: /^Lancer$/ }).click();
+
+  // --- 1. Duel de Pierre-feuille-ciseaux : roulettes, paris, révélation, prêts, jeu, verdict ---
+  await toStep('duelists');
+  for (const [i, ms] of [[4, 1000], [5, 1900], [6, 1500]]) {
+    await sleep(ms);
+    await S.shot(page, `duel-0${i}-roulette-duellistes-${i - 3}`, `Roulette des duellistes (image ${i - 3}) : fond coupé en diagonale, ROUGE à gauche, BLEU à droite, photos et prénoms qui défilent puis ralentissent.`, { tv: true, section: sec });
+  }
+  await toStep('game');
+  await sleep(1500);
+  await S.shot(page, 'duel-07-roulette-minijeux', 'Roulette des mini-jeux (icônes maison) : ici verrouillée sur le mini-jeu tiré.', { tv: true, section: sec });
+  await toStep('bets');
+  await sleep(600);
+  const duelPhone = dPhone('rouge') ?? dPhone('bleu');
+  const bp = bettorPhone();
+  await S.shot(page, 'duel-08-paris-tv', 'Paris : les deux duellistes face à face, compteur « X / N ont parié » sans aucun nom, minuteur de 15 s.', { tv: true, section: sec });
+  if (bp) await S.shot(bp.page, 'duel-09-paris-parieur', 'Téléphone parieur : deux gros boutons avec photo et prénom, ROUGE et BLEU en toutes lettres ; le pari est secret et modifiable.', { section: sec });
+  if (duelPhone) await S.shot(duelPhone.page, 'duel-10-duelliste-couleur', 'Téléphone d’un duelliste : « Tu es ROUGE / BLEU » en très gros, contre qui, rien d’autre.', { section: sec });
+  bet((k) => (k % 3 === 0 ? 'bleu' : 'rouge'));
+  await toStep('betsReveal');
+  await sleep(2600);
+  await S.shot(page, 'duel-11-revelation-paris', 'Révélation des paris : les photos arrivent du côté choisi, la cote en direct (%) bouge à chaque pari dévoilé.', { tv: true, section: sec });
+  await sleep(1700);
+  await S.shot(page, 'duel-12-revelation-cote-finale', 'Fin de la révélation : cote finale et foule de chaque côté.', { tv: true, section: sec });
+  if (bp) await S.shot(bp.page, 'duel-13-spectateur-emojis', 'Téléphone parieur après les paris : écran Spectateur avec sa mise, la cote, 8 emojis et les confettis.', { section: sec });
+  await toStep('ready');
+  if (duelPhone) await S.shot(duelPhone.page, 'duel-14-duelliste-pret', 'Téléphone d’un duelliste : gros bouton « Prêt » (5 s).', { section: sec });
+  await S.shot(page, 'duel-15-pret-tv', 'TV : les deux duellistes et leur état « Prêt ».', { tv: true, section: sec });
+  readyBoth();
+  await toStep('play');
+  // Emojis et confettis des parieurs, pendant le duel.
+  for (let k = 0; k < 3; k++) {
+    for (const pid of d().bettors) game.action(pid, { type: 'cheer', kind: k % 5 === 4 ? 'confetti' : 'emoji', emoji: ['🔥', '😱', '😂', '👏', '💀', '🍿', '😈', '🙌'][(k + pid.length) % 8] });
+    await sleep(1050);
+    if (k === 0 || k === 2) await S.shot(page, `duel-16-emojis-${k === 0 ? 'debut' : 'beaucoup'}`, k === 0 ? 'Les parieurs encouragent : emojis et confettis dans les marges, côté du camp misé.' : 'Beaucoup d’éléments à l’écran (12 joueurs) : les marges restent lisibles, 40 éléments au plus.', { tv: true, section: sec });
+  }
+  await S.shot(page, 'duel-17-pfc-tv-choix', 'Pierre-feuille-ciseaux, TV : score, manche, et pour chacun « A choisi » (jamais le choix avant la révélation).', { tv: true, section: sec });
+  if (duelPhone) await S.shot(duelPhone.page, 'duel-18-pfc-duelliste', 'Pierre-feuille-ciseaux, téléphone du duelliste : trois gros boutons, choix secret.', { section: sec });
+  playAs('rouge', { choice: 'pierre' });
+  playAs('bleu', { choice: 'ciseaux' });
+  await sleep(700);
+  await S.shot(page, 'duel-19-pfc-revelation-manche', 'Révélation simultanée de la manche : pierre contre ciseaux, la manche va à ROUGE.', { tv: true, section: sec });
+  await waitFor(() => d().mg?.round === 2 && !d().mg.shown, 8000, 'manche 2');
+  playAs('rouge', { choice: 'feuille' });
+  playAs('bleu', { choice: 'pierre' });
+  await waitFor(() => game.phase === 'revealing', 8000, 'révélation');
+  await sleep(2500);
+  await S.shot(page, 'duel-20-suspense-verdict', 'Suspense avant le verdict : « ROUGE gagne ! » sur les deux duellistes.', { tv: true, section: sec });
+  await afterDuel();
+  await S.shot(page, 'duel-21-resultat-standard', 'Résultat (cote Standard) : le vainqueur, la cote, qui boit et pourquoi (perdant, mauvais pari, sans pari), avec les photos.', { tv: true, section: sec });
+  const loserPhone = phoneOfId(game.results.loserId);
+  const rightPhone = cast.phones.find((p) => game.results.right.includes(idByName(p.name)));
+  const wrongPhone = cast.phones.find((p) => [...game.results.wrong, ...game.results.silent].includes(idByName(p.name)));
+  if (loserPhone) await S.shot(loserPhone.page, 'duel-22-tel-perdant', 'Téléphone du perdant : « Tu bois ! » et ses gorgées.', { section: sec });
+  if (rightPhone) await S.shot(rightPhone.page, 'duel-23-tel-bon-pari', 'Téléphone d’un parieur gagnant : « Bien joué, tu as vu juste ».', { section: sec });
+  if (wrongPhone) await S.shot(wrongPhone.page, 'duel-24-tel-mauvais-pari', 'Téléphone d’un parieur qui s’est trompé (ou n’a pas parié) : « Tu bois ! ».', { section: sec });
+
+  // --- 2. Culture G éclair ---
+  await startPlay(['culture']);
+  const cDuelist = dPhone('rouge') ?? dPhone('bleu');
+  await sleep(900);
+  await S.shot(page, 'duel-25-culture-tv', 'Culture G éclair, TV : question, 4 choix, score, minuteur de 10 s ; la bonne réponse n’est pas affichée.', { tv: true, section: sec });
+  if (cDuelist) await S.shot(cDuelist.page, 'duel-26-culture-duelliste', 'Culture G éclair, téléphone du duelliste : la question et quatre gros boutons.', { section: sec });
+  const rightIndex = () => d().mg.q.right;
+  playAs('bleu', { choice: (rightIndex() + 1) % 4, n: d().mg.n });
+  await sleep(300);
+  if (cDuelist && cDuelist === dPhone('bleu')) await S.shot(cDuelist.page, 'duel-27-culture-bloque', 'Mauvaise réponse : le bouton se bloque 2 secondes.', { section: sec });
+  playAs('rouge', { choice: rightIndex(), n: d().mg.n });
+  await sleep(700);
+  await S.shot(page, 'duel-28-culture-point', 'Point marqué : la bonne réponse apparaît, « Point pour ROUGE ! ».', { tv: true, section: sec });
+  await waitFor(() => d().mg?.n === 2 && d().mg.phase === 'ask', 8000, 'question 2');
+  playAs('rouge', { choice: rightIndex(), n: d().mg.n });
+  await afterDuel();
+
+  // --- 3. Duel du Feu ---
+  await startPlay(['feu']);
+  await S.shot(page, 'duel-29-feu-attente', 'Duel du Feu, TV : « Prêts… » avant les mots pièges (affichage seul si aucune voix française).', { tv: true, section: sec });
+  const fDuelist = dPhone('rouge') ?? dPhone('bleu');
+  if (fDuelist) await S.shot(fDuelist.page, 'duel-30-feu-duelliste', 'Duel du Feu, téléphone du duelliste : un seul gros bouton « TIRE ! », aucun mot affiché.', { section: sec });
+  await waitFor(() => d().mg?.phase === 'words', 10000, 'premier mot');
+  await sleep(600);
+  await S.shot(page, 'duel-31-feu-mot-piege', 'Duel du Feu, TV : un mot piège s’affiche (et se dit).', { tv: true, section: sec });
+  await waitFor(() => d().mg?.phase === 'feu', 60000, 'FEU');
+  await sleep(500);
+  playAs('bleu', { type: 'tap' });
+  await sleep(120);
+  playAs('rouge', { type: 'tap' });
+  await sleep(500);
+  await S.shot(page, 'duel-32-feu-feu', 'Duel du Feu, TV : le vrai « FEU » ! Le plus rapide (temps compensé de la latence) gagne.', { tv: true, section: sec });
+  await afterDuel();
+
+  // --- 4. Simon ---
+  await startPlay(['simon']);
+  const sDuelist = dPhone('rouge') ?? dPhone('bleu');
+  await sleep(900);
+  await S.shot(page, 'duel-33-simon-tv', 'Simon, TV : les 4 pavés (formes ET couleurs) s’allument, avec la progression de chacun.', { tv: true, section: sec });
+  if (sDuelist) await S.shot(sDuelist.page, 'duel-34-simon-duelliste', 'Simon, téléphone du duelliste : 4 gros pavés, séquence puis à toi.', { section: sec });
+  const seq = d().mg.seq;
+  const tapTurn = async (camp, turn, ok = true) => {
+    for (let i = 0; i < turn; i++) playAs(camp, { pad: ok || i < turn - 1 ? seq[i] : (seq[i] + 1) % 4 });
+  };
+  for (let turn = 1; turn <= 3; turn++) {
+    await waitFor(() => d().mg.turn === turn && Date.now() > d().mg.turnAt + 400 + turn * 420 + 60, 20000, `tour ${turn}`);
+    await tapTurn('rouge', turn);
+    await tapTurn('bleu', turn, turn < 3);
+    if (turn === 3) break;
+    await sleep(1300);
+  }
+  await sleep(500);
+  await S.shot(page, 'duel-35-simon-erreur', 'Simon, TV : BLEU est éliminé au tour 3, ROUGE finit son tour et gagne.', { tv: true, section: sec });
+  await afterDuel();
+
+  // --- 5. Couleur piège ---
+  await startPlay(['couleur']);
+  const cpDuelist = dPhone('rouge') ?? dPhone('bleu');
+  await sleep(700);
+  await S.shot(page, 'duel-36-couleur-tv', 'Couleur piège, TV : deux jauges de score, sans révéler les mots.', { tv: true, section: sec });
+  if (cpDuelist) await S.shot(cpDuelist.page, 'duel-37-couleur-duelliste', 'Couleur piège, téléphone du duelliste : un mot écrit dans une autre couleur ; quatre boutons au nom de la couleur en blanc.', { section: sec });
+  const stroop = (await import('../server/duel/minigames/couleur.js')).stroopItem;
+  const answerAs = (camp, good) => {
+    const i = d().mg.p[camp].i;
+    const item = stroop(d().mg.seed, i);
+    playAs(camp, { i, color: good ? item.ink : item.ink === 'rouge' ? 'bleu' : 'rouge' });
+  };
+  for (let k = 0; k < 7; k++) {
+    answerAs('rouge', true);
+    answerAs('bleu', k % 3 === 0);
+    await sleep(150);
+  }
+  await S.shot(page, 'duel-38-couleur-jauges', 'Couleur piège, TV : les jauges montent à mesure des bonnes réponses (−2 par erreur).', { tv: true, section: sec });
+  await afterDuel();
+
+  // --- 6. Hardcore, roi de la colline avec série, chute ---
+  nextDuel(['pfc'], { cote: 'hardcore', king: true });
+  const pfcWin = async (camp) => {
+    await toStep('play', 90000);
+    for (let r = 0; r < 2; r++) {
+      await waitFor(() => d().mg?.phase === 'choose', 10000, 'choix');
+      playAs(camp, { choice: 'pierre' });
+      playAs(camp === 'rouge' ? 'bleu' : 'rouge', { choice: 'ciseaux' });
+      if (r === 0) await waitFor(() => d().mg.phase === 'choose' && d().mg.round === 2, 8000, 'manche 2');
+    }
+  };
+  const phaseDuel = async (settle) => {
+    await toStep('bets', 40000);
+    bet((k) => (k % 2 ? 'bleu' : 'rouge'));
+    await toStep('ready', 40000);
+    readyBoth();
+    await settle();
+    await afterDuel();
+  };
+  const kingCamp = () => (d().kingId === d().red ? 'rouge' : 'bleu');
+  // Duel A : le vainqueur est couronné (cote Hardcore).
+  await phaseDuel(() => pfcWin('rouge'));
+  await S.shot(page, 'duel-39-hardcore', 'Résultat en cote Hardcore : le perdant boit autant de gorgées que de paris contre lui.', { tv: true, section: sec });
+  // Duel B : le roi défend son titre et gagne (série de 2).
+  await waitFor(() => game.phase === 'question' && d().step === 'duelists', 20000, 'duel du roi');
+  await toStep('bets', 40000);
+  await S.shot(page, 'duel-40-roi-en-place', 'Roi de la colline : couronne sur le roi, camp d’origine conservé, série affichée, challenger tiré équitablement.', { tv: true, section: sec });
+  bet(() => 'rouge');
+  await toStep('ready', 40000);
+  readyBoth();
+  await pfcWin(kingCamp());
+  await afterDuel();
+  await S.shot(page, 'duel-41-roi-serie', 'Le roi gagne encore : il reste roi, série de victoires consécutives.', { tv: true, section: sec });
+  // Duel C : le challenger l'emporte, le roi chute.
+  await waitFor(() => game.phase === 'question' && d().step === 'duelists', 20000, 'duel de la chute');
+  await toStep('bets', 40000);
+  bet(() => (kingCamp() === 'rouge' ? 'bleu' : 'rouge'));
+  await toStep('ready', 40000);
+  readyBoth();
+  await pfcWin(kingCamp() === 'rouge' ? 'bleu' : 'rouge');
+  await afterDuel();
+  await S.shot(page, 'duel-42-roi-chute', 'Le roi tombe : ses victoires consécutives s’ajoutent à ses gorgées (plafond respecté).', { tv: true, section: sec });
+
+  // --- 7. Cas limites ---
+  nextDuel(['pfc'], { king: false, cote: 'standard' });
+  await waitFor(() => game.phase === 'question' && d().step === 'bets', 40000, 'paris');
+  const gone = [...cast.bots].find((b) => b.id === d().red || b.id === d().blue);
+  const goneId = gone?.id ?? d().red;
+  if (gone) gone.close();
+  else for (const p of cast.phones) if (idByName(p.name) === goneId) await p.ctx.close();
+  await waitFor(() => d().notice?.kind === 'gone', 20000, 'duel annulé');
+  await sleep(600);
+  await S.shot(page, 'duel-43-duel-annule', 'Duelliste déconnecté plus de 10 s : duel annulé (aucun pari perdant, aucune gorgée), un autre duel est tiré.', { tv: true, section: sec });
+  await toStep('play', 90000).catch(() => {});
+  if (game.phase === 'question' && d().step === 'play') {
+    d().outcome = { winner: 'égalité', details: null };
+    game.reveal(game.roundId);
+    await afterDuel();
+    await S.shot(page, 'duel-44-egalite', 'Égalité (résultat forcé pour la capture) : seuls les deux duellistes boivent 1 gorgée, les parieurs sont épargnés.', { tv: true, section: sec });
+  }
+  for (const b of cast.bots) b.close();
+  for (const p of cast.phones) await p.ctx.close().catch(() => {});
+  await tv.ctx.close();
+
+  // 30 joueurs, dont un prénom saisi à 25 caractères (ramené à 20) : écran des paris et foule.
+  {
+    const big = await openTv(env, null);
+    await big.page.getByRole('button', { name: /Mode Duel/ }).first().click();
+    const people = [{ name: 'Bastien-Alexandre-Louis-Xx', gender: 'n', hue: 40 }, ...CAST.slice(0, 11), ...EXTRA_NAMES.map((name, i) => ({ name, gender: ['f', 'm', 'f', 'n'][i % 4], hue: (i * 29) % 360 }))];
+    const crowd = await fill(env, big.game, big.code, 30, { people });
+    big.game.settings.auto = true;
+    big.game.duelOptions = { king: false, cote: 'standard', games: ['pfc'] };
+    await big.page.waitForSelector('.duel-setup');
+    await big.page.getByRole('button', { name: /^Lancer$/ }).click();
+    const bd = () => big.game.roundData;
+    await waitFor(() => bd().step === 'bets', 40000, 'paris à 30');
+    await sleep(500);
+    await S.shot(big.page, 'duel-45-30-joueurs-paris', 'À 30 joueurs : l’écran des paris reste lisible (compteur, points de progression, duellistes en grand).', { tv: true, section: sec });
+    let k = 0;
+    for (const pid of bd().bettors) big.game.vote(pid, k++ % 4 ? 'rouge' : 'bleu');
+    await waitFor(() => bd().step === 'betsReveal', 20000, 'révélation à 30');
+    await sleep(4300);
+    await S.shot(big.page, 'duel-46-30-joueurs-foule', 'À 30 joueurs : la foule des parieurs de chaque côté, photos réduites, prénoms longs ramenés à 20 caractères.', { tv: true, section: sec });
+    for (const b of crowd.bots) b.close();
+    await big.ctx.close();
+  }
+});
+
 // ---------- Exécution ----------
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -716,7 +998,7 @@ try {
   await browser.close();
   await srv.close();
 }
-fs.writeFileSync(path.join(OUT, wanted.length ? 'INDEX-partiel.md' : 'INDEX.md'), session.indexMarkdown('Captures d’écran de la mise à jour', 'Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, téléphone 390×844, 12 joueurs mixtes aux avatars générés.'));
+fs.writeFileSync(path.join(OUT, wanted.length && !DUEL_ONLY ? 'INDEX-partiel.md' : 'INDEX.md'), session.indexMarkdown(DUEL_ONLY ? 'Captures du mode Duel (partie 1)' : 'Captures d’écran de la mise à jour', 'Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, téléphone 390×844, 12 joueurs mixtes aux avatars générés.'));
 const consoleIssues = [...session.consoleIssues];
 console.log(`${session.index.length} images, ${session.issues.length} problème(s) d’affichage repéré(s), ${consoleIssues.length} message(s) de console.`);
 for (const i of session.issues) console.log(`  ⚠ ${i.file} : ${i.issue}`);

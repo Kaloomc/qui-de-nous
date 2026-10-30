@@ -6248,7 +6248,7 @@ body.loup-night {
 
 /* Emojis et confettis : sur les marges, du côté du camp */
 .duel-cheers { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 5; }
-.duel-cheer { position: absolute; bottom: -8vh; font-size: clamp(2rem, 4.2vw, 4rem); animation: duel-float 3.2s ease-out var(--d, 0s) forwards; }
+.duel-cheer { position: absolute; bottom: 3vh; font-size: clamp(2rem, 4.2vw, 4rem); animation: duel-float 3.2s ease-out var(--d, 0s) forwards; }
 .duel-cheer.is-rouge { left: var(--x); }
 .duel-cheer.is-bleu { right: var(--x); }
 .duel-cheer.is-none { left: 45vw; }

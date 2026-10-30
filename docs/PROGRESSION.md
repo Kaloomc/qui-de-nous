@@ -27,3 +27,11 @@ Ajoutés (63), chacun confirmé sur le web avant l’écriture, avec une source 
 - [x] 6. Volume de contenu, par lots avec doublons contrôlés. Livré : Qui de nous +143 (normal) / +131 (18+) ; Tu préfères +147 / +120 ; Qui me connaît +76 / +66 ; Estimation +66 (chaque valeur lue sur Wikipédia/NASA, avec `source`) ; Imposteur +92 / +60 ; La Roue +58 / +69 (dont 8 défis par genre en normal et 6 en 18+) ; Réflexes +60 mots avec leurs voix ; NBM 204 phrases / 546 cartes (normal) et 106 / 219 (18+) ; Savant 153 faits. Non livré, par choix de qualité : les questions réservées à un genre supplémentaires (+30 / +60 par genre) et Estimation +100 (66 seulement : les autres chiffres variaient selon les sources ou dans le temps).
 - [x] 5. Captures d'écran (3 états des icônes de genre, Savant avec 3 faits, 6 phrases NBM de structures différentes avec les cartes du téléphone, cas limites) + `docs/captures/contenu-echantillon.md` (`npm run sample`)
 - [x] README (icônes, règles des questions par genre, ligne éditoriale du Savant, structure et `forme` NBM, ajout de contenu avec contrôles)
+
+# Mode Duel, partie 1
+
+- [x] 1. Moteur : mode, options, sélection équitable des duellistes (rôle `duel:duelliste`), étapes à `phaseId` unique, annulations, `teardownGame()`, interface des mini-jeux (`server/duel/minigames/index.js`)
+- [x] 2. Paris secrets, cote, gorgées (Standard / Hardcore, roi, égalité), emojis et confettis (limites serveur, TV seulement)
+- [x] 3. Roulettes, révélation des paris, écrans TV et téléphones, verdicts
+- [x] 4. Pierre-feuille-ciseaux, Simon, Couleur piège, Duel du Feu, Culture G éclair (155 questions sourcées, `npm run check-culture`), latence compensée (médiane de 5 allers-retours)
+- [x] 5. Simulateur de 300 sessions, test de fuite sur sockets, README, captures (`npm run captures -- duel` → `docs/captures/duel-partie1/`, 45 images, 0 problème d'affichage)
