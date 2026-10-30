@@ -94,6 +94,14 @@ const ICONS = {
       <rect x="44" y="98" width="32" height="10" rx="5" fill="#fff8f0" />
     </>
   ),
+  defuse: (
+    <>
+      <circle cx="54" cy="70" r="34" fill="#2a2254" stroke="#fff8f0" strokeWidth="5" />
+      <path d="M70 38 Q82 22 98 24" fill="none" stroke="#ffc93c" strokeWidth="6" strokeLinecap="round" />
+      <path d="M36 62 h36 M36 74 h36 M36 86 h36" stroke="#ff4d5e" strokeWidth="5" strokeLinecap="round" strokeDasharray="10 6" />
+      <path d="M96 14 l6 8 m0 -8 l-6 8" stroke="#ffc93c" strokeWidth="4" strokeLinecap="round" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

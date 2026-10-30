@@ -8,6 +8,7 @@ import { TimerBar } from '../components.jsx';
 import { sounds } from '../sound.js';
 import { preloadVoices, speak, useSpeechStatus } from '../speech.js';
 import { useFrameElapsed } from './duelFx.js';
+import { MG_VIEWS_2 } from './duelMinigames2.jsx';
 
 const CAMP_LABEL = { rouge: 'ROUGE', bleu: 'BLEU' };
 const timerOf = (endsAt, totalMs) => (endsAt ? { endsAt, totalMs, paused: false } : null);
@@ -368,4 +369,4 @@ Culture.Bettor = ({ play }) => (
   </div>
 );
 
-export const MG_VIEWS = { pfc: Pfc, simon: Simon, couleur: Couleur, feu: Feu, culture: Culture };
+export const MG_VIEWS = { pfc: Pfc, simon: Simon, couleur: Couleur, feu: Feu, culture: Culture, ...MG_VIEWS_2 };

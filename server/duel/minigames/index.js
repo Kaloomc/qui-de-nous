@@ -12,8 +12,9 @@
 // Le moteur (server/games/duel.js) gère les étapes, les minuteurs, les « prêts », les paris et les gorgées.
 import couleur from './couleur.js';
 import culture from './culture.js';
+import defuse from './defuse.js';
 import feu from './feu.js';
 import pfc from './pfc.js';
 import simon from './simon.js';
 
-export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur].map((m) => [m.id, m]));
+export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse].map((m) => [m.id, m]));

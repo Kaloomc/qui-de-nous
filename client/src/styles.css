@@ -6353,3 +6353,19 @@ body.loup-night {
 .mg-choice:disabled { cursor: default; }
 .mg-culture-duelist { display: grid; gap: 12px; }
 .mg-culture-duelist .mg-choices { grid-template-columns: 1fr; }
+
+/* ---------- Mode Duel, partie 2 ---------- */
+.mg-defuse, .mg-defuse-tv { display: grid; gap: 16px; justify-items: center; width: 100%; }
+.mg-clues { margin: 0; padding: 0 0 0 1.4em; display: grid; gap: 6px; font-size: clamp(1.1rem, 2.2vw, 1.9rem); font-weight: 700; max-width: 1100px; }
+.mg-duelist .mg-clues, .mg-defuse-duelist .mg-clues { font-size: 1.05rem; }
+.mg-wires { display: flex; gap: clamp(8px, 2vw, 22px); flex-wrap: wrap; justify-content: center; }
+.mg-wire { display: grid; justify-items: center; gap: 4px; min-width: 56px; min-height: 140px; padding: 8px 6px; border-radius: 16px; border: 3px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.08); color: #fff; cursor: pointer; }
+.mg-wire:disabled { cursor: default; }
+.mg-wire b { font-size: 1.5rem; }
+.mg-wire small { font-size: 0.8rem; }
+.mg-wire-line { width: 18px; min-height: 70px; border-radius: 9px; background: var(--wire); }
+.mg-wire.is-raye .mg-wire-line { background: repeating-linear-gradient(0deg, var(--wire) 0 9px, #14102a 9px 15px); }
+.mg-wire.is-point .mg-wire-line { background: radial-gradient(circle, #14102a 28%, transparent 30%) 0 0 / 18px 12px, var(--wire); }
+.mg-wire.is-solution { border-color: var(--green); box-shadow: 0 0 0 4px var(--green); }
+.mg-defuse-duelist { display: grid; gap: 10px; }
+.mg-defuse-duelist .mg-wire { min-width: 46px; flex: 1; }
