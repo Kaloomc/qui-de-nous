@@ -111,39 +111,44 @@ const SYMS = [
   { shape: '◆', color: '#ff8a3d', name: 'losange orange' },
   { shape: '✚', color: '#7ee05a', name: 'croix verte' },
 ];
+const MARK = { G: { icon: '✓', label: 'bien placé' }, O: { icon: '↔', label: 'mal placé' }, X: { icon: '✕', label: 'absent' } };
 
-function Sym({ i, onClick = null, big = false }) {
+function Sym({ i, onClick = null, big = false, disabled = false }) {
   const s = SYMS[i];
   return (
-    <button className={`mg-sym ${big ? 'is-big' : ''}`} style={{ '--sym': s.color }} disabled={!onClick} onClick={onClick} aria-label={s.name}>
+    <button className={`mg-sym ${big ? 'is-big' : ''}`} style={{ '--sym': s.color }} disabled={!onClick || disabled} onClick={onClick} aria-label={s.name}>
       {s.shape}
     </button>
   );
 }
 
-/** Indices en pastilles : ● bien placé, ○ bon symbole mal placé, avec le texte pour ne pas dépendre de la forme seule. */
-function Pips({ fb, length = 4 }) {
+/** Une case de retour façon Wordle : vert (✓ bien placé), orange (↔ mal placé), gris (✕ absent) ; l'icône évite de dépendre de la couleur. */
+function Tile({ mark, symbol = null, big = false }) {
+  const s = symbol != null ? SYMS[symbol] : null;
   return (
-    <span className="mg-pips" aria-label={`${fb.exact} bien placé(s), ${fb.misplaced} mal placé(s)`}>
-      {Array.from({ length }, (_, i) => (
-        <i key={i} className={i < fb.exact ? 'is-exact' : i < fb.exact + fb.misplaced ? 'is-mis' : ''} />
-      ))}
-      <small>{fb.exact}✔ {fb.misplaced}↔</small>
+    <span className={`mg-tile is-${mark} ${big ? 'is-big' : ''}`} role="img" aria-label={`${s ? `${s.name}, ` : ''}${MARK[mark].label}`}>
+      {s && <b style={{ color: s.color }}>{s.shape}</b>}
+      <i>{MARK[mark].icon}</i>
     </span>
   );
 }
 
 const Code = {
   Tv({ play, state }) {
+    // Grandes grilles de retour (cases colorées) ; les symboles proposés ne sont jamais montrés à l'écran commun.
     return (
       <div className="mg-code-tv">
         <div className="mg-code-cols">
           {['rouge', 'bleu'].map((camp) => (
             <div key={camp} className={`mg-code-col is-${camp}`}>
-              <strong>{CAMP_LABEL[camp]} · {play.pips[camp].length} / {play.max} essais</strong>
-              {play.pips[camp].map((fb, i) => (
-                <Pips key={i} fb={fb} length={play.length} />
-              ))}
+              <strong>{CAMP_LABEL[camp]}</strong>
+              <div className="mg-code-grid">
+                {Array.from({ length: play.max }, (_, r) => (
+                  <div key={r} className="mg-code-line">
+                    {play.grids[camp][r] ? play.grids[camp][r].map((m, k) => <Tile key={k} mark={m} big />) : Array.from({ length: play.length }, (_, k) => <span key={k} className="mg-tile is-empty is-big" />)}
+                  </div>
+                ))}
+              </div>
               {play.found[camp] && <em>✔ Code trouvé !</em>}
             </div>
           ))}
@@ -163,18 +168,18 @@ const Code = {
     const [guess, setGuess] = useState([]);
     const tries = play.mine ?? [];
     const over = tries.length >= play.max || play.found.rouge || play.found.bleu;
-    const add = (i) => guess.length < play.length && setGuess([...guess, i]);
+    // Chaque symbole ne peut être posé qu'une fois dans un essai (le code n'a jamais deux symboles identiques).
+    const add = (i) => guess.length < play.length && !guess.includes(i) && setGuess([...guess, i]);
     return (
       <div className="mg-code-duelist">
         <div className="mg-code-history">
           {tries.map((t, i) => (
             <div key={i} className="mg-code-row">
-              {t.guess.map((g, k) => <Sym key={k} i={g} />)}
-              <Pips fb={t.fb} length={play.length} />
+              {t.guess.map((g, k) => <Tile key={k} mark={t.fb.marks[k]} symbol={g} />)}
             </div>
           ))}
         </div>
-        <p className="muted">Essai {Math.min(tries.length + 1, play.max)} sur {play.max}</p>
+        <p className="muted">Essai {Math.min(tries.length + 1, play.max)} sur {play.max} · ✓ bien placé · ↔ mal placé · ✕ absent</p>
         <div className="mg-code-slots">
           {Array.from({ length: play.length }, (_, k) => (
             <button key={k} className="mg-slot" onClick={() => setGuess(guess.filter((_, j) => j !== k))} aria-label={guess[k] != null ? `Retirer ${SYMS[guess[k]].name}` : 'Case vide'}>
@@ -183,7 +188,7 @@ const Code = {
           ))}
         </div>
         <div className="mg-code-palette">
-          {SYMS.map((_, i) => <Sym key={i} i={i} big onClick={over ? null : () => add(i)} />)}
+          {SYMS.map((_, i) => <Sym key={i} i={i} big disabled={over || guess.includes(i)} onClick={over ? null : () => add(i)} />)}
         </div>
         <button className="btn btn-primary btn-xl" disabled={over || guess.length < play.length} onClick={() => { act({ guess }); setGuess([]); }}>
           Valider
@@ -252,21 +257,45 @@ Simon2.Bettor = Simon2.Tv;
 
 // ---------- Le Crash ----------
 
-/** Multiplicateur affiché : e^(rate · t), figé à la valeur d'explosion. */
+/** Multiplicateur affiché : e^(rate · t), figé à la valeur d'explosion. Renvoie aussi le temps écoulé pour la courbe. */
 function useMultiplier(play, state) {
   const elapsed = useFrameElapsed(play.phase === 'run' ? play.startedAt : null, state);
-  if (play.crashed != null) return play.crashed;
-  if (elapsed == null || elapsed === Infinity) return 1;
-  return Math.exp(play.rate * elapsed);
+  if (play.crashed != null) return { m: play.crashed, t: Math.log(play.crashed) / play.rate };
+  if (elapsed == null || elapsed === Infinity) return { m: 1, t: 0 };
+  return { m: Math.exp(play.rate * elapsed), t: elapsed };
 }
 const fmtX = (x) => `${(Math.floor(x * 100) / 100).toFixed(2).replace('.', ',')}x`;
 
-function CrashBoard({ play, state, big = true }) {
-  const m = useMultiplier(play, state);
-  const boom = play.crashed != null;
+/** Courbe qui monte derrière le gros chiffre (échelle logarithmique : de 1x à 20x). */
+function CrashCurve({ play, t, heat }) {
+  const W = 600;
+  const H = 300;
+  const tMax = Math.log(20) / play.rate;
+  const pts = [];
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const tt = (t * i) / steps;
+    pts.push(`${((tt / tMax) * W).toFixed(1)},${(H - ((play.rate * tt) / Math.log(20)) * H).toFixed(1)}`);
+  }
   return (
-    <div className={`mg-crash ${boom ? 'is-boom' : ''} ${big ? '' : 'is-small'}`}>
-      <p className="mg-crash-x" aria-live="off">{boom ? '💥 ' : ''}{fmtX(m)}</p>
+    <svg className="mg-crash-curve" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+      <polyline points={pts.join(' ')} fill="none" stroke={`hsl(${170 - heat * 170} 90% 55%)`} strokeWidth="8" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CrashBoard({ play, state, big = true }) {
+  const { m, t } = useMultiplier(play, state);
+  const boom = play.crashed != null;
+  const heat = Math.min(1, Math.log(m) / Math.log(20)); // 0 = froid, 1 = brûlant
+  const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const shake = boom || reduce ? 0 : heat * 7;
+  return (
+    <div className={`mg-crash ${boom ? 'is-boom' : ''} ${big ? '' : 'is-small'}`} style={{ '--heat': heat }}>
+      <CrashCurve play={play} t={t} heat={heat} />
+      <p className="mg-crash-x" style={{ color: boom ? undefined : `hsl(${170 - heat * 170} 90% 58%)`, transform: `translate(${(Math.sin(t / 23) * shake).toFixed(1)}px, ${(Math.cos(t / 17) * shake).toFixed(1)}px)` }}>
+        {boom ? '💥 ' : ''}{fmtX(m)}
+      </p>
       <p className="duel-eyebrow">{play.phase === 'pause' ? 'Égalité : on rejoue une fois !' : boom ? 'Explosé !' : 'Ça monte…'}</p>
       <div className="mg-crash-banks">
         {['rouge', 'bleu'].map((camp) => (

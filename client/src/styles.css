@@ -6595,3 +6595,22 @@ body.loup-night {
 .duel-cheerpad.is-fill .duel-cheerbtn { font-size: 3.2rem; min-height: 90px; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 .duel-cheerpad.is-fill .duel-cheerbtn:active { transform: scale(0.94); background: rgba(255, 255, 255, 0.25); }
 .duel-cheerpad.is-fill .duel-cheerbtn.is-wide { grid-column: 1 / -1; font-size: 2rem; background: linear-gradient(90deg, var(--duel-red-d), var(--duel-blue-d)); }
+
+/* ---------- Le Code (retour façon Wordle) et Le Crash (courbe) ---------- */
+.mg-tile { position: relative; display: inline-grid; place-items: center; width: 50px; height: 50px; border-radius: 10px; font-weight: 800; color: #fff; border: 3px solid rgba(255, 255, 255, 0.35); }
+.mg-tile b { font-size: 1.7rem; line-height: 1; }
+.mg-tile i { position: absolute; right: 2px; bottom: 0; font-style: normal; font-size: 0.95rem; }
+.mg-tile.is-G { background: #1f9d55; border-color: #7cf0a8; }
+.mg-tile.is-O { background: #d9822b; border-color: #ffd08a; }
+.mg-tile.is-X { background: #4a4560; border-color: #8a85a3; }
+.mg-tile.is-empty { background: rgba(255, 255, 255, 0.06); border-style: dashed; }
+.mg-tile.is-big { width: clamp(52px, 5.4vw, 84px); height: clamp(52px, 5.4vw, 84px); }
+.mg-tile.is-big i { font-size: clamp(1.4rem, 2.4vw, 2.2rem); position: static; }
+.mg-code-grid { display: grid; gap: 8px; justify-content: center; }
+.mg-code-line { display: flex; gap: 8px; justify-content: center; }
+.mg-code-col strong { font-size: clamp(1.6rem, 2.6vw, 2.6rem); }
+.mg-crash { position: relative; isolation: isolate; width: min(900px, 100%); }
+.mg-crash-curve { position: absolute; inset: 0 0 auto 0; width: 100%; height: 100%; z-index: -1; opacity: 0.55; }
+.mg-crash.is-small .mg-crash-curve { opacity: 0.4; }
+.mg-crash-x { font-variant-numeric: tabular-nums; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .mg-crash-x { transform: none !important; } }

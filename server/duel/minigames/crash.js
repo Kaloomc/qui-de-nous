@@ -3,7 +3,7 @@
 // La plus grande valeur gagne. Les deux à 0 (ou la même valeur) : on rejoue une fois avec un nouveau point d'explosion, puis égalité.
 // Équité : le multiplicateur est une fonction du temps serveur ; la valeur banquée est calculée côté serveur, au temps du joueur
 // (heure de réception moins son aller-retour réseau : ce qu'il voyait quand il a appuyé).
-export const MIN_CRASH = 1.1;
+export const MIN_CRASH = 1.5;
 export const MAX_CRASH = 20;
 export const MAX_RUN_MS = 18000; // durée de la montée jusqu'à 20x
 export const RATE = Math.log(MAX_CRASH) / MAX_RUN_MS; // par ms : m(t) = e^(RATE · t)
@@ -17,12 +17,12 @@ export const timeOf = (m) => Math.log(m) / RATE;
 const floor2 = (x) => Math.floor(x * 100 + 1e-9) / 100;
 
 /**
- * Point d'explosion : probabilité décroissante (P(explosion au-delà de x) = 1/x), entre 1,10x et 20x.
+ * Point d'explosion : jamais en dessous de 1,50x, probabilité décroissante (P(explosion au-delà de x) = 1,5 / x), 20x au plus.
  * Beaucoup d'explosions basses, rarement très haut.
  */
 export function drawCrash(rng) {
   const u = rng();
-  return Math.min(MAX_CRASH, Math.max(MIN_CRASH, floor2(1 / (1 - u))));
+  return Math.min(MAX_CRASH, Math.max(MIN_CRASH, floor2(MIN_CRASH / (1 - u))));
 }
 
 const idOf = (ctx, camp) => (camp === 'rouge' ? ctx.red : ctx.blue);

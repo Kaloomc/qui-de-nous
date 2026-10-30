@@ -481,7 +481,7 @@ Le vainqueur ne boit jamais. Le roi qui chute ajoute ses victoires consécutives
 - **Désamorçage** : 5 ou 6 fils (couleur, motif et numéro) et 3 indices ; le premier à couper le bon fil gagne, un mauvais fil bloque 3 s. Puzzle généré à solution unique (solveur de vérification, 1 000 puzzles testés).
 - **Le Code** : code secret de 4 symboles parmi 6 (formes et couleurs), indices à la Mastermind, 8 essais, 60 s. La TV ne montre que des pastilles ; le code n'est envoyé qu'à la fin.
 - **Simon croisé** : chacun rejoue toute la séquence de mémoire puis ajoute un pas pour piéger l'autre (6 s par pas, 15 pas au plus). La séquence n'est envoyée qu'à la TV, pendant son rejeu.
-- **Le Crash** : un multiplicateur grimpe (1,00x à 20x au plus), on « banque » avant l'explosion, tirée par le serveur et jamais communiquée. Valeur calculée côté serveur, compensée de la latence.
+- **Le Crash** : un multiplicateur grimpe (1,50x au minimum, 20x au plus), on « banque » avant l'explosion, tirée par le serveur et jamais communiquée. Valeur calculée côté serveur, compensée de la latence.
 - **1-2-3 Soleil** : on maintient un bouton pour avancer ; à « Soleil » (voix de la TV, rythme imprévisible) il faut avoir lâché, sinon on recule d'un quart du parcours (tolérance 250 ms compensée).
 - **Dilemme en or** : 20 s de discussion, puis PARTAGER ou TRAHIR en secret. Deux partagent : personne ne boit ; un seul trahit : il gagne ; deux trahissent : 2 gorgées chacun. Sans reprise.
 - **Plateau fantôme** : des personnages défilent sur la TV (téléphones vides), puis une question de comptage à 4 choix. 3 passages, 2 points gagnent. Scènes et questions générées (1 000 scènes testées à réponse unique).

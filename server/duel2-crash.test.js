@@ -14,16 +14,21 @@ async function duelWith(min, opts) {
   throw new Error('pas de tirage assez haut');
 }
 
-test('point d’explosion : 10 000 tirages entre 1,10x et 20x, probabilité décroissante', () => {
+test('point d’explosion : au moins 1,50x sur plus de 10 000 tirages à graines différentes, 20x au plus, probabilité décroissante', () => {
+  let min = Infinity;
+  for (let seed = 1; seed <= 3000; seed++) min = Math.min(min, CR.drawCrash(seededRng(seed * 7919)));
+  assert.ok(min >= 1.5, `point d’explosion trop bas : ${min}`);
+  assert.equal(CR.drawCrash(() => 0), 1.5, 'jamais en dessous de 1,50x même au pire tirage');
   const rng = seededRng(42);
   const draws = Array.from({ length: 10000 }, () => CR.drawCrash(rng));
   assert.ok(draws.every((x) => x >= CR.MIN_CRASH && x <= CR.MAX_CRASH));
+  assert.equal(CR.MIN_CRASH, 1.5);
   const share = (lo, hi) => draws.filter((x) => x >= lo && x < hi).length / draws.length;
-  const bands = [share(1.1, 2), share(2, 4), share(4, 8), share(8, 20)];
+  const bands = [share(1.5, 3), share(3, 6), share(6, 12), share(12, 20)];
   assert.ok(bands[0] > 0.4 && bands[0] < 0.6, `bas ${bands[0]}`);
   for (let i = 1; i < bands.length; i++) assert.ok(bands[i] < bands[i - 1], `la part ne décroît pas : ${bands}`);
-  assert.ok(draws.some((x) => x === CR.MAX_CRASH) && draws.some((x) => x === CR.MIN_CRASH), 'bornes atteintes');
-  assert.ok(draws.filter((x) => x > 10).length < 1300, 'au-dessus de 10x : environ 10 %');
+  assert.ok(draws.some((x) => x === CR.MAX_CRASH), '20x atteint');
+  assert.ok(draws.filter((x) => x > 10).length < 1700, 'au-dessus de 10x : environ 15 %');
 });
 
 test('bornes : au départ 1,00x, 20x atteint en 18 s, fonction croissante et inverse exacte', () => {
@@ -31,7 +36,7 @@ test('bornes : au départ 1,00x, 20x atteint en 18 s, fonction croissante et inv
   assert.ok(Math.abs(CR.multiplierAt(CR.MAX_RUN_MS) - 20) < 1e-9);
   assert.ok(CR.multiplierAt(1000) < CR.multiplierAt(2000));
   assert.ok(CR.multiplierAt(18000) - CR.multiplierAt(17000) > CR.multiplierAt(1000) - CR.multiplierAt(0), 'de plus en plus vite');
-  for (const m of [1.1, 2, 7.5, 20]) assert.ok(Math.abs(CR.multiplierAt(CR.timeOf(m)) - m) < 1e-9);
+  for (const m of [1.5, 2, 7.5, 20]) assert.ok(Math.abs(CR.multiplierAt(CR.timeOf(m)) - m) < 1e-9);
 });
 
 test('jeu : banquer avant l’explosion garde la valeur (calculée côté serveur), la plus grande gagne', async () => {
