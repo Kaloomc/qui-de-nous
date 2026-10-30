@@ -6566,3 +6566,20 @@ body.loup-night {
 .mg-tvwrongs { min-height: 3rem; display: flex; justify-content: center; }
 @keyframes duel-floatup { from { transform: translateY(8px); opacity: 1; } to { transform: translateY(-28px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .mg-choice.is-wrong, .mg-wire.is-wrong, .mg-chrono-card.is-wrong, .mg-penalty-float { animation: none; } }
+
+/* ---------- Roulette des duellistes : deux colonnes de photos ---------- */
+.duel-roulette { align-items: center; gap: 2vw; }
+.duel-col { position: relative; width: min(30vw, 340px); overflow: hidden; border-radius: 28px; -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+.duel-col-label { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 2; }
+.duel-col-strip { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+.duel-thumb { position: absolute; left: 0; right: 0; display: grid; justify-items: center; align-content: center; gap: 2px; filter: blur(3px); opacity: 0.7; transition: filter 0.15s, opacity 0.15s; }
+.duel-thumb strong { font-size: 1.3rem; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-thumb.is-center { filter: none; opacity: 1; }
+.duel-col.is-locked .duel-thumb { filter: blur(4px); }
+.duel-col.is-locked .duel-thumb.is-center { filter: none; }
+.duel-thumb.is-chosen { animation: duel-chosen 0.55s ease-out both; }
+.duel-thumb.is-chosen strong { font-size: 2.2rem; }
+.duel-col.is-rouge .duel-thumb.is-chosen .avatar { box-shadow: 0 0 0 6px var(--duel-red), 0 0 60px 18px rgba(255, 59, 78, 0.7); }
+.duel-col.is-bleu .duel-thumb.is-chosen .avatar { box-shadow: 0 0 0 6px var(--duel-blue), 0 0 60px 18px rgba(47, 123, 255, 0.7); }
+@keyframes duel-chosen { from { transform: scale(0.85); } 60% { transform: scale(1.3); } to { transform: scale(1.22); } }
+@media (prefers-reduced-motion: reduce) { .duel-thumb.is-chosen { animation: none; transform: scale(1.2); } .duel-thumb { transition: none; } }

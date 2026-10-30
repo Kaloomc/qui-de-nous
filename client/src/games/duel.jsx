@@ -7,6 +7,7 @@ import { Avatar, TimerBar } from '../components.jsx';
 import { GameIcon } from '../icons.jsx';
 import { sipsLabel } from '../sips.jsx';
 import { sounds } from '../sound.js';
+import { buildStrip, travel } from '../../../shared/roulette.js';
 import { later, reelAt, stableShuffle, teardownGame, useFrameElapsed } from './duelFx.js';
 import { MG_VIEWS } from './duelMinigames.jsx';
 
@@ -97,21 +98,58 @@ function useReelSound(reel, enabled) {
   }, [reel.index, reel.locked, enabled]);
 }
 
+const ROW = 190;
+const WINDOW_ROWS = 3;
+
+/** Une colonne de la roulette : photos qui défilent (rouge : de haut en bas, bleu : de bas en haut), arrêt net sur l'élu avec zoom et halo. */
+function RouletteColumn({ state, strip, camp, elapsed, lockAt }) {
+  const dir = camp === 'rouge' ? 'down' : 'up';
+  const L = strip.length;
+  const items = dir === 'down' ? [...strip].reverse() : strip;
+  const p = elapsed === Infinity ? 1 : travel(elapsed ?? 0, lockAt);
+  const idx = dir === 'down' ? (L - 1) * (1 - p) : (L - 1) * p;
+  const center = Math.round(idx);
+  const locked = p >= 1;
+  const y = (WINDOW_ROWS * ROW) / 2 - ROW / 2 - idx * ROW;
+  useReelSound({ index: center, locked }, elapsed !== Infinity);
+  const byId = useMemo(() => new Map(state.players.map((pl) => [pl.id, pl])), [state.players]);
+  const from = Math.max(0, center - 3);
+  const to = Math.min(L - 1, center + 3);
+  return (
+    <div className={`duel-col ${CAMPS[camp].cls} ${locked ? 'is-locked' : ''}`} style={{ height: WINDOW_ROWS * ROW }}>
+      <span className="duel-camp-label duel-col-label">{CAMPS[camp].label}</span>
+      <div className="duel-col-strip" style={{ transform: `translateY(${y}px)` }}>
+        {items.slice(from, to + 1).map((id, i) => {
+          const k = from + i;
+          const player = byId.get(id) ?? { id, name: '?', photoUrl: null };
+          const isCenter = k === center;
+          return (
+            <div key={k} className={`duel-thumb ${isCenter ? 'is-center' : ''} ${isCenter && locked ? 'is-chosen' : ''}`} style={{ top: k * ROW, height: ROW }}>
+              <Avatar player={player} size={isCenter ? 150 : 120} />
+              <strong>{player.name}</strong>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function DuelistRoulette({ state, round }) {
   const elapsed = useFrameElapsed(round.startedAt, state);
   const total = round.timer?.totalMs ?? 6500;
-  const everyone = state.players.filter((p) => p.connected);
-  const reels = useMemo(() => ({ rouge: stableShuffle(everyone, `${round.phaseId}r`), bleu: stableShuffle(everyone, `${round.phaseId}b`) }), [round.phaseId, everyone.length]);
-  const red = reelAt(reels.rouge, playerOf(state, round.red), elapsed ?? 0, total * 0.55);
-  const blue = reelAt(reels.bleu, playerOf(state, round.blue), elapsed ?? 0, total * 0.82);
-  useReelSound(red, elapsed !== Infinity);
-  useReelSound(blue, elapsed !== Infinity);
+  const ids = state.players.filter((p) => p.connected).map((p) => p.id);
+  const strips = useMemo(
+    () => ({ rouge: buildStrip(ids, round.red, `${round.phaseId}r`), bleu: buildStrip(ids, round.blue, `${round.phaseId}b`) }),
+    [round.phaseId, round.red, round.blue, ids.length],
+  );
+  const done = elapsed === Infinity || (elapsed ?? 0) >= total * 0.82;
   return (
     <div className="duel-roulette">
       <div className="duel-split" aria-hidden="true" />
-      <Fighter state={state} round={round} camp="rouge" size={200} locked={red.locked} player={red.item} />
-      <div className={`duel-vs ${red.locked && blue.locked ? 'is-hit' : ''}`}>VS</div>
-      <Fighter state={state} round={round} camp="bleu" size={200} locked={blue.locked} player={blue.item} />
+      <RouletteColumn state={state} strip={strips.rouge} camp="rouge" elapsed={elapsed} lockAt={total * 0.62} />
+      <div className={`duel-vs ${done ? 'is-hit' : ''}`}>VS</div>
+      <RouletteColumn state={state} strip={strips.bleu} camp="bleu" elapsed={elapsed} lockAt={total * 0.82} />
     </div>
   );
 }
