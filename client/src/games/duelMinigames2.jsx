@@ -593,9 +593,98 @@ Plateau.Bettor = ({ play, state }) =>
 
 // ---------- Course d'obstacles ----------
 
-const LANE_W = 640;
-const LANE_H = 170;
-const GROUND = 130;
+// Dessins pixel-art originaux (un dino qui court, saute et se baisse ; cactus ; ptérodactyle). Chaque chaîne est une ligne : « # » = pixel plein.
+const DINO_A = ['......#####...', '.....#######..', '.....##.#####.', '.....#########', '.....#####....', '#...######....', '##.#######....', '###########...', '.#########....', '..#######.....', '...#####......', '...##..##.....', '...#....#.....', '...##...##....'];
+const DINO_B = ['......#####...', '.....#######..', '.....##.#####.', '.....#########', '.....#####....', '#...######....', '##.#######....', '###########...', '.#########....', '..#######.....', '...#####......', '...##..##.....', '...##...#.....', '....##..##....'];
+const DINO_DUCK = ['..............#####.', '.............#######', '.............##.####', '..............######', '#...##########......', '##.############.....', '###############.....', '.#############......', '..####..##..##......'];
+const PTERO_UP = ['......#.........', '.....##.......#.', '....###......##.', '...####.....###.', '..#########.###.', '.############.##', '..###########...', '....#######.....', '.....##.##......'];
+const PTERO_DOWN = ['................', '................', '..#.........#...', '.###.......###..', '..###########.##', '.#############.#', '..###########...', '....#######..#..', '.....##.##...##.'];
+
+function pixels(g, rows, x, y, px, color) {
+  g.fillStyle = color;
+  rows.forEach((row, r) => {
+    for (let c = 0; c < row.length; c++) if (row[c] === '#') g.fillRect(Math.round(x + c * px), Math.round(y + r * px), Math.ceil(px), Math.ceil(px));
+  });
+}
+
+/** Cactus (trois variétés de tailles) dessiné dans la boîte de 30 × 40 de l'obstacle au sol. */
+function cactus(g, x, ground, kind) {
+  g.fillStyle = '#4fbf6a';
+  const stem = (cx, h, w = 8) => {
+    g.fillRect(cx, ground - h, w, h);
+    g.fillRect(cx - 7, ground - h * 0.65, 7, 6);
+    g.fillRect(cx - 7, ground - h * 0.65 - 12, 6, 12);
+    g.fillRect(cx + w, ground - h * 0.5, 7, 6);
+    g.fillRect(cx + w + 1, ground - h * 0.5 - 14, 6, 14);
+  };
+  if (kind === 0) stem(x + 11, 40);
+  else if (kind === 1) {
+    stem(x + 5, 28, 6);
+    stem(x + 21, 36, 6);
+  } else {
+    g.fillRect(x + 2, ground - 22, 7, 22);
+    g.fillRect(x + 12, ground - 40, 7, 40);
+    g.fillRect(x + 22, ground - 26, 7, 26);
+  }
+}
+
+const LANE = { tv: { w: 640, h: 200, ground: 160, ahead: 90 }, phone: { w: 440, h: 300, ground: 240, ahead: 70 } };
+
+/** Un couloir : le coureur reste à gauche, le décor défile (sol, nuages, obstacles). Rendu dans un canvas à partir de la simulation partagée. */
+function Lane({ track, events, frame, camp, deadAt, big = false }) {
+  const ref = useRef(null);
+  const L = big ? LANE.phone : LANE.tv;
+  const px = big ? 3 : 2.2;
+  const res = simulate(track, events, deadAt ? Math.min(frame, deadAt) : frame);
+  useEffect(() => {
+    const c = ref.current;
+    if (!c) return;
+    const g = c.getContext('2d');
+    const sky = g.createLinearGradient(0, 0, 0, L.h);
+    sky.addColorStop(0, '#2d2466');
+    sky.addColorStop(1, '#4a3a8f');
+    g.fillStyle = sky;
+    g.fillRect(0, 0, L.w, L.h);
+    // Nuages : défilement lent (effet de profondeur).
+    g.fillStyle = 'rgba(255,248,240,0.22)';
+    for (let i = 0; i < 6; i++) {
+      const cx = (((i * 173 + 40 - res.x * 0.12) % (L.w + 120)) + (L.w + 120)) % (L.w + 120) - 60;
+      const cy = 20 + ((i * 53) % (L.h * 0.35));
+      g.fillRect(cx, cy, 54, 12);
+      g.fillRect(cx + 10, cy - 9, 32, 10);
+    }
+    // Sol qui défile.
+    g.fillStyle = '#fff8f0';
+    g.fillRect(0, L.ground, L.w, 3);
+    g.fillStyle = 'rgba(255,248,240,0.55)';
+    for (let i = 0; i < 16; i++) {
+      const gx = (((i * 61 - res.x) % (L.w + 60)) + (L.w + 60)) % (L.w + 60) - 30;
+      g.fillRect(gx, L.ground + 10 + (i % 3) * 8, 14 + (i % 4) * 5, 3);
+    }
+    const rx = L.ahead;
+    const flap = Math.floor(frame / 8) % 2;
+    for (const o of track) {
+      const sx = rx + (o.x - res.x);
+      if (sx < -60 || sx > L.w + 60) continue;
+      if (o.kind === 'low') cactus(g, sx, L.ground, Math.floor(o.x / 7) % 3);
+      else pixels(g, flap ? PTERO_UP : PTERO_DOWN, sx - 4, L.ground - HIGH.top - 4, px * 1.05, '#d9b3ff');
+    }
+    const color = camp === 'rouge' ? '#ff5a6b' : '#5a9bff';
+    const jumping = res.y > 0;
+    const step = Math.floor(frame / 5) % 2;
+    if (res.duck) pixels(g, DINO_DUCK, rx - 6, L.ground - DUCK_H - res.y - 4, px, color);
+    else pixels(g, jumping || step ? DINO_A : DINO_B, rx - 6, L.ground - 14 * px - res.y + 4, px, color);
+    if (deadAt && frame >= deadAt) {
+      g.fillStyle = 'rgba(20,16,42,0.6)';
+      g.fillRect(0, 0, L.w, L.h);
+      g.fillStyle = '#fff8f0';
+      g.font = `bold ${big ? 44 : 34}px sans-serif`;
+      g.textAlign = 'center';
+      g.fillText('💥 Tombé !', L.w / 2, L.h / 2 - 10);
+    }
+  });
+  return <canvas ref={ref} className={`mg-lane is-${camp} ${big ? 'is-big' : ''}`} width={L.w} height={L.h} aria-label={`Couloir ${CAMP_LABEL[camp]} : ${Math.round(res.x)} m`} />;
+}
 
 function useRaceFrame(play, state) {
   const [frame, setFrame] = useState(0);
@@ -610,46 +699,6 @@ function useRaceFrame(play, state) {
     return () => cancelAnimationFrame(id);
   }, [play.startedAt, state?.paused, state?.clockOffset]);
   return Math.min(frame, MAX_FRAMES);
-}
-
-/** Un couloir : le coureur reste à gauche, le décor défile. Rendu dans un canvas à partir de la simulation partagée. */
-function Lane({ track, events, frame, camp, deadAt }) {
-  const ref = useRef(null);
-  const res = simulate(track, events, deadAt ? Math.min(frame, deadAt) : frame);
-  useEffect(() => {
-    const c = ref.current;
-    if (!c) return;
-    const g = c.getContext('2d');
-    g.clearRect(0, 0, LANE_W, LANE_H);
-    g.fillStyle = 'rgba(255,255,255,0.07)';
-    g.fillRect(0, 0, LANE_W, LANE_H);
-    g.fillStyle = '#fff8f0';
-    g.fillRect(0, GROUND, LANE_W, 4);
-    const rx = 90;
-    for (const o of track) {
-      const sx = rx + (o.x - res.x);
-      if (sx < -40 || sx > LANE_W + 40) continue;
-      const band = o.kind === 'low' ? LOW : HIGH;
-      g.fillStyle = o.kind === 'low' ? '#ffc93c' : '#b46cff';
-      g.fillRect(sx, GROUND - band.top, OBS_W, band.top - band.bottom);
-      g.fillStyle = '#14102a';
-      g.font = 'bold 18px sans-serif';
-      g.fillText(o.kind === 'low' ? '▲' : '▼', sx + 7, GROUND - band.top + 20);
-    }
-    const h = res.duck ? DUCK_H : STAND_H;
-    g.fillStyle = camp === 'rouge' ? '#ff3b4e' : '#2f7bff';
-    g.fillRect(rx, GROUND - res.y - h, RUN_W, h);
-    g.fillStyle = '#fff8f0';
-    g.fillRect(rx + 18, GROUND - res.y - h + 8, 6, 6);
-    if (deadAt && frame >= deadAt) {
-      g.fillStyle = 'rgba(20,16,42,0.55)';
-      g.fillRect(0, 0, LANE_W, LANE_H);
-      g.fillStyle = '#fff8f0';
-      g.font = 'bold 34px sans-serif';
-      g.fillText('💥 Tombé !', LANE_W / 2 - 80, 80);
-    }
-  });
-  return <canvas ref={ref} className={`mg-lane is-${camp}`} width={LANE_W} height={LANE_H} aria-label={`Couloir ${CAMP_LABEL[camp]} : ${Math.round(res.x)} m`} />;
 }
 
 function deadFrom(play, camp, track, events, frame) {
@@ -677,44 +726,57 @@ const Course = {
     const track = useMemo(() => makeTrack(play.seed), [play.seed]);
     const frame = useRaceFrame(play, state);
     const [mine, setMine] = useState([]);
-    const touch = useRef(null);
+    const ducking = useRef(false);
     const send = (k) => {
       const f = Math.max(0, Math.floor((serverNow(state) - play.startedAt) / DT_MS));
       setMine((list) => [...list, { f, k }]);
       act({ k, f });
     };
+    const jump = () => send('j');
+    const duck = (on) => {
+      if (ducking.current === on) return;
+      ducking.current = on;
+      send(on ? 'd1' : 'd0');
+    };
+    // Au clavier (PC) : barre d'espace ou flèche haut = sauter, flèche bas = se baisser.
+    useEffect(() => {
+      const down = (e) => {
+        if (e.repeat) return;
+        if (e.code === 'Space' || e.code === 'ArrowUp') {
+          e.preventDefault();
+          jump();
+        } else if (e.code === 'ArrowDown') {
+          e.preventDefault();
+          duck(true);
+        }
+      };
+      const up = (e) => e.code === 'ArrowDown' && duck(false);
+      window.addEventListener('keydown', down);
+      window.addEventListener('keyup', up);
+      return () => {
+        window.removeEventListener('keydown', down);
+        window.removeEventListener('keyup', up);
+      };
+    });
     const events = mine.length ? mine : play.events[side];
     const dead = deadFrom(play, side, track, events, frame);
     return (
       <div className="mg-course-duelist">
-        <Lane track={track} events={events} frame={frame} camp={side} deadAt={dead} />
-        <div
-          className="mg-course-pad"
-          onPointerDown={(e) => {
-            e.currentTarget.setPointerCapture?.(e.pointerId);
-            touch.current = { y: e.clientY, ducking: false };
-          }}
-          onPointerMove={(e) => {
-            const t = touch.current;
-            if (t && !t.ducking && e.clientY - t.y > 28) {
-              t.ducking = true;
-              send('d1');
-            }
-          }}
-          onPointerUp={() => {
-            const t = touch.current;
-            touch.current = null;
-            if (!t) return;
-            if (t.ducking) send('d0');
-            else send('j');
-          }}
-          onPointerCancel={() => {
-            if (touch.current?.ducking) send('d0');
-            touch.current = null;
-          }}
-        >
-          <strong>TOUCHE = SAUTE</strong>
-          <span>glisse vers le bas = baisse-toi</span>
+        <Lane big track={track} events={events} frame={frame} camp={side} deadAt={dead} />
+        <div className="mg-course-buttons">
+          <button className="mg-run-btn is-jump" onPointerDown={(e) => { e.preventDefault(); jump(); }} onContextMenu={(e) => e.preventDefault()}>
+            ⬆ SAUTER
+          </button>
+          <button
+            className="mg-run-btn is-duck"
+            onPointerDown={(e) => { e.preventDefault(); e.currentTarget.setPointerCapture?.(e.pointerId); duck(true); }}
+            onPointerUp={() => duck(false)}
+            onPointerCancel={() => duck(false)}
+            onPointerLeave={() => duck(false)}
+            onContextMenu={(e) => e.preventDefault()}
+          >
+            ⬇ SE BAISSER
+          </button>
         </div>
       </div>
     );

@@ -7,7 +7,7 @@ export const DT_MS = 1000 / FPS;
 export const MAX_FRAMES = 60 * FPS; // 60 s
 export const V0 = 6; // vitesse de départ, en unités par image
 export const K = 0.0011; // accélération par unité de distance : v = V0 + K · x (8,5 vers x = 2 300… jusqu'à ≈ 16 au bout de 60 s)
-export const V_MAX = 15;
+export const V_MAX = 12;
 export const JUMP_V = 14;
 export const GRAVITY = 0.7; // saut de 40 images, apogée à 140
 export const AIR_FRAMES = (2 * JUMP_V) / GRAVITY;

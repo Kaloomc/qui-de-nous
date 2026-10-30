@@ -6614,3 +6614,13 @@ body.loup-night {
 .mg-crash.is-small .mg-crash-curve { opacity: 0.4; }
 .mg-crash-x { font-variant-numeric: tabular-nums; will-change: transform; }
 @media (prefers-reduced-motion: reduce) { .mg-crash-x { transform: none !important; } }
+
+/* ---------- Course d'obstacles : couloirs et boutons ---------- */
+.mg-lane { max-width: 100%; height: auto; image-rendering: pixelated; }
+.mg-lane.is-big { width: 100%; border-width: 3px; }
+.mg-course-duelist { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.mg-course-buttons { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 6px; }
+.mg-run-btn { min-height: 24vh; border-radius: 26px; border: 5px solid #fff8f0; color: #fff; font-size: 1.7rem; font-weight: 800; touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer; }
+.mg-run-btn.is-jump { background: radial-gradient(circle, #3ee0c5, #1a8f7d); color: #14102a; }
+.mg-run-btn.is-duck { background: radial-gradient(circle, #b46cff, #6a3fb0); }
+.mg-run-btn:active { transform: scale(0.96); }

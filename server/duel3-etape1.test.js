@@ -82,3 +82,27 @@ test('pénalités de temps : chaque mini-jeu concerné retire bien le temps anno
     assert.ok(until(s) <= s.clock.now(), `${id} : débloqué après ${ms} ms`);
   }
 });
+
+test('Course d’obstacles : les boutons SAUTER et SE BAISSER produisent un saut et une baisse dans la simulation rejouée par le serveur', async () => {
+  const R = await import('../shared/runner.js');
+  const track = [{ x: 300, kind: 'low' }];
+  const jump = (f) => R.simulate(track, [{ f, k: 'j' }], 400);
+  assert.ok(R.simulate(track, [], 400).deadAt, 'sans bouton : percuté');
+  assert.ok([...Array(80).keys()].some((f) => jump(f).deadAt === null), 'SAUTER à temps : le saut passe l’obstacle');
+  const high = [{ x: 300, kind: 'high' }];
+  assert.ok(R.simulate(high, [], 400).deadAt, 'debout : percuté par l’obstacle aérien');
+  const ducked = R.simulate(high, [{ f: 0, k: 'd1' }], 400);
+  assert.equal(ducked.deadAt, null, 'SE BAISSER : passe sous l’obstacle aérien');
+  assert.equal(ducked.duck, true);
+  assert.equal(R.simulate(high, [{ f: 0, k: 'd1' }, { f: 5, k: 'd0' }], 20).duck, false, 'relâcher le bouton redresse le dino');
+  // Côté serveur : les mêmes boutons arrivent comme actions du duelliste et entrent dans les entrées rejouées.
+  const s = await duel('course');
+  s.tick(300);
+  const f = Math.floor(300 / R.DT_MS);
+  assert.equal(s.play('rouge', { k: 'j', f }), null);
+  assert.equal(s.play('rouge', { k: 'd1', f: f + 20 }), null);
+  assert.equal(s.play('rouge', { k: 'd0', f: f + 25 }), null);
+  assert.deepEqual(s.mgState().events.rouge.map((e) => e.k), ['j', 'd1', 'd0']);
+  const sim = R.simulate(s.mgState().track, s.mgState().events.rouge, f + 10);
+  assert.ok(sim.y > 0, 'le saut du bouton SAUTER est bien dans la simulation du serveur');
+});
