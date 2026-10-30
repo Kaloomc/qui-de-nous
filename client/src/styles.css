@@ -6457,3 +6457,18 @@ body.loup-night {
 .mg-course-duelist .mg-lane { width: 100%; height: auto; }
 .mg-course-pad { min-height: 46vh; display: grid; place-content: center; text-align: center; gap: 6px; border-radius: 28px; border: 5px dashed rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08); font-size: 1.6rem; touch-action: none; user-select: none; -webkit-user-select: none; }
 .mg-course-pad span { font-size: 1.1rem; opacity: 0.85; }
+
+.mg-geo, .mg-geo-duelist { display: grid; gap: 10px; justify-items: center; width: 100%; }
+.mg-geo-city { font-size: clamp(2.2rem, 5vw, 4.4rem); font-weight: 800; text-align: center; }
+.mg-geo-city.is-small { font-size: 1.8rem; }
+.mg-map-wrap { position: relative; width: min(1500px, 100%); }
+.mg-map { width: 100%; height: auto; border-radius: 18px; border: 3px solid rgba(255, 255, 255, 0.35); touch-action: none; display: block; }
+.mg-map-zoom { position: absolute; right: 8px; top: 8px; display: grid; gap: 6px; }
+.mg-map-zoom button { width: 48px; height: 48px; border-radius: 12px; border: 2px solid #fff8f0; background: rgba(20, 16, 42, 0.85); color: #fff; font-size: 1.6rem; font-weight: 800; cursor: pointer; }
+.mg-pin.is-rouge circle, .mg-pin.is-rouge rect { fill: #ff3b4e; stroke: #fff; stroke-width: 0.8; }
+.mg-pin.is-bleu circle, .mg-pin.is-bleu rect { fill: #2f7bff; stroke: #fff; stroke-width: 0.8; }
+.mg-pin text { fill: #fff; font-weight: 800; paint-order: stroke; stroke: #14102a; stroke-width: 0.8; }
+.mg-truth path { fill: #ffc93c; stroke: #14102a; stroke-width: 1; }
+.mg-geo-status { display: flex; gap: 24px; font-weight: 700; font-size: clamp(1rem, 1.8vw, 1.5rem); flex-wrap: wrap; justify-content: center; }
+.mg-geo-status .is-rouge { color: #ff8a93; }
+.mg-geo-status .is-bleu { color: #8fb8ff; }

@@ -1,0 +1,1154 @@
+[
+ {
+  "id": "geo001",
+  "nom": "Paris",
+  "pays": "France",
+  "lat": 48.8686,
+  "lon": 2.3314,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo002",
+  "nom": "Londres",
+  "pays": "United Kingdom",
+  "lat": 51.5019,
+  "lon": -0.1187,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo003",
+  "nom": "Berlin",
+  "pays": "Germany",
+  "lat": 52.5238,
+  "lon": 13.3996,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo004",
+  "nom": "Madrid",
+  "pays": "Spain",
+  "lat": 40.402,
+  "lon": -3.6853,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo005",
+  "nom": "Rome",
+  "pays": "Italy",
+  "lat": 41.8979,
+  "lon": 12.4813,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo006",
+  "nom": "Lisbonne",
+  "pays": "Portugal",
+  "lat": 38.7247,
+  "lon": -9.1468,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo007",
+  "nom": "Bruxelles",
+  "pays": "Belgium",
+  "lat": 50.8353,
+  "lon": 4.3314,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo008",
+  "nom": "Amsterdam",
+  "pays": "Netherlands",
+  "lat": 52.3519,
+  "lon": 4.9147,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo009",
+  "nom": "Vienne",
+  "pays": "Austria",
+  "lat": 48.202,
+  "lon": 16.3647,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo010",
+  "nom": "Berne",
+  "pays": "Switzerland",
+  "lat": 46.9167,
+  "lon": 7.467,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo011",
+  "nom": "Dublin",
+  "pays": "Ireland",
+  "lat": 53.335,
+  "lon": -6.2509,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo012",
+  "nom": "Oslo",
+  "pays": "Norway",
+  "lat": 59.9186,
+  "lon": 10.748,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo013",
+  "nom": "Stockholm",
+  "pays": "Sweden",
+  "lat": 59.3527,
+  "lon": 18.0954,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo014",
+  "nom": "Helsinki",
+  "pays": "Finland",
+  "lat": 60.1775,
+  "lon": 24.9322,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo015",
+  "nom": "Copenhague",
+  "pays": "Denmark",
+  "lat": 55.6805,
+  "lon": 12.5615,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo016",
+  "nom": "Varsovie",
+  "pays": "Poland",
+  "lat": 52.2519,
+  "lon": 20.9981,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo017",
+  "nom": "Prague",
+  "pays": "Czechia",
+  "lat": 50.0853,
+  "lon": 14.464,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo018",
+  "nom": "Budapest",
+  "pays": "Hungary",
+  "lat": 47.502,
+  "lon": 19.0814,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo019",
+  "nom": "Athènes",
+  "pays": "Greece",
+  "lat": 37.9853,
+  "lon": 23.7314,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo020",
+  "nom": "Bucarest",
+  "pays": "Romania",
+  "lat": 44.4353,
+  "lon": 26.098,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo021",
+  "nom": "Sofia",
+  "pays": "Bulgaria",
+  "lat": 42.6853,
+  "lon": 23.3147,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo022",
+  "nom": "Reykjavik",
+  "pays": "Iceland",
+  "lat": 64.15,
+  "lon": -21.95,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo023",
+  "nom": "Zagreb",
+  "pays": "Croatia",
+  "lat": 45.8,
+  "lon": 16,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo024",
+  "nom": "Vilnius",
+  "pays": "Lithuania",
+  "lat": 54.6834,
+  "lon": 25.3166,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo025",
+  "nom": "Riga",
+  "pays": "Latvia",
+  "lat": 56.95,
+  "lon": 24.1,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo026",
+  "nom": "Tallinn",
+  "pays": "Estonia",
+  "lat": 59.4339,
+  "lon": 24.728,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo027",
+  "nom": "Bratislava",
+  "pays": "Slovakia",
+  "lat": 48.15,
+  "lon": 17.117,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo028",
+  "nom": "Ljubljana",
+  "pays": "Slovenia",
+  "lat": 46.0553,
+  "lon": 14.515,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo029",
+  "nom": "Luxembourg",
+  "pays": "Luxembourg",
+  "lat": 49.6117,
+  "lon": 6.13,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo030",
+  "nom": "Moscou",
+  "pays": "Russia",
+  "lat": 55.7541,
+  "lon": 37.6136,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo031",
+  "nom": "Istanbul",
+  "pays": "Turkey",
+  "lat": 41.1069,
+  "lon": 29.0081,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo032",
+  "nom": "La Valette",
+  "pays": "Malta",
+  "lat": 35.8997,
+  "lon": 14.5147,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo033",
+  "nom": "Genève",
+  "pays": "Switzerland",
+  "lat": 46.21,
+  "lon": 6.14,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo034",
+  "nom": "Belgrade",
+  "pays": "Serbia",
+  "lat": 44.8206,
+  "lon": 20.466,
+  "continent": "Europe",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo035",
+  "nom": "Le Caire",
+  "pays": "Egypt",
+  "lat": 30.0519,
+  "lon": 31.248,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo036",
+  "nom": "Nairobi",
+  "pays": "Kenya",
+  "lat": -1.2814,
+  "lon": 36.8147,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo037",
+  "nom": "Lagos",
+  "pays": "Nigeria",
+  "lat": 6.4452,
+  "lon": 3.3896,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo038",
+  "nom": "Kinshasa",
+  "pays": "Congo (Kinshasa)",
+  "lat": -4.3278,
+  "lon": 15.313,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo039",
+  "nom": "Addis-Abeba",
+  "pays": "Ethiopia",
+  "lat": 9.0353,
+  "lon": 38.6981,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo040",
+  "nom": "Dakar",
+  "pays": "Senegal",
+  "lat": 14.7178,
+  "lon": -17.4751,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo041",
+  "nom": "Casablanca",
+  "pays": "Morocco",
+  "lat": 33.6019,
+  "lon": -7.6183,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo042",
+  "nom": "Rabat",
+  "pays": "Morocco",
+  "lat": 34.0253,
+  "lon": -6.8364,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo043",
+  "nom": "Alger",
+  "pays": "Algeria",
+  "lat": 36.765,
+  "lon": 3.0486,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo044",
+  "nom": "Tunis",
+  "pays": "Tunisia",
+  "lat": 36.8028,
+  "lon": 10.1797,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo045",
+  "nom": "Accra",
+  "pays": "Ghana",
+  "lat": 5.552,
+  "lon": -0.2187,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo046",
+  "nom": "Abidjan",
+  "pays": "Ivory Coast",
+  "lat": 5.3219,
+  "lon": -4.042,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo047",
+  "nom": "Johannesburg",
+  "pays": "South Africa",
+  "lat": -26.1681,
+  "lon": 28.0281,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo048",
+  "nom": "Le Cap",
+  "pays": "South Africa",
+  "lat": -33.9181,
+  "lon": 18.433,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo049",
+  "nom": "Pretoria",
+  "pays": "South Africa",
+  "lat": -25.705,
+  "lon": 28.2275,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo050",
+  "nom": "Luanda",
+  "pays": "Angola",
+  "lat": -8.8363,
+  "lon": 13.2325,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo051",
+  "nom": "Dar es Salaam",
+  "pays": "Tanzania",
+  "lat": -6.7981,
+  "lon": 39.2664,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo052",
+  "nom": "Antananarivo",
+  "pays": "Madagascar",
+  "lat": -18.9147,
+  "lon": 47.5147,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo053",
+  "nom": "Maputo",
+  "pays": "Mozambique",
+  "lat": -25.9533,
+  "lon": 32.5872,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo054",
+  "nom": "Harare",
+  "pays": "Zimbabwe",
+  "lat": -17.8158,
+  "lon": 31.0428,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo055",
+  "nom": "Lusaka",
+  "pays": "Zambia",
+  "lat": -15.4147,
+  "lon": 28.2814,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo056",
+  "nom": "Windhoek",
+  "pays": "Namibia",
+  "lat": -22.57,
+  "lon": 17.0835,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo057",
+  "nom": "Kampala",
+  "pays": "Uganda",
+  "lat": 0.3186,
+  "lon": 32.5814,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo058",
+  "nom": "Bamako",
+  "pays": "Mali",
+  "lat": 12.652,
+  "lon": -8.002,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo059",
+  "nom": "Libreville",
+  "pays": "Gabon",
+  "lat": 0.3854,
+  "lon": 9.458,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo060",
+  "nom": "Yaoundé",
+  "pays": "Cameroon",
+  "lat": 3.8686,
+  "lon": 11.5147,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo061",
+  "nom": "Port-Louis",
+  "pays": "Mauritius",
+  "lat": -20.1666,
+  "lon": 57.5,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo062",
+  "nom": "Kigali",
+  "pays": "Rwanda",
+  "lat": -1.9516,
+  "lon": 30.0586,
+  "continent": "Afrique",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo063",
+  "nom": "Tokyo",
+  "pays": "Japan",
+  "lat": 35.687,
+  "lon": 139.7495,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo064",
+  "nom": "Osaka",
+  "pays": "Japan",
+  "lat": 34.752,
+  "lon": 135.4582,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo065",
+  "nom": "Séoul",
+  "pays": "South Korea",
+  "lat": 37.5683,
+  "lon": 126.9978,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo066",
+  "nom": "Pékin",
+  "pays": "China",
+  "lat": 39.9308,
+  "lon": 116.3863,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo067",
+  "nom": "Shanghai",
+  "pays": "China",
+  "lat": 31.2184,
+  "lon": 121.4346,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo068",
+  "nom": "Mumbai",
+  "pays": "India",
+  "lat": 19.0189,
+  "lon": 72.855,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo069",
+  "nom": "New Delhi",
+  "pays": "India",
+  "lat": 28.6,
+  "lon": 77.2,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo070",
+  "nom": "Bangkok",
+  "pays": "Thailand",
+  "lat": 13.7519,
+  "lon": 100.5147,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo071",
+  "nom": "Hanoï",
+  "pays": "Vietnam",
+  "lat": 21.0353,
+  "lon": 105.8481,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo072",
+  "nom": "Jakarta",
+  "pays": "Indonesia",
+  "lat": -6.1725,
+  "lon": 106.8275,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo073",
+  "nom": "Manille",
+  "pays": "Philippines",
+  "lat": 14.6061,
+  "lon": 120.9803,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo074",
+  "nom": "Kuala Lumpur",
+  "pays": "Malaysia",
+  "lat": 3.1686,
+  "lon": 101.698,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo075",
+  "nom": "Singapour",
+  "pays": "Singapore",
+  "lat": 1.295,
+  "lon": 103.8539,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo076",
+  "nom": "Dhaka",
+  "pays": "Bangladesh",
+  "lat": 23.725,
+  "lon": 90.4066,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo077",
+  "nom": "Téhéran",
+  "pays": "Iran",
+  "lat": 35.6739,
+  "lon": 51.4224,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo078",
+  "nom": "Riyad",
+  "pays": "Saudi Arabia",
+  "lat": 24.6428,
+  "lon": 46.7708,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo079",
+  "nom": "Ankara",
+  "pays": "Turkey",
+  "lat": 39.9292,
+  "lon": 32.8624,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo080",
+  "nom": "Colombo",
+  "pays": "Sri Lanka",
+  "lat": 6.932,
+  "lon": 79.8578,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo081",
+  "nom": "Katmandou",
+  "pays": "Nepal",
+  "lat": 27.7186,
+  "lon": 85.3147,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo082",
+  "nom": "Oulan-Bator",
+  "pays": "Mongolia",
+  "lat": 47.9186,
+  "lon": 106.9147,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo083",
+  "nom": "Astana",
+  "pays": "Kazakhstan",
+  "lat": 51.1811,
+  "lon": 71.4278,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo084",
+  "nom": "Tachkent",
+  "pays": "Uzbekistan",
+  "lat": 41.3136,
+  "lon": 69.293,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo085",
+  "nom": "Bakou",
+  "pays": "Azerbaijan",
+  "lat": 40.3972,
+  "lon": 49.8603,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo086",
+  "nom": "Tbilissi",
+  "pays": "Georgia",
+  "lat": 41.727,
+  "lon": 44.7888,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo087",
+  "nom": "Doha",
+  "pays": "Qatar",
+  "lat": 25.2866,
+  "lon": 51.533,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo088",
+  "nom": "Abou Dabi",
+  "pays": "United Arab Emirates",
+  "lat": 24.4667,
+  "lon": 54.3666,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo089",
+  "nom": "Dubaï",
+  "pays": "United Arab Emirates",
+  "lat": 25.2319,
+  "lon": 55.278,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo090",
+  "nom": "Phnom Penh",
+  "pays": "Cambodia",
+  "lat": 11.552,
+  "lon": 104.9147,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo091",
+  "nom": "Vientiane",
+  "pays": "Laos",
+  "lat": 17.9667,
+  "lon": 102.6,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo092",
+  "nom": "Bangalore",
+  "pays": "India",
+  "lat": 12.9719,
+  "lon": 77.5581,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo093",
+  "nom": "Calcutta",
+  "pays": "India",
+  "lat": 22.4969,
+  "lon": 88.3227,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo094",
+  "nom": "Islamabad",
+  "pays": "Pakistan",
+  "lat": 33.7019,
+  "lon": 73.1647,
+  "continent": "Asie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo095",
+  "nom": "New York",
+  "pays": "United States of America",
+  "lat": 40.7519,
+  "lon": -73.982,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo096",
+  "nom": "Los Angeles",
+  "pays": "United States of America",
+  "lat": 33.9919,
+  "lon": -118.1819,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo097",
+  "nom": "Chicago",
+  "pays": "United States of America",
+  "lat": 41.8319,
+  "lon": -87.752,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo098",
+  "nom": "Washington (D.C.)",
+  "pays": "United States of America",
+  "lat": 38.9015,
+  "lon": -77.0114,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo099",
+  "nom": "Ottawa",
+  "pays": "Canada",
+  "lat": 45.4186,
+  "lon": -75.702,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo100",
+  "nom": "Toronto",
+  "pays": "Canada",
+  "lat": 43.7019,
+  "lon": -79.422,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo101",
+  "nom": "Vancouver",
+  "pays": "Canada",
+  "lat": 49.2754,
+  "lon": -123.1236,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo102",
+  "nom": "Mexico",
+  "pays": "Mexico",
+  "lat": 19.4444,
+  "lon": -99.1329,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo103",
+  "nom": "La Havane",
+  "pays": "Cuba",
+  "lat": 23.1339,
+  "lon": -82.3661,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo104",
+  "nom": "Bogota",
+  "pays": "Colombia",
+  "lat": 4.5984,
+  "lon": -74.0853,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo105",
+  "nom": "Lima",
+  "pays": "Peru",
+  "lat": -12.0461,
+  "lon": -77.052,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo106",
+  "nom": "Santiago du Chili",
+  "pays": "Chile",
+  "lat": -33.4481,
+  "lon": -70.669,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo107",
+  "nom": "Buenos Aires",
+  "pays": "Argentina",
+  "lat": -34.6006,
+  "lon": -58.3995,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo108",
+  "nom": "Rio de Janeiro",
+  "pays": "Brazil",
+  "lat": -22.9231,
+  "lon": -43.227,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo109",
+  "nom": "São Paulo",
+  "pays": "Brazil",
+  "lat": -23.5567,
+  "lon": -46.627,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo110",
+  "nom": "Brasilia",
+  "pays": "Brazil",
+  "lat": -15.7814,
+  "lon": -47.918,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo111",
+  "nom": "Caracas",
+  "pays": "Venezuela",
+  "lat": 10.5029,
+  "lon": -66.919,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo112",
+  "nom": "Quito",
+  "pays": "Ecuador",
+  "lat": -0.213,
+  "lon": -78.502,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo113",
+  "nom": "La Paz",
+  "pays": "Bolivia",
+  "lat": -16.496,
+  "lon": -68.1519,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo114",
+  "nom": "Montevideo",
+  "pays": "Uruguay",
+  "lat": -34.8561,
+  "lon": -56.173,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo115",
+  "nom": "Asunción",
+  "pays": "Paraguay",
+  "lat": -25.2945,
+  "lon": -57.6435,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo116",
+  "nom": "San Francisco",
+  "pays": "United States of America",
+  "lat": 37.7692,
+  "lon": -122.4172,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo117",
+  "nom": "Miami",
+  "pays": "United States of America",
+  "lat": 25.7896,
+  "lon": -80.2261,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo118",
+  "nom": "Panama",
+  "pays": "Panama",
+  "lat": 8.97,
+  "lon": -79.535,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo119",
+  "nom": "San José (Costa Rica)",
+  "pays": "Costa Rica",
+  "lat": 9.937,
+  "lon": -84.086,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo120",
+  "nom": "Kingston (Jamaïque)",
+  "pays": "Jamaica",
+  "lat": 17.9771,
+  "lon": -76.7674,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo121",
+  "nom": "Houston",
+  "pays": "United States of America",
+  "lat": 29.8219,
+  "lon": -95.3419,
+  "continent": "Amériques",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo122",
+  "nom": "Sydney",
+  "pays": "Australia",
+  "lat": -33.9181,
+  "lon": 151.1832,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo123",
+  "nom": "Melbourne",
+  "pays": "Australia",
+  "lat": -37.8181,
+  "lon": 144.9731,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo124",
+  "nom": "Canberra",
+  "pays": "Australia",
+  "lat": -35.283,
+  "lon": 149.129,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo125",
+  "nom": "Auckland",
+  "pays": "New Zealand",
+  "lat": -36.8481,
+  "lon": 174.763,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo126",
+  "nom": "Wellington",
+  "pays": "New Zealand",
+  "lat": -41.3,
+  "lon": 174.7833,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo127",
+  "nom": "Port Moresby",
+  "pays": "Papua New Guinea",
+  "lat": -9.4647,
+  "lon": 147.1925,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ },
+ {
+  "id": "geo128",
+  "nom": "Suva",
+  "pays": "Fiji",
+  "lat": -18.133,
+  "lon": 178.4417,
+  "continent": "Océanie",
+  "source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_populated_places_simple.geojson"
+ }
+]

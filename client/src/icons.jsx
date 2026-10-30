@@ -162,6 +162,14 @@ const ICONS = {
       <path d="M96 50 h14 v14 h-14 Z" fill="#b46cff" />
     </>
   ),
+  geo: (
+    <>
+      <circle cx="60" cy="58" r="42" fill="#16335a" stroke="#fff8f0" strokeWidth="5" />
+      <path d="M32 44 q10 -14 24 -6 q6 10 -4 16 q-10 4 -12 14 q-10 -8 -8 -24 Z M66 62 q14 -4 20 8 q-8 14 -18 8 Z" fill="#3d6b4f" />
+      <path d="M92 10 c10 0 16 7 16 15 c0 11 -16 26 -16 26 s-16 -15 -16 -26 c0 -8 6 -15 16 -15 Z" fill="#ff4d5e" />
+      <circle cx="92" cy="25" r="6" fill="#fff8f0" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />
