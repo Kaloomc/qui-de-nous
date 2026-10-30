@@ -495,6 +495,8 @@ Le vainqueur ne boit jamais. Le roi qui chute ajoute ses victoires consécutives
 
 **Carte du Géo-duel** : fond de carte et coordonnées des villes de [Natural Earth](https://www.naturalearthdata.com) (domaine public, jeux 1:110m « land » et « populated places »), copiés dans `scripts/data/natural-earth/` et convertis par `npm run build-geo-duel` en `shared/worldmap.js` (SVG embarqué) et `server/content/villes-geo-duel.json`. Aucun service de tuiles ni clé d'API.
 
+**Illustrations du Plateau fantôme** : les 12 animaux sont des graphismes [Twemoji](https://github.com/jdecked/twemoji) (© Twitter, Inc. et contributeurs, licence CC-BY 4.0 : https://creativecommons.org/licenses/by/4.0/), copiés dans `client/public/twemoji/`. Le code du jeu est sous la licence du projet ; seuls ces dessins demandent ce crédit.
+
 **Clips de 1-2-3 Soleil** : « Un », « Deux », « Trois » et « Soleil » sont générés par le script de voix existant (même voix que Réflexes, fichiers dans `client/public/voix/`) : `npm run voices -- --words Un,Deux,Trois,Soleil` (clé `ELEVENLABS_API_KEY` dans `.env`). La TV les joue dans une file unique (`speakQueued`), jamais coupés ni chevauchés ; sans audio, le mot s'affiche seulement.
 
 **Ajouter un mini-jeu** : créer `server/duel/minigames/<id>.js` (le contrat est décrit en tête de `server/duel/minigames/index.js` : `prepare`, `begin`, `action`, `result`, `resolve`, `view`), l'ajouter à `MINIGAMES`, écrire ses trois vues dans `client/src/games/duelMinigames.jsx` (`Tv`, `Duelist`, `Bettor`, `Summary`) et une icône dans `client/src/icons.jsx`. Le moteur gère étapes, minuteurs, « prêts », paris, gorgées et annulations ; la vue d'un mini-jeu ne doit jamais contenir le secret d'un duelliste (voir `server/duel-leak.test.js`).

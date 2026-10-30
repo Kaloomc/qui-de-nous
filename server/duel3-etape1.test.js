@@ -63,7 +63,7 @@ test('pénalités de temps : chaque mini-jeu concerné retire bien le temps anno
   const cases = [
     ['defuse', 3000, (s) => s.play('rouge', { wire: (s.mgState().puzzle.solution + 1) % s.mgState().puzzle.wires.length }), (s) => s.view(s.camp.rouge).blockedUntil, (s) => s.view('tv').wrong.rouge],
     ['culture', 2000, (s) => s.play('rouge', { choice: (s.mgState().q.right + 1) % 4, n: s.mgState().n }), (s) => s.view(s.camp.rouge).blockedUntil, (s) => s.view('tv').wrongs.rouge],
-    ['plateau', 2000, (s) => (s.tick(s.mgState().scene.durationMs + 400), s.play('rouge', { choice: (s.mgState().q.right + 1) % 4, n: s.mgState().n })), (s) => s.view(s.camp.rouge).blockedUntil, (s) => s.view('tv').wrongs.rouge],
+    ['plateau', 2000, (s) => (s.tick(s.mgState().round.scene.durationMs + 400), s.play('rouge', { choice: (s.mgState().round.right + 1) % 4, n: s.mgState().n })), (s) => s.view(s.camp.rouge).blockedUntil, (s) => s.view('tv').wrongs.rouge],
     ['chrono', 3000, (s) => {
       const order = s.mgState().cards.map((c, i) => [c.rank, i]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
       return s.play('rouge', { card: order[2] });

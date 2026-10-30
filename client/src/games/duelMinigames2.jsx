@@ -492,40 +492,56 @@ Soleil.Bettor = ({ play, state }) => (
 
 // ---------- Plateau fantôme ----------
 
-const BODY = { rouge: '#ff4d5e', bleu: '#3c9dff', vert: '#2fd18a', jaune: '#ffc93c', violet: '#b46cff' };
-const SHAPE = { rouge: 'rond', bleu: 'carre', vert: 'triangle', jaune: 'etoile', violet: 'losange' };
-const CROSS_MS = 2600;
+const ANIMAL_NAME = { dog: 'chien', cat: 'chat', frog: 'grenouille', fox: 'renard', panda: 'panda', monkey: 'singe', lion: 'lion', pig: 'cochon', octopus: 'poulpe', penguin: 'manchot', unicorn: 'licorne', tiger: 'tigre' };
+const Animal = ({ id, size = 120 }) => <img className="mg-animal" src={`/twemoji/${id}.svg`} width={size} height={size} alt={ANIMAL_NAME[id] ?? id} draggable={false} />;
 
-function Walker({ c, elapsed }) {
-  const p = (elapsed - c.start) / CROSS_MS;
-  if (p < 0 || p > 1) return null;
-  const x = c.dir === 'droite' ? p : 1 - p;
-  const jump = c.jumps ? Math.abs(Math.sin(p * Math.PI * 3)) * 46 : 0;
-  return (
-    <span className={`mg-walker shape-${SHAPE[c.color]} acc-${c.accessory} dir-${c.dir}`} style={{ left: `${4 + x * 88}%`, top: `${18 + c.lane * 26}%`, '--body': BODY[c.color], transform: `translateY(-${jump}px)` }}>
-      <i className="mg-acc" />
-    </span>
-  );
-}
-
+/** Scène lente et claire : les animaux se montrent, le rideau tombe, un animal part ou arrive ; ou bien ils défilent derrière le rideau. */
 function Stage({ play, state }) {
   const elapsed = useFrameElapsed(play.sceneAt, state);
   const t = Number.isFinite(elapsed) ? elapsed : play.sceneMs;
+  const sc = play.scene;
+  if (sc.kind === 'compte') {
+    const CROSS = 2400;
+    return (
+      <div className="mg-stage is-count" aria-label="Des animaux passent derrière le rideau">
+        {sc.walkers.map((a, i) => {
+          const p = (t - 300 - i * 1100) / CROSS;
+          if (p < 0 || p > 1) return null;
+          return (
+            <span key={i} className="mg-walker-img" style={{ left: `${p * 100}%` }}>
+              <Animal id={a} size={150} />
+            </span>
+          );
+        })}
+        <div className="mg-curtain is-fixed" aria-hidden="true">
+          🎭
+        </div>
+      </div>
+    );
+  }
+  const shown = t < 4300 ? sc.before : sc.after;
+  const curtain = t >= 3200 && t < 6000;
   return (
-    <div className="mg-stage" aria-label="Scène : comptez bien">
-      {play.scene.chars.map((c) => (
-        <Walker key={c.id} c={c} elapsed={t} />
-      ))}
+    <div className="mg-stage is-row">
+      <div className="mg-row">
+        {shown.map((a) => (
+          <Animal key={a} id={a} size={150} />
+        ))}
+      </div>
+      <div className={`mg-curtain ${curtain ? 'is-down' : ''}`} aria-hidden="true">
+        🎭
+      </div>
     </div>
   );
 }
 
 function AskChoices({ play, onPick = null, blocked = false, wrong = null }) {
   return (
-    <div className="mg-choices">
+    <div className="mg-choices is-picto">
       {play.choices.map((c, i) => (
-        <button key={i} className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''} ${wrong === i ? 'is-wrong' : ''}`} disabled={!onPick || blocked || !!play.shown} onClick={() => onPick?.(i)}>
-          <b>{'ABCD'[i]}</b> {c}
+        <button key={i} className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''} ${wrong === i ? 'is-wrong' : ''}`} disabled={!onPick || blocked || !!play.shown} onClick={() => onPick?.(i)} aria-label={c.img ? ANIMAL_NAME[c.img] : c.text}>
+          <b>{'ABCD'[i]}</b>
+          {c.img ? <Animal id={c.img} size={84} /> : <span className="mg-choice-num">{c.text}</span>}
         </button>
       ))}
     </div>
@@ -538,19 +554,16 @@ const Plateau = {
       <div className="mg-plateau">
         <TvWrongs wrongs={play.wrongs} ms={round?.mg?.penaltyMs} />
         <Score a={play.score.rouge} b={play.score.bleu} />
-        <p className="duel-eyebrow">Premier à 2 points</p>
+        <p className="duel-eyebrow">Première équipe à 2 points</p>
         {play.phase === 'scene' && play.scene ? (
-          <>
-            <Stage play={play} state={state} />
-            <p className="duel-eyebrow">Regardez bien les personnages !</p>
-          </>
+          <Stage play={play} state={state} />
         ) : (
           <>
             <h2 className="mg-question">{play.question}</h2>
             <AskChoices play={play} />
             {play.shown && <p className="duel-eyebrow">{play.shown.scorer ? `Point pour ${CAMP_LABEL[play.shown.scorer]} !` : play.shown.tie ? 'Égalité de vitesse !' : 'Personne ne marque'}</p>}
             {play.endsAt && (
-              <TimerBar timer={{ endsAt: play.endsAt, totalMs: 7000, paused: false }} state={state} small>
+              <TimerBar timer={{ endsAt: play.endsAt, totalMs: 9000, paused: false }} state={state} small>
                 {(s) => `${s} s`}
               </TimerBar>
             )}
@@ -565,7 +578,7 @@ const Plateau = {
       return (
         <div className="mg-plateau-wait">
           <h2>Regarde la TV !</h2>
-          <p className="muted">Compte les personnages : une question arrive.</p>
+          <p className="muted">Une question arrive juste après.</p>
         </div>
       );
     }
@@ -575,21 +588,13 @@ const Plateau = {
         <h2 className="mg-question is-small">{play.question}</h2>
         <PenaltyBadge left={pen.left} flash={pen.flash} ms={round?.mg?.penaltyMs} />
         <AskChoices play={play} blocked={pen.left > 0} wrong={pen.wrong} onPick={(i) => { pen.mark(i); act({ choice: i, n: play.n }); }} />
+        {play.shown && <p className="duel-eyebrow">{play.shown.scorer ? `Point pour ${CAMP_LABEL[play.shown.scorer]}` : 'Pas de point'}</p>}
       </div>
     );
   },
   Summary: ({ details }) => (details?.score ? <p className="duel-cote-line">Points : ROUGE {details.score.rouge} – {details.score.bleu} BLEU</p> : null),
 };
-Plateau.Bettor = ({ play, state }) =>
-  play.phase === 'scene' ? (
-    <p className="duel-eyebrow">Regarde la TV : compte les personnages !</p>
-  ) : (
-    <div className="mg-plateau">
-      <Score a={play.score.rouge} b={play.score.bleu} />
-      <h2 className="mg-question is-small">{play.question}</h2>
-      <AskChoices play={play} />
-    </div>
-  );
+Plateau.Bettor = Plateau.Tv;
 
 // ---------- Course d'obstacles ----------
 

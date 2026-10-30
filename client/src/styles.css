@@ -6632,3 +6632,18 @@ body.loup-night {
 .mg-defuse-tv .mg-wire small { font-size: clamp(1.1rem, 1.6vw, 1.6rem); }
 .mg-defuse-tv .mg-wire-line { width: clamp(34px, 3.4vw, 54px); min-height: clamp(150px, 22vh, 250px); }
 .mg-defuse-tv .mg-clues { font-size: clamp(1.6rem, 2.4vw, 2.6rem); }
+
+/* ---------- Plateau fantôme : animaux Twemoji, rideau ---------- */
+.mg-stage { position: relative; width: min(1300px, 96%); height: 38vh; overflow: hidden; border-radius: 24px; background: linear-gradient(180deg, #3a2f7a, #241c52); }
+.mg-stage.is-row { display: grid; place-items: center; }
+.mg-row { display: flex; gap: clamp(14px, 3vw, 44px); align-items: center; justify-content: center; transition: opacity 0.25s; }
+.mg-animal { display: block; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4)); }
+.mg-curtain { position: absolute; inset: 0 0 auto 0; height: 100%; display: grid; place-items: center; font-size: 6rem; background: repeating-linear-gradient(90deg, #8a1f3d 0 26px, #a82b4c 26px 52px); transform: translateY(-101%); transition: transform 0.9s ease-in-out; }
+.mg-curtain.is-down { transform: translateY(0); }
+.mg-curtain.is-fixed { inset: 0 auto 0 34%; width: 32%; height: 100%; transform: none; }
+.mg-stage.is-count .mg-walker-img { position: absolute; bottom: 12%; transform: translateX(-50%); }
+.mg-choices.is-picto { grid-template-columns: repeat(4, 1fr); }
+.mg-choices.is-picto .mg-choice { flex-direction: column; justify-content: center; min-height: 130px; gap: 6px; }
+.mg-choice-num { font-size: 3rem; font-weight: 800; }
+.mg-culture-duelist .mg-choices.is-picto { grid-template-columns: 1fr 1fr; }
+@media (prefers-reduced-motion: reduce) { .mg-curtain, .mg-row { transition: none; } }

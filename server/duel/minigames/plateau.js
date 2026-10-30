@@ -1,88 +1,63 @@
-// Plateau fantôme : de petits personnages défilent sur la TV pendant 6 à 7 s (les téléphones restent vides), puis une question de
-// comptage apparaît avec 4 choix : le premier à répondre juste marque, une mauvaise réponse bloque 2 s. 3 passages, 2 points gagnent ;
-// 1-1 → 4e passage, puis égalité finale. Tout est généré par programme à partir d'une graine : le comptage est exact et sans ambiguïté.
-// Confidentialité : la scène (les personnages) n'est envoyée qu'à la TV, pendant le défilé ; la bonne réponse jamais avant la fin de la question.
-export const COLORS = [
-  { id: 'rouge', name: 'rouge', shape: 'rond' },
-  { id: 'bleu', name: 'bleu', shape: 'carré' },
-  { id: 'vert', name: 'vert', shape: 'triangle' },
-  { id: 'jaune', name: 'jaune', shape: 'étoile' },
-  { id: 'violet', name: 'violet', shape: 'losange' },
-];
-export const ACCESSORIES = ['chapeau', 'cape', 'echarpe', 'aucun'];
+// Plateau fantôme : une scène très courte sur la TV (les téléphones restent vides), puis une question évidente à 4 choix. Une seule règle par
+// passage : « Quel animal a disparu ? », « Quel animal est arrivé ? » ou « Combien d'animaux sont passés derrière le rideau ? ».
+// Le premier à répondre juste marque, une mauvaise réponse bloque 2 s. 3 passages, 2 points gagnent ; 1-1 → 4e passage, puis égalité finale.
+// Les animaux sont des illustrations Twemoji (client/public/twemoji, CC-BY 4.0, crédit dans le README). Tout est généré à partir d'une graine :
+// la réponse est unique et vérifiable.
+// Confidentialité : la scène n'est envoyée qu'à la TV, pendant l'animation ; la bonne réponse jamais avant la fin de la question.
+export const ANIMALS = ['dog', 'cat', 'frog', 'fox', 'panda', 'monkey', 'lion', 'pig', 'octopus', 'penguin', 'unicorn', 'tiger'];
+export const KINDS = ['disparu', 'nouveau', 'compte'];
 export const WIN_AT = 2;
 export const PASSES = 3;
 export const SUDDEN_PASSES = 1;
-export const QUESTION_MS = 7000;
+export const QUESTION_MS = 9000; // temps suffisant pour lire et répondre
 export const BLOCK_MS = 2000;
 export const SETTLE_MS = 250;
 export const REVEAL_MS = 1800;
 export const TIE_MS = 20;
 
 const pick = (rng, list) => list[Math.floor(rng() * list.length)];
-
-/** Une scène : 10 à 14 personnages qui traversent l'écran, chacun avec une couleur, un accessoire, un sens et un saut (oui / non). */
-export function makeScene(rng) {
-  const n = 10 + Math.floor(rng() * 5);
-  const durationMs = 6000 + Math.floor(rng() * 2) * 1000;
-  const chars = Array.from({ length: n }, (_, i) => ({
-    id: i,
-    color: pick(rng, COLORS).id,
-    accessory: pick(rng, ACCESSORIES),
-    dir: rng() < 0.5 ? 'gauche' : 'droite',
-    jumps: rng() < 0.4,
-    // Chacun entre en scène à un instant distinct et traverse en 2,6 s : tout est visible en entier (aucun personnage coupé).
-    start: Math.round((i / n) * (durationMs - 2600)),
-    lane: i % 3,
-  }));
-  return { chars, durationMs };
-}
-
-const QUESTIONS = {
-  chapeau: { text: 'Combien de personnages portaient un chapeau ?', count: (c) => c.accessory === 'chapeau' },
-  cape: { text: 'Combien de personnages portaient une cape ?', count: (c) => c.accessory === 'cape' },
-  echarpe: { text: 'Combien de personnages portaient une écharpe ?', count: (c) => c.accessory === 'echarpe' },
-  gauche: { text: 'Combien de personnages sont allés vers la gauche ?', count: (c) => c.dir === 'gauche' },
-  droite: { text: 'Combien de personnages sont allés vers la droite ?', count: (c) => c.dir === 'droite' },
-  saut: { text: 'Combien de personnages ont sauté ?', count: (c) => c.jumps },
-  couleur: { text: 'Quelle couleur est passée le plus souvent ?' },
-};
-
-/** Réponse exacte d'un type de question, recalculée à partir de la scène : un nombre, ou l'id de la couleur gagnante (null si ex æquo). */
-export function answerOf(kind, scene) {
-  if (kind === 'couleur') {
-    const counts = Object.fromEntries(COLORS.map((c) => [c.id, scene.chars.filter((x) => x.color === c.id).length]));
-    const best = Math.max(...Object.values(counts));
-    const top = Object.keys(counts).filter((c) => counts[c] === best);
-    return top.length === 1 ? top[0] : null;
-  }
-  return scene.chars.filter(QUESTIONS[kind].count).length;
-}
+const shuffle = (rng, list) => list.map((x) => [rng(), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+/** `count` éléments distincts de `list`, hors `exclude`. */
+const some = (rng, list, count, exclude = []) => shuffle(rng, list.filter((x) => !exclude.includes(x))).slice(0, count);
 
 /**
- * Une question sur la scène : 4 choix distincts dont un seul juste. Les types sans réponse unique (ex æquo de couleurs, zéro personnage)
- * sont écartés. `avoid` : types déjà posés.
+ * Un passage : { kind, scene, text, choices: [{ img } | { text }], right }.
+ *  disparu : 3 à 5 animaux, un disparaît derrière le rideau ; nouveau : 3 ou 4 animaux, un de plus arrive ;
+ *  compte : 2 à 6 animaux traversent la scène derrière le rideau, on les compte.
+ * Les 4 choix sont toujours distincts, un seul est juste.
  */
-export function makeQuestion(scene, rng, avoid = []) {
-  const kinds = Object.keys(QUESTIONS).filter((k) => !avoid.includes(k));
-  for (let tries = 0; tries < 60; tries++) {
-    const kind = pick(rng, kinds.length ? kinds : Object.keys(QUESTIONS));
-    const right = answerOf(kind, scene);
-    if (right == null || right === 0) continue;
-    let choices;
-    if (kind === 'couleur') {
-      const others = COLORS.map((c) => c.id).filter((c) => c !== right);
-      choices = [right, ...others.sort(() => rng() - 0.5).slice(0, 3)];
-      choices = choices.map((id) => COLORS.find((c) => c.id === id).name[0].toUpperCase() + COLORS.find((c) => c.id === id).name.slice(1) + ` (${COLORS.find((c) => c.id === id).shape})`);
-    } else {
-      const pool = [];
-      for (let d = -3; d <= 3; d++) if (d !== 0 && right + d >= 0) pool.push(right + d);
-      choices = [right, ...pool.sort(() => rng() - 0.5).slice(0, 3)].map(String);
-    }
-    const shuffled = choices.map((c, i) => ({ c, i, k: rng() })).sort((a, b) => a.k - b.k);
-    return { kind, text: QUESTIONS[kind].text, choices: shuffled.map((x) => x.c), right: shuffled.findIndex((x) => x.i === 0) };
+export function makeRound(rng, kind = pick(rng, KINDS)) {
+  if (kind === 'disparu') {
+    const n = 3 + Math.floor(rng() * 3);
+    const before = some(rng, ANIMALS, n);
+    const gone = pick(rng, before);
+    const after = before.filter((a) => a !== gone);
+    const lures = [...some(rng, after, 3), ...some(rng, ANIMALS, 3, [gone, ...after])].slice(0, 3);
+    const choices = shuffle(rng, [gone, ...lures]);
+    return { kind, scene: { before, after, durationMs: 7500 }, text: 'Quel animal a disparu ?', choices: choices.map((img) => ({ img })), right: choices.indexOf(gone) };
   }
-  throw new Error('question introuvable');
+  if (kind === 'nouveau') {
+    const n = 3 + Math.floor(rng() * 2);
+    const before = some(rng, ANIMALS, n);
+    const added = pick(rng, ANIMALS.filter((a) => !before.includes(a)));
+    const after = [...before];
+    after.splice(Math.floor(rng() * (n + 1)), 0, added);
+    const lures = [...some(rng, before, 2), ...some(rng, ANIMALS, 2, [added, ...before])].slice(0, 3);
+    const choices = shuffle(rng, [added, ...lures]);
+    return { kind, scene: { before, after, durationMs: 7500 }, text: 'Quel animal est arrivé ?', choices: choices.map((img) => ({ img })), right: choices.indexOf(added) };
+  }
+  const total = 2 + Math.floor(rng() * 5);
+  const walkers = Array.from({ length: total }, () => pick(rng, ANIMALS));
+  const numbers = [total, ...some(rng, [1, 2, 3, 4, 5, 6, 7, 8], 3, [total])].sort((a, b) => a - b);
+  return { kind: 'compte', scene: { walkers, durationMs: 2500 + total * 1100 }, text: 'Combien d’animaux sont passés derrière le rideau ?', choices: numbers.map((x) => ({ text: String(x) })), right: numbers.indexOf(total) };
+}
+
+/** Réponse attendue recalculée à partir de la scène seule (sert aux tests : elle doit toujours retrouver la bonne case). */
+export function answerFromScene(round) {
+  const { kind, scene } = round;
+  if (kind === 'disparu') return scene.before.find((a) => !scene.after.includes(a));
+  if (kind === 'nouveau') return scene.after.find((a) => !scene.before.includes(a));
+  return String(scene.walkers.length);
 }
 
 const idOf = (ctx, camp) => (camp === 'rouge' ? ctx.red : ctx.blue);
@@ -90,9 +65,7 @@ const CAMPS = ['rouge', 'bleu'];
 
 function startPass(s, ctx) {
   s.n += 1;
-  s.scene = makeScene(ctx.rng);
-  s.q = makeQuestion(s.scene, ctx.rng, s.asked);
-  s.asked.push(s.q.kind);
+  s.round = makeRound(ctx.rng, s.n === 1 ? undefined : pick(ctx.rng, KINDS.filter((k) => k !== s.round?.kind)));
   s.phase = 'scene';
   s.sceneAt = ctx.now();
   s.correct = {};
@@ -100,7 +73,7 @@ function startPass(s, ctx) {
   s.settled = false;
   s.shown = null;
   const token = ++s.token;
-  ctx.later(s.scene.durationMs + 400, () => s.token === token && startQuestion(s, ctx, token));
+  ctx.later(s.round.scene.durationMs + 400, () => s.token === token && startQuestion(s, ctx, token));
 }
 
 function startQuestion(s, ctx, token) {
@@ -121,7 +94,7 @@ function settle(s, ctx, token) {
     else scorer = gap < 0 ? 'rouge' : 'bleu';
   }
   if (scorer) s.score[scorer] += 1;
-  s.shown = { n: s.n, right: s.q.right, scorer, tie };
+  s.shown = { n: s.n, right: s.round.right, scorer, tie };
   s.phase = 'reveal';
   s.token += 1;
   const lead = s.score.rouge === s.score.bleu ? null : s.score.rouge > s.score.bleu ? 'rouge' : 'bleu';
@@ -141,11 +114,11 @@ export default {
   id: 'plateau',
   name: 'Plateau fantôme',
   icon: 'plateau',
-  penaltyMs: BLOCK_MS,
   category: 'attention',
-  maxMs: 75000,
+  penaltyMs: BLOCK_MS,
+  maxMs: 80000,
   minContent: 0,
-  prepare: () => ({ wrongs: { rouge: 0, bleu: 0 }, n: 0, score: { rouge: 0, bleu: 0 }, asked: [], phase: 'scene', token: 0, done: null }),
+  prepare: () => ({ wrongs: { rouge: 0, bleu: 0 }, n: 0, score: { rouge: 0, bleu: 0 }, round: null, phase: 'scene', token: 0, done: null }),
   begin: (s, ctx) => startPass(s, ctx),
   action(s, camp, data, ctx) {
     if (s.done || s.phase !== 'ask') return 'Pas maintenant.';
@@ -154,7 +127,7 @@ export default {
     const now = ctx.now();
     if (now < (s.blocked[camp] ?? 0)) return 'Bloqué.';
     if (s.correct[camp] != null) return null;
-    if (data.choice !== s.q.right) {
+    if (data.choice !== s.round.right) {
       s.blocked[camp] = now + BLOCK_MS;
       s.wrongs[camp] += 1;
       return null;
@@ -170,22 +143,23 @@ export default {
   result: (s) => (s.done ? { winner: s.done.winner, details: details(s) } : null),
   resolve: (s) => ({ winner: winnerOf(s), details: details(s) }),
   view(s, who) {
+    const asking = s.phase === 'ask' || s.phase === 'reveal';
     const view = {
       n: s.n,
       passes: PASSES,
       wrongs: { ...s.wrongs },
       score: { ...s.score },
       phase: s.phase,
-      question: s.phase === 'ask' || s.phase === 'reveal' ? s.q.text : null,
-      choices: s.phase === 'ask' || s.phase === 'reveal' ? s.q.choices : [],
+      question: asking ? s.round.text : null,
+      choices: asking ? s.round.choices : [],
       askedAt: s.askedAt,
       endsAt: s.phase === 'ask' ? s.askedAt + QUESTION_MS : null,
       sceneAt: s.phase === 'scene' ? s.sceneAt : null,
-      sceneMs: s.phase === 'scene' ? s.scene.durationMs : 0,
+      sceneMs: s.phase === 'scene' ? s.round.scene.durationMs : 0,
       shown: s.phase === 'reveal' ? s.shown : null,
     };
-    // La scène : la TV seulement, et seulement pendant le défilé (les téléphones restent vides).
-    if (who.kind === 'tv' && s.phase === 'scene') view.scene = s.scene;
+    // La scène : la TV seulement, et seulement pendant l'animation (les téléphones restent vides).
+    if (who.kind === 'tv' && s.phase === 'scene') view.scene = { kind: s.round.kind, ...s.round.scene };
     if (who.kind === 'duelist') view.blockedUntil = s.blocked[who.side] ?? 0;
     return view;
   },

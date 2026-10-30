@@ -1,49 +1,53 @@
-// Plateau fantôme : sur 1 000 scènes la réponse est unique et vérifiable ; règles de manche ; la scène n'est jamais envoyée aux téléphones.
+// Plateau fantôme : une règle par passage, réponse unique sur 1 000 passages, illustrations présentes, règles de manche, scène réservée à la TV.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
 import { seededRng } from './rules/duel.js';
 import * as PL from './duel/minigames/plateau.js';
 import { duel, leaks } from './duelTestKit.js';
 
-test('1 000 scènes : réponse unique, 4 choix distincts, aucun personnage hors cadre, types variés', () => {
+test('1 000 passages : 4 choix distincts, une seule bonne réponse retrouvée à partir de la scène, 3 à 5 animaux au plus à l’écran', () => {
   const kinds = new Set();
   for (let seed = 1; seed <= 1000; seed++) {
-    const rng = seededRng(seed);
-    const scene = PL.makeScene(rng);
-    assert.ok(scene.chars.length >= 10 && scene.chars.length <= 14);
-    assert.ok(scene.durationMs >= 6000 && scene.durationMs <= 8000);
-    for (const c of scene.chars) {
-      assert.ok(c.start >= 0 && c.start + 2600 <= scene.durationMs, 'personnage à moitié visible : il sort de la scène');
-      assert.ok(PL.ACCESSORIES.includes(c.accessory) && ['gauche', 'droite'].includes(c.dir) && typeof c.jumps === 'boolean');
+    const round = PL.makeRound(seededRng(seed * 31));
+    kinds.add(round.kind);
+    assert.equal(round.choices.length, 4);
+    const labels = round.choices.map((c) => c.img ?? c.text);
+    assert.equal(new Set(labels).size, 4, `choix en double (${seed})`);
+    assert.equal(labels[round.right], PL.answerFromScene(round), `mauvaise réponse (${seed}, ${round.kind})`);
+    assert.equal(labels.filter((l) => l === PL.answerFromScene(round)).length, 1);
+    const { scene } = round;
+    if (round.kind === 'compte') {
+      assert.ok(scene.walkers.length >= 2 && scene.walkers.length <= 6);
+      assert.ok(scene.walkers.every((a) => PL.ANIMALS.includes(a)));
+    } else {
+      assert.ok(scene.before.length >= 3 && scene.before.length <= 5 && scene.after.length <= 5, 'trop de personnages à l’écran');
+      assert.equal(new Set(scene.before).size, scene.before.length, 'deux fois le même animal');
+      assert.equal(Math.abs(scene.after.length - scene.before.length), 1, 'une seule règle : un animal de moins ou de plus');
     }
-    const q = PL.makeQuestion(scene, rng);
-    kinds.add(q.kind);
-    assert.equal(q.choices.length, 4);
-    assert.equal(new Set(q.choices).size, 4, `choix en double (${seed})`);
-    const truth = PL.answerOf(q.kind, scene);
-    assert.ok(truth != null && truth !== 0);
-    if (q.kind === 'couleur') {
-      const color = PL.COLORS.find((c) => c.id === truth);
-      assert.ok(q.choices[q.right].toLowerCase().startsWith(color.name), `couleur ${seed}`);
-      assert.equal(q.choices.filter((c) => c.toLowerCase().startsWith(color.name)).length, 1);
-    } else assert.equal(q.choices[q.right], String(truth), `comptage ${seed}`);
-    assert.ok(q.choices.every((c, i) => i === q.right || c !== q.choices[q.right]), 'une seule bonne réponse');
+    assert.ok(scene.durationMs >= 4000 && scene.durationMs <= 9500, 'animation lente et lisible');
   }
-  assert.ok(kinds.size >= 6, `types de questions variés : ${[...kinds]}`);
-  assert.deepEqual(PL.makeScene(seededRng(3)), PL.makeScene(seededRng(3)), 'reproductible');
+  assert.deepEqual([...kinds].sort(), ['compte', 'disparu', 'nouveau']);
+  assert.deepEqual(PL.makeRound(seededRng(3)), PL.makeRound(seededRng(3)), 'reproductible');
 });
 
-test('couleur à égalité : la question n’est jamais posée', () => {
-  const scene = { durationMs: 6000, chars: ['rouge', 'rouge', 'bleu', 'bleu'].map((color, id) => ({ id, color, accessory: 'aucun', dir: 'gauche', jumps: false, start: id * 10, lane: 0 })) };
-  assert.equal(PL.answerOf('couleur', scene), null);
-  for (let i = 0; i < 50; i++) assert.notEqual(PL.makeQuestion({ ...scene, chars: [...scene.chars, ...scene.chars.slice(0, 1).map((c) => ({ ...c, id: 9 }))] }, seededRng(i)).kind, 'chapeau', 'aucun chapeau : jamais posée');
+test('les 12 illustrations Twemoji sont présentes (aucun fichier manquant) et le crédit est dans le README', () => {
+  assert.equal(PL.ANIMALS.length, 12);
+  for (const a of PL.ANIMALS) {
+    const file = new URL(`../client/public/twemoji/${a}.svg`, import.meta.url);
+    assert.ok(existsSync(file), `illustration manquante : ${a}`);
+    assert.match(readFileSync(file, 'utf8'), /<svg /, `${a} : fichier SVG invalide`);
+  }
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  assert.match(readme, /Twemoji/);
+  assert.match(readme, /CC-BY 4\.0/);
 });
 
 const toAsk = (s) => {
-  s.tick(s.mgState().scene.durationMs + 400);
+  s.tick(s.mgState().round.scene.durationMs + 400);
   assert.equal(s.mgState().phase, 'ask');
 };
-const ans = (s, camp, ok) => s.play(camp, { choice: ok ? s.mgState().q.right : (s.mgState().q.right + 1) % 4, n: s.mgState().n });
+const ans = (s, camp, ok) => s.play(camp, { choice: ok ? s.mgState().round.right : (s.mgState().round.right + 1) % 4, n: s.mgState().n });
 
 test('manche : le premier juste marque, une mauvaise réponse bloque 2 s, 2 points gagnent', async () => {
   const s = await duel('plateau');
@@ -60,14 +64,18 @@ test('manche : le premier juste marque, une mauvaise réponse bloque 2 s, 2 poin
   assert.equal(s.winner(), 'bleu');
 });
 
-test('1-1 après 3 passages : 4e passage, puis égalité finale ; question non répondue : personne ne marque', async () => {
+test('deux passages de suite ne reprennent jamais la même règle ; 1-1 après 3 passages : 4e passage, puis égalité', async () => {
   const s = await duel('plateau');
+  const kinds = [s.mgState().round.kind];
   toAsk(s);
   ans(s, 'rouge', true);
   s.tick(PL.SETTLE_MS + PL.REVEAL_MS);
+  kinds.push(s.mgState().round.kind);
   toAsk(s);
   ans(s, 'bleu', true);
   s.tick(PL.SETTLE_MS + PL.REVEAL_MS);
+  kinds.push(s.mgState().round.kind);
+  assert.ok(kinds[0] !== kinds[1] && kinds[1] !== kinds[2], `règles répétées : ${kinds}`);
   toAsk(s);
   s.tick(PL.QUESTION_MS + PL.REVEAL_MS);
   assert.equal(s.mgState().n, 4, '4e passage');
@@ -76,14 +84,13 @@ test('1-1 après 3 passages : 4e passage, puis égalité finale ; question non r
   assert.equal(s.winner(), 'égalité');
 });
 
-test('confidentialité : la scène n’est envoyée qu’à la TV pendant le défilé, jamais aux téléphones ; la bonne réponse jamais avant la fin', async () => {
+test('confidentialité : la scène n’est envoyée qu’à la TV pendant l’animation, jamais aux téléphones ; la bonne réponse jamais avant la fin', async () => {
   const s = await duel('plateau');
-  const scene = s.mgState().scene;
   assert.ok(s.view('tv').scene);
   for (const who of [s.bettor, ...s.ids]) {
     const v = s.view(who);
-    assert.equal(v.scene, undefined, 'les téléphones sont vides pendant le défilé');
-    assert.equal(leaks(v, ['accessory', 'chars', 'jumps']), false);
+    assert.equal(v.scene, undefined, 'les téléphones sont vides pendant l’animation');
+    assert.equal(leaks(v, ['before', 'after', 'walkers']), false);
     assert.equal(v.question, null);
   }
   toAsk(s);
@@ -93,6 +100,6 @@ test('confidentialité : la scène n’est envoyée qu’à la TV pendant le dé
     assert.equal(v.shown, null);
     assert.equal(JSON.stringify(v).includes('"right"'), false);
     assert.equal(v.choices.length, 4);
+    assert.ok(v.question.length <= 60, 'question courte');
   }
-  assert.ok(scene.chars.length >= 10);
 });
