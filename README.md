@@ -486,7 +486,7 @@ Le vainqueur ne boit jamais. Le roi qui chute ajoute ses victoires consécutives
 - **Dilemme en or** : 20 s de discussion, puis PARTAGER ou TRAHIR en secret. Deux partagent : personne ne boit ; un seul trahit : il gagne ; deux trahissent : 2 gorgées chacun. Sans reprise.
 - **Plateau fantôme** : des personnages défilent sur la TV (téléphones vides), puis une question de comptage à 4 choix. 3 passages, 2 points gagnent. Scènes et questions générées (1 000 scènes testées à réponse unique).
 - **Course d'obstacles** : même tracé pour les deux, saut au toucher, se baisser en glissant. Simulation déterministe à pas fixe (`shared/runner.js`) rejouée par le serveur ; le dernier debout gagne.
-- **Qui suis-je ?** : 4 indices un par un toutes les 5 s, on répond quand on veut parmi 4 choix (4 points au premier indice, 1 au dernier, −1 par erreur).
+- **Qui suis-je ?** : 4 indices un par un toutes les 5 s, on répond quand on veut parmi 4 choix (4 points au premier indice, 1 au dernier, aucune perte en cas d'erreur (blocage jusqu'à l'indice suivant)).
 - **Ordre chronologique** : 5 événements sans date à toucher du plus ancien au plus récent ; une erreur = 3 s de blocage.
 - **Vrai ou Faux en survie** : des affirmations à temps décroissant (5 s à 2 s) ; la première erreur ou absence élimine.
 - **Géo-duel** : 3 villes, une épingle sur la carte du monde (15 s par ville), la somme des distances (Haversine) la plus petite gagne.

@@ -34,18 +34,24 @@ test('le contrôle repère les défauts (indice qui nomme la réponse, écart de
 const riddles = qui.slice(0, 30);
 const answer = (s, camp, ok) => s.play(camp, { choice: ok ? s.mgState().right : (s.mgState().right + 1) % 4, n: s.mgState().n });
 
-test('Qui suis-je ? : points = indices non affichés + 1, −1 pour une erreur (jamais sous 0), blocage jusqu’à l’indice suivant', async () => {
+test('Qui suis-je ? : points = indices non affichés + 1, aucune perte en cas d’erreur, blocage jusqu’à l’indice suivant, retour immédiat au duelliste', async () => {
   assert.equal(QS.pointsFor(1), 4);
   assert.equal(QS.pointsFor(4), 1);
   const s = await duel('quisuisje', { content: { qui: riddles } });
   assert.equal(s.view('tv').clues.length, 1, 'un seul indice au départ');
   answer(s, 'rouge', false);
-  assert.equal(s.view('tv').score.rouge, 0, 'jamais sous zéro');
+  assert.equal(s.view('tv').score.rouge, 0);
+  const wrong = s.view(s.camp.rouge);
+  assert.equal(wrong.mine.wrong.length, 1, 'le duelliste voit tout de suite que c’est raté');
+  assert.equal(wrong.mine.choice, null);
+  assert.equal(JSON.stringify(s.view(s.camp.bleu).mine?.wrong), '[]', 'l’adversaire n’en voit rien');
   assert.match(answer(s, 'rouge', true), /Bloqué/);
   s.tick(QS.CLUE_MS + 50); // 2e indice
   assert.equal(s.view('tv').clues.length, 2);
   assert.equal(answer(s, 'rouge', true), null);
-  assert.equal(s.view('tv').score.rouge, 3, '2 indices affichés : 4 − 2 + 1 = 3 points');
+  assert.equal(s.view('tv').score.rouge, 3, '2 indices affichés : 4 − 2 + 1 = 3 points (aucun point retiré pour l’erreur)');
+  assert.equal(s.view(s.camp.rouge).mine.points, 3);
+  assert.equal(s.view(s.camp.rouge).mine.choice, s.mgState().right);
   answer(s, 'bleu', true);
   assert.equal(s.view('tv').reveal.n, 1, 'les deux ont trouvé : énigme terminée');
   assert.equal(s.view('tv').score.bleu, 3);

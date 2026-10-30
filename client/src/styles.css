@@ -6673,3 +6673,12 @@ body.loup-night {
 .duel-drinker-sips { font-size: 1.25em; background: rgba(255, 201, 60, 0.16); border: 2px solid var(--yellow); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .duel-winner-burst { display: none; } }
 .duel-results .is-loser { opacity: 0.72; }
+
+/* Qui suis-je ? : retour immédiat au geste */
+.mg-choice { transition: transform 0.12s, background-color 0.12s; }
+.mg-choice:not(:disabled):active, .mg-choice.is-pending { transform: scale(0.97); background: rgba(255, 201, 60, 0.35); border-color: var(--yellow); }
+.mg-choice.is-right em { font-style: normal; margin-left: auto; font-size: 1.4em; }
+.mg-choice.is-wrong:disabled { opacity: 1; color: #fff; }
+.mg-qui-feedback { font-weight: 800; font-size: clamp(1.1rem, 4.5vw, 1.5rem); padding: 10px 14px; border-radius: 14px; text-align: center; border: 3px solid currentColor; }
+.mg-qui-feedback.is-ok { color: #2fd18a; background: rgba(47, 209, 138, 0.15); }
+.mg-qui-feedback.is-ko { color: #ff8a93; background: rgba(255, 59, 78, 0.15); }

@@ -862,14 +862,20 @@ function Clues({ play }) {
   );
 }
 
-function QuiChoices({ play, onPick = null, blocked = false }) {
+/** mine : le résultat de mon propre geste ({ choice, points, wrong }) ; pending : la touche appuyée, avant la réponse du serveur. */
+function QuiChoices({ play, onPick = null, blocked = false, mine = null, pending = null }) {
+  const found = mine?.choice != null;
   return (
     <div className="mg-choices">
-      {play.choices.map((c, i) => (
-        <button key={i} className={`mg-choice ${play.reveal ? (i === play.reveal.right ? 'is-right' : 'is-dim') : ''}`} disabled={!onPick || blocked || !!play.reveal} onClick={() => onPick?.(i)}>
-          <b>{'ABCD'[i]}</b> {c}
-        </button>
-      ))}
+      {play.choices.map((c, i) => {
+        const state = play.reveal ? (i === play.reveal.right ? 'is-right' : 'is-dim') : found ? (i === mine.choice ? 'is-right' : 'is-dim') : mine?.wrong?.includes(i) ? 'is-wrong' : pending === i ? 'is-pending' : '';
+        return (
+          <button key={i} className={`mg-choice ${state}`} disabled={!onPick || blocked || found || !!play.reveal || mine?.wrong?.includes(i)} onClick={() => onPick?.(i)}>
+            <b>{'ABCD'[i]}</b> {c}
+            {state === 'is-right' && !play.reveal && <em> ✓</em>}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -896,14 +902,37 @@ const Qui = {
       const id = setInterval(() => tick((n) => n + 1), 500);
       return () => clearInterval(id);
     }, []);
+    const [pending, setPending] = useState(null);
+    const mine = play.mine;
+    useEffect(() => setPending(null), [mine?.wrong?.length, mine?.choice, play.n, play.clues.length]);
     const seen = play.clues.length;
     const blocked = play.blockedUntilClue != null && seen <= play.blockedUntilClue;
+    const found = mine?.choice != null;
     return (
       <div className="mg-qui-duelist">
         <Score a={play.score.rouge} b={play.score.bleu} unit=" pts" />
         <Clues play={play} />
-        {blocked && <p className="duel-notice">Mauvaise réponse : −1 point, bloqué jusqu’au prochain indice</p>}
-        <QuiChoices play={play} blocked={blocked} onPick={(i) => act({ choice: i, n: play.n })} />
+        {found && !play.reveal && (
+          <p className="mg-qui-feedback is-ok" role="status">
+            ✓ Bonne réponse ! +{mine.points} point{mine.points > 1 ? 's' : ''}. On attend l’autre…
+          </p>
+        )}
+        {!found && blocked && (
+          <p className="mg-qui-feedback is-ko" role="status">
+            ✕ Raté, aucun point perdu. Tu réessaies au prochain indice.
+          </p>
+        )}
+        <QuiChoices
+          play={play}
+          blocked={blocked}
+          mine={mine}
+          pending={pending}
+          onPick={(i) => {
+            setPending(i);
+            navigator.vibrate?.(30);
+            act({ choice: i, n: play.n });
+          }}
+        />
         {play.reveal && <p className="duel-eyebrow">C’était : {play.reveal.answer}</p>}
       </div>
     );

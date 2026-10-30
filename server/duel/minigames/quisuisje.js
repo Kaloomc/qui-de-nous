@@ -1,6 +1,7 @@
 // Qui suis-je ? : 3 énigmes. Pour chacune, 4 indices s'affichent un par un toutes les 5 s (du plus difficile au plus facile) ; chacun peut
 // répondre à tout moment parmi 4 choix. Bonne réponse = nombre d'indices non encore affichés + 1 (4 points au premier indice, 1 au dernier) ;
-// mauvaise réponse = −1 point (minimum 0) et blocage jusqu'à l'indice suivant. Le plus de points gagne ; égalité : 4e énigme, puis égalité.
+// mauvaise réponse = aucun point perdu, simple blocage jusqu'à l'indice suivant. Le plus de points gagne ; égalité : 4e énigme, puis égalité.
+// Chaque duelliste voit tout de suite le résultat de SON geste (juste + points, ou raté), sans attendre l'autre ; l'adversaire n'en voit rien.
 // Confidentialité : la bonne réponse n'est envoyée à personne avant la fin de l'énigme ; les indices à venir non plus.
 import { loadJson } from '../../games/load.js';
 
@@ -29,6 +30,7 @@ function nextRiddle(s, ctx) {
   s.phase = 'ask';
   s.startedAt = ctx.now();
   s.answered = {};
+  s.mine = { rouge: { choice: null, points: 0, wrong: [] }, bleu: { choice: null, points: 0, wrong: [] } };
   s.blockedUntilClue = {};
   s.shown = null;
   const token = ++s.token;
@@ -69,7 +71,7 @@ export default {
   maxMs: (COUNT + SUDDEN) * (CLUES * CLUE_MS + TAIL_MS + REVEAL_MS) + 4000,
   minContent: MIN_RIDDLES,
   available: (game) => (game.duelContent?.qui ?? RIDDLES).length >= MIN_RIDDLES,
-  prepare: (ctx) => ({ list: ctx.content.qui ?? RIDDLES, n: 0, r: null, choices: [], right: -1, phase: 'ask', startedAt: null, clueCount: 1, score: { rouge: 0, bleu: 0 }, gain: { rouge: 0, bleu: 0 }, answered: {}, blockedUntilClue: {}, history: [], shown: null, token: 0, done: null }),
+  prepare: (ctx) => ({ list: ctx.content.qui ?? RIDDLES, n: 0, r: null, choices: [], right: -1, phase: 'ask', startedAt: null, clueCount: 1, score: { rouge: 0, bleu: 0 }, gain: { rouge: 0, bleu: 0 }, answered: {}, mine: {}, blockedUntilClue: {}, history: [], shown: null, token: 0, done: null }),
   begin: (s, ctx) => nextRiddle(s, ctx),
   action(s, camp, data, ctx) {
     if (s.done || s.phase !== 'ask') return 'Pas maintenant.';
@@ -85,10 +87,10 @@ export default {
       const pts = pointsFor(seen);
       s.score[camp] += pts;
       s.gain[camp] += pts;
+      s.mine[camp].choice = data.choice;
+      s.mine[camp].points = pts;
     } else {
-      const lost = s.score[camp] > 0 ? 1 : 0; // −1 point, jamais sous zéro
-      s.score[camp] -= lost;
-      s.gain[camp] -= lost;
+      if (!s.mine[camp].wrong.includes(data.choice)) s.mine[camp].wrong.push(data.choice);
       s.blockedUntilClue[camp] = seen;
     }
     // L'énigme se termine quand les deux ont trouvé.
@@ -113,7 +115,10 @@ export default {
       done: { rouge: !!s.answered.rouge, bleu: !!s.answered.bleu },
       reveal: s.phase === 'reveal' ? s.shown : null,
     };
-    if (who.kind === 'duelist') view.blockedUntilClue = s.blockedUntilClue[who.side] ?? null;
+    if (who.kind === 'duelist') {
+      view.blockedUntilClue = s.blockedUntilClue[who.side] ?? null;
+      view.mine = s.mine[who.side] ?? null; // son propre résultat, tout de suite
+    }
     return view;
   },
 };
