@@ -6,6 +6,7 @@ import { makeGame } from './testClock.js';
 import { seededRng } from './rules/duel.js';
 import * as D from './rules/duel.js';
 
+const PLAYED = new Set();
 const KNOWN_STEPS = new Set(['waiting', 'duelists', 'game', 'bets', 'betsReveal', 'ready', 'play']);
 const TIMER = /^(g:(phase|soon|gone|mg\d+)|next|reveal|pending|autoReveal|grace|vote)$/;
 
@@ -20,6 +21,17 @@ function randomPlay(rng) {
     { choice: Math.floor(rng() * 5), n: Math.floor(rng() * 4) },
     {},
     { choice: null, pad: 'x', i: {} },
+    // Les 12 mini-jeux de la partie 2.
+    { wire: Math.floor(rng() * 8) - 1 },
+    { guess: Array.from({ length: 4 }, () => Math.floor(rng() * 7)) },
+    { type: 'bank' },
+    { type: 'hold', down: rng() < 0.5 },
+    { choice: pick(['partager', 'trahir']) },
+    { pin: { lat: rng() * 200 - 100, lon: rng() * 400 - 200 }, n: Math.floor(rng() * 4) },
+    { card: Math.floor(rng() * 7) - 1 },
+    { value: rng() < 0.5, n: Math.floor(rng() * 5) },
+    { k: pick(['j', 'd1', 'd0', 'x']), f: Math.floor(rng() * 400) },
+    { choice: Math.floor(rng() * 4), n: Math.floor(rng() * 4) },
   ]);
 }
 
@@ -38,6 +50,7 @@ async function session(seed) {
   for (let t = 0; t < 900; t++) {
     clock.tick(200);
     const d = game.roundData;
+    if (d.mgId && d.step === 'play') PLAYED.add(d.mgId);
     // Comportements
     for (const p of players) {
       if (!game.players.has(p.id)) continue;
@@ -106,5 +119,6 @@ test('simulateur : 300 sessions de 3 à 30 joueurs, comportements variés, aucun
     const res = await session(seed);
     total += res.duels;
   }
+  assert.equal(PLAYED.size, 17, `les 17 mini-jeux ont été joués : ${[...PLAYED]}`);
   assert.ok(total > 100, `les duels avancent (${total} au total)`);
 });
