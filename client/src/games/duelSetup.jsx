@@ -60,7 +60,7 @@ export function DuelSetup({ state, gameAct }) {
           {games.map((g) => (
             <label key={g.id} className={`duel-game ${active.includes(g.id) ? 'is-on' : ''}`}>
               <input type="checkbox" checked={active.includes(g.id)} onChange={() => toggle(g.id)} />
-              <GameIcon icon={g.icon} size={36} />
+              <GameIcon icon={g.icon} size={28} />
               <span>{g.name}</span>
             </label>
           ))}

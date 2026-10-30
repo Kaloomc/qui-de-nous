@@ -22,8 +22,9 @@ try {
 
 const wanted = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 // `npm run captures -- duel` : les captures du mode Duel vont dans leur propre dossier, avec leur INDEX.md.
-const DUEL_ONLY = wanted.length === 1 && wanted[0] === 'duel';
-const OUT = path.join(ROOT, DUEL_ONLY ? 'docs/captures/duel-partie1' : 'docs/captures');
+const DUEL_ONLY = wanted.length === 1 && ['duel', 'duel2'].includes(wanted[0]);
+const DUEL_DIR = { duel: 'docs/captures/duel-partie1', duel2: 'docs/captures/duel-partie2' }[wanted[0]];
+const OUT = path.join(ROOT, DUEL_ONLY ? DUEL_DIR : 'docs/captures');
 const SECTIONS = {};
 const section = (name, title, fn) => (SECTIONS[name] = { title, fn });
 
@@ -972,6 +973,256 @@ section('duel', 'Mode Duel — moteur, roulettes, paris, 5 mini-jeux, gorgées, 
   }
 });
 
+// ---------- Mode Duel, partie 2 : les 12 nouveaux mini-jeux ----------
+
+section('duel2', 'Mode Duel, partie 2 : les 12 mini-jeux', async (env) => {
+  const S = env.session;
+  const sec = 'Mode Duel (partie 2)';
+  const REAL = ['Camille', 'Mehdi', 'Sacha', 'Inès'];
+  const tv = await openTv(env, null);
+  const { game, code } = tv;
+  const page = tv.page;
+  await page.waitForSelector('.game-grid');
+  await page.getByRole('button', { name: /Mode Duel/ }).first().click();
+  await page.waitForSelector('.duel-setup');
+  const cast = await fill(env, game, code, 12, { real: REAL });
+  const idByName = (n) => idOf(game, n);
+  const phoneOfId = (pid) => cast.phones.find((p) => idByName(p.name) === pid);
+  const role = 'duel:duelliste';
+  game.spotlight.pick(role, [...game.players.keys()]);
+  const counts = game.spotlight.counts.get(role);
+  for (const [pid] of counts) counts.set(pid, cast.phones.some((p) => idByName(p.name) === pid) ? 0 : 6);
+  game.settings.auto = true;
+  game.settings.resultsMs = 3000;
+  await sleep(600);
+  await S.shot(page, 'duel2-01-options-17-jeux', 'Écran d’options : les 17 mini-jeux (5 de la partie 1 et 12 nouveaux) avec leur icône, tous cochés par défaut.', { tv: true, lobby: true, section: sec });
+  const d = () => game.roundData;
+  const toStep = (s, ms = 60000) => waitFor(() => game.phase === 'question' && d().step === s, ms, `étape ${s}`);
+  const bet = () => {
+    let k = 0;
+    for (const pid of d().bettors) game.vote(pid, k++ % 3 === 0 ? 'bleu' : 'rouge');
+  };
+  const readyBoth = () => {
+    game.action(d().red, { type: 'ready' });
+    game.action(d().blue, { type: 'ready' });
+  };
+  const dPhone = (camp) => phoneOfId(camp === 'rouge' ? d().red : d().blue);
+  // Les actions passent ici directement par le serveur : on diffuse l'état pour que les téléphones soient à jour avant la capture.
+  const playAs = (camp, data) => {
+    const r = game.action(camp === 'rouge' ? d().red : d().blue, { type: 'play', data });
+    game.onChange?.(game);
+    return r;
+  };
+  const startPlay = async (id) => {
+    game.duelOptions = { ...game.duelOptions, games: [id], king: false };
+    // On passe les duels déjà lancés avec un autre mini-jeu jusqu'à celui qu'on veut montrer.
+    for (let tries = 0; tries < 12; tries++) {
+      await waitFor(() => game.phase === 'question' && d().step === 'bets', 90000, 'paris');
+      if (d().mgId === id) break;
+      game.gameHostAction({ type: 'skip' });
+      await sleep(200);
+    }
+    bet();
+    await toStep('ready', 40000);
+    readyBoth();
+    await toStep('play', 40000);
+  };
+  const shotBoth = async (name, caption, camp = 'rouge', phoneFirst = false) => {
+    game.onChange?.(game);
+    await sleep(250);
+    const p = dPhone(camp);
+    const phone = async () => p && S.shot(p.page, `duel2-${name}-tel`, `Téléphone d’un duelliste : ${caption}`, { section: sec });
+    if (phoneFirst) await phone();
+    await S.shot(page, `duel2-${name}-tv`, `TV : ${caption}`, { tv: true, section: sec });
+    if (!phoneFirst) await phone();
+  };
+  const forceEnd = async (winner) => {
+    d().outcome = { winner, details: null, sips: null };
+    game.reveal(game.roundId);
+    await waitFor(() => game.phase === 'results', 30000, 'résultats');
+    await sleep(700);
+  };
+  const waitResults = async (ms = 60000) => {
+    await waitFor(() => game.phase === 'results', ms, 'résultats');
+    await sleep(700);
+  };
+
+  // Premier duel : la roulette des mini-jeux avec les 17 jeux.
+  game.duelOptions = { ...game.duelOptions, games: null };
+  await page.getByRole('button', { name: /^Lancer$/ }).click();
+  await toStep('game', 30000);
+  await sleep(700);
+  await S.shot(page, 'duel2-02-roulette-minijeux-1', 'Roulette des mini-jeux : elle défile sur les 17 jeux (ici en cours de défilement).', { tv: true, section: sec });
+  await sleep(1500);
+  await S.shot(page, 'duel2-03-roulette-minijeux-2', 'Roulette des mini-jeux : verrouillée sur le jeu tiré.', { tv: true, section: sec });
+  await toStep('bets', 15000);
+  game.gameHostAction({ type: 'skip' });
+
+  // 1. Désamorçage
+  await startPlay('defuse');
+  await sleep(900);
+  await shotBoth('defuse-1', 'la bombe avec ses fils (couleur, motif, numéro) et ses 3 indices.');
+  const sol = d().mg.puzzle.solution;
+  playAs('bleu', { wire: (sol + 1) % d().mg.puzzle.wires.length });
+  await sleep(500);
+  await shotBoth('defuse-2-bloque', 'un mauvais fil est coupé : le joueur est bloqué 3 secondes.', 'bleu');
+  playAs('rouge', { wire: sol });
+  await waitResults();
+
+  // 2. Le Code
+  await startPlay('code');
+  await sleep(600);
+  playAs('rouge', { guess: [0, 1, 2, 3] });
+  playAs('rouge', { guess: [1, 1, 4, 5] });
+  playAs('bleu', { guess: [2, 2, 3, 3] });
+  await sleep(500);
+  await shotBoth('code-1', 'la TV ne montre que des pastilles d’indices ; le téléphone montre ses essais.');
+  playAs('rouge', { guess: d().mg.secret });
+  await sleep(500);
+  await S.shot(page, 'duel2-code-2-trouve-tv', 'TV : le code est trouvé, le code secret apparaît.', { tv: true, section: sec });
+  await waitResults();
+
+  // 3. Simon croisé
+  await startPlay('simon2');
+  const first = d().mg.turn;
+  playAs(first, { pad: 2 });
+  await sleep(1000);
+  await S.shot(page, 'duel2-simon2-1-rejeu-tv', 'TV : après un tour réussi, la séquence est rejouée sur la TV seulement.', { tv: true, section: sec });
+  await waitFor(() => d().mg.phase === 'input', 8000, 'saisie');
+  const next = d().mg.turn;
+  await shotBoth('simon2-2-saisie', 'c’est à l’autre de rejouer la séquence de mémoire, puis d’ajouter un pas.', next);
+  playAs(next, { pad: 0 });
+  await waitResults();
+
+  // 4. Le Crash
+  await startPlay('crash');
+  await sleep(800);
+  playAs('rouge', { type: 'bank' });
+  await sleep(500);
+  await shotBoth('crash-1', 'le multiplicateur grimpe ; ROUGE a déjà banqué.');
+  await waitFor(() => d().mg.crashedAt != null || game.phase !== 'question', 25000, 'explosion');
+  await sleep(500);
+  await S.shot(page, 'duel2-crash-2-explosion-tv', 'TV : le multiplicateur explose, la valeur de chacun est comptée.', { tv: true, section: sec });
+  await waitResults();
+
+  // 5. 1-2-3 Soleil
+  await startPlay('soleil');
+  playAs('rouge', { type: 'hold', down: true });
+  playAs('bleu', { type: 'hold', down: true });
+  await sleep(1800);
+  await shotBoth('soleil-1', 'les deux maintiennent leur bouton : les barres avancent.');
+  await waitFor(() => d().mg.sun, 15000, 'Soleil');
+  await sleep(500);
+  await S.shot(page, 'duel2-soleil-2-soleil-tv', 'TV : « SOLEIL ! » : il faut avoir lâché, sinon on recule d’un quart.', { tv: true, section: sec });
+  playAs('bleu', { type: 'hold', down: false });
+  await sleep(1500);
+  await forceEnd('bleu');
+
+  // 6. Dilemme en or
+  await startPlay('dilemme');
+  await sleep(1200);
+  await shotBoth('dilemme-1-discussion', 'la discussion de 20 secondes : « Parlez-vous ! ».');
+  await waitFor(() => d().mg.phase === 'choose', 30000, 'choix');
+  await sleep(500);
+  await shotBoth('dilemme-2-choix', 'chacun choisit PARTAGER ou TRAHIR en secret.');
+  playAs('rouge', { choice: 'trahir' });
+  playAs('bleu', { choice: 'partager' });
+  await waitFor(() => game.phase === 'revealing', 10000, 'révélation');
+  await sleep(500);
+  await S.shot(page, 'duel2-dilemme-3-suspense-tv', 'TV : suspense avant la révélation simultanée des choix.', { tv: true, section: sec });
+  await waitResults();
+  await S.shot(page, 'duel2-dilemme-4-resultat-tv', 'TV : les choix sont révélés (ROUGE a trahi, BLEU a partagé) et les gorgées tombent.', { tv: true, section: sec });
+
+  // 7. Plateau fantôme
+  await startPlay('plateau');
+  await sleep(2500);
+  await shotBoth('plateau-1-defile', 'les personnages défilent sur la TV ; les téléphones sont vides.');
+  await waitFor(() => d().mg.phase === 'ask', 15000, 'question');
+  await sleep(500);
+  await shotBoth('plateau-2-question', 'la question de comptage avec ses 4 choix.');
+  playAs('rouge', { choice: d().mg.q.right, n: d().mg.n });
+  await waitFor(() => d().mg.score.rouge >= 1, 5000, 'point');
+  await forceEnd('rouge');
+
+  // 8. Course d'obstacles
+  await startPlay('course');
+  const run = await import('../shared/runner.js');
+  const plan = run.perfectEvents(d().mg.track, 300);
+  const t0 = Date.now();
+  let sent = 0;
+  while (Date.now() - t0 < 600) {
+    const f = Math.floor((Date.now() - t0) / run.DT_MS);
+    while (sent < plan.length && plan[sent].f <= f) {
+      playAs('rouge', { k: plan[sent].k, f: plan[sent].f });
+      sent += 1;
+    }
+    await sleep(8);
+  }
+  await shotBoth('course-1', 'les deux couloirs sur le même tracé ; ROUGE saute et se baisse, BLEU ne bouge pas.', 'rouge', true);
+  await waitFor(() => d().mg.done || game.phase !== 'question', 15000, 'mort de BLEU');
+  await sleep(300);
+  await S.shot(page, 'duel2-course-2-tombe-tv', 'TV : BLEU est tombé sur un obstacle ; le dernier debout gagne.', { tv: true, section: sec });
+  await waitResults();
+
+  // 9. Qui suis-je ?
+  await startPlay('quisuisje');
+  await sleep(1200);
+  await shotBoth('qui-1', 'premier indice (le plus difficile), 4 points en jeu.');
+  await sleep(6000);
+  await shotBoth('qui-2', 'deuxième indice : la réponse rapporte 3 points.');
+  playAs('rouge', { choice: d().mg.right, n: d().mg.n });
+  playAs('bleu', { choice: (d().mg.right + 1) % 4, n: d().mg.n });
+  await sleep(300);
+  playAs('bleu', { choice: d().mg.right, n: d().mg.n });
+  await sleep(1000);
+  await S.shot(page, 'duel2-qui-3-reponse-tv', 'TV : la réponse est révélée, les points sont comptés.', { tv: true, section: sec });
+  await forceEnd('rouge');
+
+  // 10. Ordre chronologique
+  await startPlay('chrono');
+  await sleep(700);
+  const order = d().mg.cards.map((c, i) => [c.rank, i]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+  playAs('rouge', { card: order[0] });
+  playAs('rouge', { card: order[1] });
+  playAs('bleu', { card: order[3] });
+  await sleep(500);
+  await shotBoth('chrono-1', 'les cartes à ordonner ; ROUGE en a placé deux, BLEU s’est trompé (bloqué 3 s).');
+  for (const i of order.slice(2)) playAs('rouge', { card: i });
+  await sleep(1200);
+  await S.shot(page, 'duel2-chrono-2-dates-tv', 'TV : ROUGE a fini ; les dates apparaissent sur les cartes.', { tv: true, section: sec });
+  await waitResults();
+
+  // 11. Vrai ou Faux
+  await startPlay('vf');
+  await sleep(900);
+  await shotBoth('vf-1', 'une affirmation, deux gros boutons VRAI et FAUX, un temps qui diminue.');
+  playAs('rouge', { value: d().mg.st.vrai, n: d().mg.n });
+  await sleep(400);
+  await S.shot(page, 'duel2-vf-2-reponse-tv', 'TV : en attendant l’autre, ROUGE a répondu.', { tv: true, section: sec });
+  playAs('bleu', { value: !d().mg.st.vrai, n: d().mg.n });
+  await waitFor(() => d().mg.phase === 'reveal', 12000, 'révélation');
+  await sleep(500);
+  await S.shot(page, 'duel2-vf-3-verdict-tv', 'TV : la bonne réponse et son explication ; BLEU est éliminé.', { tv: true, section: sec });
+  await waitResults();
+
+  // 12. Géo-duel
+  await startPlay('geo');
+  await sleep(1200);
+  const city = d().mg.city;
+  playAs('rouge', { pin: { lat: city.lat + 3, lon: city.lon + 4 }, n: d().mg.n });
+  playAs('bleu', { pin: { lat: city.lat - 25, lon: city.lon - 40 }, n: d().mg.n });
+  await sleep(500);
+  await shotBoth('geo-1', 'la ville annoncée et la carte du monde : chacun pose son épingle au doigt.');
+  await waitFor(() => d().mg.phase === 'reveal', 25000, 'révélation de la ville');
+  await sleep(700);
+  await shotBoth('geo-2-revelation', 'la carte montre les deux épingles, la bonne position (étoile) et les distances en km.');
+  await forceEnd('rouge');
+
+  for (const b of cast.bots) b.close();
+  for (const p of cast.phones) await p.ctx.close().catch(() => {});
+  await tv.ctx.close();
+});
+
 // ---------- Exécution ----------
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -998,7 +1249,7 @@ try {
   await browser.close();
   await srv.close();
 }
-fs.writeFileSync(path.join(OUT, wanted.length && !DUEL_ONLY ? 'INDEX-partiel.md' : 'INDEX.md'), session.indexMarkdown(DUEL_ONLY ? 'Captures du mode Duel (partie 1)' : 'Captures d’écran de la mise à jour', 'Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, téléphone 390×844, 12 joueurs mixtes aux avatars générés.'));
+fs.writeFileSync(path.join(OUT, wanted.length && !DUEL_ONLY ? 'INDEX-partiel.md' : 'INDEX.md'), session.indexMarkdown(DUEL_ONLY ? (wanted[0] === 'duel2' ? 'Captures du mode Duel (partie 2 : 12 mini-jeux)' : 'Captures du mode Duel (partie 1)') : 'Captures d’écran de la mise à jour', 'Générées par `npm run captures` (scripts/capture-demo.js) : TV 1920×1080, téléphone 390×844, 12 joueurs mixtes aux avatars générés.'));
 const consoleIssues = [...session.consoleIssues];
 console.log(`${session.index.length} images, ${session.issues.length} problème(s) d’affichage repéré(s), ${consoleIssues.length} message(s) de console.`);
 for (const i of session.issues) console.log(`  ⚠ ${i.file} : ${i.issue}`);

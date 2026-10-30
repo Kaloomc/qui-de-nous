@@ -49,3 +49,12 @@ Un commit par jeu, `npm test` et `npm run build` après chacun (484 tests verts)
 - [ ] Plateau fantôme, Course d'obstacles (simulation déterministe client / serveur)
 - [ ] Qui suis-je ?, Ordre chronologique, Vrai ou Faux en survie, Géo-duel (+ 4 fichiers de contenu vérifiés avec source, carte Natural Earth)
 - [ ] Captures `docs/captures/duel-partie2/`, simulateur de bots à 17 jeux (le simulateur existant couvre déjà les 11 jeux actuels : les nouveaux sont dans le registre)
+
+# Mode Duel, partie 2 : terminée (12 mini-jeux sur 12), contenus réduits
+
+Un commit par jeu ou groupe de jeux ; `npm test` (533 tests) et `npm run build` verts à chaque étape.
+
+- [x] Désamorçage, Le Code, Simon croisé, Le Crash, 1-2-3 Soleil (clips Un/Deux/Trois/Soleil + file audio unique), Dilemme en or (gorgées propres au jeu, règle annoncée aux parieurs), Plateau fantôme, Course d'obstacles (simulation partagée `shared/runner.js`), Géo-duel (carte Natural Earth), Qui suis-je ?, Ordre chronologique, Vrai ou Faux
+- [x] Intégration des 17 jeux (options, roulette, désactivation), simulateur de 300 sessions avec les 17 jeux, tests de fuite sur sockets
+- [x] README (12 jeux, contenus, licence de la carte, clips audio) et captures `docs/captures/duel-partie2/` (48 images, 0 problème d'affichage)
+- Volumes de contenu livrés (réduits, signalés) : Qui suis-je 54 (demandé 100), Ordre chronologique 60 séries sur 92 événements (demandé 100), Vrai ou Faux 218 (demandé 300, dont 169 vraies : le tirage en duel reste 50 / 50), Géo-duel 128 villes (demandé 120, villes seulement, pas de monuments), clips audio 4.

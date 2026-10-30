@@ -1,5 +1,7 @@
 // Vues des mini-jeux de la partie 2 du mode Duel (même contrat que duelMinigames.jsx : Tv, Duelist, Bettor, Summary).
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { toLatLon, toXY } from '../../../shared/geo.js';
+import { MAP_H, MAP_W, WORLD_PATH } from '../../../shared/worldmap.js';
 import { DT_MS, DUCK_H, HIGH, LOW, MAX_FRAMES, OBS_W, RUN_W, STAND_H, makeTrack, simulate } from '../../../shared/runner.js';
 import { TimerBar } from '../components.jsx';
 import { serverNow } from '../lib.js';

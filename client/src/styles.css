@@ -6501,3 +6501,26 @@ body.loup-night {
 .mg-vf-btn.is-false { background: #8a1f66; }
 .mg-vf-btn.is-picked { box-shadow: 0 0 0 6px var(--yellow); }
 .mg-vf-btn:disabled:not(.is-picked) { opacity: 0.5; }
+
+.mg-simon2-tv .mg-pads { width: min(340px, 90%); }
+.mg-simon2-tv { display: grid; gap: 12px; justify-items: center; width: 100%; }
+.mg-stage { height: 38vh; }
+
+.mg-map-wrap { width: min(1500px, 100%, 104vh); }
+
+.mg-clues { text-align: left; justify-self: center; }
+
+.mg-map-wrap { width: min(1500px, 100%, 74vh); }
+.mg-geo-duelist .mg-map-wrap { width: 100%; }
+
+.mg-map-wrap { width: min(1500px, 100%, 58vh); }
+.mg-geo-duelist .mg-map-wrap { width: 100%; }
+.mg-geo .mg-geo-city { font-size: clamp(1.8rem, 3.4vw, 3rem); }
+
+.mg-map-wrap { width: min(1500px, 100%, 48vh); }
+.mg-geo-duelist .mg-map-wrap { width: 100%; }
+
+.duel-game { min-height: 42px; padding: 3px 12px 3px 8px; gap: 8px; font-size: 0.95rem; }
+.duel-games { gap: 8px; }
+.duel-setup { gap: 10px; margin: 12px auto; }
+.duel-setup-row { padding: 10px 16px; }
