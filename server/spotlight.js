@@ -12,6 +12,7 @@ export const SPOTLIGHT_ROLES = {
   imposteur: 'imposteur:imposteur',
   patatePorteur: 'patate:premier-porteur',
   roueCible: 'roue:cible',
+  duelDuelist: 'duel:duelliste',
 };
 
 export class Spotlight {

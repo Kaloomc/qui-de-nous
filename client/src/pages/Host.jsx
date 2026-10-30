@@ -8,6 +8,7 @@ import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
 import { preloadNarration, teardownGame } from '../narrator.js';
+import { DuelCard, DuelSetup } from '../games/duelSetup.jsx';
 import { LoupSetup } from '../games/loupSetup.jsx';
 import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
@@ -83,7 +84,16 @@ export default function Host({ code }) {
   const inGame = ['question', 'revealing', 'results'].includes(state.phase);
   // Mode soirée en cours : la barre de la soirée remplace « Terminer » et le bouton du mode auto.
   const party = state.party && state.party.step !== 'over' ? state.party : null;
-  const endButton = party ? null : (
+  // Mode Duel : « Terminer le mode » ramène directement à la grille des jeux.
+  const quitDuel = async () => {
+    await act('host:end');
+    await act('host:chooseGame');
+  };
+  const endButton = party ? null : mode.id === 'duel' ? (
+    <button className="btn btn-ghost" onClick={quitDuel}>
+      Terminer le mode
+    </button>
+  ) : (
     <button className="btn btn-ghost" onClick={() => act('host:end')}>
       Terminer
     </button>
@@ -106,6 +116,7 @@ export default function Host({ code }) {
           state={state}
           onPick={(id) => act('host:pickGame', { mode: id })}
           onParty={() => setPartySetupOpen(true)}
+          onDuel={() => act('host:pickGame', { mode: 'duel' })}
           onResetSips={() => act('host:resetSips')}
           adultSlot={<AdultButton state={state} act={act} />}
         />
@@ -122,7 +133,7 @@ export default function Host({ code }) {
           onSettings={() => setSettingsOpen(true)}
           onChangeGame={() => act('host:chooseGame')}
           adultSlot={<AdultButton state={state} act={act} />}
-          extra={mode.id === 'loup' ? <LoupSetup state={state} gameAct={gameAct} /> : null}
+          extra={mode.id === 'loup' ? <LoupSetup state={state} gameAct={gameAct} /> : mode.id === 'duel' ? <DuelSetup state={state} gameAct={gameAct} /> : null}
           blocked={mode.id === 'loup' ? state.lobby?.errors?.[0] : null}
         />
       )}
@@ -334,7 +345,7 @@ function SettingsModal({ settings, onChange, onClose }) {
 }
 
 /** Grille des jeux : grandes cartes, navigation au clavier (flèches + Entrée), à la souris ou au tactile. */
-function GamePicker({ state, onPick, onParty, onResetSips, adultSlot }) {
+function GamePicker({ state, onPick, onParty, onDuel, onResetSips, adultSlot }) {
   const gridRef = useRef(null);
   const cardRefs = useRef({});
   const count = state.players.length;
@@ -389,6 +400,7 @@ function GamePicker({ state, onPick, onParty, onResetSips, adultSlot }) {
         </p>
       )}
       <PartyCard onClick={onParty} />
+      <DuelCard onClick={onDuel} />
       <div ref={gridRef} className="game-grid">
         {GAMES.map((g) => (
           <button
@@ -486,7 +498,7 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSl
           </button>
           {adultSlot}
           <button className="btn btn-primary btn-xl" onClick={onStart} disabled={count < (mode.minToStart ?? 2) || !!blocked}>
-            {count < (mode.minToStart ?? 2) ? `Il faut au moins ${mode.minToStart ?? 2} joueurs` : blocked ? 'Compo à corriger' : 'Lancer la partie'}
+            {count < (mode.minToStart ?? 2) ? `Il faut au moins ${mode.minToStart ?? 2} joueurs` : blocked ? 'Compo à corriger' : mode.id === 'duel' ? 'Lancer' : 'Lancer la partie'}
           </button>
         </div>
       </section>

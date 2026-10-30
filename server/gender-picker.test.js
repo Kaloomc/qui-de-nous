@@ -3,6 +3,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 
 const require = createRequire(import.meta.url);
@@ -12,7 +13,7 @@ let Picker;
 let GenderIcon;
 
 before(async () => {
-  vite = await createServer({ configFile: new URL('../vite.config.js', import.meta.url).pathname, server: { middlewareMode: true }, appType: 'custom', logLevel: 'silent' });
+  vite = await createServer({ configFile: fileURLToPath(new URL('../vite.config.js', import.meta.url)), server: { middlewareMode: true }, appType: 'custom', logLevel: 'silent' });
   const mod = await vite.ssrLoadModule('/src/gender.jsx');
   Picker = mod.GenderPicker;
   GenderIcon = mod.GenderIcon;

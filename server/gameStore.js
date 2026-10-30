@@ -113,10 +113,14 @@ export class Game {
     this.touch();
   }
 
-  /** Point unique de démontage d'un jeu : tous ses minuteurs sont annulés et sa session invalidée. */
-  reset() {
+  /** Point unique de démontage d'un jeu : tous ses minuteurs sont annulés et sa session invalidée (un minuteur d'une session passée ne fait rien). */
+  teardownGame() {
     this.clearTimers();
     this.session += 1;
+  }
+
+  reset() {
+    this.teardownGame();
     this.roundId = null;
     this.phase = this.mode ? 'lobby' : 'picking';
     this.paused = false;
@@ -977,7 +981,7 @@ export class Game {
       })),
       round,
       votingOpen: this.phase === 'question' && !!this.rules && this.votingOpen,
-      votedIds: this.phase === 'question' ? [...this.votes.keys()] : [],
+      votedIds: this.phase === 'question' && !this.rules?.hideVoters ? [...this.votes.keys()] : [],
       voteTimer: this.phase === 'question' ? this.timerState('vote') : null,
       nextTimer: this.phase === 'results' ? this.timerState('next') : null,
       reveal: this.reveal_,

@@ -135,6 +135,19 @@ export const GAME_CATALOG = [
     partyRounds: [2, 3],
     available: true,
   },
+  {
+    // Mode à part (carte « Mode Duel » en haut de la grille) : ni dans la grille des jeux, ni dans le mode soirée.
+    id: 'duel',
+    name: 'Mode Duel',
+    icon: 'duel',
+    special: true,
+    tagline: 'Deux joueurs s’affrontent dans un mini-jeu, tous les autres parient sur le vainqueur.',
+    rule: 'Le perdant boit, et ceux qui ont parié contre le vainqueur aussi. Plus la salle misait sur le gagnant, plus le perdant boit.',
+    players: { min: 5, max: 30 },
+    minToStart: 3,
+    rhythm: 'rapide',
+    available: true,
+  },
 ];
 
 export const DEFAULT_GAME = 'qui-de-nous';

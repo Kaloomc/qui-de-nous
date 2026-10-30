@@ -54,6 +54,14 @@ const ICONS = {
       <text x="84" y="74" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="40" fill="#fff">B</text>
     </>
   ),
+  duel: (
+    <>
+      <path d="M12 16 L84 16 L12 96 Z" fill="#ff3b4e" />
+      <path d="M108 104 L36 104 L108 24 Z" fill="#2f7bff" />
+      <path d="M84 16 L108 24 L36 104 L12 96 Z" fill="#14102a" />
+      <text x="60" y="72" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="40" fill="#fff8f0" transform="rotate(-42 60 60)">VS</text>
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

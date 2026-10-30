@@ -1,4 +1,5 @@
 import { DEFAULT_GAME, GAME_CATALOG } from '../../../shared/games.js';
+import * as duel from './duel.jsx';
 import * as estimation from './estimation.jsx';
 import * as feu from './feu.jsx';
 import * as imposteur from './imposteur.jsx';
@@ -27,15 +28,19 @@ const VIEWS = {
   [loup.id]: loup,
   [savant.id]: savant,
   [nbm.id]: nbm,
+  [duel.id]: duel,
 };
 
-export const GAMES = GAME_CATALOG.map((game) => ({
+const ALL = GAME_CATALOG.map((game) => ({
   ...game,
   ...VIEWS[game.id],
   playable: game.available && Object.hasOwn(VIEWS, game.id),
 }));
 
-export const gameById = (id) => GAMES.find((game) => game.id === id);
+/** Jeux de la grille et du mode soirée : le mode Duel (`special`) a sa propre carte. */
+export const GAMES = ALL.filter((game) => !game.special);
+
+export const gameById = (id) => ALL.find((game) => game.id === id);
 
 /** Jeu de la partie en cours (celui par défaut tant qu'aucun n'est choisi, pour les écrans communs). */
 export const gameOf = (state) => gameById(state?.mode) ?? gameById(DEFAULT_GAME);
