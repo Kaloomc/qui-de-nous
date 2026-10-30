@@ -6369,3 +6369,24 @@ body.loup-night {
 .mg-wire.is-solution { border-color: var(--green); box-shadow: 0 0 0 4px var(--green); }
 .mg-defuse-duelist { display: grid; gap: 10px; }
 .mg-defuse-duelist .mg-wire { min-width: 46px; flex: 1; }
+
+.mg-sym { min-width: 44px; min-height: 44px; border-radius: 12px; border: 3px solid var(--sym); background: color-mix(in srgb, var(--sym) 22%, #14102a); color: var(--sym); font-size: 1.6rem; cursor: pointer; }
+.mg-sym.is-big { min-width: 56px; min-height: 56px; font-size: 2rem; }
+.mg-sym:disabled { cursor: default; opacity: 0.95; }
+.mg-pips { display: inline-flex; align-items: center; gap: 5px; }
+.mg-pips i { width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff8f0; }
+.mg-pips i.is-exact { background: #fff8f0; }
+.mg-pips i.is-mis { background: linear-gradient(90deg, #fff8f0 50%, transparent 50%); }
+.mg-pips small { margin-left: 6px; font-weight: 700; }
+.mg-code-tv { display: grid; gap: 12px; width: 100%; justify-items: center; }
+.mg-code-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: min(1100px, 96%); }
+.mg-code-col { display: grid; gap: 8px; align-content: start; padding: 14px; border-radius: 18px; min-height: 260px; font-size: 1.2rem; }
+.mg-code-col.is-rouge { background: rgba(255, 59, 78, 0.18); }
+.mg-code-col.is-bleu { background: rgba(47, 123, 255, 0.18); }
+.mg-code-secret { font-size: 2.4rem; }
+.mg-code-duelist { display: grid; gap: 10px; text-align: center; }
+.mg-code-history { display: grid; gap: 6px; max-height: 34vh; overflow: auto; }
+.mg-code-row { display: flex; gap: 6px; align-items: center; justify-content: center; }
+.mg-code-slots { display: flex; gap: 10px; justify-content: center; }
+.mg-slot { width: 64px; height: 64px; border-radius: 14px; border: 3px dashed rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08); font-size: 2rem; color: #fff; cursor: pointer; }
+.mg-code-palette { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }

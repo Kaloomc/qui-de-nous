@@ -102,6 +102,17 @@ const ICONS = {
       <path d="M96 14 l6 8 m0 -8 l-6 8" stroke="#ffc93c" strokeWidth="4" strokeLinecap="round" />
     </>
   ),
+  code: (
+    <>
+      <circle cx="26" cy="34" r="14" fill="#ff4f8b" />
+      <rect x="50" y="20" width="28" height="28" rx="5" fill="#ffc93c" />
+      <path d="M96 20 L110 48 H82 Z" fill="#3ee0c5" />
+      <circle cx="30" cy="88" r="6" fill="#fff8f0" />
+      <circle cx="50" cy="88" r="6" fill="#fff8f0" opacity="0.4" />
+      <circle cx="70" cy="88" r="6" fill="#fff8f0" opacity="0.4" />
+      <circle cx="90" cy="88" r="6" fill="none" stroke="#fff8f0" strokeWidth="3" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

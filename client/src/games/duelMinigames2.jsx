@@ -91,5 +91,99 @@ const Defuse = {
 };
 Defuse.Bettor = Defuse.Tv;
 
-export const MG_VIEWS_2 = { defuse: Defuse };
+// ---------- Le Code ----------
+
+const SYMS = [
+  { shape: '●', color: '#ff4f8b', name: 'rond rose' },
+  { shape: '■', color: '#ffc93c', name: 'carré jaune' },
+  { shape: '▲', color: '#3ee0c5', name: 'triangle turquoise' },
+  { shape: '★', color: '#b46cff', name: 'étoile violette' },
+  { shape: '◆', color: '#ff8a3d', name: 'losange orange' },
+  { shape: '✚', color: '#7ee05a', name: 'croix verte' },
+];
+
+function Sym({ i, onClick = null, big = false }) {
+  const s = SYMS[i];
+  return (
+    <button className={`mg-sym ${big ? 'is-big' : ''}`} style={{ '--sym': s.color }} disabled={!onClick} onClick={onClick} aria-label={s.name}>
+      {s.shape}
+    </button>
+  );
+}
+
+/** Indices en pastilles : ● bien placé, ○ bon symbole mal placé, avec le texte pour ne pas dépendre de la forme seule. */
+function Pips({ fb, length = 4 }) {
+  return (
+    <span className="mg-pips" aria-label={`${fb.exact} bien placé(s), ${fb.misplaced} mal placé(s)`}>
+      {Array.from({ length }, (_, i) => (
+        <i key={i} className={i < fb.exact ? 'is-exact' : i < fb.exact + fb.misplaced ? 'is-mis' : ''} />
+      ))}
+      <small>{fb.exact}✔ {fb.misplaced}↔</small>
+    </span>
+  );
+}
+
+const Code = {
+  Tv({ play, state }) {
+    return (
+      <div className="mg-code-tv">
+        <div className="mg-code-cols">
+          {['rouge', 'bleu'].map((camp) => (
+            <div key={camp} className={`mg-code-col is-${camp}`}>
+              <strong>{CAMP_LABEL[camp]} · {play.pips[camp].length} / {play.max} essais</strong>
+              {play.pips[camp].map((fb, i) => (
+                <Pips key={i} fb={fb} length={play.length} />
+              ))}
+              {play.found[camp] && <em>✔ Code trouvé !</em>}
+            </div>
+          ))}
+        </div>
+        {play.secret && (
+          <p className="mg-code-secret">
+            Le code : {play.secret.map((x, i) => <span key={i} style={{ color: SYMS[x].color }}>{SYMS[x].shape} </span>)}
+          </p>
+        )}
+        <TimerBar timer={{ endsAt: play.startedAt + play.limitMs, totalMs: play.limitMs, paused: false }} state={state} small>
+          {(s) => `${s} s`}
+        </TimerBar>
+      </div>
+    );
+  },
+  Duelist({ play, act }) {
+    const [guess, setGuess] = useState([]);
+    const tries = play.mine ?? [];
+    const over = tries.length >= play.max || play.found.rouge || play.found.bleu;
+    const add = (i) => guess.length < play.length && setGuess([...guess, i]);
+    return (
+      <div className="mg-code-duelist">
+        <div className="mg-code-history">
+          {tries.map((t, i) => (
+            <div key={i} className="mg-code-row">
+              {t.guess.map((g, k) => <Sym key={k} i={g} />)}
+              <Pips fb={t.fb} length={play.length} />
+            </div>
+          ))}
+        </div>
+        <p className="muted">Essai {Math.min(tries.length + 1, play.max)} sur {play.max}</p>
+        <div className="mg-code-slots">
+          {Array.from({ length: play.length }, (_, k) => (
+            <button key={k} className="mg-slot" onClick={() => setGuess(guess.filter((_, j) => j !== k))} aria-label={guess[k] != null ? `Retirer ${SYMS[guess[k]].name}` : 'Case vide'}>
+              {guess[k] != null ? <span style={{ color: SYMS[guess[k]].color }}>{SYMS[guess[k]].shape}</span> : '·'}
+            </button>
+          ))}
+        </div>
+        <div className="mg-code-palette">
+          {SYMS.map((_, i) => <Sym key={i} i={i} big onClick={over ? null : () => add(i)} />)}
+        </div>
+        <button className="btn btn-primary btn-xl" disabled={over || guess.length < play.length} onClick={() => { act({ guess }); setGuess([]); }}>
+          Valider
+        </button>
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.tries ? <p className="duel-cote-line">Essais : ROUGE {details.tries.rouge} – {details.tries.bleu} BLEU</p> : null),
+};
+Code.Bettor = Code.Tv;
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code };
 export { CAMP_LABEL, Score, useBlocked };
