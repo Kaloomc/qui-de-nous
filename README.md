@@ -477,6 +477,15 @@ Le vainqueur ne boit jamais. Le roi qui chute ajoute ses victoires consécutives
 
 **Les 5 mini-jeux** (≈ 40 s) : Pierre-feuille-ciseaux (meilleur des 3, choix secret), Culture G éclair (premier juste marque, 2 points gagnent), Duel du Feu (voix et mots pièges de Réflexes, faux départ = défaite), Simon (mêmes pavés, formes et couleurs), Couleur piège (couleur de l'encre, score = bonnes − 2 × erreurs). Les temps de réaction sont mesurés côté serveur et compensés de la latence de chaque téléphone (médiane de 5 allers-retours) ; moins de 20 ms d'écart : on rejoue, puis égalité.
 
+**Mini-jeux de la partie 2** (`server/duel/minigames/`) :
+- **Désamorçage** : 5 ou 6 fils (couleur, motif et numéro) et 3 indices ; le premier à couper le bon fil gagne, un mauvais fil bloque 3 s. Puzzle généré avec une solution unique (vérifiée par un solveur, 1 000 puzzles testés).
+- **Le Code** : code secret de 4 symboles parmi 6 (formes et couleurs), indices à la Mastermind, 8 essais et 60 s. La TV ne montre que des pastilles ; le code n'est envoyé qu'à la fin.
+- **Simon croisé** : chacun rejoue toute la séquence de mémoire puis ajoute un pas pour piéger l'autre (6 s par pas, 15 pas au plus). La séquence n'est envoyée qu'à la TV, pendant son rejeu.
+- **Le Crash** : un multiplicateur grimpe, on « banque » avant l'explosion (point tiré par le serveur, entre 1,10x et 20x, jamais communiqué). Valeur calculée côté serveur, compensée de la latence.
+- **Dilemme en or** : 20 s de discussion, puis PARTAGER ou TRAHIR en secret. Deux partagent : personne ne boit ; un seul trahit : il gagne ; deux trahissent : 2 gorgées chacun. Sans reprise. Un mini-jeu peut imposer ses propres gorgées (`sips` dans son résultat) et annoncer sa règle aux parieurs (`rule`).
+
+**Pas encore faits** (voir `docs/PROGRESSION.md`) : 1-2-3 Soleil, Plateau fantôme, Course d'obstacles, Qui suis-je ?, Ordre chronologique, Vrai ou Faux en survie, Géo-duel.
+
 **Ajouter un mini-jeu** : créer `server/duel/minigames/<id>.js` (le contrat est décrit en tête de `server/duel/minigames/index.js` : `prepare`, `begin`, `action`, `result`, `resolve`, `view`), l'ajouter à `MINIGAMES`, écrire ses trois vues dans `client/src/games/duelMinigames.jsx` (`Tv`, `Duelist`, `Bettor`, `Summary`) et une icône dans `client/src/icons.jsx`. Le moteur gère étapes, minuteurs, « prêts », paris, gorgées et annulations ; la vue d'un mini-jeu ne doit jamais contenir le secret d'un duelliste (voir `server/duel-leak.test.js`).
 
 **Ajouter une question de Culture G** : une ligne dans le dernier lot `scripts/culture-rows-N.mjs` : `[question, bonne réponse, 3 mauvaises, catégorie, source]`. La source est l'URL d'une page où vous avez *lu* le fait (pas un lien de mémoire). Puis `node scripts/build-culture-duel.mjs` et `npm run check-culture` (format, 150 questions au moins, doublons, sources).

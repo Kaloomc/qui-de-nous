@@ -35,3 +35,17 @@ Ajoutés (63), chacun confirmé sur le web avant l’écriture, avec une source 
 - [x] 3. Roulettes, révélation des paris, écrans TV et téléphones, verdicts
 - [x] 4. Pierre-feuille-ciseaux, Simon, Couleur piège, Duel du Feu, Culture G éclair (155 questions sourcées, `npm run check-culture`), latence compensée (médiane de 5 allers-retours)
 - [x] 5. Simulateur de 300 sessions, test de fuite sur sockets, README, captures (`npm run captures -- duel` → `docs/captures/duel-partie1/`, 45 images, 0 problème d'affichage)
+
+# Mode Duel, partie 2 (12 mini-jeux) : arrêt volontaire à 5 sur 12
+
+Un commit par jeu, `npm test` et `npm run build` après chacun (484 tests verts).
+
+- [x] Désamorçage (générateur à solution unique, 1 000 puzzles testés)
+- [x] Le Code (indices Mastermind testés avec doublons, code jamais envoyé avant la fin)
+- [x] Simon croisé (séquence visible seulement sur la TV pendant son rejeu)
+- [x] Le Crash (distribution sur 10 000 tirages, bornes, latence compensée)
+- [x] Dilemme en or (gorgées propres au jeu : petit ajout au moteur, `sips` et `rule` dans le contrat des mini-jeux)
+- [ ] 1-2-3 Soleil : les clips se génèrent avec `npm run voices -- --words Un,Deux,Trois,Soleil` (pipeline existant, clé ElevenLabs dans `.env`) ; la logique serveur (barre qui avance tant qu'on appuie, recul d'un quart si on est appuyé à « Soleil » + 250 ms, temps compensés) reste à écrire
+- [ ] Plateau fantôme, Course d'obstacles (simulation déterministe client / serveur)
+- [ ] Qui suis-je ?, Ordre chronologique, Vrai ou Faux en survie, Géo-duel (+ 4 fichiers de contenu vérifiés avec source, carte Natural Earth)
+- [ ] Captures `docs/captures/duel-partie2/`, simulateur de bots à 17 jeux (le simulateur existant couvre déjà les 11 jeux actuels : les nouveaux sont dans le registre)
