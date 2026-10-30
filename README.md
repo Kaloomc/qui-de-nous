@@ -477,14 +477,25 @@ Le vainqueur ne boit jamais. Le roi qui chute ajoute ses victoires consécutives
 
 **Les 5 mini-jeux** (≈ 40 s) : Pierre-feuille-ciseaux (meilleur des 3, choix secret), Culture G éclair (premier juste marque, 2 points gagnent), Duel du Feu (voix et mots pièges de Réflexes, faux départ = défaite), Simon (mêmes pavés, formes et couleurs), Couleur piège (couleur de l'encre, score = bonnes − 2 × erreurs). Les temps de réaction sont mesurés côté serveur et compensés de la latence de chaque téléphone (médiane de 5 allers-retours) ; moins de 20 ms d'écart : on rejoue, puis égalité.
 
-**Mini-jeux de la partie 2** (`server/duel/minigames/`) :
-- **Désamorçage** : 5 ou 6 fils (couleur, motif et numéro) et 3 indices ; le premier à couper le bon fil gagne, un mauvais fil bloque 3 s. Puzzle généré avec une solution unique (vérifiée par un solveur, 1 000 puzzles testés).
-- **Le Code** : code secret de 4 symboles parmi 6 (formes et couleurs), indices à la Mastermind, 8 essais et 60 s. La TV ne montre que des pastilles ; le code n'est envoyé qu'à la fin.
+**Les 12 mini-jeux de la partie 2** (`server/duel/minigames/`, en tout 17 avec ceux de la partie 1, tous cochés par défaut dans l'écran d'options et dans la roulette) :
+- **Désamorçage** : 5 ou 6 fils (couleur, motif et numéro) et 3 indices ; le premier à couper le bon fil gagne, un mauvais fil bloque 3 s. Puzzle généré à solution unique (solveur de vérification, 1 000 puzzles testés).
+- **Le Code** : code secret de 4 symboles parmi 6 (formes et couleurs), indices à la Mastermind, 8 essais, 60 s. La TV ne montre que des pastilles ; le code n'est envoyé qu'à la fin.
 - **Simon croisé** : chacun rejoue toute la séquence de mémoire puis ajoute un pas pour piéger l'autre (6 s par pas, 15 pas au plus). La séquence n'est envoyée qu'à la TV, pendant son rejeu.
-- **Le Crash** : un multiplicateur grimpe, on « banque » avant l'explosion (point tiré par le serveur, entre 1,10x et 20x, jamais communiqué). Valeur calculée côté serveur, compensée de la latence.
-- **Dilemme en or** : 20 s de discussion, puis PARTAGER ou TRAHIR en secret. Deux partagent : personne ne boit ; un seul trahit : il gagne ; deux trahissent : 2 gorgées chacun. Sans reprise. Un mini-jeu peut imposer ses propres gorgées (`sips` dans son résultat) et annoncer sa règle aux parieurs (`rule`).
+- **Le Crash** : un multiplicateur grimpe (1,00x à 20x au plus), on « banque » avant l'explosion, tirée par le serveur et jamais communiquée. Valeur calculée côté serveur, compensée de la latence.
+- **1-2-3 Soleil** : on maintient un bouton pour avancer ; à « Soleil » (voix de la TV, rythme imprévisible) il faut avoir lâché, sinon on recule d'un quart du parcours (tolérance 250 ms compensée).
+- **Dilemme en or** : 20 s de discussion, puis PARTAGER ou TRAHIR en secret. Deux partagent : personne ne boit ; un seul trahit : il gagne ; deux trahissent : 2 gorgées chacun. Sans reprise.
+- **Plateau fantôme** : des personnages défilent sur la TV (téléphones vides), puis une question de comptage à 4 choix. 3 passages, 2 points gagnent. Scènes et questions générées (1 000 scènes testées à réponse unique).
+- **Course d'obstacles** : même tracé pour les deux, saut au toucher, se baisser en glissant. Simulation déterministe à pas fixe (`shared/runner.js`) rejouée par le serveur ; le dernier debout gagne.
+- **Qui suis-je ?** : 4 indices un par un toutes les 5 s, on répond quand on veut parmi 4 choix (4 points au premier indice, 1 au dernier, −1 par erreur).
+- **Ordre chronologique** : 5 événements sans date à toucher du plus ancien au plus récent ; une erreur = 3 s de blocage.
+- **Vrai ou Faux en survie** : des affirmations à temps décroissant (5 s à 2 s) ; la première erreur ou absence élimine.
+- **Géo-duel** : 3 villes, une épingle sur la carte du monde (15 s par ville), la somme des distances (Haversine) la plus petite gagne.
 
-**Pas encore faits** (voir `docs/PROGRESSION.md`) : 1-2-3 Soleil, Plateau fantôme, Course d'obstacles, Qui suis-je ?, Ordre chronologique, Vrai ou Faux en survie, Géo-duel.
+**Contenus de la partie 2** (`server/content/`, contrôlés par `npm run check-duel-content` : format, volumes, doublons, sources) : `qui-suis-je-duel.json`, `ordre-chrono-duel.json`, `vrai-faux-duel.json`, `villes-geo-duel.json` (et `culture-g-duel.json`, partie 1). Pour ajouter du contenu : une ligne dans le dernier lot `scripts/vf-rows-N.mjs` (affirmations), `scripts/qui-rows-N.mjs` (énigmes) ou `scripts/chrono-pool.mjs` (événements datés), avec l'URL d'une page où vous avez *lu* le fait ; puis `npm run build-duel-content` et `npm run check-duel-content`. Une affirmation fausse est un fait vérifié dont on change un détail (l'explication donne la vraie valeur).
+
+**Carte du Géo-duel** : fond de carte et coordonnées des villes de [Natural Earth](https://www.naturalearthdata.com) (domaine public, jeux 1:110m « land » et « populated places »), copiés dans `scripts/data/natural-earth/` et convertis par `npm run build-geo-duel` en `shared/worldmap.js` (SVG embarqué) et `server/content/villes-geo-duel.json`. Aucun service de tuiles ni clé d'API.
+
+**Clips de 1-2-3 Soleil** : « Un », « Deux », « Trois » et « Soleil » sont générés par le script de voix existant (même voix que Réflexes, fichiers dans `client/public/voix/`) : `npm run voices -- --words Un,Deux,Trois,Soleil` (clé `ELEVENLABS_API_KEY` dans `.env`). La TV les joue dans une file unique (`speakQueued`), jamais coupés ni chevauchés ; sans audio, le mot s'affiche seulement.
 
 **Ajouter un mini-jeu** : créer `server/duel/minigames/<id>.js` (le contrat est décrit en tête de `server/duel/minigames/index.js` : `prepare`, `begin`, `action`, `result`, `resolve`, `view`), l'ajouter à `MINIGAMES`, écrire ses trois vues dans `client/src/games/duelMinigames.jsx` (`Tv`, `Duelist`, `Bettor`, `Summary`) et une icône dans `client/src/icons.jsx`. Le moteur gère étapes, minuteurs, « prêts », paris, gorgées et annulations ; la vue d'un mini-jeu ne doit jamais contenir le secret d'un duelliste (voir `server/duel-leak.test.js`).
 
