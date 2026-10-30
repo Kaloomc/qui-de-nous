@@ -176,6 +176,25 @@ export function seededRng(seed) {
   };
 }
 
+// ---------- Emojis et confettis ----------
+
+const CHEER_STEPS = ['betsReveal', 'ready', 'play'];
+
+/** Les parieurs encouragent leur camp, de la révélation des paris à la fin du duel : purement visuel, aucun effet sur le jeu ni les gorgées. */
+function cheer(game, d, playerId, action) {
+  if (!CHEER_STEPS.includes(d.step) || d.outcome) return 'Pas maintenant.';
+  if (!d.bettors?.includes(playerId)) return 'Seuls les parieurs encouragent.';
+  const item = D.cleanCheer(action);
+  if (item.error) return item.error;
+  const now = game.clock.now();
+  const last = d.emojis.at?.[playerId];
+  if (last != null && now - last < D.CHEER_GAP_MS) return 'Doucement : un envoi par seconde.';
+  (d.emojis.at ??= {})[playerId] = now;
+  d.emojis.sent += 1;
+  d.emojis.feed = [...(d.emojis.feed ?? []), { n: d.emojis.sent, ...item, camp: game.votes.get(playerId) ?? null }].slice(-D.FEED_MAX);
+  return null;
+}
+
 // ---------- Vues ----------
 
 const campOf = (d, id) => (id === d.red ? 'rouge' : id === d.blue ? 'bleu' : null);
@@ -265,6 +284,7 @@ export default {
       if (bothReady(d)) soon(game, timing(game).readyBeatMs);
       return null;
     }
+    if (action.type === 'cheer') return cheer(game, d, playerId, action);
     if (action.type === 'play') {
       if (d.step !== 'play' || d.outcome) return 'Pas maintenant.';
       if (!camp) return 'Tu ne te bats pas.';
@@ -369,6 +389,8 @@ export default {
       bets: showBets && d.bettors ? betsMap(game, d) : null,
       odds: showBets && d.bettors ? D.oddsPct(betsMap(game, d), d.bettors) : null,
       ready: d.step === 'ready' ? { rouge: !!d.ready[d.red], bleu: !!d.ready[d.blue] } : null,
+      // Fil des emojis : la TV seulement (jamais les téléphones, donc jamais ceux des duellistes).
+      cheers: viewer.host && CHEER_STEPS.includes(d.step) && !d.outcome ? d.emojis.feed ?? [] : null,
       play: gameView(game, d, viewer),
       finished: !!d.outcome,
     };

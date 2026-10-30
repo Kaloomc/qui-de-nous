@@ -69,6 +69,19 @@ export function pickMinigame(active, last, rng = Math.random) {
   return pool[Math.floor(rng() * pool.length)];
 }
 
+// ---------- Emojis et confettis des parieurs ----------
+
+export const EMOJIS = ['🔥', '😱', '😂', '👏', '💀', '🍿', '😈', '🙌'];
+export const CHEER_GAP_MS = 1000; // un envoi par seconde et par joueur
+export const FEED_MAX = 40; // éléments gardés pour la TV
+
+/** Un envoi des parieurs (emoji de la liste fixe ou confettis). Renvoie l'élément à afficher ou { error }. */
+export function cleanCheer(action) {
+  if (action?.kind === 'confetti') return { kind: 'confetti' };
+  if (action?.kind === 'emoji' && EMOJIS.includes(action.emoji)) return { kind: 'emoji', emoji: action.emoji };
+  return { error: 'Envoi invalide.' };
+}
+
 // ---------- Cote et gorgées ----------
 
 export const SIP_CAP = { standard: 8, hardcore: 15 };
