@@ -6432,3 +6432,18 @@ body.loup-night {
 .mg-soleil-banner.is-sun { background: var(--yellow); color: #14102a; }
 .mg-hold-btn { min-height: 38vh; border-radius: 32px; border: 6px solid #fff8f0; background: radial-gradient(circle, #3ee0c5, #1a8f7d); color: #14102a; font-size: 2.6rem; font-weight: 800; touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer; }
 .mg-hold-btn.is-down { background: radial-gradient(circle, #ffc93c, #ff7a59); transform: scale(0.98); }
+
+.mg-plateau { display: grid; gap: 12px; justify-items: center; width: 100%; }
+.mg-plateau-wait { flex: 1; display: grid; gap: 8px; align-content: center; text-align: center; }
+.mg-stage { position: relative; width: min(1300px, 96%); height: 46vh; border-radius: 24px; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.14)); overflow: hidden; }
+.mg-walker { position: absolute; width: 64px; height: 64px; background: var(--body); border: 4px solid #fff8f0; transition: none; }
+.mg-walker.shape-rond { border-radius: 50%; }
+.mg-walker.shape-triangle { clip-path: polygon(50% 0, 100% 100%, 0 100%); border: 0; }
+.mg-walker.shape-etoile { clip-path: polygon(50% 0, 62% 36%, 100% 38%, 70% 60%, 80% 100%, 50% 76%, 20% 100%, 30% 60%, 0 38%, 38% 36%); border: 0; }
+.mg-walker.shape-losange { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); border: 0; }
+.mg-acc { position: absolute; background: #fff8f0; display: none; }
+.acc-chapeau .mg-acc { display: block; left: 12px; top: -22px; width: 36px; height: 24px; clip-path: polygon(20% 100%, 30% 0, 70% 0, 80% 100%, 100% 100%, 100% 100%, 0 100%); }
+.acc-echarpe .mg-acc { display: block; left: -4px; top: 42px; width: 64px; height: 12px; border-radius: 6px; background: repeating-linear-gradient(90deg, #fff8f0 0 8px, #14102a 8px 12px); }
+.acc-cape .mg-acc { display: block; top: 6px; width: 30px; height: 52px; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.mg-walker.dir-droite.acc-cape .mg-acc { left: -26px; }
+.mg-walker.dir-gauche.acc-cape .mg-acc { right: -26px; transform: scaleX(-1); }

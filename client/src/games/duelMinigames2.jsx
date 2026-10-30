@@ -453,5 +453,105 @@ Soleil.Bettor = ({ play, state }) => (
   </div>
 );
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil };
+// ---------- Plateau fantôme ----------
+
+const BODY = { rouge: '#ff4d5e', bleu: '#3c9dff', vert: '#2fd18a', jaune: '#ffc93c', violet: '#b46cff' };
+const SHAPE = { rouge: 'rond', bleu: 'carre', vert: 'triangle', jaune: 'etoile', violet: 'losange' };
+const CROSS_MS = 2600;
+
+function Walker({ c, elapsed }) {
+  const p = (elapsed - c.start) / CROSS_MS;
+  if (p < 0 || p > 1) return null;
+  const x = c.dir === 'droite' ? p : 1 - p;
+  const jump = c.jumps ? Math.abs(Math.sin(p * Math.PI * 3)) * 46 : 0;
+  return (
+    <span className={`mg-walker shape-${SHAPE[c.color]} acc-${c.accessory} dir-${c.dir}`} style={{ left: `${4 + x * 88}%`, top: `${18 + c.lane * 26}%`, '--body': BODY[c.color], transform: `translateY(-${jump}px)` }}>
+      <i className="mg-acc" />
+    </span>
+  );
+}
+
+function Stage({ play, state }) {
+  const elapsed = useFrameElapsed(play.sceneAt, state);
+  const t = Number.isFinite(elapsed) ? elapsed : play.sceneMs;
+  return (
+    <div className="mg-stage" aria-label="Scène : comptez bien">
+      {play.scene.chars.map((c) => (
+        <Walker key={c.id} c={c} elapsed={t} />
+      ))}
+    </div>
+  );
+}
+
+function AskChoices({ play, onPick = null, blocked = false }) {
+  return (
+    <div className="mg-choices">
+      {play.choices.map((c, i) => (
+        <button key={i} className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''}`} disabled={!onPick || blocked || !!play.shown} onClick={() => onPick?.(i)}>
+          <b>{'ABCD'[i]}</b> {c}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const Plateau = {
+  Tv({ play, state }) {
+    return (
+      <div className="mg-plateau">
+        <Score a={play.score.rouge} b={play.score.bleu} />
+        <p className="duel-eyebrow">Passage {play.n} · 2 points gagnent</p>
+        {play.phase === 'scene' && play.scene ? (
+          <>
+            <Stage play={play} state={state} />
+            <p className="duel-eyebrow">Regardez bien les personnages !</p>
+          </>
+        ) : (
+          <>
+            <h2 className="mg-question">{play.question}</h2>
+            <AskChoices play={play} />
+            {play.shown && <p className="duel-eyebrow">{play.shown.scorer ? `Point pour ${CAMP_LABEL[play.shown.scorer]} !` : play.shown.tie ? 'Égalité de vitesse !' : 'Personne ne marque'}</p>}
+            {play.endsAt && (
+              <TimerBar timer={{ endsAt: play.endsAt, totalMs: 7000, paused: false }} state={state} small>
+                {(s) => `${s} s`}
+              </TimerBar>
+            )}
+          </>
+        )}
+      </div>
+    );
+  },
+  Duelist({ play, act, state }) {
+    const left = useBlocked(play.blockedUntil, state);
+    if (play.phase === 'scene') {
+      return (
+        <div className="mg-plateau-wait">
+          <h2>Regarde la TV !</h2>
+          <p className="muted">Compte les personnages : une question arrive.</p>
+        </div>
+      );
+    }
+    return (
+      <div className="mg-culture-duelist">
+        <Score a={play.score.rouge} b={play.score.bleu} />
+        <h2 className="mg-question is-small">{play.question}</h2>
+        {left > 0 && <p className="duel-notice">Mauvaise réponse : bloqué 2 s</p>}
+        <AskChoices play={play} blocked={left > 0} onPick={(i) => act({ choice: i, n: play.n })} />
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.score ? <p className="duel-cote-line">Points : ROUGE {details.score.rouge} – {details.score.bleu} BLEU</p> : null),
+};
+Plateau.Bettor = ({ play, state }) =>
+  play.phase === 'scene' ? (
+    <p className="duel-eyebrow">Regarde la TV : compte les personnages !</p>
+  ) : (
+    <div className="mg-plateau">
+      <Score a={play.score.rouge} b={play.score.bleu} />
+      <h2 className="mg-question is-small">{play.question}</h2>
+      <AskChoices play={play} />
+    </div>
+  );
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil, plateau: Plateau };
 export { CAMP_LABEL, Score, useBlocked };

@@ -144,6 +144,15 @@ const ICONS = {
       <rect x="14" y="88" width="54" height="12" rx="6" fill="#3ee0c5" />
     </>
   ),
+  plateau: (
+    <>
+      <path d="M18 100 V60 a14 14 0 0 1 28 0 V100 Z" fill="#b3a9d6" />
+      <path d="M50 100 V46 a14 14 0 0 1 28 0 V100 Z" fill="#fff8f0" />
+      <path d="M82 100 V66 a12 12 0 0 1 24 0 V100 Z" fill="#b3a9d6" />
+      <circle cx="32" cy="72" r="3" fill="#14102a" /><circle cx="64" cy="58" r="3" fill="#14102a" /><circle cx="94" cy="76" r="3" fill="#14102a" />
+      <path d="M52 22 L64 8 L76 22 Z" fill="#ffc93c" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />
