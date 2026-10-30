@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { TimerBar } from '../components.jsx';
 import { serverNow } from '../lib.js';
+import { useFrameElapsed } from './duelFx.js';
 
 const CAMP_LABEL = { rouge: 'ROUGE', bleu: 'BLEU' };
 
@@ -185,5 +186,60 @@ const Code = {
 };
 Code.Bettor = Code.Tv;
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code };
+// ---------- Simon croisé ----------
+
+const CROSS_PADS = [
+  { shape: '●', color: '#ff4f8b', name: 'rond rose' },
+  { shape: '■', color: '#ffc93c', name: 'carré jaune' },
+  { shape: '▲', color: '#3ee0c5', name: 'triangle turquoise' },
+  { shape: '★', color: '#b46cff', name: 'étoile violette' },
+];
+
+function CrossPads({ lit = -1, onTap = null }) {
+  return (
+    <div className="mg-pads is-big">
+      {CROSS_PADS.map((p, i) => (
+        <button key={i} className={`mg-pad ${lit === i ? 'is-lit' : ''}`} style={{ '--pad': p.color }} disabled={!onTap} onClick={() => onTap?.(i)} aria-label={p.name}>
+          {p.shape}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const Simon2 = {
+  Tv({ play, state }) {
+    const elapsed = useFrameElapsed(play.phase === 'replay' ? play.replayAt : null, state);
+    const i = elapsed == null || elapsed === Infinity ? -1 : Math.floor((elapsed - 500) / 520);
+    const lit = play.seq && i >= 0 && i < play.seq.length && (elapsed - 500) % 520 < 400 ? play.seq[i] : -1;
+    return (
+      <div className="mg-simon2-tv">
+        <p className="duel-eyebrow">
+          {play.steps} pas sur {play.max} · {play.phase === 'replay' ? 'Regardez bien la séquence !' : `Au tour de ${CAMP_LABEL[play.turn]} : rejouer puis ajouter un pas`}
+        </p>
+        <CrossPads lit={lit} />
+        {play.deadline && (
+          <TimerBar timer={{ endsAt: play.deadline, totalMs: 6000, paused: false }} state={state} small>
+            {(s) => `${s} s pour le prochain pas`}
+          </TimerBar>
+        )}
+      </div>
+    );
+  },
+  Duelist({ play, act, side }) {
+    const mine = play.turn === side && play.phase === 'input';
+    return (
+      <div className="mg-simon-duelist">
+        <p className="duel-eyebrow">
+          {play.phase === 'replay' ? 'Regarde la séquence sur la TV…' : mine ? (play.pos < play.steps ? `Rejoue la séquence : ${play.pos} / ${play.steps}` : 'Ajoute un pas pour piéger l’autre !') : 'Ton adversaire joue…'}
+        </p>
+        <CrossPads onTap={mine ? (i) => act({ pad: i }) : null} />
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.steps ? <p className="duel-cote-line">Séquence de {details.steps} pas</p> : null),
+};
+Simon2.Bettor = Simon2.Tv;
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2 };
 export { CAMP_LABEL, Score, useBlocked };

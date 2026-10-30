@@ -113,6 +113,14 @@ const ICONS = {
       <circle cx="90" cy="88" r="6" fill="none" stroke="#fff8f0" strokeWidth="3" />
     </>
   ),
+  simon2: (
+    <>
+      <rect x="10" y="10" width="44" height="44" rx="12" fill="#ff4f8b" />
+      <rect x="66" y="66" width="44" height="44" rx="12" fill="#3ee0c5" />
+      <path d="M60 30 H86 V56" fill="none" stroke="#fff8f0" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M60 90 H34 V64" fill="none" stroke="#fff8f0" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

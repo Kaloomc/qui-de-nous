@@ -17,5 +17,6 @@ import defuse from './defuse.js';
 import feu from './feu.js';
 import pfc from './pfc.js';
 import simon from './simon.js';
+import simon2 from './simon2.js';
 
-export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse, code].map((m) => [m.id, m]));
+export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse, code, simon2].map((m) => [m.id, m]));
