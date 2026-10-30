@@ -6390,3 +6390,14 @@ body.loup-night {
 .mg-code-slots { display: flex; gap: 10px; justify-content: center; }
 .mg-slot { width: 64px; height: 64px; border-radius: 14px; border: 3px dashed rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08); font-size: 2rem; color: #fff; cursor: pointer; }
 .mg-code-palette { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+.mg-crash { display: grid; justify-items: center; gap: 10px; }
+.mg-crash-x { font-size: clamp(4.5rem, 16vw, 12rem); font-weight: 800; line-height: 1; color: var(--teal); text-shadow: 0 0 40px rgba(62, 224, 197, 0.4); }
+.mg-crash.is-small .mg-crash-x { font-size: clamp(3.4rem, 18vw, 5.5rem); }
+.mg-crash.is-boom .mg-crash-x { color: var(--duel-red); text-shadow: 0 0 40px rgba(255, 59, 78, 0.6); animation: duel-impact 0.5s ease-out; }
+.mg-crash-banks { display: grid; gap: 4px; text-align: center; font-weight: 700; font-size: clamp(1rem, 1.8vw, 1.5rem); }
+.mg-crash-banks .is-rouge { color: #ff8a93; }
+.mg-crash-banks .is-bleu { color: #8fb8ff; }
+.mg-crash-duelist { flex: 1; display: grid; gap: 14px; align-content: center; text-align: center; }
+.mg-bank-btn { min-height: 34vh; border-radius: 32px; border: 6px solid #fff8f0; background: radial-gradient(circle, #3ee0c5, #1a8f7d); color: #14102a; font-size: 3rem; font-weight: 800; cursor: pointer; }
+.mg-bank-btn:disabled { filter: grayscale(0.6); opacity: 0.7; }

@@ -121,6 +121,13 @@ const ICONS = {
       <path d="M60 90 H34 V64" fill="none" stroke="#fff8f0" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
     </>
   ),
+  crash: (
+    <>
+      <path d="M12 100 L40 70 L58 82 L96 24" fill="none" stroke="#3ee0c5" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M96 24 l-4 -14 M96 24 l12 6 M96 24 l8 -10" stroke="#ffc93c" strokeWidth="6" strokeLinecap="round" />
+      <circle cx="96" cy="24" r="7" fill="#ff4d5e" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

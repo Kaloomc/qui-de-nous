@@ -241,5 +241,52 @@ const Simon2 = {
 };
 Simon2.Bettor = Simon2.Tv;
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2 };
+// ---------- Le Crash ----------
+
+/** Multiplicateur affiché : e^(rate · t), figé à la valeur d'explosion. */
+function useMultiplier(play, state) {
+  const elapsed = useFrameElapsed(play.phase === 'run' ? play.startedAt : null, state);
+  if (play.crashed != null) return play.crashed;
+  if (elapsed == null || elapsed === Infinity) return 1;
+  return Math.exp(play.rate * elapsed);
+}
+const fmtX = (x) => `${(Math.floor(x * 100) / 100).toFixed(2).replace('.', ',')}x`;
+
+function CrashBoard({ play, state, big = true }) {
+  const m = useMultiplier(play, state);
+  const boom = play.crashed != null;
+  return (
+    <div className={`mg-crash ${boom ? 'is-boom' : ''} ${big ? '' : 'is-small'}`}>
+      <p className="mg-crash-x" aria-live="off">{boom ? '💥 ' : ''}{fmtX(m)}</p>
+      <p className="duel-eyebrow">{play.phase === 'pause' ? 'Égalité : on rejoue une fois !' : boom ? 'Explosé !' : 'Ça monte…'}</p>
+      <div className="mg-crash-banks">
+        {['rouge', 'bleu'].map((camp) => (
+          <span key={camp} className={`is-${camp}`}>
+            {CAMP_LABEL[camp]} : {play.banked[camp] != null ? `banqué à ${fmtX(play.banked[camp])}` : boom ? '0 (explosé)' : 'pas encore banqué'}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const Crash = {
+  Tv: ({ play, state }) => <CrashBoard play={play} state={state} />,
+  Duelist({ play, act, side, state }) {
+    const done = play.banked[side] != null || play.crashed != null || play.phase !== 'run';
+    return (
+      <div className="mg-crash-duelist">
+        <CrashBoard play={play} state={state} big={false} />
+        <button className="mg-bank-btn" disabled={done} onClick={() => { navigator.vibrate?.(30); act({ type: 'bank' }); }}>
+          {play.banked[side] != null ? `✔ Banqué à ${fmtX(play.banked[side])}` : 'BANQUE !'}
+        </button>
+      </div>
+    );
+  },
+  Summary: ({ details }) =>
+    details?.banked ? <p className="duel-cote-line">Banqué : ROUGE {details.banked.rouge ? fmtX(details.banked.rouge) : '0'} – {details.banked.bleu ? fmtX(details.banked.bleu) : '0'} BLEU · explosion à {fmtX(details.crash)}</p> : null,
+};
+Crash.Bettor = Crash.Tv;
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash };
 export { CAMP_LABEL, Score, useBlocked };
