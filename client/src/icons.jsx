@@ -128,6 +128,14 @@ const ICONS = {
       <circle cx="96" cy="24" r="7" fill="#ff4d5e" />
     </>
   ),
+  dilemme: (
+    <>
+      <circle cx="60" cy="34" r="22" fill="#ffc93c" />
+      <circle cx="60" cy="34" r="10" fill="#14102a" />
+      <path d="M14 110 Q14 74 40 66 L60 82 L80 66 Q106 74 106 110 Z" fill="#b46cff" />
+      <path d="M52 92 l8 8 l14 -16" fill="none" stroke="#fff8f0" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

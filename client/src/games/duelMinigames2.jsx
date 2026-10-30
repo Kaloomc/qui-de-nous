@@ -288,5 +288,77 @@ const Crash = {
 };
 Crash.Bettor = Crash.Tv;
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash };
+// ---------- Dilemme en or ----------
+
+const CHOICE_LABEL = { partager: '🤝 PARTAGER', trahir: '🗡️ TRAHIR' };
+
+const Dilemme = {
+  Tv({ play, state }) {
+    return (
+      <div className="mg-dilemme">
+        <h2 className="mg-dilemme-title">{play.phase === 'talk' ? 'Parlez-vous !' : 'Chacun choisit en secret…'}</h2>
+        <p className="duel-rule">Partager tous les deux : personne ne boit. Un seul trahit : il gagne. Les deux trahissent : 2 gorgées chacun.</p>
+        <div className="mg-dilemme-boxes">
+          {['rouge', 'bleu'].map((camp) => (
+            <div key={camp} className={`mg-dilemme-box is-${camp}`}>
+              <strong>{CAMP_LABEL[camp]}</strong>
+              <span>{play.phase === 'talk' ? '💬' : play.chosen[camp] ? '🔒 a choisi' : '🤔 réfléchit'}</span>
+            </div>
+          ))}
+        </div>
+        {play.talkEndsAt && (
+          <TimerBar timer={{ endsAt: play.talkEndsAt, totalMs: 20000, paused: false }} state={state}>
+            {(s) => `Discussion : ${s} s`}
+          </TimerBar>
+        )}
+        {play.deadline && (
+          <TimerBar timer={{ endsAt: play.deadline, totalMs: 8000, paused: false }} state={state}>
+            {(s) => `${s} s pour choisir`}
+          </TimerBar>
+        )}
+      </div>
+    );
+  },
+  Duelist({ play, act, state }) {
+    const locked = !!play.mine;
+    return (
+      <div className="mg-dilemme-duelist">
+        {play.phase === 'talk' ? (
+          <>
+            <h2>Parle à ton adversaire !</h2>
+            <p className="muted">Négocie ou bluffe, à voix haute. Les boutons s’ouvrent dans quelques secondes.</p>
+            <TimerBar timer={{ endsAt: play.talkEndsAt, totalMs: 20000, paused: false }} state={state} small>
+              {(s) => `${s} s`}
+            </TimerBar>
+          </>
+        ) : (
+          <>
+            <p className="muted">{locked ? 'Choix verrouillé. Attends l’autre…' : 'Choisis en secret !'}</p>
+            {['partager', 'trahir'].map((c) => (
+              <button key={c} className={`mg-dilemme-btn is-${c} ${play.mine === c ? 'is-picked' : ''}`} disabled={locked} onClick={() => act({ choice: c })}>
+                {CHOICE_LABEL[c]}
+              </button>
+            ))}
+            {play.deadline && (
+              <TimerBar timer={{ endsAt: play.deadline, totalMs: 8000, paused: false }} state={state} small>
+                {(s) => `${s} s`}
+              </TimerBar>
+            )}
+          </>
+        )}
+      </div>
+    );
+  },
+  // Suspense du verdict : rien n'est dévoilé tant que le vainqueur n'est pas annoncé.
+  Reveal: () => <p className="mg-dilemme-title">🔒 ? &nbsp; 🔒 ?</p>,
+  Summary: ({ details }) =>
+    details?.choices ? (
+      <p className="duel-cote-line">
+        ROUGE : {CHOICE_LABEL[details.choices.rouge]} · BLEU : {CHOICE_LABEL[details.choices.bleu]}
+      </p>
+    ) : null,
+};
+Dilemme.Bettor = Dilemme.Tv;
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme };
 export { CAMP_LABEL, Score, useBlocked };

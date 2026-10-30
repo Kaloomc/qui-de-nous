@@ -6401,3 +6401,17 @@ body.loup-night {
 .mg-crash-duelist { flex: 1; display: grid; gap: 14px; align-content: center; text-align: center; }
 .mg-bank-btn { min-height: 34vh; border-radius: 32px; border: 6px solid #fff8f0; background: radial-gradient(circle, #3ee0c5, #1a8f7d); color: #14102a; font-size: 3rem; font-weight: 800; cursor: pointer; }
 .mg-bank-btn:disabled { filter: grayscale(0.6); opacity: 0.7; }
+.duel-rule { font-size: clamp(1.1rem, 2vw, 1.7rem); font-weight: 700; color: var(--yellow); text-align: center; max-width: 900px; }
+
+.mg-dilemme { display: grid; gap: 14px; justify-items: center; width: 100%; }
+.mg-dilemme-title { font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 800; text-align: center; }
+.mg-dilemme-boxes { display: flex; gap: 40px; }
+.mg-dilemme-box { display: grid; justify-items: center; gap: 6px; min-width: 260px; padding: 20px 30px; border-radius: 24px; font-size: 1.8rem; }
+.mg-dilemme-box.is-rouge { background: rgba(255, 59, 78, 0.25); border: 3px solid var(--duel-red); }
+.mg-dilemme-box.is-bleu { background: rgba(47, 123, 255, 0.25); border: 3px solid var(--duel-blue); }
+.mg-dilemme-duelist { flex: 1; display: grid; gap: 14px; align-content: center; text-align: center; }
+.mg-dilemme-btn { min-height: 26vh; border-radius: 28px; border: 5px solid #fff8f0; font-size: 2.2rem; font-weight: 800; color: #fff; cursor: pointer; }
+.mg-dilemme-btn.is-partager { background: #1a8f7d; }
+.mg-dilemme-btn.is-trahir { background: #8a1f66; }
+.mg-dilemme-btn.is-picked { box-shadow: 0 0 0 6px var(--yellow); }
+.mg-dilemme-btn:disabled:not(.is-picked) { opacity: 0.45; }

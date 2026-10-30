@@ -147,6 +147,7 @@ function BetsTv({ state, round }) {
         <Fighter state={state} round={round} camp="bleu" size={190} />
       </div>
       <p className="duel-bets-title">Les paris sont ouverts !</p>
+      {round.mg?.rule && <p className="duel-rule">{round.mg.rule}</p>}
       <p className="duel-bets-count">
         <strong>{n}</strong> / {of} ont parié
       </p>
@@ -428,6 +429,7 @@ function BetButtons({ state, round, my, vote }) {
   return (
     <div className="duel-betpad">
       <h1>Qui va gagner ?</h1>
+      {round.mg?.rule && <p className="duel-rule">{round.mg.rule}</p>}
       <p className="muted">Ton pari est secret. Tu peux changer jusqu’à la révélation.</p>
       {['rouge', 'bleu'].map((camp) => {
         const p = playerOf(state, idOf(round, camp));

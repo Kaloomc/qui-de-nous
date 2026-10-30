@@ -171,7 +171,8 @@ function forceResult(game) {
 function finishDuel(game, res) {
   const d = data(game);
   const winner = D.CAMPS.includes(res?.winner) ? res.winner : 'égalité';
-  d.outcome = { winner, details: res?.details ?? null };
+  // `res.sips` : gorgées propres au mini-jeu par camp (ex. Dilemme en or), qui remplacent le calcul habituel.
+  d.outcome = { winner, details: res?.details ?? null, sips: res?.sips ?? null };
   game.reveal(game.roundId);
 }
 
@@ -355,6 +356,7 @@ export default {
     const king = r.king && d.kingId === r.king.id ? r.king : null;
     const { winner, details } = d.outcome;
     const settled = D.settleDuel({ winner, red: d.red, blue: d.blue, bets, bettors: d.bettors ?? [], cote, kingId: king?.id ?? null, kingStreak: king?.streak ?? 0 });
+    if (d.outcome.sips) settled.sips = Object.fromEntries(Object.entries(d.outcome.sips).map(([camp, n]) => [camp === 'rouge' ? d.red : d.blue, n]));
     const next = D.nextKing({ king, winner, red: d.red, blue: d.blue, kingMode: options(game).king });
     return {
       red: d.red,
@@ -408,7 +410,7 @@ export default {
       kingId: d.kingId,
       king: options(game).king ? run(game).king : null,
       cote: options(game).cote,
-      mg: mg && !['waiting', 'duelists'].includes(d.step) ? { id: mg.id, name: mg.name, icon: mg.icon, maxMs: mg.maxMs } : null,
+      mg: mg && !['waiting', 'duelists'].includes(d.step) ? { id: mg.id, name: mg.name, icon: mg.icon, maxMs: mg.maxMs, rule: mg.rule ?? null } : null,
       games: d.step === 'game' ? activeIds(game).map((id) => ({ id, name: minigames(game)[id].name, icon: minigames(game)[id].icon })) : null,
       // Compteur sans noms pendant les paris ; les paris eux-mêmes seulement une fois révélés.
       betCount: d.bettors ? { n: Object.keys(betsMap(game, d)).length, of: d.bettors.length } : null,
