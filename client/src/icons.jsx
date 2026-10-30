@@ -153,6 +153,15 @@ const ICONS = {
       <path d="M52 22 L64 8 L76 22 Z" fill="#ffc93c" />
     </>
   ),
+  course: (
+    <>
+      <rect x="14" y="54" width="26" height="40" rx="6" fill="#ff4f8b" />
+      <circle cx="27" cy="42" r="10" fill="#fff8f0" />
+      <path d="M10 100 H110" stroke="#fff8f0" strokeWidth="5" strokeLinecap="round" />
+      <rect x="70" y="70" width="18" height="30" fill="#ffc93c" />
+      <path d="M96 50 h14 v14 h-14 Z" fill="#b46cff" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

@@ -1,5 +1,6 @@
 // Vues des mini-jeux de la partie 2 du mode Duel (même contrat que duelMinigames.jsx : Tv, Duelist, Bettor, Summary).
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { DT_MS, DUCK_H, HIGH, LOW, MAX_FRAMES, OBS_W, RUN_W, STAND_H, makeTrack, simulate } from '../../../shared/runner.js';
 import { TimerBar } from '../components.jsx';
 import { serverNow } from '../lib.js';
 import { preloadVoices, speakQueued, useSpeechStatus } from '../speech.js';
@@ -553,5 +554,137 @@ Plateau.Bettor = ({ play, state }) =>
     </div>
   );
 
-export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil, plateau: Plateau };
+// ---------- Course d'obstacles ----------
+
+const LANE_W = 640;
+const LANE_H = 170;
+const GROUND = 130;
+
+function useRaceFrame(play, state) {
+  const [frame, setFrame] = useState(0);
+  useEffect(() => {
+    if (play.startedAt == null || state?.paused) return undefined;
+    let id;
+    const loop = () => {
+      setFrame(Math.max(0, Math.floor((serverNow(state) - play.startedAt) / DT_MS)));
+      id = requestAnimationFrame(loop);
+    };
+    id = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(id);
+  }, [play.startedAt, state?.paused, state?.clockOffset]);
+  return Math.min(frame, MAX_FRAMES);
+}
+
+/** Un couloir : le coureur reste à gauche, le décor défile. Rendu dans un canvas à partir de la simulation partagée. */
+function Lane({ track, events, frame, camp, deadAt }) {
+  const ref = useRef(null);
+  const res = simulate(track, events, deadAt ? Math.min(frame, deadAt) : frame);
+  useEffect(() => {
+    const c = ref.current;
+    if (!c) return;
+    const g = c.getContext('2d');
+    g.clearRect(0, 0, LANE_W, LANE_H);
+    g.fillStyle = 'rgba(255,255,255,0.07)';
+    g.fillRect(0, 0, LANE_W, LANE_H);
+    g.fillStyle = '#fff8f0';
+    g.fillRect(0, GROUND, LANE_W, 4);
+    const rx = 90;
+    for (const o of track) {
+      const sx = rx + (o.x - res.x);
+      if (sx < -40 || sx > LANE_W + 40) continue;
+      const band = o.kind === 'low' ? LOW : HIGH;
+      g.fillStyle = o.kind === 'low' ? '#ffc93c' : '#b46cff';
+      g.fillRect(sx, GROUND - band.top, OBS_W, band.top - band.bottom);
+      g.fillStyle = '#14102a';
+      g.font = 'bold 18px sans-serif';
+      g.fillText(o.kind === 'low' ? '▲' : '▼', sx + 7, GROUND - band.top + 20);
+    }
+    const h = res.duck ? DUCK_H : STAND_H;
+    g.fillStyle = camp === 'rouge' ? '#ff3b4e' : '#2f7bff';
+    g.fillRect(rx, GROUND - res.y - h, RUN_W, h);
+    g.fillStyle = '#fff8f0';
+    g.fillRect(rx + 18, GROUND - res.y - h + 8, 6, 6);
+    if (deadAt && frame >= deadAt) {
+      g.fillStyle = 'rgba(20,16,42,0.55)';
+      g.fillRect(0, 0, LANE_W, LANE_H);
+      g.fillStyle = '#fff8f0';
+      g.font = 'bold 34px sans-serif';
+      g.fillText('💥 Tombé !', LANE_W / 2 - 80, 80);
+    }
+  });
+  return <canvas ref={ref} className={`mg-lane is-${camp}`} width={LANE_W} height={LANE_H} aria-label={`Couloir ${CAMP_LABEL[camp]} : ${Math.round(res.x)} m`} />;
+}
+
+function deadFrom(play, camp, track, events, frame) {
+  if (play.dead?.[camp]) return play.dead[camp];
+  return simulate(track, events, frame).deadAt;
+}
+
+const Course = {
+  Tv({ play, state }) {
+    const track = useMemo(() => makeTrack(play.seed), [play.seed]);
+    const frame = useRaceFrame(play, state);
+    return (
+      <div className="mg-course">
+        {['rouge', 'bleu'].map((camp) => (
+          <div key={camp} className="mg-course-row">
+            <strong>{CAMP_LABEL[camp]}</strong>
+            <Lane track={track} events={play.events[camp]} frame={frame} camp={camp} deadAt={deadFrom(play, camp, track, play.events[camp], frame)} />
+          </div>
+        ))}
+        <p className="duel-eyebrow">Le dernier debout gagne · touche = saute, glisse vers le bas = se baisse</p>
+      </div>
+    );
+  },
+  Duelist({ play, act, side, state }) {
+    const track = useMemo(() => makeTrack(play.seed), [play.seed]);
+    const frame = useRaceFrame(play, state);
+    const [mine, setMine] = useState([]);
+    const touch = useRef(null);
+    const send = (k) => {
+      const f = Math.max(0, Math.floor((serverNow(state) - play.startedAt) / DT_MS));
+      setMine((list) => [...list, { f, k }]);
+      act({ k, f });
+    };
+    const events = mine.length ? mine : play.events[side];
+    const dead = deadFrom(play, side, track, events, frame);
+    return (
+      <div className="mg-course-duelist">
+        <Lane track={track} events={events} frame={frame} camp={side} deadAt={dead} />
+        <div
+          className="mg-course-pad"
+          onPointerDown={(e) => {
+            e.currentTarget.setPointerCapture?.(e.pointerId);
+            touch.current = { y: e.clientY, ducking: false };
+          }}
+          onPointerMove={(e) => {
+            const t = touch.current;
+            if (t && !t.ducking && e.clientY - t.y > 28) {
+              t.ducking = true;
+              send('d1');
+            }
+          }}
+          onPointerUp={() => {
+            const t = touch.current;
+            touch.current = null;
+            if (!t) return;
+            if (t.ducking) send('d0');
+            else send('j');
+          }}
+          onPointerCancel={() => {
+            if (touch.current?.ducking) send('d0');
+            touch.current = null;
+          }}
+        >
+          <strong>TOUCHE = SAUTE</strong>
+          <span>glisse vers le bas = baisse-toi</span>
+        </div>
+      </div>
+    );
+  },
+  Summary: ({ details }) => (details?.distance ? <p className="duel-cote-line">Distance : ROUGE {details.distance.rouge} – {details.distance.bleu} BLEU</p> : null),
+};
+Course.Bettor = Course.Tv;
+
+export const MG_VIEWS_2 = { defuse: Defuse, code: Code, simon2: Simon2, crash: Crash, dilemme: Dilemme, soleil: Soleil, plateau: Plateau, course: Course };
 export { CAMP_LABEL, Score, useBlocked };
