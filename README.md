@@ -67,6 +67,7 @@ Tous les jeux partagent le même lobby, le mode auto, les minuteurs, le compteur
   - [6. Déroulement d'une partie](#6-déroulement-dune-partie)
   - [Réglages de la partie (mode auto, minuteurs, pause)](#réglages-de-la-partie)
   - [Mode soirée](#mode-soirée)
+  - [Mode Duel](#mode-duel)
   - [Mode 18+](#mode-18)
   - [Genre des joueurs et vie privée](#genre-des-joueurs-et-vie-privée)
   - [Tirage équitable](#tirage-équitable)
@@ -454,6 +455,31 @@ Un jeu de phrases à trou, 100 % téléphone pour écrire, la TV pour rire. Il s
 - **Confidentialité.** Ni la TV ni les autres téléphones ne reçoivent le lien entre une réponse et son auteur avant la fin de la manche (un test sur de vrais sockets, plus un test de mutation qui casse volontairement la protection, le vérifient). Un joueur ne sait que quelle réponse est la sienne, sans le montrer aux autres.
 - **Censure.** L'hôte peut masquer une réponse déplacée en la touchant sur la TV : elle est cachée et son auteur sort du classement de la manche.
 - Il fait partie du mode soirée (2 à 3 manches), du mode 18+ (phrases et cartes 18+ séparées) et du récap (trophées *la meilleure plume* et *le roi du Golden*).
+
+### Mode Duel
+
+Une carte « Mode Duel » trône en haut de la grille, à côté du mode soirée. À partir de 3 joueurs (2 duellistes + 1 parieur, 5 ou plus conseillés, 30 au plus), le mode tourne jusqu'à ce que l'hôte l'arrête (Pause, **Passer ce duel**, **Terminer le mode** qui ramène à la grille).
+
+**Un duel** : roulette des duellistes (ROUGE à gauche, BLEU à droite, tirage équitable via le registre de projecteurs, jamais le même joueur ni la même paire deux duels de suite à partir de 4 joueurs) → roulette des mini-jeux (jamais deux fois le même) → paris secrets de 15 s (modifiables jusqu'à la révélation, compteur « X / N ont parié » sans noms) → révélation des paris et cote en direct → les deux duellistes appuient sur « Prêt » (5 s) → duel → verdict et gorgées → duel suivant tout seul. Pendant le duel, les parieurs envoient des emojis et des confettis (1 par seconde, sans effet sur le jeu).
+
+**Options** (écran du lobby) : *Roi de la colline* (le gagnant reste et garde son camp, 5 victoires d'affilée au plus), *cote* Standard ou Hardcore, mini-jeux actifs (au moins un).
+
+**Gorgées** (`server/rules/duel.js`, une seule fonction pour tout le mode). B = nombre de parieurs qui avaient misé sur le vainqueur.
+
+| | Perdant | Parieurs sur le perdant | Sans pari |
+|---|---|---|---|
+| Standard | 1 + ⌈B/2⌉ (8 au plus) : B=0 → 1, B=6 → 4, B=14 → 8 | 1 | 1 |
+| Hardcore | B, au moins 1 (15 au plus) | 1 | 1 |
+
+Le vainqueur ne boit jamais. Le roi qui chute ajoute ses victoires consécutives (sans dépasser le plafond). Égalité : les deux duellistes boivent 1, les parieurs sont épargnés.
+
+**Cas limites** : un duelliste déconnecté est attendu 10 s, puis le duel est annulé (aucun pari perdant, aucune gorgée) et un autre est tiré, sauf si le résultat est déjà là. Pas « Prêt » en 5 s : même chose. Un joueur qui arrive pendant le duel parie au suivant. Moins de 3 joueurs connectés : le mode attend, puis reprend seul.
+
+**Les 5 mini-jeux** (≈ 40 s) : Pierre-feuille-ciseaux (meilleur des 3, choix secret), Culture G éclair (premier juste marque, 2 points gagnent), Duel du Feu (voix et mots pièges de Réflexes, faux départ = défaite), Simon (mêmes pavés, formes et couleurs), Couleur piège (couleur de l'encre, score = bonnes − 2 × erreurs). Les temps de réaction sont mesurés côté serveur et compensés de la latence de chaque téléphone (médiane de 5 allers-retours) ; moins de 20 ms d'écart : on rejoue, puis égalité.
+
+**Ajouter un mini-jeu** : créer `server/duel/minigames/<id>.js` (le contrat est décrit en tête de `server/duel/minigames/index.js` : `prepare`, `begin`, `action`, `result`, `resolve`, `view`), l'ajouter à `MINIGAMES`, écrire ses trois vues dans `client/src/games/duelMinigames.jsx` (`Tv`, `Duelist`, `Bettor`, `Summary`) et une icône dans `client/src/icons.jsx`. Le moteur gère étapes, minuteurs, « prêts », paris, gorgées et annulations ; la vue d'un mini-jeu ne doit jamais contenir le secret d'un duelliste (voir `server/duel-leak.test.js`).
+
+**Ajouter une question de Culture G** : une ligne dans le dernier lot `scripts/culture-rows-N.mjs` : `[question, bonne réponse, 3 mauvaises, catégorie, source]`. La source est l'URL d'une page où vous avez *lu* le fait (pas un lien de mémoire). Puis `node scripts/build-culture-duel.mjs` et `npm run check-culture` (format, 150 questions au moins, doublons, sources).
 
 ### Compteur de gorgées
 
