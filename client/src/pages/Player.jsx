@@ -56,6 +56,13 @@ export default function Player({ code }) {
     return () => socket.off('kicked', onKicked);
   }, []);
 
+  // Mode Duel : le serveur mesure la latence de ce téléphone (plusieurs allers-retours) pour départager les temps de réaction.
+  useEffect(() => {
+    const onPing = (ack) => typeof ack === 'function' && ack();
+    socket.on('latency:ping', onPing);
+    return () => socket.off('latency:ping', onPing);
+  }, []);
+
   // Vote rattaché à l'identifiant unique de la manche (voir vote.js) : jamais repris d'une manche ou d'un jeu précédent.
   const roundId = roundKey(state);
   const currentVote = currentVoteOf(myVote, state);

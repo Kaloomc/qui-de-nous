@@ -6292,3 +6292,64 @@ body.loup-night {
   .duel-fighter.is-locked .duel-fighter-avatar, .duel-vs.is-hit, .duel-gamebox.is-locked { animation: none; }
   .duel-cheer, .duel-cheer.is-confetti i { animation-duration: 0.01s; animation-delay: 0s; }
 }
+
+/* ---------- Mode Duel : mini-jeux ---------- */
+.duel-score { display: flex; justify-content: center; align-items: baseline; gap: 14px; font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 800; }
+.duel-score .is-rouge { color: var(--duel-red); }
+.duel-score .is-bleu { color: #6fa3ff; }
+.mg-pfc, .mg-simon, .mg-couleur, .mg-feu, .mg-culture { display: grid; justify-items: center; gap: 14px; width: 100%; }
+.mg-pfc-hands { display: flex; gap: clamp(20px, 8vw, 120px); }
+.mg-pfc-hand { display: grid; justify-items: center; gap: 4px; padding: 18px 40px; border-radius: 26px; border: 4px solid transparent; min-width: 200px; }
+.mg-pfc-hand.is-rouge { background: rgba(255, 59, 78, 0.25); border-color: var(--duel-red); }
+.mg-pfc-hand.is-bleu { background: rgba(47, 123, 255, 0.25); border-color: var(--duel-blue); }
+.mg-pfc-hand.is-win { box-shadow: 0 0 0 6px var(--yellow); }
+.mg-hand-icon { font-size: clamp(4rem, 10vw, 8rem); line-height: 1; }
+.mg-pfc-hand.is-shown .mg-hand-icon { animation: duel-impact 0.5s ease-out; }
+.mg-pfc-pad { display: grid; gap: 14px; text-align: center; }
+.mg-pfc-buttons { display: grid; gap: 12px; }
+.mg-pfc-btn { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 96px; border-radius: 22px; border: 3px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 1.6rem; font-weight: 800; cursor: pointer; }
+.mg-pfc-btn span { font-size: 3rem; }
+.mg-pfc-btn.is-picked { border-color: var(--yellow); background: rgba(255, 201, 60, 0.2); }
+.mg-pfc-btn:disabled { opacity: 0.8; }
+.mg-pfc-shown { font-size: 2.6rem; line-height: 1.3; }
+.mg-pads { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; width: min(340px, 90%); }
+.mg-pads.is-big { width: 100%; gap: 14px; }
+.mg-pad { aspect-ratio: 1.3; min-height: 88px; border-radius: 22px; border: 4px solid rgba(255, 255, 255, 0.35); background: color-mix(in srgb, var(--pad) 38%, #14102a); color: #fff; font-size: 3.4rem; cursor: pointer; transition: transform 0.08s, background 0.08s; }
+.mg-pad.is-lit { background: var(--pad); border-color: #fff; transform: scale(1.06); box-shadow: 0 0 36px var(--pad); color: #14102a; }
+.mg-pad:disabled { cursor: default; }
+.mg-simon-progress { display: grid; gap: 8px; width: min(620px, 94%); }
+.mg-simon-row { display: grid; grid-template-columns: 90px 1fr auto; align-items: center; gap: 10px; padding: 6px 12px; border-radius: 12px; }
+.mg-simon-row.is-rouge { background: rgba(255, 59, 78, 0.2); }
+.mg-simon-row.is-bleu { background: rgba(47, 123, 255, 0.2); }
+.mg-simon-row.is-out { opacity: 0.55; }
+.mg-simon-dots { display: flex; flex-wrap: wrap; gap: 5px; }
+.mg-simon-dots i { width: 14px; height: 14px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); }
+.mg-simon-dots i.is-on { background: var(--yellow); }
+.mg-simon-duelist { display: grid; gap: 14px; text-align: center; }
+.mg-gauges { display: flex; gap: 60px; align-items: flex-end; height: 34vh; }
+.mg-gauge { display: grid; grid-template-rows: 1fr auto auto; justify-items: center; align-items: end; gap: 4px; height: 100%; width: 140px; }
+.mg-gauge-bar { width: 100%; border-radius: 14px 14px 0 0; transition: height 0.25s; }
+.mg-gauge.is-rouge .mg-gauge-bar { background: var(--duel-red); }
+.mg-gauge.is-bleu .mg-gauge-bar { background: var(--duel-blue); }
+.mg-gauge strong { font-size: 2.4rem; }
+.mg-couleur-duelist { display: grid; gap: 12px; text-align: center; }
+.mg-stroop-word { font-size: clamp(3.4rem, 18vw, 6rem); font-weight: 800; line-height: 1.1; }
+.mg-stroop-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mg-stroop-btn { min-height: 92px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.5); background: #2a2254; color: #fff; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.06em; cursor: pointer; }
+.mg-stroop-btn:active { background: #3d3278; }
+.mg-feu-word { font-size: clamp(4rem, 14vw, 11rem); font-weight: 800; line-height: 1; text-align: center; overflow-wrap: anywhere; }
+.mg-feu-word.is-small { font-size: clamp(1.6rem, 4vw, 3rem); }
+.mg-feu.is-feu .mg-feu-word { color: var(--yellow); text-shadow: 0 0 40px #ff7a59; animation: duel-impact 0.45s ease-out; }
+.mg-feu-duelist { flex: 1; display: grid; gap: 12px; text-align: center; align-content: center; }
+.mg-feu-btn { min-height: 38vh; border-radius: 32px; border: 6px solid #fff8f0; background: radial-gradient(circle, #ff7a59, #c4162b); color: #fff; font-size: 3.4rem; font-weight: 800; cursor: pointer; }
+.mg-feu-btn:disabled { filter: grayscale(0.8); opacity: 0.6; }
+.mg-question { font-size: clamp(1.8rem, 3.6vw, 3.2rem); text-align: center; max-width: 1300px; line-height: 1.15; }
+.mg-question.is-small { font-size: 1.35rem; }
+.mg-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: min(1200px, 100%); }
+.mg-choice { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 10px 16px; border-radius: 18px; border: 3px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: #fff; font-size: clamp(1.1rem, 2vw, 1.8rem); font-weight: 700; text-align: left; cursor: pointer; }
+.mg-choice b { display: grid; place-items: center; min-width: 40px; height: 40px; border-radius: 50%; background: var(--yellow); color: #14102a; }
+.mg-choice.is-right { background: rgba(47, 209, 138, 0.35); border-color: var(--green); }
+.mg-choice.is-dim { opacity: 0.4; }
+.mg-choice:disabled { cursor: default; }
+.mg-culture-duelist { display: grid; gap: 12px; }
+.mg-culture-duelist .mg-choices { grid-template-columns: 1fr; }

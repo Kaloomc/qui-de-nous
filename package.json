@@ -17,6 +17,7 @@
     "loupsoak": "node --expose-gc scripts/loup-soak.js",
     "savantsoak": "node --expose-gc scripts/savant-soak.js",
     "check-facts": "node scripts/check-facts.js",
+    "check-culture": "node scripts/check-culture-duel.js",
     "check-nbm": "node scripts/check-nbm.js",
     "check-genre": "node scripts/check-genre-stereotypes.js",
     "sample": "node scripts/content-sample.js",

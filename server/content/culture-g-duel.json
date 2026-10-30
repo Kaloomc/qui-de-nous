@@ -1,0 +1,2017 @@
+[
+ {
+  "id": "cg001",
+  "question": "En quelle année la tour Eiffel a-t-elle été inaugurée ?",
+  "choix": [
+   "1869",
+   "1900",
+   "1889",
+   "1912"
+  ],
+  "bonne": 2,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "cg002",
+  "question": "Qui a dirigé la construction de la tour Eiffel ?",
+  "choix": [
+   "Georges Haussmann",
+   "Gustave Eiffel",
+   "Auguste Bartholdi",
+   "Victor Baltard"
+  ],
+  "bonne": 1,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "cg003",
+  "question": "Combien de rivets compte environ la tour Eiffel ?",
+  "choix": [
+   "2,5 millions",
+   "25 000",
+   "250 000",
+   "25 millions"
+  ],
+  "bonne": 0,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "cg004",
+  "question": "Depuis quelle année la tour Eiffel est-elle inscrite à l’UNESCO (rives de la Seine) ?",
+  "choix": [
+   "1964",
+   "1979",
+   "2001",
+   "1991"
+  ],
+  "bonne": 3,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Tour_Eiffel"
+ },
+ {
+  "id": "cg005",
+  "question": "Combien de planètes compte le Système solaire ?",
+  "choix": [
+   "7",
+   "9",
+   "8",
+   "10"
+  ],
+  "bonne": 2,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Syst%C3%A8me_solaire"
+ },
+ {
+  "id": "cg006",
+  "question": "Quelle planète du Système solaire est la plus grande ?",
+  "choix": [
+   "Saturne",
+   "Jupiter",
+   "Neptune",
+   "La Terre"
+  ],
+  "bonne": 1,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Syst%C3%A8me_solaire"
+ },
+ {
+  "id": "cg007",
+  "question": "Quelle est la planète la plus éloignée du Soleil ?",
+  "choix": [
+   "Neptune",
+   "Uranus",
+   "Saturne",
+   "Pluton"
+  ],
+  "bonne": 0,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Syst%C3%A8me_solaire"
+ },
+ {
+  "id": "cg008",
+  "question": "Quel type d’étoile est le Soleil ?",
+  "choix": [
+   "Une géante rouge",
+   "Une naine blanche",
+   "Une supernova",
+   "Une naine jaune"
+  ],
+  "bonne": 3,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Syst%C3%A8me_solaire"
+ },
+ {
+  "id": "cg009",
+  "question": "Quelle part de la masse du Système solaire le Soleil représente-t-il ?",
+  "choix": [
+   "Environ 50 %",
+   "Environ 75 %",
+   "Environ 99,85 %",
+   "Environ 90 %"
+  ],
+  "bonne": 2,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Syst%C3%A8me_solaire"
+ },
+ {
+  "id": "cg010",
+  "question": "Lequel de ces astres est une planète naine ?",
+  "choix": [
+   "Titan",
+   "Cérès",
+   "Ganymède",
+   "Io"
+  ],
+  "bonne": 1,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Syst%C3%A8me_solaire"
+ },
+ {
+  "id": "cg011",
+  "question": "Combien d’os constants possède un adulte environ ?",
+  "choix": [
+   "206",
+   "106",
+   "306",
+   "412"
+  ],
+  "bonne": 0,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Squelette_humain"
+ },
+ {
+  "id": "cg012",
+  "question": "Quel est le plus long os du corps humain ?",
+  "choix": [
+   "Le tibia",
+   "L’humérus",
+   "Le radius",
+   "Le fémur"
+  ],
+  "bonne": 3,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Squelette_humain"
+ },
+ {
+  "id": "cg013",
+  "question": "Quel est le plus petit os du corps humain ?",
+  "choix": [
+   "Le coccyx",
+   "La rotule",
+   "L’étrier",
+   "Le pisiforme"
+  ],
+  "bonne": 2,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Squelette_humain"
+ },
+ {
+  "id": "cg014",
+  "question": "Combien de vertèbres cervicales compte la colonne vertébrale ?",
+  "choix": [
+   "5",
+   "7",
+   "12",
+   "9"
+  ],
+  "bonne": 1,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Squelette_humain"
+ },
+ {
+  "id": "cg015",
+  "question": "Combien de paires de côtes compte le thorax humain ?",
+  "choix": [
+   "12",
+   "10",
+   "14",
+   "8"
+  ],
+  "bonne": 0,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Squelette_humain"
+ },
+ {
+  "id": "cg016",
+  "question": "De quoi se nourrit presque exclusivement la baleine bleue ?",
+  "choix": [
+   "De thon",
+   "De phoques",
+   "D’algues",
+   "De krill"
+  ],
+  "bonne": 3,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Baleine_bleue"
+ },
+ {
+  "id": "cg017",
+  "question": "Quelle est la longueur moyenne d’une baleine bleue ?",
+  "choix": [
+   "8 à 10 mètres",
+   "12 à 15 mètres",
+   "25 à 27 mètres",
+   "40 à 45 mètres"
+  ],
+  "bonne": 2,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Baleine_bleue"
+ },
+ {
+  "id": "cg018",
+  "question": "Combien de temps dure la gestation d’une baleine bleue ?",
+  "choix": [
+   "3 mois",
+   "10 à 12 mois",
+   "6 mois",
+   "18 mois"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Baleine_bleue"
+ },
+ {
+  "id": "cg019",
+  "question": "Dans quel océan l’Amazone se jette-t-elle ?",
+  "choix": [
+   "L’océan Atlantique",
+   "L’océan Pacifique",
+   "L’océan Indien",
+   "La mer des Caraïbes"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Amazone_(fleuve)"
+ },
+ {
+  "id": "cg020",
+  "question": "Quelle part du débit des fleuves du monde l’Amazone représente-t-elle environ ?",
+  "choix": [
+   "Un dixième",
+   "Un tiers",
+   "Un centième",
+   "Un cinquième"
+  ],
+  "bonne": 3,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Amazone_(fleuve)"
+ },
+ {
+  "id": "cg021",
+  "question": "Quel pays l’Amazone ne traverse-t-elle pas ?",
+  "choix": [
+   "Le Pérou",
+   "La Colombie",
+   "L’Argentine",
+   "Le Brésil"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Amazone_(fleuve)"
+ },
+ {
+  "id": "cg022",
+  "question": "Quelle altitude officielle mesure l’Everest (2020) ?",
+  "choix": [
+   "8 611 m",
+   "8 848,86 m",
+   "8 091 m",
+   "9 100 m"
+  ],
+  "bonne": 1,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "cg023",
+  "question": "Qui a atteint le sommet de l’Everest en premier, le 29 mai 1953 ?",
+  "choix": [
+   "Edmund Hillary et Tensing Norgay",
+   "Reinhold Messner et Peter Habeler",
+   "George Mallory et Andrew Irvine",
+   "Maurice Herzog et Louis Lachenal"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "cg024",
+  "question": "Dans quelle chaîne de montagnes se trouve l’Everest ?",
+  "choix": [
+   "Les Andes",
+   "Les Alpes",
+   "Le Karakoram",
+   "L’Himalaya"
+  ],
+  "bonne": 3,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "cg025",
+  "question": "À quelle frontière se trouve l’Everest ?",
+  "choix": [
+   "Inde et Pakistan",
+   "Inde et Bhoutan",
+   "Népal et Chine",
+   "Chine et Mongolie"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "cg026",
+  "question": "Dans quelle ville est née Marie Curie ?",
+  "choix": [
+   "Paris",
+   "Varsovie",
+   "Prague",
+   "Vienne"
+  ],
+  "bonne": 1,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "cg027",
+  "question": "Quel élément chimique Marie Curie a-t-elle nommé d’après son pays natal ?",
+  "choix": [
+   "Le polonium",
+   "Le radium",
+   "Le francium",
+   "Le germanium"
+  ],
+  "bonne": 0,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "cg028",
+  "question": "Combien de prix Nobel Marie Curie a-t-elle reçus ?",
+  "choix": [
+   "Un",
+   "Trois",
+   "Quatre",
+   "Deux"
+  ],
+  "bonne": 3,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "cg029",
+  "question": "En quelle année Marie Curie a-t-elle partagé le Nobel de physique avec Pierre Curie et Henri Becquerel ?",
+  "choix": [
+   "1895",
+   "1911",
+   "1903",
+   "1921"
+  ],
+  "bonne": 2,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "cg030",
+  "question": "Dans quel domaine Marie Curie a-t-elle reçu son Nobel de 1911 ?",
+  "choix": [
+   "La physique",
+   "La chimie",
+   "La médecine",
+   "La littérature"
+  ],
+  "bonne": 1,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ },
+ {
+  "id": "cg031",
+  "question": "Où est né Léonard de Vinci ?",
+  "choix": [
+   "À Vinci, en Toscane",
+   "À Florence",
+   "À Rome",
+   "À Milan"
+  ],
+  "bonne": 0,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/L%C3%A9onard_de_Vinci"
+ },
+ {
+  "id": "cg032",
+  "question": "Dans quel pays est mort Léonard de Vinci ?",
+  "choix": [
+   "L’Italie",
+   "L’Espagne",
+   "L’Angleterre",
+   "La France"
+  ],
+  "bonne": 3,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/L%C3%A9onard_de_Vinci"
+ },
+ {
+  "id": "cg033",
+  "question": "Quel roi a invité Léonard de Vinci en France ?",
+  "choix": [
+   "Louis XIV",
+   "Henri IV",
+   "François Iᵉʳ",
+   "Charles VII"
+  ],
+  "bonne": 2,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/L%C3%A9onard_de_Vinci"
+ },
+ {
+  "id": "cg034",
+  "question": "Laquelle de ces œuvres est de Léonard de Vinci ?",
+  "choix": [
+   "La Naissance de Vénus",
+   "La Cène",
+   "Le Cri",
+   "La Nuit étoilée"
+  ],
+  "bonne": 1,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/L%C3%A9onard_de_Vinci"
+ },
+ {
+  "id": "cg035",
+  "question": "Dans quelle ville se trouve le château du Clos-Lucé, où Léonard est mort ?",
+  "choix": [
+   "Amboise",
+   "Blois",
+   "Chambord",
+   "Tours"
+  ],
+  "bonne": 0,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/L%C3%A9onard_de_Vinci"
+ },
+ {
+  "id": "cg036",
+  "question": "Dans quelle ville est né Victor Hugo ?",
+  "choix": [
+   "Paris",
+   "Lyon",
+   "Rouen",
+   "Besançon"
+  ],
+  "bonne": 3,
+  "categorie": "littérature",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "cg037",
+  "question": "En quelle année paraît Notre-Dame de Paris ?",
+  "choix": [
+   "1802",
+   "1862",
+   "1831",
+   "1789"
+  ],
+  "bonne": 2,
+  "categorie": "littérature",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "cg038",
+  "question": "Quelle pièce de Victor Hugo a provoqué la « bataille » de 1830 ?",
+  "choix": [
+   "Ruy Blas",
+   "Hernani",
+   "Cyrano de Bergerac",
+   "Lorenzaccio"
+  ],
+  "bonne": 1,
+  "categorie": "littérature",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "cg039",
+  "question": "Où Victor Hugo a-t-il été transféré après ses funérailles nationales en 1885 ?",
+  "choix": [
+   "Au Panthéon",
+   "Aux Invalides",
+   "À Notre-Dame",
+   "Au Père-Lachaise"
+  ],
+  "bonne": 0,
+  "categorie": "littérature",
+  "source": "https://fr.wikipedia.org/wiki/Victor_Hugo"
+ },
+ {
+  "id": "cg040",
+  "question": "Dans quelle ville est né Mozart ?",
+  "choix": [
+   "Vienne",
+   "Berlin",
+   "Prague",
+   "Salzbourg"
+  ],
+  "bonne": 3,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "cg041",
+  "question": "À quel âge Mozart est-il mort ?",
+  "choix": [
+   "25 ans",
+   "45 ans",
+   "35 ans",
+   "56 ans"
+  ],
+  "bonne": 2,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "cg042",
+  "question": "Dans quelle ville Mozart est-il mort en 1791 ?",
+  "choix": [
+   "Salzbourg",
+   "Vienne",
+   "Munich",
+   "Paris"
+  ],
+  "bonne": 1,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "cg043",
+  "question": "Quel est le titre d’un opéra de Mozart créé à Munich en 1781 ?",
+  "choix": [
+   "Idoménée",
+   "Don Carlos",
+   "Fidelio",
+   "Carmen"
+  ],
+  "bonne": 0,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "cg044",
+  "question": "Quel empereur a unifié la Chine en 221 av. J.-C. et fait bâtir un grand mur au nord ?",
+  "choix": [
+   "Han Wudi",
+   "Kubilai Khan",
+   "Puyi",
+   "Qin Shi Huang"
+  ],
+  "bonne": 3,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Grande_Muraille_de_Chine"
+ },
+ {
+  "id": "cg045",
+  "question": "Sous quelle dynastie la partie la plus connue de la Grande Muraille a-t-elle été bâtie ?",
+  "choix": [
+   "Les Tang",
+   "Les Qing",
+   "Les Ming",
+   "Les Han"
+  ],
+  "bonne": 2,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Grande_Muraille_de_Chine"
+ },
+ {
+  "id": "cg046",
+  "question": "En quelle année la Grande Muraille est-elle inscrite à l’UNESCO ?",
+  "choix": [
+   "1972",
+   "1987",
+   "1999",
+   "2005"
+  ],
+  "bonne": 1,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Grande_Muraille_de_Chine"
+ },
+ {
+  "id": "cg047",
+  "question": "À quel pharaon est attribuée la Grande Pyramide de Gizeh ?",
+  "choix": [
+   "Khéops",
+   "Toutânkhamon",
+   "Ramsès II",
+   "Akhénaton"
+  ],
+  "bonne": 0,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
+ },
+ {
+  "id": "cg048",
+  "question": "Quelle était la hauteur initiale de la pyramide de Khéops ?",
+  "choix": [
+   "Environ 80 mètres",
+   "Environ 200 mètres",
+   "Environ 110 mètres",
+   "Environ 146 mètres"
+  ],
+  "bonne": 3,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
+ },
+ {
+  "id": "cg049",
+  "question": "Où se trouve la pyramide de Khéops ?",
+  "choix": [
+   "À Louxor",
+   "À Alexandrie",
+   "À Gizeh",
+   "À Assouan"
+  ],
+  "bonne": 2,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Pyramide_de_Kh%C3%A9ops"
+ },
+ {
+  "id": "cg050",
+  "question": "Quel est le plus grand océan du monde ?",
+  "choix": [
+   "L’Atlantique",
+   "Le Pacifique",
+   "L’océan Indien",
+   "L’océan Arctique"
+  ],
+  "bonne": 1,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "cg051",
+  "question": "Qui a donné le nom de « Pacifique » à l’océan, en 1520 ?",
+  "choix": [
+   "Magellan",
+   "Christophe Colomb",
+   "Vasco de Gama",
+   "James Cook"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "cg052",
+  "question": "Quelle fosse du Pacifique dépasse 10 000 m de profondeur ?",
+  "choix": [
+   "La fosse de Porto Rico",
+   "La fosse de la Sonde",
+   "La fosse de Java",
+   "La fosse des Mariannes"
+  ],
+  "bonne": 3,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Oc%C3%A9an_Pacifique"
+ },
+ {
+  "id": "cg053",
+  "question": "Dans quel continent se trouve le Sahara ?",
+  "choix": [
+   "L’Asie",
+   "L’Australie",
+   "L’Afrique",
+   "L’Amérique du Sud"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Sahara"
+ },
+ {
+  "id": "cg054",
+  "question": "Quel est le point culminant du Sahara ?",
+  "choix": [
+   "Le Kilimandjaro",
+   "L’Emi Koussi",
+   "Le mont Kenya",
+   "Le Toubkal"
+  ],
+  "bonne": 1,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Sahara"
+ },
+ {
+  "id": "cg055",
+  "question": "Dans quel pays se trouve l’Emi Koussi, point culminant du Sahara ?",
+  "choix": [
+   "Le Tchad",
+   "L’Algérie",
+   "L’Égypte",
+   "Le Maroc"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Sahara"
+ },
+ {
+  "id": "cg056",
+  "question": "Où s’est déroulée la première Coupe du monde de football, en 1930 ?",
+  "choix": [
+   "En Italie",
+   "Au Brésil",
+   "En France",
+   "En Uruguay"
+  ],
+  "bonne": 3,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "cg057",
+  "question": "Qui a gagné la première Coupe du monde de football ?",
+  "choix": [
+   "L’Argentine",
+   "Le Brésil",
+   "L’Uruguay",
+   "L’Italie"
+  ],
+  "bonne": 2,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "cg058",
+  "question": "Combien de titres mondiaux le Brésil détient-il au football ?",
+  "choix": [
+   "Trois",
+   "Cinq",
+   "Quatre",
+   "Sept"
+  ],
+  "bonne": 1,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "cg059",
+  "question": "Tous les combien d’années a lieu la Coupe du monde de football ?",
+  "choix": [
+   "Quatre ans",
+   "Deux ans",
+   "Trois ans",
+   "Cinq ans"
+  ],
+  "bonne": 0,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Coupe_du_monde_de_football"
+ },
+ {
+  "id": "cg060",
+  "question": "Quelle est l’altitude du mont Blanc ?",
+  "choix": [
+   "Environ 3 500 m",
+   "Environ 5 642 m",
+   "Environ 4 000 m",
+   "Environ 4 807 m"
+  ],
+  "bonne": 3,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Blanc"
+ },
+ {
+  "id": "cg061",
+  "question": "Qui a réussi la première ascension du mont Blanc en 1786 ?",
+  "choix": [
+   "Edward Whymper",
+   "Horace-Bénédict de Saussure seul",
+   "Jacques Balmat et Michel Paccard",
+   "Lionel Terray"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Blanc"
+ },
+ {
+  "id": "cg062",
+  "question": "Entre quels pays se trouve le sommet du mont Blanc ?",
+  "choix": [
+   "La France et la Suisse",
+   "La France et l’Italie",
+   "La Suisse et l’Italie",
+   "La France et l’Autriche"
+  ],
+  "bonne": 1,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Blanc"
+ },
+ {
+  "id": "cg063",
+  "question": "Quel architecte a conçu la pyramide de verre du Louvre ?",
+  "choix": [
+   "Ieoh Ming Pei",
+   "Jean Nouvel",
+   "Renzo Piano",
+   "Norman Foster"
+  ],
+  "bonne": 0,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "cg064",
+  "question": "En quelle année la pyramide du Louvre a-t-elle été inaugurée ?",
+  "choix": [
+   "1969",
+   "1979",
+   "2001",
+   "1989"
+  ],
+  "bonne": 3,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "cg065",
+  "question": "En quelle année le musée du Louvre a-t-il ouvert ?",
+  "choix": [
+   "1715",
+   "1889",
+   "1793",
+   "1850"
+  ],
+  "bonne": 2,
+  "categorie": "monuments",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "cg066",
+  "question": "Laquelle de ces œuvres est exposée au Louvre ?",
+  "choix": [
+   "Le Penseur",
+   "La Victoire de Samothrace",
+   "Les Tournesols",
+   "La Persistance de la mémoire"
+  ],
+  "bonne": 1,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Mus%C3%A9e_du_Louvre"
+ },
+ {
+  "id": "cg067",
+  "question": "À quelle distance moyenne se trouve la Lune de la Terre ?",
+  "choix": [
+   "Environ 384 000 km",
+   "Environ 38 400 km",
+   "Environ 3 840 000 km",
+   "Environ 150 millions de km"
+  ],
+  "bonne": 0,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "cg068",
+  "question": "Quelle mission a posé les premiers humains sur la Lune ?",
+  "choix": [
+   "Apollo 13",
+   "Gemini 4",
+   "Spoutnik 2",
+   "Apollo 11"
+  ],
+  "bonne": 3,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "cg069",
+  "question": "Quel astronaute a marché le premier sur la Lune en 1969 ?",
+  "choix": [
+   "Buzz Aldrin",
+   "Youri Gagarine",
+   "Neil Armstrong",
+   "John Glenn"
+  ],
+  "bonne": 2,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "cg070",
+  "question": "En combien de jours environ la Lune fait-elle le tour de la Terre ?",
+  "choix": [
+   "7 jours",
+   "27 jours",
+   "14 jours",
+   "365 jours"
+  ],
+  "bonne": 1,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "cg071",
+  "question": "Combien de jours dure environ le cycle des phases de la Lune ?",
+  "choix": [
+   "29,5 jours",
+   "15 jours",
+   "24 jours",
+   "33 jours"
+  ],
+  "bonne": 0,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Lune"
+ },
+ {
+  "id": "cg072",
+  "question": "Combien de vertèbres cervicales a une girafe ?",
+  "choix": [
+   "14",
+   "25",
+   "40",
+   "7"
+  ],
+  "bonne": 3,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "cg073",
+  "question": "Combien de temps dure la gestation d’une girafe ?",
+  "choix": [
+   "Environ 5 mois",
+   "Environ 9 mois",
+   "Environ 15 mois",
+   "Environ 24 mois"
+  ],
+  "bonne": 2,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "cg074",
+  "question": "Quelle hauteur une girafe adulte peut-elle atteindre ?",
+  "choix": [
+   "Environ 3 m",
+   "Près de 5,8 m",
+   "Environ 8 m",
+   "Environ 2 m"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Girafe"
+ },
+ {
+  "id": "cg075",
+  "question": "En quelle année a eu lieu le premier Tour de France ?",
+  "choix": [
+   "1903",
+   "1889",
+   "1919",
+   "1936"
+  ],
+  "bonne": 0,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "cg076",
+  "question": "Quel journal est à l’origine du Tour de France ?",
+  "choix": [
+   "Le Figaro",
+   "Le Monde",
+   "L’Équipe",
+   "L’Auto"
+  ],
+  "bonne": 3,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "cg077",
+  "question": "Où se termine traditionnellement le Tour de France ?",
+  "choix": [
+   "Au pied de la tour Eiffel",
+   "Devant le Louvre",
+   "Sur les Champs-Élysées",
+   "À Versailles"
+  ],
+  "bonne": 2,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "cg078",
+  "question": "Lequel de ces coureurs a remporté cinq fois le Tour de France ?",
+  "choix": [
+   "Laurent Fignon",
+   "Eddy Merckx",
+   "Greg LeMond",
+   "Raymond Poulidor"
+  ],
+  "bonne": 1,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "cg079",
+  "question": "Qui a porté le premier maillot jaune du Tour, en 1919 ?",
+  "choix": [
+   "Eugène Christophe",
+   "Henri Pélissier",
+   "Louison Bobet",
+   "Octave Lapize"
+  ],
+  "bonne": 0,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Tour_de_France_cycliste"
+ },
+ {
+  "id": "cg080",
+  "question": "Combien de cases compte un échiquier ?",
+  "choix": [
+   "36",
+   "81",
+   "100",
+   "64"
+  ],
+  "bonne": 3,
+  "categorie": "jeux",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "cg081",
+  "question": "Combien de pièces y a-t-il sur un échiquier au départ ?",
+  "choix": [
+   "16",
+   "24",
+   "32",
+   "40"
+  ],
+  "bonne": 2,
+  "categorie": "jeux",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "cg082",
+  "question": "Combien de pions chaque joueur possède-t-il aux échecs ?",
+  "choix": [
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "bonne": 1,
+  "categorie": "jeux",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "cg083",
+  "question": "Quel mot persan signifiant « le roi » a donné son nom aux échecs ?",
+  "choix": [
+   "Shah",
+   "Rukh",
+   "Fil",
+   "Asb"
+  ],
+  "bonne": 0,
+  "categorie": "jeux",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89checs"
+ },
+ {
+  "id": "cg084",
+  "question": "Quelle est la récompense suprême du Festival de Cannes ?",
+  "choix": [
+   "Le Lion d’or",
+   "L’Ours d’or",
+   "Le César",
+   "La Palme d’or"
+  ],
+  "bonne": 3,
+  "categorie": "cinéma",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "cg085",
+  "question": "À quelle période de l’année se tient le Festival de Cannes ?",
+  "choix": [
+   "En janvier",
+   "En septembre",
+   "En mai",
+   "En décembre"
+  ],
+  "bonne": 2,
+  "categorie": "cinéma",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "cg086",
+  "question": "Dans quel lieu se déroule le Festival de Cannes ?",
+  "choix": [
+   "L’Opéra Garnier",
+   "Le Palais des festivals",
+   "Le Grand Rex",
+   "Le Zénith"
+  ],
+  "bonne": 1,
+  "categorie": "cinéma",
+  "source": "https://fr.wikipedia.org/wiki/Festival_de_Cannes"
+ },
+ {
+  "id": "cg087",
+  "question": "Combien d’œufs une reine abeille peut-elle pondre par jour en pleine saison ?",
+  "choix": [
+   "Plus de 2 500",
+   "Une vingtaine",
+   "Environ 100",
+   "Environ 500"
+  ],
+  "bonne": 0,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Abeille_domestique"
+ },
+ {
+  "id": "cg088",
+  "question": "Combien d’abeilles compte une colonie saine en plein été ?",
+  "choix": [
+   "500 à 1 000",
+   "2 000 à 5 000",
+   "500 000",
+   "40 000 à 80 000"
+  ],
+  "bonne": 3,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Abeille_domestique"
+ },
+ {
+  "id": "cg089",
+  "question": "Qu’indique la danse frétillante d’une abeille ?",
+  "choix": [
+   "La présence d’un prédateur",
+   "L’arrivée de l’hiver",
+   "La distance et la direction d’une source de nectar",
+   "L’âge de la reine"
+  ],
+  "bonne": 2,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Abeille_domestique"
+ },
+ {
+  "id": "cg090",
+  "question": "Dans quel pays est né Frédéric Chopin ?",
+  "choix": [
+   "En France",
+   "En Pologne",
+   "En Allemagne",
+   "En Hongrie"
+  ],
+  "bonne": 1,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "cg091",
+  "question": "De quel instrument Chopin a-t-il surtout composé ?",
+  "choix": [
+   "Du piano",
+   "Du violon",
+   "De l’orgue",
+   "De la flûte"
+  ],
+  "bonne": 0,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "cg092",
+  "question": "Dans quelle ville est mort Chopin en 1849 ?",
+  "choix": [
+   "Varsovie",
+   "Vienne",
+   "Londres",
+   "Paris"
+  ],
+  "bonne": 3,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Fr%C3%A9d%C3%A9ric_Chopin"
+ },
+ {
+  "id": "cg093",
+  "question": "Quel jour de 1789 les émeutiers parisiens prennent-ils la Bastille ?",
+  "choix": [
+   "Le 5 mai",
+   "Le 26 août",
+   "Le 14 juillet",
+   "Le 9 novembre"
+  ],
+  "bonne": 2,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise"
+ },
+ {
+  "id": "cg094",
+  "question": "Où s’ouvrent les États généraux le 5 mai 1789 ?",
+  "choix": [
+   "À Paris",
+   "À Versailles",
+   "À Fontainebleau",
+   "À Reims"
+  ],
+  "bonne": 1,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise"
+ },
+ {
+  "id": "cg095",
+  "question": "Quel texte est adopté le 26 août 1789 ?",
+  "choix": [
+   "La Déclaration des droits de l’homme et du citoyen",
+   "Le Code civil",
+   "La Constitution de la Ve République",
+   "Le serment du Jeu de paume"
+  ],
+  "bonne": 0,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise"
+ },
+ {
+  "id": "cg096",
+  "question": "Quel coup d’État de Bonaparte met fin à la Révolution en 1799 ?",
+  "choix": [
+   "Le 10 Thermidor",
+   "Le 2 Décembre",
+   "Le 9 Thermidor",
+   "Le 18 Brumaire"
+  ],
+  "bonne": 3,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/R%C3%A9volution_fran%C3%A7aise"
+ },
+ {
+  "id": "cg097",
+  "question": "Dans quelle ville est né Napoléon Bonaparte ?",
+  "choix": [
+   "À Paris",
+   "À Bastia",
+   "À Ajaccio",
+   "À Marseille"
+  ],
+  "bonne": 2,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier"
+ },
+ {
+  "id": "cg098",
+  "question": "Dans quelle cathédrale Napoléon est-il sacré empereur en 1804 ?",
+  "choix": [
+   "Reims",
+   "Notre-Dame de Paris",
+   "Saint-Denis",
+   "Chartres"
+  ],
+  "bonne": 1,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier"
+ },
+ {
+  "id": "cg099",
+  "question": "Sur quelle île Napoléon est-il mort en exil ?",
+  "choix": [
+   "Sainte-Hélène",
+   "L’île d’Elbe",
+   "La Corse",
+   "Malte"
+  ],
+  "bonne": 0,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier"
+ },
+ {
+  "id": "cg100",
+  "question": "Quelle défaite met fin à l’Empire napoléonien en 1815 ?",
+  "choix": [
+   "Austerlitz",
+   "Trafalgar",
+   "Iéna",
+   "Waterloo"
+  ],
+  "bonne": 3,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Napol%C3%A9on_Ier"
+ },
+ {
+  "id": "cg101",
+  "question": "Dans quelle ville ont eu lieu les premiers Jeux olympiques modernes (1896) ?",
+  "choix": [
+   "Paris",
+   "Londres",
+   "Athènes",
+   "Rome"
+  ],
+  "bonne": 2,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques"
+ },
+ {
+  "id": "cg102",
+  "question": "Quel Français a rénové les Jeux olympiques en 1894 ?",
+  "choix": [
+   "Jules Rimet",
+   "Pierre de Coubertin",
+   "Henri Desgrange",
+   "Georges Carpentier"
+  ],
+  "bonne": 1,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques"
+ },
+ {
+  "id": "cg103",
+  "question": "Où se tenaient les Jeux olympiques de l’Antiquité ?",
+  "choix": [
+   "À Olympie",
+   "À Delphes",
+   "À Athènes",
+   "À Sparte"
+  ],
+  "bonne": 0,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques"
+ },
+ {
+  "id": "cg104",
+  "question": "Dans quelle ville ont eu lieu les premiers Jeux olympiques d’hiver, en 1924 ?",
+  "choix": [
+   "Oslo",
+   "Grenoble",
+   "Saint-Moritz",
+   "Chamonix"
+  ],
+  "bonne": 3,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Jeux_olympiques"
+ },
+ {
+  "id": "cg105",
+  "question": "Dans quelle ville est né Albert Einstein ?",
+  "choix": [
+   "Berlin",
+   "Zurich",
+   "Ulm",
+   "Vienne"
+  ],
+  "bonne": 2,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "cg106",
+  "question": "En quelle année Einstein publie-t-il la relativité restreinte ?",
+  "choix": [
+   "1879",
+   "1905",
+   "1915",
+   "1921"
+  ],
+  "bonne": 1,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "cg107",
+  "question": "Pour quoi Einstein a-t-il reçu son prix Nobel de physique ?",
+  "choix": [
+   "L’effet photoélectrique",
+   "La relativité générale",
+   "La bombe atomique",
+   "Le Big Bang"
+  ],
+  "bonne": 0,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "cg108",
+  "question": "Dans quelle ville américaine Einstein est-il mort ?",
+  "choix": [
+   "New York",
+   "Boston",
+   "Washington",
+   "Princeton"
+  ],
+  "bonne": 3,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "cg109",
+  "question": "Dans quel pays est né Vincent van Gogh ?",
+  "choix": [
+   "En France",
+   "En Belgique",
+   "Aux Pays-Bas",
+   "En Allemagne"
+  ],
+  "bonne": 2,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Vincent_van_Gogh"
+ },
+ {
+  "id": "cg110",
+  "question": "Laquelle de ces toiles est de Van Gogh ?",
+  "choix": [
+   "La Jeune Fille à la perle",
+   "La Nuit étoilée",
+   "Impression, soleil levant",
+   "Les Demoiselles d’Avignon"
+  ],
+  "bonne": 1,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Vincent_van_Gogh"
+ },
+ {
+  "id": "cg111",
+  "question": "Dans quelle commune française Van Gogh est-il mort ?",
+  "choix": [
+   "Auvers-sur-Oise",
+   "Arles",
+   "Giverny",
+   "Saint-Rémy-de-Provence"
+  ],
+  "bonne": 0,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Vincent_van_Gogh"
+ },
+ {
+  "id": "cg112",
+  "question": "Dans quelle ville espagnole est né Pablo Picasso ?",
+  "choix": [
+   "Barcelone",
+   "Madrid",
+   "Séville",
+   "Malaga"
+  ],
+  "bonne": 3,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "cg113",
+  "question": "Quelle ville basque son tableau Guernica évoque-t-il ?",
+  "choix": [
+   "Bilbao",
+   "Saint-Sébastien",
+   "Guernica",
+   "Pampelune"
+  ],
+  "bonne": 2,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "cg114",
+  "question": "Avec quel peintre Picasso a-t-il fondé le cubisme ?",
+  "choix": [
+   "Henri Matisse",
+   "Georges Braque",
+   "Salvador Dalí",
+   "Claude Monet"
+  ],
+  "bonne": 1,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Pablo_Picasso"
+ },
+ {
+  "id": "cg115",
+  "question": "Dans quelle mer le Nil se jette-t-il ?",
+  "choix": [
+   "La Méditerranée",
+   "La mer Rouge",
+   "L’océan Indien",
+   "La mer Noire"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "cg116",
+  "question": "Quelle longueur dépasse le Nil ?",
+  "choix": [
+   "3 000 km",
+   "1 500 km",
+   "12 000 km",
+   "6 700 km"
+  ],
+  "bonne": 3,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "cg117",
+  "question": "Combien de pays le Nil traverse-t-il ?",
+  "choix": [
+   "Trois",
+   "Cinq",
+   "Huit",
+   "Douze"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "cg118",
+  "question": "Quel pays n’est pas traversé par le Nil ?",
+  "choix": [
+   "L’Égypte",
+   "Le Maroc",
+   "L’Éthiopie",
+   "L’Ouganda"
+  ],
+  "bonne": 1,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Nil"
+ },
+ {
+  "id": "cg119",
+  "question": "Dans quel pays est né Isaac Newton ?",
+  "choix": [
+   "En Angleterre",
+   "En France",
+   "En Allemagne",
+   "En Italie"
+  ],
+  "bonne": 0,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Isaac_Newton"
+ },
+ {
+  "id": "cg120",
+  "question": "Quelle loi Newton a-t-il formulée ?",
+  "choix": [
+   "La relativité",
+   "Le principe d’incertitude",
+   "La sélection naturelle",
+   "La gravitation universelle"
+  ],
+  "bonne": 3,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Isaac_Newton"
+ },
+ {
+  "id": "cg121",
+  "question": "En quelle année paraît le Principia de Newton ?",
+  "choix": [
+   "1543",
+   "1789",
+   "1687",
+   "1905"
+  ],
+  "bonne": 2,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Isaac_Newton"
+ },
+ {
+  "id": "cg122",
+  "question": "Que montre Newton dans son livre Opticks ?",
+  "choix": [
+   "Que la Terre tourne autour du Soleil",
+   "Que la lumière blanche est composée de plusieurs couleurs",
+   "Que la lumière va à vitesse infinie",
+   "Que les atomes existent"
+  ],
+  "bonne": 1,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Isaac_Newton"
+ },
+ {
+  "id": "cg123",
+  "question": "Quel surnom Louis XIV portait-il ?",
+  "choix": [
+   "Le Roi-Soleil",
+   "Le Bien-Aimé",
+   "Le Bel",
+   "Le Sage"
+  ],
+  "bonne": 0,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "cg124",
+  "question": "Combien de temps a duré le règne de Louis XIV ?",
+  "choix": [
+   "40 ans",
+   "55 ans",
+   "25 ans",
+   "72 ans"
+  ],
+  "bonne": 3,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "cg125",
+  "question": "À quel âge environ Louis XIV est-il devenu roi ?",
+  "choix": [
+   "18 ans",
+   "25 ans",
+   "Presque 5 ans",
+   "12 ans"
+  ],
+  "bonne": 2,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "cg126",
+  "question": "Depuis quel château Louis XIV dirige-t-il le royaume à partir de 1682 ?",
+  "choix": [
+   "Fontainebleau",
+   "Versailles",
+   "Chambord",
+   "Vincennes"
+  ],
+  "bonne": 1,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "cg127",
+  "question": "Combien pèse en moyenne un cerveau d’homme adulte ?",
+  "choix": [
+   "Environ 1,5 kg",
+   "Environ 500 g",
+   "Environ 3 kg",
+   "Environ 5 kg"
+  ],
+  "bonne": 0,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "cg128",
+  "question": "Environ combien de neurones compte le cerveau humain ?",
+  "choix": [
+   "86 millions",
+   "1 milliard",
+   "1 000 milliards",
+   "86 milliards"
+  ],
+  "bonne": 3,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "cg129",
+  "question": "Quelle part de l’énergie du corps le cerveau consomme-t-il ?",
+  "choix": [
+   "2 %",
+   "50 %",
+   "20 à 25 %",
+   "75 %"
+  ],
+  "bonne": 2,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "cg130",
+  "question": "Quel est le carburant principal du cerveau ?",
+  "choix": [
+   "Les protéines",
+   "Le glucose",
+   "Le calcium",
+   "Le fer"
+  ],
+  "bonne": 1,
+  "categorie": "corps humain",
+  "source": "https://fr.wikipedia.org/wiki/Cerveau_humain"
+ },
+ {
+  "id": "cg131",
+  "question": "Quelle est l’altitude du Vésuve ?",
+  "choix": [
+   "1 281 m",
+   "3 340 m",
+   "650 m",
+   "2 100 m"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Vesuve"
+ },
+ {
+  "id": "cg132",
+  "question": "Quelle ville a été ensevelie par l’éruption du Vésuve en 79 ?",
+  "choix": [
+   "Athènes",
+   "Carthage",
+   "Syracuse",
+   "Pompéi"
+  ],
+  "bonne": 3,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Vesuve"
+ },
+ {
+  "id": "cg133",
+  "question": "Près de quelle baie se trouve le Vésuve ?",
+  "choix": [
+   "La baie de Cannes",
+   "La baie de Rio",
+   "La baie de Naples",
+   "La baie de Somme"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Vesuve"
+ },
+ {
+  "id": "cg134",
+  "question": "Sur quelle surface se joue Roland-Garros ?",
+  "choix": [
+   "Le gazon",
+   "La terre battue",
+   "Le béton",
+   "Le parquet"
+  ],
+  "bonne": 1,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Internationaux_de_France_de_tennis"
+ },
+ {
+  "id": "cg135",
+  "question": "Combien de titres en simple messieurs Rafael Nadal a-t-il à Roland-Garros ?",
+  "choix": [
+   "14",
+   "9",
+   "11",
+   "17"
+  ],
+  "bonne": 0,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Internationaux_de_France_de_tennis"
+ },
+ {
+  "id": "cg136",
+  "question": "À quelle période se joue Roland-Garros ?",
+  "choix": [
+   "En janvier",
+   "En août",
+   "En octobre",
+   "Fin mai – début juin"
+  ],
+  "bonne": 3,
+  "categorie": "sport",
+  "source": "https://fr.wikipedia.org/wiki/Internationaux_de_France_de_tennis"
+ },
+ {
+  "id": "cg137",
+  "question": "De quelle région du monde le cacaoyer est-il originaire ?",
+  "choix": [
+   "L’Asie du Sud-Est",
+   "L’Afrique de l’Ouest",
+   "Le bassin amazonien",
+   "L’Europe du Sud"
+  ],
+  "bonne": 2,
+  "categorie": "gastronomie",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "cg138",
+  "question": "De quelle langue vient le mot « chocolat » ?",
+  "choix": [
+   "Le latin",
+   "Le nahuatl",
+   "L’arabe",
+   "Le grec"
+  ],
+  "bonne": 1,
+  "categorie": "gastronomie",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "cg139",
+  "question": "Quel peuple appelait la boisson de cacao « kakaw » ?",
+  "choix": [
+   "Les Mayas",
+   "Les Incas",
+   "Les Romains",
+   "Les Vikings"
+  ],
+  "bonne": 0,
+  "categorie": "gastronomie",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "cg140",
+  "question": "Qui incorpore du lait en poudre au chocolat vers 1875 ?",
+  "choix": [
+   "Henri Nestlé",
+   "Jean Neuhaus",
+   "Milton Hershey",
+   "Daniel Peter"
+  ],
+  "bonne": 3,
+  "categorie": "gastronomie",
+  "source": "https://fr.wikipedia.org/wiki/Chocolat"
+ },
+ {
+  "id": "cg141",
+  "question": "Il y a combien d’années environ les dinosaures (hors oiseaux) ont-ils disparu ?",
+  "choix": [
+   "6 millions d’années",
+   "250 millions d’années",
+   "66 millions d’années",
+   "10 000 ans"
+  ],
+  "bonne": 2,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Dinosaure"
+ },
+ {
+  "id": "cg142",
+  "question": "Quels animaux actuels descendent des dinosaures ?",
+  "choix": [
+   "Les crocodiles",
+   "Les oiseaux",
+   "Les lézards",
+   "Les tortues"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/Dinosaure"
+ },
+ {
+  "id": "cg143",
+  "question": "Qui a créé le mot « dinosaure » en 1842 ?",
+  "choix": [
+   "Richard Owen",
+   "Charles Darwin",
+   "Georges Cuvier",
+   "Mary Anning"
+  ],
+  "bonne": 0,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Dinosaure"
+ },
+ {
+  "id": "cg144",
+  "question": "Quel est l’âge approximatif de la Terre ?",
+  "choix": [
+   "454 millions d’années",
+   "14 milliards d’années",
+   "10 000 ans",
+   "4,54 milliards d’années"
+  ],
+  "bonne": 3,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "cg145",
+  "question": "Quelle part de la surface terrestre l’eau couvre-t-elle environ ?",
+  "choix": [
+   "51 %",
+   "90 %",
+   "71 %",
+   "33 %"
+  ],
+  "bonne": 2,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "cg146",
+  "question": "Combien de satellites naturels la Terre a-t-elle ?",
+  "choix": [
+   "Deux",
+   "Un",
+   "Aucun",
+   "Quatre"
+  ],
+  "bonne": 1,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "cg147",
+  "question": "De combien de degrés l’axe de la Terre est-il incliné environ ?",
+  "choix": [
+   "23°",
+   "5°",
+   "45°",
+   "90°"
+  ],
+  "bonne": 0,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "cg148",
+  "question": "En combien de jours la Terre fait-elle le tour du Soleil ?",
+  "choix": [
+   "Environ 30",
+   "Environ 180",
+   "Environ 700",
+   "Environ 365"
+  ],
+  "bonne": 3,
+  "categorie": "espace",
+  "source": "https://fr.wikipedia.org/wiki/Terre"
+ },
+ {
+  "id": "cg149",
+  "question": "En quelle année Einstein publie-t-il la relativité générale ?",
+  "choix": [
+   "1905",
+   "1879",
+   "1915",
+   "1955"
+  ],
+  "bonne": 2,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Albert_Einstein"
+ },
+ {
+  "id": "cg150",
+  "question": "À quel âge Van Gogh est-il mort ?",
+  "choix": [
+   "27 ans",
+   "37 ans",
+   "47 ans",
+   "57 ans"
+  ],
+  "bonne": 1,
+  "categorie": "arts",
+  "source": "https://fr.wikipedia.org/wiki/Vincent_van_Gogh"
+ },
+ {
+  "id": "cg151",
+  "question": "Quel est le nom tibétain de l’Everest ?",
+  "choix": [
+   "Chomolungma",
+   "Annapurna",
+   "Kangchenjunga",
+   "Lhotse"
+  ],
+  "bonne": 0,
+  "categorie": "géographie",
+  "source": "https://fr.wikipedia.org/wiki/Mont_Everest"
+ },
+ {
+  "id": "cg152",
+  "question": "Combien d’œuvres du catalogue Köchel sont répertoriées pour Mozart ?",
+  "choix": [
+   "89",
+   "2 500",
+   "12 000",
+   "893"
+  ],
+  "bonne": 3,
+  "categorie": "musique",
+  "source": "https://fr.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart"
+ },
+ {
+  "id": "cg153",
+  "question": "Dans quelle ville Louis XIV est-il né ?",
+  "choix": [
+   "Versailles",
+   "Paris",
+   "Saint-Germain-en-Laye",
+   "Fontainebleau"
+  ],
+  "bonne": 2,
+  "categorie": "histoire",
+  "source": "https://fr.wikipedia.org/wiki/Louis_XIV"
+ },
+ {
+  "id": "cg154",
+  "question": "De combien la population d’éléphants d’Afrique a-t-elle chuté depuis les années 1980 ?",
+  "choix": [
+   "Environ 10 %",
+   "Environ 70 %",
+   "Environ 30 %",
+   "Elle a doublé"
+  ],
+  "bonne": 1,
+  "categorie": "animaux",
+  "source": "https://fr.wikipedia.org/wiki/%C3%89l%C3%A9phant_d%27Afrique"
+ },
+ {
+  "id": "cg155",
+  "question": "En quelle année Marie Curie est-elle morte ?",
+  "choix": [
+   "1934",
+   "1911",
+   "1945",
+   "1903"
+  ],
+  "bonne": 0,
+  "categorie": "sciences",
+  "source": "https://fr.wikipedia.org/wiki/Marie_Curie"
+ }
+]

@@ -62,6 +62,38 @@ const ICONS = {
       <text x="60" y="72" textAnchor="middle" fontFamily="'Baloo 2', sans-serif" fontWeight="800" fontSize="40" fill="#fff8f0" transform="rotate(-42 60 60)">VS</text>
     </>
   ),
+  pfc: (
+    <>
+      <circle cx="34" cy="72" r="22" fill="#b3a9d6" />
+      <rect x="58" y="28" width="34" height="46" rx="6" fill="#fff8f0" transform="rotate(12 75 51)" />
+      <path d="M70 100 L100 62 M100 100 L70 62" stroke="#ff4f8b" strokeWidth="9" strokeLinecap="round" />
+    </>
+  ),
+  simon: (
+    <>
+      <rect x="12" y="12" width="46" height="46" rx="12" fill="#ff4f8b" />
+      <rect x="62" y="12" width="46" height="46" rx="12" fill="#ffc93c" />
+      <rect x="12" y="62" width="46" height="46" rx="12" fill="#3ee0c5" />
+      <rect x="62" y="62" width="46" height="46" rx="12" fill="#b46cff" />
+    </>
+  ),
+  couleur: (
+    <>
+      <path d="M60 12 C30 12 10 34 10 58 c0 22 18 32 34 32 c10 0 12 -8 8 -14 c-4 -7 0 -14 9 -14 h14 c18 0 35 -8 35 -26 C110 30 90 12 60 12 Z" fill="#fff8f0" />
+      <circle cx="38" cy="46" r="8" fill="#ff4d5e" />
+      <circle cx="62" cy="34" r="8" fill="#ffc93c" />
+      <circle cx="86" cy="46" r="8" fill="#3c9dff" />
+      <circle cx="34" cy="70" r="8" fill="#2fd18a" />
+    </>
+  ),
+  culture: (
+    <>
+      <circle cx="60" cy="54" r="40" fill="#ffc93c" />
+      <path d="M44 48 q4 -14 16 -14 q16 0 16 14 q0 8 -9 14 q-5 4 -5 10" fill="none" stroke="#14102a" strokeWidth="8" strokeLinecap="round" />
+      <circle cx="62" cy="86" r="5" fill="#14102a" />
+      <rect x="44" y="98" width="32" height="10" rx="5" fill="#fff8f0" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

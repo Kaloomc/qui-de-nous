@@ -27,7 +27,17 @@ export function registerSockets(io, store) {
   // Un téléphone ne reçoit pas deux fois le même état (hors horloge) : beaucoup d'événements d'une partie à 30 ne changent
   // rien à son écran (les votes des autres, par exemple). Le cache est par connexion : une nouvelle connexion reçoit toujours l'état.
   const lastSent = new Map();
+  // Mesure de latence d'un joueur (mode Duel) : un aller-retour socket.io, en ms (null sans réponse en 2 s).
+  const pingPlayer = (game, playerId) =>
+    new Promise((resolve) => {
+      const socketId = [...(game.players.get(playerId)?.sockets ?? [])][0];
+      const socket = socketId && io.sockets.sockets.get(socketId);
+      if (!socket) return resolve(null);
+      const start = Date.now();
+      socket.timeout(2000).emit('latency:ping', (err) => resolve(err ? null : Date.now() - start));
+    });
   const broadcast = (game) => {
+    game.pingPlayer ??= (playerId) => pingPlayer(game, playerId);
     io.to(hostRoom(game.code)).emit('state', game.publicState({ host: true }));
     for (const player of game.players.values()) {
       if (player.sockets.size === 0) continue;

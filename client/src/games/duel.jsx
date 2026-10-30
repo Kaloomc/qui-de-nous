@@ -280,7 +280,7 @@ function CheerPad({ act, my }) {
 
 // ---------- Duel ----------
 
-function PlayTv({ state, round }) {
+function PlayTv({ state, round, gameAct }) {
   const View = MG_VIEWS[round.mg?.id]?.Tv;
   return (
     <div className="duel-play">
@@ -292,7 +292,7 @@ function PlayTv({ state, round }) {
         </div>
         <Fighter state={state} round={round} camp="bleu" size={96} />
       </div>
-      <div className="duel-play-body">{View && round.play ? <View state={state} round={round} play={round.play} /> : null}</div>
+      <div className="duel-play-body">{View && round.play ? <View state={state} round={round} play={round.play} gameAct={gameAct} /> : null}</div>
     </div>
   );
 }
@@ -321,7 +321,7 @@ export function HostQuestion({ state, gameAct }) {
       <>
         <Notice state={state} round={round} />
         <KingBanner state={state} round={round} />
-        {Step && <Step key={round.phaseId} state={state} round={round} />}
+        {Step && <Step key={round.phaseId} state={state} round={round} gameAct={gameAct} />}
         {round.cheers && <CheerLayer feed={round.cheers} />}
       </>
     );
@@ -344,7 +344,7 @@ export function HostReveal({ state }) {
   const round = state.round;
   const elapsed = useFrameElapsed(state.reveal?.startedAt, state);
   const done = elapsed === Infinity || (elapsed ?? 0) > (state.reveal?.durationMs ?? 4500) * 0.55;
-  const View = MG_VIEWS[round.mg?.id]?.Tv;
+  const View = MG_VIEWS[round.mg?.id]?.Reveal ?? MG_VIEWS[round.mg?.id]?.Tv;
   useEffect(() => {
     if (done) sounds.reveal();
     else sounds.drumroll(2200);

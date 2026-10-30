@@ -5,6 +5,7 @@
 // Confidentialité : un mini-jeu ne fournit que des vues par rôle (TV, duelliste, parieur) ; les paris restent secrets jusqu'à
 // la révélation, le compteur « X / N ont parié » ne donne aucun nom.
 import * as D from '../rules/duel.js';
+import { seededRng } from '../rules/duel.js';
 import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { TIMING } from '../timing.js';
 import { MINIGAMES } from '../duel/minigames/index.js';
@@ -36,7 +37,9 @@ function run(game) {
   return game.duelRun;
 }
 
-const activeIds = (game) => D.activeGames(options(game), Object.keys(minigames(game)));
+/** Mini-jeux jouables : ceux qui ont assez de contenu (`available`), et que l'hôte n'a pas décochés. */
+const playableIds = (game) => Object.keys(minigames(game)).filter((id) => minigames(game)[id].available?.(game) !== false);
+const activeIds = (game) => D.activeGames(options(game), playableIds(game));
 
 // ---------- Étapes ----------
 
@@ -88,9 +91,27 @@ function startBetsReveal(game) {
 
 const bothReady = (d) => !!d.ready[d.red] && !!d.ready[d.blue];
 
+/** Mesure de latence des deux duellistes (plusieurs allers-retours, médiane), pendant que chacun se prépare. */
+async function probeLatency(game, ids) {
+  if (!game.pingPlayer) return;
+  game.duelLatency ??= new Map();
+  await Promise.all(
+    ids.map(async (id) => {
+      const samples = [];
+      for (let i = 0; i < 5; i++) {
+        const rtt = await game.pingPlayer(id);
+        if (rtt != null) samples.push(Math.min(rtt, 1500));
+      }
+      samples.sort((a, b) => a - b);
+      if (samples.length) game.duelLatency.set(id, samples[Math.floor(samples.length / 2)]);
+    }),
+  );
+}
+
 function startReady(game) {
   const d = data(game);
   d.ready = {};
+  probeLatency(game, duelists(d));
   go(game, 'ready', timing(game).readyMs, () => (bothReady(data(game)) ? startPlay(game) : cancelDuel(game, { kind: 'notReady', ids: duelists(data(game)).filter((id) => !data(game).ready[id]) })));
 }
 
@@ -102,9 +123,13 @@ function contextFor(game, d, playId) {
     red: d.red,
     blue: d.blue,
     now: () => game.clock.now(),
-    latency: (id) => game.latencyOf?.(id) ?? 0,
+    /** Aller-retour réseau (médiane de plusieurs mesures) d'un joueur, en ms : sert à compenser les temps de réaction. */
+    latency: (id) => game.duelLatency?.get(id) ?? 0,
+    draw: (key, list) => game.history.draw(key, list),
     content: game.duelContent ?? {},
-    voice: !!game.duelVoice,
+    get voice() {
+      return !!game.duelVoice; // dit par la TV à tout moment (Duel du Feu)
+    },
     /** Minuteur du mini-jeu : annulé avec le duel ; `fn` ne s'exécute que si le duel et l'étape sont toujours les mêmes. */
     later(ms, fn) {
       d.laterSeq += 1;
@@ -162,18 +187,6 @@ function cancelDuel(game, notice) {
   game.votes = new Map();
   game.roundData = { seq: d.seq ?? 0 };
   begin(game, notice);
-}
-
-/** Petit générateur à graine (mulberry32) : les deux duellistes jouent exactement la même séquence. */
-export function seededRng(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
 }
 
 // ---------- Emojis et confettis ----------
@@ -245,7 +258,7 @@ export default {
 
   publicLobby: (game) => ({
     options: options(game),
-    games: Object.values(minigames(game)).map((m) => ({ id: m.id, name: m.name, icon: m.icon, category: m.category })),
+    games: Object.values(minigames(game)).map((m) => ({ id: m.id, name: m.name, icon: m.icon, category: m.category, available: m.available?.(game) !== false })),
   }),
 
   startRound(game) {
@@ -258,9 +271,22 @@ export default {
   hostAction(game, action) {
     if (action.type === 'config') {
       if (game.phase !== 'lobby') return 'Les options se règlent avant le lancement.';
-      const { options: next, error } = D.cleanOptions(action, options(game), Object.keys(minigames(game)));
+      const { options: next, error } = D.cleanOptions(action, options(game), playableIds(game));
       if (error) return error;
       game.duelOptions = next;
+      return null;
+    }
+    // La TV dit si elle a une voix (Duel du Feu) ; ses signaux (« FEU » prononcé…) vont au mini-jeu en cours.
+    if (action.type === 'voice') {
+      game.duelVoice = !!action.available;
+      return null;
+    }
+    if (action.type === 'spoken') {
+      const d = data(game);
+      if (game.phase !== 'question' || d.step !== 'play' || d.outcome) return null;
+      const mg = minigames(game)[d.mgId];
+      mg.host?.(d.mg, action, d.ctx);
+      checkResult(game);
       return null;
     }
     // « Passer ce duel » : annulé sans gorgée, un autre est tiré (après le verdict, c'est « Suivant »).

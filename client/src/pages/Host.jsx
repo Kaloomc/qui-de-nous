@@ -8,11 +8,13 @@ import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
 import { preloadNarration, teardownGame } from '../narrator.js';
+import { teardownGame as teardownDuel } from '../games/duelFx.js';
 import { DuelCard, DuelSetup } from '../games/duelSetup.jsx';
 import { LoupSetup } from '../games/loupSetup.jsx';
 import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
 import { PartyBoard, Podium, sipsLabel, totalSips } from '../sips.jsx';
 import { isMuted, setMuted, sounds, unlockAudio } from '../sound.js';
+import { preloadVoices, unlockSpeech } from '../speech.js';
 
 const RESULTS_CHOICES = [5000, 10000, 15000, 20000];
 const VOTE_CHOICES = [0, 15000, 30000, 45000];
@@ -31,6 +33,8 @@ export default function Host({ code }) {
   useEffect(() => {
     if (state?.mode === 'loup') preloadNarration();
     else teardownGame(); // autre jeu : la voix en cours s'arrête et la file est vidée
+    // Changement de jeu ou fin du mode Duel : toutes ses animations s'arrêtent d'un coup.
+    return () => teardownDuel();
   }, [state?.mode]);
 
   useOnConnect(async function resume() {
@@ -128,7 +132,14 @@ export default function Host({ code }) {
         <Lobby
           state={state}
           mode={mode}
-          onStart={() => act('host:start')}
+          onStart={() => {
+            // Mode Duel : la voix du Duel du Feu doit être activée par un geste de l'hôte (le clic sur « Lancer »).
+            if (mode.id === 'duel') {
+              unlockSpeech();
+              preloadVoices();
+            }
+            act('host:start');
+          }}
           onKick={kick}
           onSettings={() => setSettingsOpen(true)}
           onChangeGame={() => act('host:chooseGame')}
