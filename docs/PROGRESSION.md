@@ -58,3 +58,7 @@ Un commit par jeu ou groupe de jeux ; `npm test` (533 tests) et `npm run build` 
 - [x] Intégration des 17 jeux (options, roulette, désactivation), simulateur de 300 sessions avec les 17 jeux, tests de fuite sur sockets
 - [x] README (12 jeux, contenus, licence de la carte, clips audio) et captures `docs/captures/duel-partie2/` (48 images, 0 problème d'affichage)
 - Volumes de contenu livrés (réduits, signalés) : Qui suis-je 54 (demandé 100), Ordre chronologique 60 séries sur 92 événements (demandé 100), Vrai ou Faux 218 (demandé 300, dont 169 vraies : le tirage en duel reste 50 / 50), Géo-duel 128 villes (demandé 120, villes seulement, pas de monuments), clips audio 4.
+
+# Mode Duel : corrections après tests réels
+
+- [x] Étape 1 : carte d'intro de 4,5 s (règle, pictogramme, 3-2-1) avant chaque mini-jeu, scène TV à 70 % de la hauteur avec avatars en grand dans les coins, menu hôte discret (coin bas gauche, replié), en-têtes courts en casse normale, bannière « duel annulé » seule 2,8 s, pénalités de temps (Désamorçage −3 s, Culture G −2 s, Plateau fantôme −2 s, Ordre chronologique −3 s : mauvaise réponse en rouge, « −X s » flottant, décompte en direct ; Qui suis-je ? : bloqué jusqu'à l'indice suivant, −1 point)

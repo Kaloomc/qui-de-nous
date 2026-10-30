@@ -93,11 +93,8 @@ export default function Host({ code }) {
     await act('host:end');
     await act('host:chooseGame');
   };
-  const endButton = party ? null : mode.id === 'duel' ? (
-    <button className="btn btn-ghost" onClick={quitDuel}>
-      Terminer le mode
-    </button>
-  ) : (
+  // Mode Duel : « Terminer le mode » est dans le petit menu hôte (coin de l'écran), pas au milieu.
+  const endButton = party || mode.id === 'duel' ? null : (
     <button className="btn btn-ghost" onClick={() => act('host:end')}>
       Terminer
     </button>
@@ -151,7 +148,7 @@ export default function Host({ code }) {
 
       {state.phase === 'question' && mode.hostLayout === 'custom' && (
         <div className="question">
-          <mode.HostQuestion state={state} gameAct={gameAct} />
+          <mode.HostQuestion state={state} gameAct={gameAct} onQuit={mode.id === 'duel' ? quitDuel : undefined} />
           <div className="actions">{endButton}</div>
         </div>
       )}
@@ -203,7 +200,7 @@ export default function Host({ code }) {
 
       {state.phase === 'results' && (
         <div className="results-screen">
-          <mode.HostResults key={state.roundId} state={state} gameAct={gameAct} />
+          <mode.HostResults key={state.roundId} state={state} gameAct={gameAct} onQuit={mode.id === 'duel' ? quitDuel : undefined} />
           <TimerBar timer={state.pendingTimer} state={state} small>
             {(s) => `Réponse attendue : encore ${s} s`}
           </TimerBar>

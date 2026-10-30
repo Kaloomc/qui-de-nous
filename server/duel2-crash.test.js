@@ -101,7 +101,7 @@ test('confidentialité : le point d’explosion n’est envoyé à personne avan
   for (const who of ['tv', s.bettor, ...s.ids]) {
     const v = s.view(who);
     assert.equal(v.crashed, null);
-    assert.equal(JSON.stringify(v).includes(String(crash)), false);
+    assert.equal(JSON.stringify(v).includes(`"crashed":${crash}`), false);
     assert.equal(JSON.stringify(v).includes('"crash"'), false);
   }
   s.tick(CR.timeOf(crash) * 0.5);

@@ -34,6 +34,7 @@ async function duel(id, { content, latency } = {}) {
   ctx.tick(T.betsRevealMs);
   for (const pid of [d().red, d().blue]) ctx.game.action(pid, { type: 'ready' });
   ctx.tick(T.readyBeatMs);
+  ctx.tick(T.introMs);
   assert.equal(d().step, 'play');
   const camp = { rouge: d().red, blue: d().blue, bleu: d().blue };
   const play = (c, data) => ctx.game.action(camp[c], { type: 'play', data });

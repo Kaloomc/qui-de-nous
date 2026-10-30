@@ -7,6 +7,7 @@ import { TimerBar } from '../components.jsx';
 import { serverNow } from '../lib.js';
 import { preloadVoices, speakQueued, useSpeechStatus } from '../speech.js';
 import { useFrameElapsed } from './duelFx.js';
+import { PenaltyBadge, TvWrongs, usePenalty } from './duelPenalty.jsx';
 
 const CAMP_LABEL = { rouge: 'ROUGE', bleu: 'BLEU' };
 
@@ -37,10 +38,10 @@ function useBlocked(until, state) {
 const WIRE_COLORS = { rouge: '#ff4d5e', bleu: '#3c9dff', vert: '#2fd18a', jaune: '#ffc93c', violet: '#b46cff' };
 const PATTERN_NAMES = { uni: 'uni', raye: 'rayé', point: 'pointillé' };
 
-function Wire({ wire, onCut = null, cut = false, solution = false }) {
+function Wire({ wire, onCut = null, cut = false, solution = false, wrong = false }) {
   return (
     <button
-      className={`mg-wire is-${wire.pattern} ${solution ? 'is-solution' : ''} ${cut ? 'is-cut' : ''}`}
+      className={`mg-wire is-${wire.pattern} ${solution ? 'is-solution' : ''} ${cut ? 'is-cut' : ''} ${wrong ? 'is-wrong' : ''}`}
       style={{ '--wire': WIRE_COLORS[wire.color] }}
       disabled={!onCut}
       onClick={() => onCut?.(wire.n - 1)}
@@ -53,7 +54,7 @@ function Wire({ wire, onCut = null, cut = false, solution = false }) {
   );
 }
 
-function Bomb({ play, onCut = null, blocked = false }) {
+function Bomb({ play, onCut = null, blocked = false, wrong = null }) {
   return (
     <div className="mg-defuse">
       <ol className="mg-clues">
@@ -63,7 +64,7 @@ function Bomb({ play, onCut = null, blocked = false }) {
       </ol>
       <div className="mg-wires">
         {play.wires.map((w) => (
-          <Wire key={w.n} wire={w} onCut={blocked ? null : onCut} solution={play.cut === w.n - 1} />
+          <Wire key={w.n} wire={w} onCut={blocked ? null : onCut} solution={play.cut === w.n - 1} wrong={wrong === w.n - 1} />
         ))}
       </div>
     </div>
@@ -71,11 +72,15 @@ function Bomb({ play, onCut = null, blocked = false }) {
 }
 
 const Defuse = {
-  Tv({ play, state }) {
+  Tv({ play, state, round }) {
     return (
       <div className="mg-defuse-tv">
-        <Score a={play.wrong.rouge} b={play.wrong.bleu} unit=" ✂✖" />
-        <p className="duel-eyebrow">Mauvais fils coupés · le premier à couper le bon fil gagne</p>
+        <TvWrongs wrongs={play.wrong} ms={round?.mg?.penaltyMs} />
+        <p className="mg-wrongs">
+          <span className="is-rouge">ROUGE · fils ratés : {play.wrong.rouge} / 1</span>
+          <span className="is-bleu">BLEU · fils ratés : {play.wrong.bleu} / 1</span>
+        </p>
+        <p className="duel-eyebrow">Coupe le bon fil le premier</p>
         <Bomb play={play} />
         <TimerBar timer={{ endsAt: play.startedAt + play.limitMs, totalMs: play.limitMs, paused: false }} state={state} small>
           {(s) => `${s} s avant l’explosion`}
@@ -83,12 +88,12 @@ const Defuse = {
       </div>
     );
   },
-  Duelist({ play, act, state }) {
-    const left = useBlocked(play.blockedUntil, state);
+  Duelist({ play, act, state, round }) {
+    const pen = usePenalty(play.blockedUntil, state);
     return (
       <div className="mg-defuse-duelist">
-        {left > 0 && <p className="duel-notice">Mauvais fil : bloqué 3 s</p>}
-        <Bomb play={play} onCut={(i) => act({ wire: i })} blocked={left > 0} />
+        <PenaltyBadge left={pen.left} flash={pen.flash} ms={round?.mg?.penaltyMs} />
+        <Bomb play={play} wrong={pen.wrong} onCut={(i) => { pen.mark(i); act({ wire: i }); }} blocked={pen.left > 0} />
       </div>
     );
   },
@@ -413,7 +418,7 @@ const Soleil = {
       <div className={`mg-soleil ${play.sun ? 'is-sun' : ''}`}>
         {status === 'none' && <p className="feu-sound-warn">Pas de voix sur cet écran : suivez le mot affiché. À « SOLEIL », lâchez !</p>}
         <p key={n} className="mg-soleil-word">{play.cue ? SUN_WORD[play.cue.word] : 'Prêts…'}</p>
-        <p className="duel-eyebrow">{play.sun ? 'LÂCHEZ TOUT !' : 'Maintenez votre bouton… mais pas à « Soleil »'}</p>
+        <p className="duel-eyebrow">{play.sun ? 'LÂCHEZ TOUT !' : 'Maintiens… sauf à « Soleil »'}</p>
         <Tracks play={play} state={state} />
       </div>
     );
@@ -486,11 +491,11 @@ function Stage({ play, state }) {
   );
 }
 
-function AskChoices({ play, onPick = null, blocked = false }) {
+function AskChoices({ play, onPick = null, blocked = false, wrong = null }) {
   return (
     <div className="mg-choices">
       {play.choices.map((c, i) => (
-        <button key={i} className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''}`} disabled={!onPick || blocked || !!play.shown} onClick={() => onPick?.(i)}>
+        <button key={i} className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''} ${wrong === i ? 'is-wrong' : ''}`} disabled={!onPick || blocked || !!play.shown} onClick={() => onPick?.(i)}>
           <b>{'ABCD'[i]}</b> {c}
         </button>
       ))}
@@ -499,11 +504,12 @@ function AskChoices({ play, onPick = null, blocked = false }) {
 }
 
 const Plateau = {
-  Tv({ play, state }) {
+  Tv({ play, state, round }) {
     return (
       <div className="mg-plateau">
+        <TvWrongs wrongs={play.wrongs} ms={round?.mg?.penaltyMs} />
         <Score a={play.score.rouge} b={play.score.bleu} />
-        <p className="duel-eyebrow">Passage {play.n} · 2 points gagnent</p>
+        <p className="duel-eyebrow">Premier à 2 points</p>
         {play.phase === 'scene' && play.scene ? (
           <>
             <Stage play={play} state={state} />
@@ -524,8 +530,8 @@ const Plateau = {
       </div>
     );
   },
-  Duelist({ play, act, state }) {
-    const left = useBlocked(play.blockedUntil, state);
+  Duelist({ play, act, state, round }) {
+    const pen = usePenalty(play.blockedUntil, state);
     if (play.phase === 'scene') {
       return (
         <div className="mg-plateau-wait">
@@ -538,8 +544,8 @@ const Plateau = {
       <div className="mg-culture-duelist">
         <Score a={play.score.rouge} b={play.score.bleu} />
         <h2 className="mg-question is-small">{play.question}</h2>
-        {left > 0 && <p className="duel-notice">Mauvaise réponse : bloqué 2 s</p>}
-        <AskChoices play={play} blocked={left > 0} onPick={(i) => act({ choice: i, n: play.n })} />
+        <PenaltyBadge left={pen.left} flash={pen.flash} ms={round?.mg?.penaltyMs} />
+        <AskChoices play={play} blocked={pen.left > 0} wrong={pen.wrong} onPick={(i) => { pen.mark(i); act({ choice: i, n: play.n }); }} />
       </div>
     );
   },
@@ -634,7 +640,7 @@ const Course = {
             <Lane track={track} events={play.events[camp]} frame={frame} camp={camp} deadAt={deadFrom(play, camp, track, play.events[camp], frame)} />
           </div>
         ))}
-        <p className="duel-eyebrow">Le dernier debout gagne · touche = saute, glisse vers le bas = se baisse</p>
+        <p className="duel-eyebrow">Le dernier debout gagne</p>
       </div>
     );
   },
@@ -856,7 +862,7 @@ const Qui = {
     return (
       <div className="mg-qui">
         <Score a={play.score.rouge} b={play.score.bleu} unit=" pts" />
-        <p className="duel-eyebrow">Énigme {play.n} · plus tu réponds tôt, plus tu gagnes de points (4, 3, 2, 1)</p>
+        <p className="duel-eyebrow">Énigme {play.n} · réponds tôt pour gagner plus</p>
         <Clues play={play} />
         <QuiChoices play={play} />
         {play.reveal && <p className="duel-eyebrow">C’était : {play.reveal.answer}</p>}
@@ -895,13 +901,13 @@ Qui.Bettor = ({ play }) => (
 
 // ---------- Ordre chronologique ----------
 
-function ChronoCards({ play, onPick = null, placed = [], blocked = false, years = null }) {
+function ChronoCards({ play, onPick = null, placed = [], blocked = false, years = null, wrong = null }) {
   return (
     <div className="mg-chrono-cards">
       {play.cards.map((c, i) => {
         const pos = placed.indexOf(c.i);
         return (
-          <button key={c.i} className={`mg-chrono-card ${pos >= 0 ? 'is-placed' : ''}`} disabled={!onPick || blocked || pos >= 0} onClick={() => onPick?.(c.i)}>
+          <button key={c.i} className={`mg-chrono-card ${pos >= 0 ? 'is-placed' : ''} ${wrong === c.i ? 'is-wrong' : ''}`} disabled={!onPick || blocked || pos >= 0} onClick={() => onPick?.(c.i)}>
             <b>{pos >= 0 ? `${pos + 1}` : '?'}</b>
             <span>{c.texte}</span>
             {years && <em>{years[i]}</em>}
@@ -913,10 +919,11 @@ function ChronoCards({ play, onPick = null, placed = [], blocked = false, years 
 }
 
 const Chrono = {
-  Tv({ play, state }) {
+  Tv({ play, state, round }) {
     return (
       <div className="mg-chrono">
-        <p className="duel-eyebrow">Touche les événements du plus ancien au plus récent · une erreur = 3 s de blocage</p>
+        <TvWrongs wrongs={play.wrongs} ms={round?.mg?.penaltyMs} />
+        <p className="duel-eyebrow">Du plus ancien au plus récent</p>
         <ChronoCards play={play} years={play.years} />
         <div className="mg-chrono-progress">
           {['rouge', 'bleu'].map((camp) => (
@@ -931,13 +938,13 @@ const Chrono = {
       </div>
     );
   },
-  Duelist({ play, act, state }) {
-    const left = useBlocked(play.blockedUntil, state);
+  Duelist({ play, act, state, round }) {
+    const pen = usePenalty(play.blockedUntil, state);
     return (
       <div className="mg-chrono-duelist">
         <p className="muted">Du plus ancien au plus récent : {play.mine.length} / 5</p>
-        {left > 0 && <p className="duel-notice">Erreur : bloqué 3 s</p>}
-        <ChronoCards play={play} placed={play.mine} blocked={left > 0} onPick={(i) => act({ card: i })} years={play.years} />
+        <PenaltyBadge left={pen.left} flash={pen.flash} ms={round?.mg?.penaltyMs} />
+        <ChronoCards play={play} placed={play.mine} blocked={pen.left > 0} wrong={pen.wrong} onPick={(i) => { pen.mark(i); act({ card: i }); }} years={play.years} />
       </div>
     );
   },
@@ -961,7 +968,7 @@ const Vf = {
     const r = play.reveal;
     return (
       <div className="mg-vf">
-        <p className="duel-eyebrow">Affirmation {play.n} sur {play.max} · la première erreur ou absence élimine</p>
+        <p className="duel-eyebrow">Affirmation {play.n} sur {play.max}</p>
         <h2 className="mg-vf-text">{play.texte}</h2>
         <div className="mg-vf-status">
           {['rouge', 'bleu'].map((camp) => (

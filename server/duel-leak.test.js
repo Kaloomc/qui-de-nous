@@ -10,7 +10,7 @@ import { GameStore } from './gameStore.js';
 import { registerSockets } from './sockets.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const FAST = { duelistsMs: 60, gameMs: 40, betsMs: 600, betsBeatMs: 30, betsRevealMs: 80, readyMs: 800, readyBeatMs: 30, resultMs: 100 };
+const FAST = { duelistsMs: 60, gameMs: 40, betsMs: 600, betsBeatMs: 30, betsRevealMs: 80, readyMs: 800, readyBeatMs: 30, introMs: 30, resultMs: 100 };
 
 function client(url) {
   const socket = io(url, { transports: ['websocket'], forceNew: true, reconnection: false });

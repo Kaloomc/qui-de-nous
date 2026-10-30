@@ -6524,3 +6524,45 @@ body.loup-night {
 .duel-games { gap: 8px; }
 .duel-setup { gap: 10px; margin: 12px auto; }
 .duel-setup-row { padding: 10px 16px; }
+
+/* ---------- Corrections après tests : lisibilité TV, intro, menu hôte ---------- */
+.duel-eyebrow { text-transform: none; letter-spacing: 0; font-size: clamp(1.5rem, 2.6vw, 2.5rem); }
+.duel-host { padding-top: 8px; }
+.duel-fade { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; animation: duel-fadein 0.25s ease-out both; }
+@keyframes duel-fadein { from { opacity: 0; } to { opacity: 1; } }
+.duel-play { position: relative; width: 100%; }
+.duel-play-body { min-height: 70vh; display: grid; place-content: center; justify-items: center; gap: 14px; font-size: 1.15em; }
+.duel-corner { position: fixed; top: 14px; z-index: 3; }
+.duel-corner.is-rouge { left: 18px; } .duel-corner.is-bleu { right: 18px; }
+.duel-corner .duel-fighter-name { font-size: clamp(1.6rem, 2.6vw, 2.6rem); }
+.duel-corner .duel-camp-label { font-size: 1.2rem; }
+.duel-host .timer-label, .duel-host .timer small { font-size: clamp(1.4rem, 2.2vw, 2.2rem); }
+.duel-score { font-size: clamp(2.2rem, 4vw, 4rem); }
+.duel-hostmenu { position: fixed; left: 12px; bottom: 12px; z-index: 20; }
+.duel-hostmenu summary { list-style: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); cursor: pointer; font-size: 1.6rem; opacity: 0.55; }
+.duel-hostmenu summary::-webkit-details-marker { display: none; }
+.duel-hostmenu[open] summary { opacity: 1; }
+.duel-hostmenu-items { position: absolute; left: 0; bottom: 56px; display: grid; gap: 8px; padding: 10px; border-radius: 14px; background: #1f1940; border: 2px solid rgba(255, 255, 255, 0.2); }
+.duel-hostmenu-items .ctrl { min-height: 44px; white-space: nowrap; }
+.duel-intro { display: grid; justify-items: center; gap: 14px; text-align: center; max-width: 1200px; }
+.duel-intro-name { font-size: clamp(3rem, 6vw, 6rem); }
+.duel-intro-rule { font-size: clamp(1.8rem, 3.4vw, 3.4rem); font-weight: 700; line-height: 1.2; }
+.duel-intro-picto { font-size: clamp(3rem, 7vw, 6rem); }
+.duel-intro-count { font-size: clamp(5rem, 14vw, 11rem); font-weight: 800; color: var(--yellow); line-height: 1; min-height: 1em; }
+.duel-intro-count.is-on { animation: duel-impact 0.5s ease-out; }
+.duel-intro.is-compact { gap: 8px; } .duel-intro.is-compact .duel-intro-name { font-size: 2.2rem; } .duel-intro.is-compact .duel-intro-rule { font-size: 1.5rem; } .duel-intro.is-compact .duel-intro-picto { font-size: 3rem; } .duel-intro.is-compact .duel-intro-count { font-size: 6rem; }
+.duel-notice-only { min-height: 60vh; display: grid; place-items: center; }
+.duel-notice.is-big { font-size: clamp(2rem, 4vw, 3.6rem); padding: 22px 36px; }
+.mg-wrongs { display: flex; gap: 40px; font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 800; }
+.mg-wrongs .is-rouge { color: #ff8a93; } .mg-wrongs .is-bleu { color: #8fb8ff; }
+@media (prefers-reduced-motion: reduce) { .duel-fade, .duel-intro-count.is-on { animation: none; } }
+
+.mg-choice.is-wrong, .mg-wire.is-wrong, .mg-chrono-card.is-wrong { background: #b3182b !important; border-color: #ff4d5e !important; animation: duel-shake 0.4s; }
+.mg-choice.is-wrong::after, .mg-chrono-card.is-wrong::after { content: "✖"; margin-left: auto; font-weight: 800; }
+@keyframes duel-shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.mg-penalty { position: relative; }
+.mg-penalty-float { position: absolute; right: 8px; top: -6px; font-size: 1.8rem; font-weight: 800; color: #ff4d5e; text-shadow: 0 2px 6px #000; animation: duel-floatup 1.3s ease-out forwards; }
+.mg-penalty-float.is-tv { position: static; display: inline-block; margin: 0 18px; font-size: 2.2rem; }
+.mg-tvwrongs { min-height: 3rem; display: flex; justify-content: center; }
+@keyframes duel-floatup { from { transform: translateY(8px); opacity: 1; } to { transform: translateY(-28px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mg-choice.is-wrong, .mg-wire.is-wrong, .mg-chrono-card.is-wrong, .mg-penalty-float { animation: none; } }

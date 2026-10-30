@@ -141,10 +141,11 @@ export default {
   id: 'plateau',
   name: 'Plateau fantôme',
   icon: 'plateau',
+  penaltyMs: BLOCK_MS,
   category: 'attention',
   maxMs: 75000,
   minContent: 0,
-  prepare: () => ({ n: 0, score: { rouge: 0, bleu: 0 }, asked: [], phase: 'scene', token: 0, done: null }),
+  prepare: () => ({ wrongs: { rouge: 0, bleu: 0 }, n: 0, score: { rouge: 0, bleu: 0 }, asked: [], phase: 'scene', token: 0, done: null }),
   begin: (s, ctx) => startPass(s, ctx),
   action(s, camp, data, ctx) {
     if (s.done || s.phase !== 'ask') return 'Pas maintenant.';
@@ -155,6 +156,7 @@ export default {
     if (s.correct[camp] != null) return null;
     if (data.choice !== s.q.right) {
       s.blocked[camp] = now + BLOCK_MS;
+      s.wrongs[camp] += 1;
       return null;
     }
     s.correct[camp] = Math.max(0, now - s.askedAt - ctx.latency(idOf(ctx, camp)));
@@ -171,6 +173,7 @@ export default {
     const view = {
       n: s.n,
       passes: PASSES,
+      wrongs: { ...s.wrongs },
       score: { ...s.score },
       phase: s.phase,
       question: s.phase === 'ask' || s.phase === 'reveal' ? s.q.text : null,

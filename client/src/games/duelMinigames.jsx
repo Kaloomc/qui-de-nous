@@ -8,6 +8,7 @@ import { TimerBar } from '../components.jsx';
 import { sounds } from '../sound.js';
 import { preloadVoices, speak, useSpeechStatus } from '../speech.js';
 import { useFrameElapsed } from './duelFx.js';
+import { PenaltyBadge, TvWrongs, usePenalty } from './duelPenalty.jsx';
 import { MG_VIEWS_2 } from './duelMinigames2.jsx';
 
 const CAMP_LABEL = { rouge: 'ROUGE', bleu: 'BLEU' };
@@ -33,7 +34,7 @@ const Pfc = {
     return (
       <div className="mg-pfc">
         <Score a={play.wins.rouge} b={play.wins.bleu} />
-        <p className="duel-eyebrow">Manche {play.round} sur {play.max} au plus · meilleur des 3</p>
+        <p className="duel-eyebrow">Manche {play.round} · meilleur des 3</p>
         <div className="mg-pfc-hands">
           {['rouge', 'bleu'].map((camp) => {
             const shown = play.shown?.[camp];
@@ -307,13 +308,13 @@ const Feu = {
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 
-function Choices({ play, onPick = null, blocked = false }) {
+function Choices({ play, onPick = null, blocked = false, wrong = null }) {
   return (
     <div className="mg-choices">
       {play.choices.map((c, i) => (
         <button
           key={i}
-          className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''}`}
+          className={`mg-choice ${play.shown ? (i === play.shown.right ? 'is-right' : 'is-dim') : ''} ${wrong === i ? 'is-wrong' : ''}`}
           disabled={!onPick || blocked || !!play.shown}
           onClick={() => onPick?.(i)}
         >
@@ -325,11 +326,12 @@ function Choices({ play, onPick = null, blocked = false }) {
 }
 
 const Culture = {
-  Tv({ play, state }) {
+  Tv({ play, state, round }) {
     return (
       <div className="mg-culture">
         <Score a={play.score.rouge} b={play.score.bleu} />
-        <p className="duel-eyebrow">Question {play.n}{play.categorie ? ` · ${play.categorie}` : ''} · 2 points gagnent</p>
+        <TvWrongs wrongs={play.wrongs} ms={round?.mg?.penaltyMs} />
+        <p className="duel-eyebrow">Question {play.n}{play.categorie ? ` · ${play.categorie}` : ''} · premier à 2 points</p>
         <h2 className="mg-question">{play.question}</h2>
         <Choices play={play} />
         {play.shown && <p className="duel-eyebrow">{play.shown.scorer ? `Point pour ${CAMP_LABEL[play.shown.scorer]} !` : play.shown.tie ? 'Égalité de vitesse : on la rejoue !' : 'Personne ne marque'}</p>}
@@ -341,20 +343,15 @@ const Culture = {
       </div>
     );
   },
-  Duelist({ play, act, state }) {
-    const [now, setNow] = useState(0);
-    const blockedFor = Math.max(0, (play.blockedUntil ?? 0) - Date.now() - (state?.clockOffset ?? 0));
-    useEffect(() => {
-      if (blockedFor <= 0) return undefined;
-      const id = setTimeout(() => setNow((n) => n + 1), blockedFor + 20);
-      return () => clearTimeout(id);
-    }, [play.blockedUntil, now]);
+  Duelist({ play, act, state, round }) {
+    const pen = usePenalty(play.blockedUntil, state);
+    const blockedFor = pen.left;
     return (
       <div className="mg-culture-duelist">
         <Score a={play.score.rouge} b={play.score.bleu} />
         <h2 className="mg-question is-small">{play.question}</h2>
-        {blockedFor > 0 && <p className="duel-notice">Mauvaise réponse : bloqué 2 s</p>}
-        <Choices play={play} blocked={blockedFor > 0} onPick={(i) => act({ choice: i, n: play.n })} />
+        <PenaltyBadge left={pen.left} flash={pen.flash} ms={round?.mg?.penaltyMs} />
+        <Choices play={play} blocked={blockedFor > 0} wrong={pen.wrong} onPick={(i) => { pen.mark(i); act({ choice: i, n: play.n }); }} />
         {play.shown && <p className="duel-eyebrow">{play.shown.scorer ? `Point pour ${CAMP_LABEL[play.shown.scorer]}` : 'Pas de point'}</p>}
       </div>
     );

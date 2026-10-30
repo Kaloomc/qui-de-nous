@@ -200,6 +200,7 @@ async function setup(n = 5, extra = {}) {
     ctx.tick(T.betsRevealMs);
     for (const id of [d().red, d().blue]) assert.equal(ctx.game.action(id, { type: 'ready' }), null);
     ctx.tick(T.readyBeatMs);
+  ctx.tick(T.introMs);
   };
   return { ...ctx, d, T, byId, toBets, toPlay, step: () => d().step };
 }
@@ -249,6 +250,7 @@ test('un duel complet : duellistes → mini-jeu → paris → révélation → p
   assert.equal(s.step(), 'ready', 'un seul prêt : on attend l’autre');
   game.action(blue, { type: 'ready' });
   s.tick(s.T.readyBeatMs);
+  s.tick(s.T.introMs);
   assert.equal(s.step(), 'play');
   assert.match(game.action(bettors[0], { type: 'play', data: { win: true } }), /ne te bats pas/);
   assert.equal(game.action(blue, { type: 'play', data: { win: true } }), null);
@@ -278,6 +280,7 @@ test('non-parieurs et mauvais paris : 1 gorgée chacun ; égalité par temps éc
   s.toPlay.length;
   for (const id of [s.d().red, s.d().blue]) s.game.action(id, { type: 'ready' });
   s.tick(s.T.readyBeatMs);
+  s.tick(s.T.introMs);
   s.tick(FAKE.maxMs + s.T.playPadMs); // personne ne joue : résolution forcée → égalité
   assert.equal(s.game.results.winner, 'égalité');
   s.tick(s.T.resultMs);
@@ -305,7 +308,7 @@ test('duelliste déconnecté : attente 10 s puis duel annulé (aucune gorgée), 
   assert.equal(s.game.roundId, first);
   s.tick(2);
   assert.notEqual(s.game.roundId, first, 'duel annulé après 10 s');
-  assert.equal(s.step(), 'duelists');
+  assert.equal(s.step(), 'notice');
   assert.equal(s.d().notice.kind, 'gone');
   assert.deepEqual(s.d().notice.ids, [red]);
   assert.equal(s.game.votes.size, 0, 'les paris du duel annulé sont effacés');
@@ -328,7 +331,7 @@ test('un duelliste qui n’est pas prêt en 5 s : duel annulé ; les deux prêts
   assert.equal(s.d().notice.kind, 'notReady');
   assert.equal(s.d().notice.ids.length, 1);
   assert.notEqual(s.d().notice.ids[0], red);
-  assert.equal(s.step(), 'duelists');
+  assert.equal(s.step(), 'notice');
 });
 
 test('la fin du duel tombe pendant l’attente d’un duelliste absent : le résultat reste valable', async () => {
@@ -435,7 +438,7 @@ test('événements périmés ignorés : action ou pari d’un duel passé, étap
   const old = { roundId: s.game.roundId, phaseId: s.d().phaseId, bettor: s.d().bettors[0] };
   s.game.gameHostAction({ type: 'skip' });
   assert.match(s.game.vote(old.bettor, 'rouge', old.roundId), /terminée/);
-  s.tick(s.T.duelistsMs + s.T.gameMs + s.T.betsMs + s.T.betsRevealMs);
+  s.tick(s.T.noticeMs + s.T.duelistsMs + s.T.gameMs + s.T.betsMs + s.T.betsRevealMs);
   assert.equal(s.step(), 'ready');
   assert.match(s.game.action(s.d().red, { type: 'ready', phaseId: old.phaseId }), /Trop tard/);
   assert.match(s.game.action(s.d().red, { type: 'play', data: { win: true } }), /Pas maintenant/);
@@ -536,6 +539,7 @@ test('emojis et confettis : parieurs seulement, de la révélation des paris à 
   s.tick(s.T.betsRevealMs);
   for (const id of [s.d().red, s.d().blue]) game.action(id, { type: 'ready' });
   s.tick(s.T.readyBeatMs);
+  s.tick(s.T.introMs);
   assert.equal(s.step(), 'play');
   for (let i = 0; i < 10; i++) {
     s.tick(1001);

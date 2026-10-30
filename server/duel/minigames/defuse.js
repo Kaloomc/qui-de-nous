@@ -156,6 +156,7 @@ export default {
   id: 'defuse',
   name: 'Désamorçage',
   icon: 'defuse',
+  penaltyMs: BLOCK_MS,
   category: 'cerveau',
   maxMs: MAX_MS + 2000,
   minContent: 0,

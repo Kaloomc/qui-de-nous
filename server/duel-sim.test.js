@@ -7,7 +7,7 @@ import { seededRng } from './rules/duel.js';
 import * as D from './rules/duel.js';
 
 const PLAYED = new Set();
-const KNOWN_STEPS = new Set(['waiting', 'duelists', 'game', 'bets', 'betsReveal', 'ready', 'play']);
+const KNOWN_STEPS = new Set(['waiting', 'notice', 'intro', 'duelists', 'game', 'bets', 'betsReveal', 'ready', 'play']);
 const TIMER = /^(g:(phase|soon|gone|mg\d+)|next|reveal|pending|autoReveal|grace|vote)$/;
 
 /** Une action au hasard, de la forme attendue par l'un des 5 mini-jeux (ou carrément invalide). */

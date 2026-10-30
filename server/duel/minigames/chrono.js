@@ -60,12 +60,13 @@ export default {
   id: 'chrono',
   name: 'Ordre chronologique',
   icon: 'chrono',
+  penaltyMs: BLOCK_MS,
   category: 'connaissances',
   maxMs: MAX_MS + 4000,
   minContent: MIN_SERIES,
   available: (game) => (game.duelContent?.chrono ?? SERIES).length >= MIN_SERIES,
   prepare(ctx) {
-    const s = { list: ctx.content.chrono ?? SERIES, token: 0, replayed: false, done: null };
+    const s = { wrongs: { rouge: 0, bleu: 0 }, list: ctx.content.chrono ?? SERIES, token: 0, replayed: false, done: null };
     newSeries(s, ctx);
     return s;
   },
@@ -84,6 +85,7 @@ export default {
     if (p.placed.includes(data.card) || p.finishedAt != null) return null;
     if (card.rank !== p.placed.length) {
       p.blockedUntil = now + BLOCK_MS; // erreur : 3 s de blocage, la carte n'est pas placée
+      s.wrongs[camp] += 1;
       return null;
     }
     p.placed.push(data.card);
@@ -105,6 +107,7 @@ export default {
       cards: s.cards.map((c, i) => ({ i, texte: c.texte })),
       startedAt: s.startedAt,
       limitMs: MAX_MS,
+      wrongs: { ...s.wrongs },
       count: { rouge: s.p.rouge.placed.length, bleu: s.p.bleu.placed.length },
       // Les dates n'apparaissent qu'à la fin de la manche.
       years: s.done ? s.cards.map((c) => c.annee) : null,

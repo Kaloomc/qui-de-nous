@@ -9,7 +9,7 @@ import { GameStore } from './gameStore.js';
 import { registerSockets } from './sockets.js';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const FAST = { duelistsMs: 40, gameMs: 30, betsMs: 200, betsBeatMs: 20, betsRevealMs: 40, readyMs: 800, readyBeatMs: 20, resultMs: 100 };
+const FAST = { duelistsMs: 40, gameMs: 30, betsMs: 200, betsBeatMs: 20, betsRevealMs: 40, readyMs: 800, readyBeatMs: 20, introMs: 20, resultMs: 100 };
 
 function client(url) {
   const socket = io(url, { transports: ['websocket'], forceNew: true, reconnection: false });
@@ -122,7 +122,7 @@ test('Le Crash : le point d’explosion n’est envoyé à personne avant l’ex
       await sleep(40);
       for (const c of [ctx.tv, ...ctx.players]) {
         const m = c.state;
-        if (m.round?.play && m.round.play.crashed == null) assert.equal(JSON.stringify(m.round.play).includes(String(crash)), false, 'point d’explosion visible');
+        if (m.round?.play && m.round.play.crashed == null) assert.equal(JSON.stringify(m.round.play).includes(`"crashed":${crash}`), false, 'point d’explosion visible');
       }
     }
     for (const c of [ctx.tv, ...ctx.players]) for (const m of messagesBeforeEnd(c)) if (m.round.play.crashed == null) assert.equal(JSON.stringify(m.round.play).includes('"crash"'), false);

@@ -1,0 +1,20 @@
+// Carte d'intro de chaque mini-jeu (affichée 3 s avant le duel) : pictogramme et règle en une phrase.
+export const INTROS = {
+  pfc: ['✊✋✌️', 'Choisis pierre, feuille ou ciseaux en secret. Meilleur des 3 manches.'],
+  culture: ['❓', 'Réponds juste le premier. Deux points gagnent.'],
+  feu: ['🔫', 'Tire seulement quand tu entends FEU. Trop tôt, tu perds.'],
+  simon: ['🟥🟨🟩', 'Rejoue la suite de pavés sans te tromper.'],
+  couleur: ['🎨', 'Touche la couleur de l’encre, pas le mot écrit.'],
+  defuse: ['💣', 'Coupe le bon fil grâce aux 3 indices.'],
+  code: ['🔐', 'Trouve le code secret : vert = bien placé, orange = mal placé.'],
+  simon2: ['🧠', 'Rejoue toute la suite, puis ajoute un pas pour piéger l’autre.'],
+  crash: ['📈', 'Banque avant que ça explose. La plus haute valeur gagne.'],
+  soleil: ['☀️', 'Avance en maintenant le bouton. Lâche à « Soleil » !'],
+  dilemme: ['🤝', 'Partager ou trahir ? Parlez-vous, puis choisissez en secret.'],
+  plateau: ['👀', 'Regarde bien la scène, puis réponds à la question.'],
+  course: ['🏃', 'Saute et baisse-toi. Le dernier debout gagne.'],
+  geo: ['🌍', 'Pose ton épingle au plus près de la ville.'],
+  quisuisje: ['🕵️', 'Devine qui je suis. Moins il y a d’indices, plus tu gagnes.'],
+  chrono: ['⏳', 'Touche les événements du plus ancien au plus récent.'],
+  vf: ['✔✖', 'Vrai ou faux ? Une erreur et tu es éliminé.'],
+};

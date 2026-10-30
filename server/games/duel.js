@@ -9,6 +9,7 @@ import { seededRng } from '../rules/duel.js';
 import { SPOTLIGHT_ROLES } from '../spotlight.js';
 import { TIMING } from '../timing.js';
 import { MINIGAMES } from '../duel/minigames/index.js';
+import { INTROS } from '../duel/intros.js';
 import { go, soon } from './steps.js';
 
 export const DUEL_TIMING = {
@@ -19,6 +20,8 @@ export const DUEL_TIMING = {
   betsRevealMs: 5500, // paris dévoilés, cote en direct
   readyMs: 5000, // « Prêt »
   readyBeatMs: 700, // pause quand les deux sont prêts
+  introMs: 4500, // carte d'intro du mini-jeu (règle, puis 3-2-1) : fait partie de la préparation
+  noticeMs: 2800, // bannière « duel annulé », seule à l'écran
   graceMs: 10000, // duelliste déconnecté : attente avant d'annuler
   playPadMs: 4000, // marge au-delà de la durée du mini-jeu
   resultMs: 4500, // suspense avant le verdict
@@ -63,6 +66,12 @@ function begin(game, notice = null) {
   r.lastGame = mgId;
   r.last = { pair: [pick.rouge, pick.bleu], challenger: pick.kingId ? (pick.kingId === pick.rouge ? pick.bleu : pick.rouge) : null };
   Object.assign(d, { red: pick.rouge, blue: pick.bleu, kingId: pick.kingId, mgId, mgSeed: Math.floor(Math.random() * 2 ** 31) });
+  // Après une annulation, la bannière s'affiche seule quelques secondes avant la roulette du duel suivant.
+  if (notice && !['resume', 'pause'].includes(notice.kind)) go(game, 'notice', timing(game).noticeMs, () => startDuelists(game));
+  else startDuelists(game);
+}
+
+function startDuelists(game) {
   go(game, 'duelists', timing(game).duelistsMs, () => startGameRoulette(game));
 }
 
@@ -112,7 +121,7 @@ function startReady(game) {
   const d = data(game);
   d.ready = {};
   probeLatency(game, duelists(d));
-  go(game, 'ready', timing(game).readyMs, () => (bothReady(data(game)) ? startPlay(game) : cancelDuel(game, { kind: 'notReady', ids: duelists(data(game)).filter((id) => !data(game).ready[id]) })));
+  go(game, 'ready', timing(game).readyMs, () => (bothReady(data(game)) ? startIntro(game) : cancelDuel(game, { kind: 'notReady', ids: duelists(data(game)).filter((id) => !data(game).ready[id]) })));
 }
 
 /** Contexte donné au mini-jeu : graine commune, horloge, minuteurs annulés avec le duel, mesure de latence. */
@@ -140,6 +149,11 @@ function contextFor(game, d, playId) {
       });
     },
   };
+}
+
+/** Carte d'intro : règle du mini-jeu et décompte 3-2-1 avant le départ (aucun temps de jeu consommé). */
+function startIntro(game) {
+  go(game, 'intro', timing(game).introMs, () => startPlay(game));
 }
 
 function startPlay(game) {
@@ -192,7 +206,7 @@ function cancelDuel(game, notice) {
 
 // ---------- Emojis et confettis ----------
 
-const CHEER_STEPS = ['betsReveal', 'ready', 'play'];
+const CHEER_STEPS = ['betsReveal', 'ready', 'intro', 'play'];
 
 /** Les parieurs encouragent leur camp, de la révélation des paris à la fin du duel : purement visuel, aucun effet sur le jeu ni les gorgées. */
 function cheer(game, d, playerId, action) {
@@ -397,7 +411,7 @@ export default {
   publicRound(game, viewer) {
     const d = data(game);
     if (!d.step) return {};
-    const showBets = ['betsReveal', 'ready', 'play'].includes(d.step) || game.phase !== 'question';
+    const showBets = ['betsReveal', 'ready', 'intro', 'play'].includes(d.step) || game.phase !== 'question';
     const mg = d.mgId ? minigames(game)[d.mgId] : null;
     const round = {
       step: d.step,
@@ -410,7 +424,7 @@ export default {
       kingId: d.kingId,
       king: options(game).king ? run(game).king : null,
       cote: options(game).cote,
-      mg: mg && !['waiting', 'duelists'].includes(d.step) ? { id: mg.id, name: mg.name, icon: mg.icon, maxMs: mg.maxMs, rule: mg.rule ?? null } : null,
+      mg: mg && !['waiting', 'duelists', 'notice'].includes(d.step) ? { id: mg.id, name: mg.name, icon: mg.icon, maxMs: mg.maxMs, rule: mg.rule ?? null, penaltyMs: mg.penaltyMs ?? null, intro: INTROS[mg.id] ?? null } : null,
       games: d.step === 'game' ? activeIds(game).map((id) => ({ id, name: minigames(game)[id].name, icon: minigames(game)[id].icon })) : null,
       // Compteur sans noms pendant les paris ; les paris eux-mêmes seulement une fois révélés.
       betCount: d.bettors ? { n: Object.keys(betsMap(game, d)).length, of: d.bettors.length } : null,

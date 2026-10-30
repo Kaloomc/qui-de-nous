@@ -279,19 +279,67 @@ function CheerPad({ act, my }) {
   );
 }
 
+// ---------- Carte d'intro, bannière, menu hôte ----------
+
+/** Carte d'intro du mini-jeu (TV et duellistes) : icône, nom, règle en gros, pictogramme, puis décompte 3-2-1. */
+function IntroCard({ state, round, compact = false }) {
+  const elapsed = useFrameElapsed(round.startedAt, state);
+  const total = round.timer?.totalMs ?? 4500;
+  const left = elapsed === Infinity ? 0 : Math.max(0, total - (elapsed ?? 0));
+  const count = left > 3000 ? null : Math.max(1, Math.ceil(left / 1000));
+  const [picto, rule] = round.mg?.intro ?? ['', ''];
+  return (
+    <div className={`duel-intro ${compact ? 'is-compact' : ''}`}>
+      <GameIcon icon={round.mg?.icon} size={compact ? 90 : 150} />
+      <h1 className="duel-intro-name">{round.mg?.name}</h1>
+      <p className="duel-intro-rule">{rule}</p>
+      <p className="duel-intro-picto" aria-hidden="true">{picto}</p>
+      <p key={count} className={`duel-intro-count ${count ? 'is-on' : ''}`} aria-live="polite">{count ?? '…'}</p>
+    </div>
+  );
+}
+
+/** Bannière « duel annulé » : seule à l'écran quelques secondes, puis le duel suivant. */
+function NoticeOnly({ state, round }) {
+  return (
+    <div className="duel-notice-only">
+      <p className="duel-notice is-big" role="status">{noticeText(state, round.notice)}</p>
+    </div>
+  );
+}
+
+/** Petit menu hôte discret : replié par défaut, dans un coin (jamais au milieu de l'écran). */
+function HostMenu({ gameAct, onQuit, skip = true }) {
+  return (
+    <details className="duel-hostmenu">
+      <summary aria-label="Menu hôte">⋯</summary>
+      <div className="duel-hostmenu-items">
+        {skip && (
+          <button className="ctrl" onClick={() => gameAct({ type: 'skip' })}>
+            Passer ce duel
+          </button>
+        )}
+        {onQuit && (
+          <button className="ctrl" onClick={onQuit}>
+            Terminer le mode
+          </button>
+        )}
+      </div>
+    </details>
+  );
+}
+
 // ---------- Duel ----------
 
 function PlayTv({ state, round, gameAct }) {
   const View = MG_VIEWS[round.mg?.id]?.Tv;
   return (
     <div className="duel-play">
-      <div className="duel-play-head">
-        <Fighter state={state} round={round} camp="rouge" size={96} />
-        <div className="duel-play-title">
-          <GameIcon icon={round.mg?.icon} size={64} />
-          <strong>{round.mg?.name}</strong>
-        </div>
-        <Fighter state={state} round={round} camp="bleu" size={96} />
+      <div className="duel-corner is-rouge">
+        <Fighter state={state} round={round} camp="rouge" size={150} />
+      </div>
+      <div className="duel-corner is-bleu">
+        <Fighter state={state} round={round} camp="bleu" size={150} />
       </div>
       <div className="duel-play-body">{View && round.play ? <View state={state} round={round} play={round.play} gameAct={gameAct} /> : null}</div>
     </div>
@@ -300,7 +348,7 @@ function PlayTv({ state, round, gameAct }) {
 
 // ---------- Écrans de la TV ----------
 
-export function HostQuestion({ state, gameAct }) {
+export function HostQuestion({ state, gameAct, onQuit }) {
   const round = state.round;
   // Fin du mode, changement de jeu ou pause : toutes les animations s'arrêtent.
   useEffect(() => () => teardownGame(), []);
@@ -317,11 +365,10 @@ export function HostQuestion({ state, gameAct }) {
       </div>
     );
   } else {
-    const Step = { duelists: DuelistRoulette, game: GameRoulette, bets: BetsTv, betsReveal: BetsReveal, ready: ReadyTv, play: PlayTv }[round.step];
+    const Step = { notice: NoticeOnly, duelists: DuelistRoulette, game: GameRoulette, bets: BetsTv, betsReveal: BetsReveal, ready: ReadyTv, intro: IntroCard, play: PlayTv }[round.step];
     body = (
       <>
-        <Notice state={state} round={round} />
-        <KingBanner state={state} round={round} />
+        {!['notice', 'intro', 'play'].includes(round.step) && <KingBanner state={state} round={round} />}
         {Step && <Step key={round.phaseId} state={state} round={round} gameAct={gameAct} />}
         {round.cheers && <CheerLayer feed={round.cheers} />}
       </>
@@ -329,11 +376,9 @@ export function HostQuestion({ state, gameAct }) {
   }
   return (
     <div className="duel-host">
-      {body}
-      <div className="duel-host-actions">
-        <button className="ctrl" onClick={() => gameAct({ type: 'skip' })}>
-          Passer ce duel
-        </button>
+      <HostMenu gameAct={gameAct} onQuit={onQuit} />
+      <div key={round.step} className="duel-fade">
+        {body}
       </div>
     </div>
   );
@@ -370,7 +415,7 @@ export function HostReveal({ state }) {
   );
 }
 
-export function HostResults({ state }) {
+export function HostResults({ state, onQuit }) {
   const r = state.results;
   const round = state.round;
   const drinkers = Object.entries(r.sips)
@@ -381,6 +426,7 @@ export function HostResults({ state }) {
   const winner = r.winnerId ? playerOf(state, r.winnerId) : null;
   return (
     <div className="duel-results">
+      <HostMenu skip={false} gameAct={() => {}} onQuit={onQuit} />
       <h1 className={`duel-winner ${tie ? '' : CAMPS[r.winner].cls}`}>{tie ? 'Égalité !' : `${winner.name} gagne !`}</h1>
       <div className="duel-bets-fighters is-small">
         {['rouge', 'bleu'].map((camp) => (
@@ -512,6 +558,8 @@ function DuelistScreen({ state, round, act, my }) {
       </Reveal>
     );
   }
+  if (round.step === 'notice') return <NoticeOnly state={state} round={round} />;
+  if (round.step === 'intro') return <IntroCard compact state={state} round={round} />;
   if (round.step === 'game') {
     return (
       <div className="center">
@@ -577,7 +625,8 @@ export function PlayerRound({ state, act, vote }) {
     );
   }
   let body;
-  if (my.role === 'duelist') body = <DuelistScreen state={state} round={round} act={act} my={my} />;
+  if (round.step === 'notice') body = <NoticeOnly state={state} round={round} />;
+  else if (my.role === 'duelist') body = <DuelistScreen state={state} round={round} act={act} my={my} />;
   else if (round.step === 'bets' && my.role === 'bettor') body = <BetButtons state={state} round={round} my={my} vote={vote} />;
   else if (my.role === 'out') {
     body = (
@@ -596,7 +645,6 @@ export function PlayerRound({ state, act, vote }) {
   } else body = <Spectator state={state} round={round} act={act} my={my} />;
   return (
     <div key={round.phaseId} className="duel-phone">
-      <Notice state={state} round={round} />
       {body}
     </div>
   );

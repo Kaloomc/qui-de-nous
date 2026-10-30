@@ -85,13 +85,14 @@ export default {
   id: 'culture',
   name: 'Culture G éclair',
   icon: 'culture',
+  penaltyMs: BLOCK_MS, // mauvaise réponse : bloqué 2 s
   category: 'connaissances',
   maxMs: 80000,
   minContent: MIN_QUESTIONS,
   available: (game) => (game.duelContent?.culture ?? QUESTIONS).length >= MIN_QUESTIONS,
   prepare(ctx) {
     const list = ctx.content.culture ?? QUESTIONS;
-    return { n: 0, score: { rouge: 0, bleu: 0 }, q: null, shown: null, phase: 'ask', token: 0, history: [], done: null, replayed: false, pick: (c) => c.draw('duel-culture', list) };
+    return { n: 0, wrongs: { rouge: 0, bleu: 0 }, score: { rouge: 0, bleu: 0 }, q: null, shown: null, phase: 'ask', token: 0, history: [], done: null, replayed: false, pick: (c) => c.draw('duel-culture', list) };
   },
   begin: (s, ctx) => ask(s, ctx),
   action(s, camp, data, ctx) {
@@ -104,6 +105,7 @@ export default {
     if (q.correct[camp] != null) return null;
     if (data.choice !== q.right) {
       q.blocked[camp] = now + BLOCK_MS;
+      s.wrongs[camp] += 1;
       return null;
     }
     // Question vue sur le téléphone RTT/2 après l'envoi, réponse reçue RTT/2 après le clic : on retire l'aller-retour.
@@ -122,6 +124,7 @@ export default {
     const view = {
       n: s.n,
       max: MAX_QUESTIONS,
+      wrongs: { ...s.wrongs },
       score: { ...s.score },
       phase: s.phase,
       question: q?.question ?? null,
