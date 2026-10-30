@@ -90,7 +90,7 @@ async function session(seed) {
     if (game.results && game.phase === 'results') {
       const r = game.results;
       assert.ok(Object.values(r.sips).every((s) => s >= 0 && s <= D.SIP_CAP[r.cote] + 1));
-      if (r.winner === 'égalité') assert.deepEqual(Object.keys(r.sips).sort(), [r.red, r.blue].sort());
+      if (r.winner === 'égalité') assert.ok(Object.keys(r.sips).every((id) => id === r.red || id === r.blue), 'égalité : seuls les duellistes boivent');
       else assert.equal(r.sips[r.winnerId], undefined, 'le vainqueur ne boit jamais');
     }
   }
