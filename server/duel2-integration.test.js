@@ -5,11 +5,11 @@ import { makeGame } from './testClock.js';
 import { DUEL_TIMING } from './games/duel.js';
 import { MINIGAMES } from './duel/minigames/index.js';
 
-const NEW = ['defuse', 'code', 'simon2', 'crash', 'dilemme', 'soleil', 'plateau', 'course', 'geo', 'quisuisje', 'chrono', 'vf'];
+const NEW = ['defuse', 'code', 'simon2', 'crash', 'dilemme', 'soleil', 'plateau', 'course', 'geo', 'quisuisje', 'chrono', 'vf', 'des', 'russe'];
 const OLD = ['pfc', 'culture', 'feu', 'simon', 'couleur'];
 
-test('les 17 mini-jeux sont enregistrés, avec nom, icône, catégorie et durée ; 12 nouveaux + 5 de la partie 1', () => {
-  assert.equal(Object.keys(MINIGAMES).length, 17);
+test('les 19 mini-jeux sont enregistrés, avec nom, icône, catégorie et durée ; 14 nouveaux + 5 de la partie 1', () => {
+  assert.equal(Object.keys(MINIGAMES).length, 19);
   for (const id of [...OLD, ...NEW]) {
     const m = MINIGAMES[id];
     assert.ok(m, id);
@@ -18,22 +18,22 @@ test('les 17 mini-jeux sont enregistrés, avec nom, icône, catégorie et durée
   }
 });
 
-test('écran d’options : les 17 jeux sont listés (cochés par défaut) et la roulette les propose tous', async () => {
+test('écran d’options : les 19 jeux sont listés (cochés par défaut) et la roulette les propose tous', async () => {
   const { game } = await makeGame('duel', ['A', 'B', 'C', 'D', 'E']);
   const lobby = game.publicState({ host: true }).lobby;
-  assert.equal(lobby.games.length, 17);
+  assert.equal(lobby.games.length, 19);
   assert.ok(lobby.games.every((g) => g.available), 'tous disponibles (contenu suffisant)');
   assert.equal(lobby.options.games, null, 'tous cochés par défaut');
   const seen = new Set();
   game.start();
-  for (let i = 0; i < 400 && seen.size < 17; i++) {
+  for (let i = 0; i < 400 && seen.size < 19; i++) {
     game.roundData.step === 'game' && (game.publicState({ host: true }).round.games ?? []).forEach((g) => seen.add(g.id));
     game.clock.tick(500);
     if (game.roundData.step === 'game') (game.publicState({ host: true }).round.games ?? []).forEach((g) => seen.add(g.id));
     if (game.phase === 'question' && game.roundData.step === 'ready') game.gameHostAction({ type: 'skip' });
     if (game.phase !== 'question') game.clock.tick(15000);
   }
-  assert.equal(seen.size, 17, 'la roulette contient les 17 jeux');
+  assert.equal(seen.size, 19, 'la roulette contient les 19 jeux');
 });
 
 test('un jeu décoché n’est jamais tiré ; au moins un jeu doit rester coché', async () => {

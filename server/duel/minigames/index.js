@@ -6,7 +6,7 @@
 //   host(état, action, ctx)        : (facultatif) signal de la TV (voix lancée…)
 //   result(état, ctx) → null | { winner: 'rouge'|'bleu'|'égalité', details }   : le duel est-il terminé ?
 //   resolve(état, ctx) → { winner, details }   : résultat forcé à la fin du temps (jamais null)
-//   view(état, qui, ctx)           : ce que voit { kind: 'tv' } | { kind: 'duelist', side } | { kind: 'bettor' } ; aucun secret d'un
+//   view(état, qui, ctx)           : ce que voit { kind: 'tv' } | { kind: 'duelist', side } | { kind: 'bettor', id, bet } (bet : a parié sur ce duel) ; aucun secret d'un
 //                                    duelliste ne doit sortir de la vue de ce duelliste avant la fin de la manche.
 // ctx : seed, rng, red, blue, now(), later(ms, fn), latency(id) (aller-retour en ms), draw(clé, liste), content, voice.
 // Le moteur (server/games/duel.js) gère les étapes, les minuteurs, les « prêts », les paris et les gorgées.
@@ -27,5 +27,7 @@ import simon from './simon.js';
 import soleil from './soleil.js';
 import vf from './vf.js';
 import simon2 from './simon2.js';
+import des from './des.js';
+import russe from './russe.js';
 
-export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse, code, simon2, crash, dilemme, soleil, plateau, course, geo, quisuisje, chrono, vf].map((m) => [m.id, m]));
+export const MINIGAMES = Object.fromEntries([pfc, culture, feu, simon, couleur, defuse, code, simon2, crash, dilemme, soleil, plateau, course, geo, quisuisje, chrono, vf, des, russe].map((m) => [m.id, m]));

@@ -249,7 +249,7 @@ function myView(game, d, id) {
 /** Le mini-jeu ne montre à chacun que ce qu'il a le droit de voir. */
 function gameView(game, d, viewer) {
   if (!d.mg || d.step !== 'play') return null;
-  const who = viewer.host ? { kind: 'tv' } : campOf(d, viewer.playerId) ? { kind: 'duelist', side: campOf(d, viewer.playerId), id: viewer.playerId } : { kind: 'bettor' };
+  const who = viewer.host ? { kind: 'tv' } : campOf(d, viewer.playerId) ? { kind: 'duelist', side: campOf(d, viewer.playerId), id: viewer.playerId } : { kind: 'bettor', id: viewer.playerId, bet: !!d.bettors?.includes(viewer.playerId) && game.votes.has(viewer.playerId) };
   return minigames(game)[d.mgId].view(d.mg, who, d.ctx);
 }
 

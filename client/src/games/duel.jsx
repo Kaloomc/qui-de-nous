@@ -737,11 +737,14 @@ function BetButtons({ state, round, my, vote }) {
   );
 }
 
-function Spectator({ round, my, cheer }) {
+function Spectator({ state, round, my, cheer }) {
+  // Parieur d'un jeu à secret (Dés menteurs, Roulette russe) : le serveur lui envoie `play.secret`, affiché au-dessus des emojis.
+  const Secret = round.step === 'play' && round.play?.secret ? MG_VIEWS[round.mg?.id]?.Secret : null;
   // Seul rappel du pari : un fin liseré en haut (rouge ou bleu, avec son libellé pour les lecteurs d'écran).
   return (
     <div className="duel-spectator is-fill">
       <div className={`duel-betband ${my.bet ? CAMPS[my.bet].cls : 'is-none'}`} role="note" aria-label={my.bet ? `Ton pari : ${CAMPS[my.bet].label}` : 'Pas de pari'} />
+      {Secret && !round.finished && <Secret state={state} round={round} play={round.play} />}
       {['betsReveal', 'intro', 'ready', 'play'].includes(round.step) && !round.finished ? <CheerPad cheer={cheer} /> : <p className="duel-eyebrow">Regarde l’écran !</p>}
     </div>
   );
@@ -858,7 +861,7 @@ export function PlayerRound({ state, act, vote, cheer }) {
         <p className="lead">Qui va se battre ?</p>
       </div>
     );
-  } else body = <Spectator round={round} my={my} cheer={cheer} />;
+  } else body = <Spectator state={state} round={round} my={my} cheer={cheer} />;
   return (
     <div key={round.phaseId} className="duel-phone">
       {body}

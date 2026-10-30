@@ -32,6 +32,11 @@ function randomPlay(rng) {
     { value: rng() < 0.5, n: Math.floor(rng() * 5) },
     { k: pick(['j', 'd1', 'd0', 'x']), f: Math.floor(rng() * 400) },
     { choice: Math.floor(rng() * 4), n: Math.floor(rng() * 4) },
+    // Dés menteurs et Roulette russe.
+    { type: 'ready', round: Math.floor(rng() * 3) },
+    { choice: pick(['garder', 'relancer', 'tricher']), round: Math.floor(rng() * 3), phase: pick(['talk', 'decide', undefined]) },
+    { slot: Math.floor(rng() * 8) - 1, t: pick([undefined, 1, 2, 3]) },
+    { pass: true },
   ]);
 }
 
@@ -119,6 +124,6 @@ test('simulateur : 300 sessions de 3 à 30 joueurs, comportements variés, aucun
     const res = await session(seed);
     total += res.duels;
   }
-  assert.equal(PLAYED.size, 17, `les 17 mini-jeux ont été joués : ${[...PLAYED]}`);
+  assert.equal(PLAYED.size, 19, `les 19 mini-jeux ont été joués : ${[...PLAYED]}`);
   assert.ok(total > 100, `les duels avancent (${total} au total)`);
 });

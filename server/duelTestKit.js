@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { makeGame } from './testClock.js';
 import { DUEL_TIMING } from './games/duel.js';
 
-/** `id` : le seul mini-jeu actif ; `latency` : active la table de latences ; `content` : contenu injecté ; `players` : nombre de joueurs. */
-export async function duel(id, { content, latency, players = 5, minigames } = {}) {
+/** `id` : le seul mini-jeu actif ; `latency` : active la table de latences ; `content` : contenu injecté ; `players` : nombre de joueurs ;
+ *  `bets` : nombre de parieurs (dans l'ordre) qui parient, en alternant rouge et bleu : les autres restent « sans pari ». */
+export async function duel(id, { content, latency, players = 5, minigames, bets = 0 } = {}) {
   const ctx = await makeGame('duel', Array.from({ length: players }, (_, i) => `J${i}`));
   if (minigames) ctx.game.duelMinigames = minigames;
   ctx.game.duelOptions = { king: false, cote: 'standard', games: [id] };
@@ -15,6 +16,7 @@ export async function duel(id, { content, latency, players = 5, minigames } = {}
   const T = DUEL_TIMING;
   ctx.tick(T.duelistsMs);
   ctx.tick(T.gameMs);
+  d().bettors.slice(0, bets).forEach((pid, i) => ctx.game.vote(pid, i % 2 ? 'bleu' : 'rouge'));
   ctx.tick(T.betsMs);
   ctx.tick(T.betsRevealMs);
   for (const pid of [d().red, d().blue]) ctx.game.action(pid, { type: 'ready' });

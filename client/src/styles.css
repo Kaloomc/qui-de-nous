@@ -6682,3 +6682,79 @@ body.loup-night {
 .mg-qui-feedback { font-weight: 800; font-size: clamp(1.1rem, 4.5vw, 1.5rem); padding: 10px 14px; border-radius: 14px; text-align: center; border: 3px solid currentColor; }
 .mg-qui-feedback.is-ok { color: #2fd18a; background: rgba(47, 209, 138, 0.15); }
 .mg-qui-feedback.is-ko { color: #ff8a93; background: rgba(255, 59, 78, 0.15); }
+
+/* Dés menteurs et Roulette russe */
+.mg-des, .mg-russe { width: 100%; display: grid; justify-items: center; gap: 14px; }
+.mg-des-title, .mg-russe-title { font-size: clamp(2rem, 4.6vw, 4rem); font-weight: 800; text-align: center; overflow-wrap: anywhere; }
+.mg-die rect { fill: #fff8f0; stroke: #14102a; stroke-width: 4; }
+.mg-die circle { fill: #14102a; }
+.mg-die text { fill: #6b5fa0; }
+.mg-die.is-hidden rect { fill: #3a3170; stroke: #fff8f0; stroke-dasharray: 8 6; }
+.mg-die.is-hidden text { fill: #ffc93c; }
+.mg-die.is-rolling { animation: mg-die-spin 0.45s linear infinite; }
+@keyframes mg-die-spin { from { transform: rotate(0deg) scale(1.08); } to { transform: rotate(360deg) scale(1.08); } }
+.mg-des-face { display: flex; align-items: center; justify-content: center; gap: clamp(20px, 6vw, 90px); }
+.mg-des-side { display: grid; justify-items: center; gap: 6px; font-size: clamp(1.2rem, 2.4vw, 2rem); }
+.mg-des-side.is-rouge strong, .mg-des-col.is-rouge > strong { color: #ff8a93; }
+.mg-des-side.is-bleu strong, .mg-des-col.is-bleu > strong { color: #8fb8ff; }
+.mg-des-vs { font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 800; color: var(--yellow); }
+.mg-des-status { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; font-weight: 700; font-size: clamp(1.1rem, 2vw, 1.7rem); }
+.mg-des-status .is-rouge { color: #ff8a93; }
+.mg-des-status .is-bleu { color: #8fb8ff; }
+.mg-des-timer { width: min(100%, 900px); font-size: clamp(1.6rem, 3.4vw, 3rem); }
+.mg-des-timer .timer-label { font-size: clamp(2rem, 5vw, 4.4rem); font-weight: 800; }
+.mg-des-reveal { display: grid; justify-items: center; gap: 12px; width: 100%; }
+.mg-des-cols { display: flex; gap: clamp(16px, 5vw, 80px); justify-content: center; align-items: flex-start; }
+.mg-des-col { display: grid; justify-items: center; gap: 6px; padding: 12px 16px; border-radius: 20px; border: 3px solid transparent; font-size: clamp(1.1rem, 2vw, 1.8rem); animation: duel-fadein 0.3s both; }
+.mg-des-col.is-win { border-color: var(--yellow); background: rgba(255, 201, 60, 0.14); transform: scale(1.06); }
+.mg-des-col.is-lose { opacity: 0.7; border-style: dashed; border-color: rgba(255, 255, 255, 0.4); }
+.mg-des-col small { color: var(--muted); }
+.mg-des-choice, .mg-des-verdict { animation: duel-fadein 0.4s both; animation-delay: var(--d, 0s); font-weight: 800; }
+.mg-des-verdict { font-size: clamp(1.6rem, 3.6vw, 3rem); color: var(--yellow); }
+.mg-des-badge { font-style: normal; font-weight: 800; background: var(--yellow); color: #2a1d00; padding: 2px 12px; border-radius: 999px; }
+.mg-des-duelist, .mg-russe-duelist { width: 100%; display: grid; justify-items: center; gap: 12px; }
+.mg-des-hint { text-align: center; font-size: 1.15rem; }
+.mg-des-mine { font-size: 1.6rem; font-weight: 800; }
+.mg-des-btn { width: 100%; min-height: 64px; font-size: 1.4rem; }
+.mg-des-pick { border-radius: 18px; border: 3px solid #fff8f0; background: rgba(255, 255, 255, 0.1); color: #fff; font-weight: 800; cursor: pointer; }
+.mg-des-pick.is-picked { background: rgba(47, 209, 138, 0.35); border-color: var(--green); }
+.mg-des-pick:disabled:not(.is-picked) { opacity: 0.5; }
+.mg-des-feedback { font-weight: 800; font-size: 1.3rem; padding: 10px 14px; border-radius: 14px; text-align: center; border: 3px solid currentColor; }
+.mg-des-feedback.is-ok { color: #2fd18a; background: rgba(47, 209, 138, 0.15); }
+
+/* Secret des parieurs (téléphone) : au-dessus des emojis, compact */
+.mg-secret { display: grid; justify-items: center; gap: 6px; padding: 8px 10px; border-radius: 16px; border: 3px dashed var(--yellow); background: rgba(255, 201, 60, 0.1); }
+.mg-secret-title { font-weight: 800; font-size: 1.1rem; color: var(--yellow); }
+.mg-des-secret-row { display: flex; gap: 22px; justify-content: center; }
+.mg-des-secret-row > div { display: grid; justify-items: center; gap: 2px; }
+.mg-des-secret-row .is-rouge small { color: #ff8a93; }
+.mg-des-secret-row .is-bleu small { color: #8fb8ff; }
+
+/* Barillet */
+.mg-barrel { position: relative; width: min(100%, 560px, 62vh); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #2a2254 0 60%, #1b1540 61%); border: 6px solid #b3a9d6; }
+.mg-barrel.is-compact { width: min(60vw, 230px); }
+.mg-barrel-core { position: absolute; inset: 38%; display: grid; place-items: center; font-size: clamp(1.6rem, 6vw, 3.4rem); border-radius: 50%; background: #14102a; }
+.mg-chamber { position: absolute; width: 27%; aspect-ratio: 1; min-width: 44px; min-height: 44px; transform: translate(-50%, -50%); border-radius: 50%; border: 4px solid #b3a9d6; background: #14102a; color: #fff; display: grid; place-items: center; align-content: center; gap: 0; font-weight: 800; padding: 0; cursor: default; transition: transform 0.2s, background-color 0.2s; }
+.mg-chamber b { font-size: clamp(1.3rem, 4.2vw, 2.6rem); line-height: 1; }
+.mg-chamber span { font-size: clamp(0.7rem, 1.6vw, 1.1rem); line-height: 1.05; text-align: center; }
+.mg-barrel.is-compact .mg-chamber b { font-size: 1.1rem; }
+.mg-barrel.is-compact .mg-chamber span { font-size: 0.55rem; }
+.mg-chamber.is-open { cursor: pointer; border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(255, 201, 60, 0.35); touch-action: manipulation; }
+.mg-chamber.is-open:active { transform: translate(-50%, -50%) scale(0.92); }
+.mg-chamber.is-safe { background: #1f8a58; border-color: #2fd18a; transform: translate(-50%, -50%) scale(0.94); }
+.mg-chamber.is-trap { border: 4px dashed #6cc4ff; background: #12365c; }
+.mg-chamber.is-splash { background: #2b8ee0; border-color: #fff; animation: mg-splash-pop 0.6s ease-out both; }
+@keyframes mg-splash-pop { 0% { transform: translate(-50%, -50%) scale(0.6); } 60% { transform: translate(-50%, -50%) scale(1.25); } 100% { transform: translate(-50%, -50%) scale(1.08); } }
+.mg-russe-passes { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; font-weight: 700; font-size: clamp(1rem, 1.8vw, 1.5rem); }
+.mg-russe-passes .is-rouge { color: #ff8a93; }
+.mg-russe-passes .is-bleu { color: #8fb8ff; }
+.mg-russe-msg { font-weight: 800; font-size: 1.4rem; text-align: center; }
+.mg-russe-msg.is-mine { color: var(--yellow); }
+.mg-russe.is-splash .mg-russe-title { color: #6cc4ff; }
+.mg-splash { position: fixed; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; z-index: 7; }
+.mg-splash span { position: absolute; left: 0; top: 0; font-size: var(--s); animation: mg-splash-fly 1.5s ease-out both; animation-delay: var(--d); }
+@keyframes mg-splash-fly { 0% { transform: rotate(var(--a)) translateY(0) scale(0.4); opacity: 1; } 100% { transform: rotate(var(--a)) translateY(-38vmin) scale(1.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .mg-die.is-rolling, .mg-chamber.is-splash, .mg-des-col, .mg-des-choice, .mg-des-verdict { animation: none; }
+  .mg-splash { display: none; }
+}

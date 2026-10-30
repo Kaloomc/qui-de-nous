@@ -194,6 +194,32 @@ const ICONS = {
       <path d="M73 49 l22 22 M95 49 l-22 22" stroke="#fff8f0" strokeWidth="8" strokeLinecap="round" />
     </>
   ),
+  des: (
+    <>
+      <rect x="10" y="30" width="58" height="58" rx="12" fill="#fff8f0" stroke="#14102a" strokeWidth="4" transform="rotate(-10 39 59)" />
+      <g fill="#14102a" transform="rotate(-10 39 59)">
+        <circle cx="26" cy="46" r="5" />
+        <circle cx="39" cy="59" r="5" />
+        <circle cx="52" cy="72" r="5" />
+      </g>
+      <rect x="58" y="14" width="48" height="48" rx="10" fill="#ff4f8b" stroke="#fff8f0" strokeWidth="4" transform="rotate(12 82 38)" />
+      <g fill="#fff8f0" transform="rotate(12 82 38)">
+        <circle cx="70" cy="26" r="4.5" />
+        <circle cx="94" cy="26" r="4.5" />
+        <circle cx="70" cy="50" r="4.5" />
+        <circle cx="94" cy="50" r="4.5" />
+      </g>
+    </>
+  ),
+  russe: (
+    <>
+      <circle cx="60" cy="60" r="46" fill="#2a2254" stroke="#fff8f0" strokeWidth="5" />
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <circle key={i} cx={60 + 28 * Math.cos((i / 6) * 2 * Math.PI - Math.PI / 2)} cy={60 + 28 * Math.sin((i / 6) * 2 * Math.PI - Math.PI / 2)} r="10" fill={i === 1 ? '#3ee0c5' : '#14102a'} stroke="#b3a9d6" strokeWidth="3" />
+      ))}
+      <path d="M60 46 c0 0 -9 11 -9 17 a9 9 0 0 0 18 0 c0 -6 -9 -17 -9 -17 Z" fill="#6cc4ff" stroke="#fff8f0" strokeWidth="3" />
+    </>
+  ),
   quill: (
     <>
       <rect x="20" y="18" width="62" height="84" rx="10" fill="#fff8f0" />

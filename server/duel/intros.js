@@ -17,4 +17,6 @@ export const INTROS = {
   quisuisje: ['🕵️', 'Devine qui je suis. Moins il y a d’indices, plus tu gagnes.'],
   chrono: ['⏳', 'Touche les événements du plus ancien au plus récent.'],
   vf: ['✔✖', 'Vrai ou faux ? Une erreur et tu es éliminé.'],
+  des: ['🎲', 'Tu vois son dé, pas le tien : conseille-le ou bluffe-le, puis garde ou relance.'],
+  russe: ['💦', 'Une case sur 6 déclenche le splash. Choisis à ton tour… ou passe.'],
 };
