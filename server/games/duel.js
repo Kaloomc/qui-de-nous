@@ -49,7 +49,7 @@ const activeIds = (game) => D.activeGames(options(game), playableIds(game));
 /** Début d'un duel (ou duel retiré après une annulation). `notice` : pourquoi le précédent a été annulé. */
 function begin(game, notice = null) {
   const d = data(game);
-  Object.assign(d, { seq: d.seq ?? 0, notice, red: null, blue: null, kingId: null, mgId: null, mgSeed: null, bettors: null, ready: {}, mg: null, outcome: null, step: null, laterSeq: 0, emojis: { sent: 0 } });
+  Object.assign(d, { seq: d.seq ?? 0, notice, red: null, blue: null, kingId: null, mgId: null, mgSeed: null, bettors: null, ready: {}, mg: null, outcome: null, step: null, laterSeq: 0, emojis: { sent: 0, seq: 0, queue: [] } });
   const r = run(game);
   const here = game.connectedPlayers().map((p) => p.id);
   const active = activeIds(game);
@@ -214,12 +214,16 @@ function cheer(game, d, playerId, action) {
   if (!d.bettors?.includes(playerId)) return 'Seuls les parieurs encouragent.';
   const item = D.cleanCheer(action);
   if (item.error) return item.error;
+  // Spam autorisé jusqu'à CHEER_PER_SEC appuis par seconde et par joueur ; le surplus est ignoré, sans erreur.
+  const want = Math.max(1, Math.min(D.CHEER_BATCH_MAX, Math.floor(Number(action.count)) || 1));
   const now = game.clock.now();
-  const last = d.emojis.at?.[playerId];
-  if (last != null && now - last < D.CHEER_GAP_MS) return 'Doucement : un envoi par seconde.';
-  (d.emojis.at ??= {})[playerId] = now;
-  d.emojis.sent += 1;
-  d.emojis.feed = [...(d.emojis.feed ?? []), { n: d.emojis.sent, ...item, camp: game.votes.get(playerId) ?? null }].slice(-D.FEED_MAX);
+  const win = (d.emojis.win ??= {});
+  if (!win[playerId] || now - win[playerId].start >= 1000) win[playerId] = { start: now, used: 0 };
+  const ok = Math.min(want, D.CHEER_PER_SEC - win[playerId].used);
+  if (ok <= 0) return null;
+  win[playerId].used += ok;
+  d.emojis.sent += ok;
+  d.emojis.queue = [...(d.emojis.queue ?? []), { n: ++d.emojis.seq, ...item, camp: game.votes.get(playerId) ?? null, count: ok }].slice(-D.FEED_MAX);
   return null;
 }
 
@@ -275,6 +279,19 @@ export default {
     options: options(game),
     games: Object.values(minigames(game)).map((m) => ({ id: m.id, name: m.name, icon: m.icon, category: m.category, available: m.available?.(game) !== false })),
   }),
+
+  /** Emojis en attente, pour la TV seulement (événement `duel:cheers`, hors de l'état : jamais vers les téléphones, donc jamais vers les duellistes). */
+  drainCheers(game) {
+    const d = data(game);
+    const items = d.emojis?.queue ?? [];
+    if (items.length) d.emojis.queue = [];
+    return items;
+  },
+  cheer(game, playerId, payload) {
+    const d = data(game);
+    if (game.phase !== 'question' || !d.step) return 'Pas maintenant.';
+    return cheer(game, d, playerId, payload ?? {});
+  },
 
   startRound(game) {
     // Le mode tourne tout seul : l'enchaînement automatique est activé au lancement (l'hôte peut le couper ensuite).
@@ -431,8 +448,6 @@ export default {
       bets: showBets && d.bettors ? betsMap(game, d) : null,
       odds: showBets && d.bettors ? D.oddsPct(betsMap(game, d), d.bettors) : null,
       ready: d.step === 'ready' ? { rouge: !!d.ready[d.red], bleu: !!d.ready[d.blue] } : null,
-      // Fil des emojis : la TV seulement (jamais les téléphones, donc jamais ceux des duellistes).
-      cheers: viewer.host && CHEER_STEPS.includes(d.step) && !d.outcome ? d.emojis.feed ?? [] : null,
       play: gameView(game, d, viewer),
       finished: !!d.outcome,
     };

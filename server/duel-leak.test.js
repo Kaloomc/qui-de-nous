@@ -82,10 +82,12 @@ test('fuite : choix secrets, paris secrets et emojis réservés à la TV, sur de
     await ctx.tv.waitFor((s) => s.round?.step === 'play');
     assert.ok(red.pings >= 1 && blue.pings >= 1, 'les duellistes ont été sondés (latence)');
     // Emojis : seulement la TV les reçoit.
-    assert.ok((await bettors[0].emit('player:action', { action: { type: 'cheer', kind: 'emoji', emoji: '🔥' }, roundId })).ok);
-    await sleep(60);
-    assert.equal(ctx.tv.state.round.cheers?.length, 1);
-    for (const p of ctx.players) assert.ok(p.log.every((m) => !m.round?.cheers), `${p.name} a reçu le fil d’emojis`);
+    const got = [];
+    ctx.tv.socket.on('duel:cheers', (items) => got.push(...items));
+    for (const p of ctx.players) p.socket.on('duel:cheers', () => assert.fail(`${p.name} a reçu des emojis`));
+    assert.ok((await bettors[0].emit('player:cheer', { kind: 'emoji', emoji: '🔥', count: 3 })).ok);
+    await sleep(250);
+    assert.equal(got.reduce((n, c) => n + c.count, 0), 3, 'la TV reçoit le lot');
     // ROUGE choisit en secret : personne d'autre ne le voit avant la révélation de la manche.
     assert.ok((await red.emit('player:action', { action: { type: 'play', data: { choice: 'pierre' } }, roundId })).ok);
     await sleep(60);

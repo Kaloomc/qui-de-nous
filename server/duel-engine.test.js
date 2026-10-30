@@ -512,54 +512,49 @@ test('confidentialité des paris : seuls les noms des parieurs déjà révélés
   assert.equal(s.game.publicState({ host: true }).round.bets[a], 'rouge');
 });
 
-test('emojis et confettis : parieurs seulement, de la révélation des paris à la fin du duel, 1 envoi par seconde, 40 éléments au plus, TV seulement', async () => {
+test('emojis et confettis : parieurs seulement, de la révélation des paris à la fin du duel, 15 appuis par seconde (le surplus est ignoré sans erreur), envoyés à la TV par lots', async () => {
   const s = await setup(8);
   const { game } = s;
   game.start();
   s.toBets();
   const [a, b] = s.d().bettors;
   game.vote(a, 'rouge');
-  assert.match(game.action(a, { type: 'cheer', kind: 'emoji', emoji: '🔥' }), /Pas maintenant/, 'aucun envoi pendant les paris');
+  assert.match(game.cheer(a, { kind: 'emoji', emoji: '🔥' }), /Pas maintenant/, 'aucun envoi pendant les paris');
   s.tick(s.T.betsMs);
   assert.equal(s.step(), 'betsReveal');
-  assert.equal(game.action(a, { type: 'cheer', kind: 'emoji', emoji: '🔥' }), null);
-  assert.match(game.action(a, { type: 'cheer', kind: 'emoji', emoji: '😱' }), /seconde/, 'plus d’un envoi par seconde');
+  assert.equal(game.cheer(a, { kind: 'emoji', emoji: '🔥' }), null);
+  // Spam : 40 appuis d'un coup (en lots) dans la même seconde → 15 acceptés au total, jamais d'erreur.
+  for (let i = 0; i < 4; i++) assert.equal(game.cheer(a, { kind: 'emoji', emoji: '😱', count: 10 }), null);
+  const batch = game.drainCheers();
+  assert.equal(batch.reduce((n, c) => n + c.count, 0), D.CHEER_PER_SEC, 'plafond serveur : 15 par seconde');
+  assert.equal(game.drainCheers().length, 0, 'la file est vidée à chaque envoi');
   s.tick(1001);
-  assert.equal(game.action(a, { type: 'cheer', kind: 'confetti' }), null);
-  assert.match(game.action(b, { type: 'cheer', kind: 'emoji', emoji: '💩' }), /invalide/, 'liste fixe');
-  assert.match(game.action(b, { type: 'cheer', kind: 'emoji' }), /invalide/);
-  assert.match(game.action(s.d().red, { type: 'cheer', kind: 'emoji', emoji: '🔥' }), /parieurs/, 'un duelliste n’encourage pas');
-  const tv = game.publicState({ host: true }).round.cheers;
-  assert.deepEqual(tv.map((c) => c.kind), ['emoji', 'confetti']);
-  assert.equal(tv[0].camp, 'rouge', 'couleur du camp pour lequel le parieur a misé');
-  assert.equal(tv[1].camp, 'rouge');
-  assert.equal(game.publicState({ host: true }).round.cheers.length, 2);
-  for (const p of s.players) assert.equal(game.publicState({ playerId: p.id }).round.cheers, null, 'rien sur les téléphones');
+  assert.equal(game.cheer(a, { kind: 'confetti', count: 99 }), null);
+  assert.equal(game.drainCheers()[0].count, D.CHEER_BATCH_MAX, 'un lot ne dépasse pas 15');
+  assert.match(game.cheer(b, { kind: 'emoji', emoji: '💩' }), /invalide/, 'liste fixe');
+  assert.match(game.cheer(s.d().red, { kind: 'emoji', emoji: '🔥' }), /parieurs/, 'un duelliste n’encourage pas');
+  game.vote; // les emojis n'ont aucun effet sur le jeu
   const sipsBefore = JSON.stringify([...game.sips]);
-  s.tick(s.T.betsRevealMs);
-  for (const id of [s.d().red, s.d().blue]) game.action(id, { type: 'ready' });
-  s.tick(s.T.readyBeatMs);
-  s.tick(s.T.introMs);
-  assert.equal(s.step(), 'play');
-  for (let i = 0; i < 10; i++) {
-    s.tick(1001);
-    for (const id of s.d().bettors) game.action(id, { type: 'cheer', kind: 'emoji', emoji: D.EMOJIS[i % 8] });
+  for (let i = 0; i < 30; i++) {
+    for (const id of s.d().bettors) game.cheer(id, { kind: 'emoji', emoji: D.EMOJIS[i % 8], count: 15 });
+    s.tick(100);
   }
-  assert.equal(game.publicState({ host: true }).round.cheers.length, D.FEED_MAX, '60 envois, 40 gardés');
+  assert.ok(game.drainCheers().length <= D.FEED_MAX, 'la file est bornée');
   assert.equal(JSON.stringify([...game.sips]), sipsBefore, 'aucun effet sur les gorgées');
+  // Jamais dans l'état envoyé aux écrans : ni TV, ni téléphones (donc jamais aux duellistes).
+  for (const viewer of [{ host: true }, ...s.players.map((p) => ({ playerId: p.id }))]) assert.equal('cheers' in game.publicState(viewer).round, false);
 });
 
-test('emojis : plus rien une fois le duel terminé ; le fil repart de zéro au duel suivant', async () => {
+test('emojis : plus rien une fois le duel terminé ; la file repart de zéro au duel suivant', async () => {
   const s = await setup(6);
   s.game.start();
   s.toPlay();
   const [a] = s.d().bettors;
-  assert.equal(s.game.action(a, { type: 'cheer', kind: 'confetti' }), null);
+  assert.equal(s.game.cheer(a, { kind: 'confetti' }), null);
   s.game.action(s.d().red, { type: 'play', data: { win: true } });
-  assert.match(s.game.action(a, { type: 'cheer', kind: 'confetti' }), /Pas maintenant/);
-  assert.equal(s.game.publicState({ host: true }).round.cheers, null);
+  assert.match(s.game.cheer(a, { kind: 'confetti' }), /Pas maintenant/);
   s.tick(s.T.resultMs);
   s.tick(s.game.settings.resultsMs);
   s.toPlay();
-  assert.deepEqual(s.game.publicState({ host: true }).round.cheers, []);
+  assert.deepEqual(s.game.drainCheers(), []);
 });

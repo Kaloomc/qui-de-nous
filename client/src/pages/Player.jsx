@@ -98,6 +98,9 @@ export default function Player({ code }) {
     return res.ok ? null : res.error;
   }
 
+  /** Emojis du mode Duel : envoi léger, sans état ni réponse attendue. */
+  const cheer = (payload) => socket.emit('player:cheer', payload, () => {});
+
   async function changeGender(gender) {
     const res = await request('player:gender', { gender });
     if (!res.ok) setNotice(res.error);
@@ -146,7 +149,7 @@ export default function Player({ code }) {
   else if (state.party?.lateIds.includes(me.id) && ['question', 'revealing', 'results'].includes(state.phase)) {
     content = <Late me={me} mode={mode} />;
   } else if (state.phase === 'question' && mode.playerLayout === 'custom') {
-    content = <mode.PlayerRound key={roundId} state={state} me={me} act={act} vote={vote} myVote={currentVote?.choice ?? null} />;
+    content = <mode.PlayerRound key={roundId} state={state} me={me} act={act} vote={vote} cheer={cheer} myVote={currentVote?.choice ?? null} />;
   } else if (state.phase === 'question') {
     content = (
       <>

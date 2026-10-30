@@ -52,6 +52,14 @@ export function registerSockets(io, store) {
     }
   };
   store.onChange = broadcast;
+  // Les emojis des parieurs partent vers la TV (et seulement elle) par lots toutes les 100 ms.
+  setInterval(() => {
+    for (const game of store.games.values()) {
+      if (game.mode !== 'duel') continue;
+      const items = game.drainCheers();
+      if (items.length) io.to(hostRoom(game.code)).emit('duel:cheers', items);
+    }
+  }, 100).unref();
 
   io.on('connection', (socket) => {
     const on = (event, fn) =>
@@ -199,6 +207,14 @@ export function registerSockets(io, store) {
       if (error) return ack({ ok: false, error });
       game.touch();
       broadcast(game);
+      ack({ ok: true });
+    });
+
+    // Emojis et confettis du mode Duel : événement léger, sans diffusion d'état ni réponse bavarde.
+    on('player:cheer', ({ kind, emoji, count }, ack) => {
+      const game = currentGame();
+      if (!game || socket.data.role !== 'player') return ack({ ok: false });
+      game.cheer(socket.data.playerId, { kind, emoji, count });
       ack({ ok: true });
     });
 

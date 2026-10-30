@@ -8,7 +8,8 @@ import { GameIcon } from '../icons.jsx';
 import { sipsLabel } from '../sips.jsx';
 import { sounds } from '../sound.js';
 import { buildStrip, travel } from '../../../shared/roulette.js';
-import { later, reelAt, stableShuffle, teardownGame, useFrameElapsed } from './duelFx.js';
+import { socket } from '../lib.js';
+import { later, reducedMotion, reelAt, stableShuffle, startLoop, teardownGame, useFrameElapsed } from './duelFx.js';
 import { MG_VIEWS } from './duelMinigames.jsx';
 
 export const id = 'duel';
@@ -273,44 +274,197 @@ function ReadyTv({ state, round }) {
 
 // ---------- Emojis et confettis ----------
 
-/** Fil d'emojis de la TV : sur les marges, du côté du camp ; au plus 40 éléments, chacun disparaît au bout de 3 s. */
-function CheerLayer({ feed }) {
-  const [items, setItems] = useState([]);
-  const seen = useRef(new Set());
-  useEffect(() => {
-    const fresh = (feed ?? []).filter((c) => !seen.current.has(c.n));
-    if (!fresh.length) return;
-    fresh.forEach((c) => seen.current.add(c.n));
-    setItems((cur) => [...cur, ...fresh.map((c) => ({ ...c, x: 2 + ((c.n * 37) % 12) }))].slice(-40));
-    for (const c of fresh) later(() => setItems((cur) => cur.filter((i) => i.n !== c.n)), 3200);
-  }, [feed]);
-  return (
-    <div className="duel-cheers" aria-hidden="true">
-      {items.map((c) => (
-        <span key={c.n} className={`duel-cheer ${c.kind === 'confetti' ? 'is-confetti' : ''} ${c.camp ? CAMPS[c.camp].cls : 'is-none'}`} style={{ '--x': `${c.x}vw`, '--d': `${(c.n % 5) * 0.08}s` }}>
-          {c.kind === 'emoji' ? c.emoji : Array.from({ length: 7 }, (_, i) => <i key={i} style={{ '--a': `${i * 51}deg` }} />)}
-        </span>
-      ))}
-    </div>
-  );
+const CHEER_COLORS = ['#ff4f8b', '#ffc93c', '#3ee0c5', '#6c8bff', '#7ee05a', '#ff8a3d', '#b46cff', '#ffffff'];
+const MARGIN = 0.14; // part de la largeur réservée à chaque marge : les emojis ne montent jamais sur la zone de jeu
+
+/** Sprite d'un emoji (dessiné une seule fois, puis copié à chaque image : fluide même avec beaucoup d'éléments). */
+function emojiSprite(cache, emoji) {
+  let c = cache.get(emoji);
+  if (!c) {
+    c = document.createElement('canvas');
+    c.width = c.height = 96;
+    const g = c.getContext('2d');
+    g.font = '76px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(emoji, 48, 54);
+    cache.set(emoji, c);
+  }
+  return c;
 }
 
-function CheerPad({ act, my }) {
-  const [cool, setCool] = useState(false);
-  const send = async (payload) => {
-    if (cool) return;
-    setCool(true);
-    later(() => setCool(false), 1000);
-    await act({ type: 'cheer', ...payload });
+/**
+ * Emojis et confettis de la TV, dessinés dans un canvas plein écran (60 images par seconde) : uniquement dans les marges, du côté du camp
+ * misé. Les lots arrivent par l'événement `duel:cheers` ; beaucoup d'envois en même temps déclenchent un effet de combo.
+ */
+function CheerCanvas() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    const g = canvas.getContext('2d');
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    const calm = reducedMotion();
+    const cache = new Map();
+    const parts = [];
+    const recent = []; // [heure, nombre d'appuis] sur la dernière seconde, pour le combo
+    let combo = 0;
+    const zone = () => {
+      const w = canvas.width * MARGIN;
+      return { left: [0, w], right: [canvas.width - w, canvas.width] };
+    };
+    const pickX = (camp) => {
+      const z = zone();
+      const side = camp === 'bleu' ? z.right : camp === 'rouge' ? z.left : Math.random() < 0.5 ? z.left : z.right;
+      return side[0] + Math.random() * (side[1] - side[0]);
+    };
+    const add = (p) => {
+      parts.push(p);
+      if (parts.length > 600) parts.splice(0, parts.length - 600);
+    };
+    const onCheers = (items) => {
+      const now = performance.now();
+      for (const it of items) {
+        recent.push([now, it.count]);
+        const big = 1 + Math.min(1.2, combo / 60);
+        if (it.kind === 'emoji') {
+          const n = calm ? 1 : Math.min(it.count, 8);
+          for (let i = 0; i < n; i++) add({ k: 'emoji', sprite: emojiSprite(cache, it.emoji), x: pickX(it.camp), y: canvas.height + 40, vy: -(240 + Math.random() * 260), ph: Math.random() * 6, size: (64 + Math.random() * 40) * big, life: calm ? 1.2 : 3.4, age: 0 });
+        } else if (!calm) {
+          // Rafale de confettis : de grosses poignées, formes et couleurs variées, tirées vers le haut dans la marge.
+          const n = Math.min(40 + it.count * 14, 160) * (combo > 30 ? 2 : 1);
+          const x0 = pickX(it.camp);
+          const camp = it.camp === 'bleu' ? '#2f7bff' : it.camp === 'rouge' ? '#ff3b4e' : null;
+          for (let i = 0; i < n; i++) {
+            add({ k: 'conf', shape: i % 4, x: x0, y: canvas.height - 20, vx: (Math.random() - 0.5) * 500, vy: -(500 + Math.random() * 800), rot: Math.random() * 6, vr: (Math.random() - 0.5) * 14, size: 10 + Math.random() * 14, color: camp && i % 3 === 0 ? camp : CHEER_COLORS[i % CHEER_COLORS.length], life: 2.6 + Math.random() * 1.2, age: 0 });
+          }
+        }
+      }
+    };
+    socket.on('duel:cheers', onCheers);
+    let last = performance.now();
+    const stop = startLoop((t) => {
+      const dt = Math.min(0.05, (t - last) / 1000);
+      last = t;
+      while (recent.length && t - recent[0][0] > 1000) recent.shift();
+      combo = recent.reduce((n, r) => n + r[1], 0);
+      g.clearRect(0, 0, canvas.width, canvas.height);
+      const lz = zone().left;
+      const rz = zone().right;
+      if (combo > 30 && !calm) {
+        // Combo : les marges s'embrasent.
+        const a = Math.min(0.45, combo / 200);
+        for (const [x0, x1] of [lz, rz]) {
+          const grad = g.createLinearGradient(0, canvas.height, 0, 0);
+          grad.addColorStop(0, `rgba(255,201,60,${a})`);
+          grad.addColorStop(1, 'rgba(255,79,139,0)');
+          g.fillStyle = grad;
+          g.fillRect(x0, 0, x1 - x0, canvas.height);
+        }
+        g.font = '800 44px "Baloo 2", sans-serif';
+        g.fillStyle = '#fff8f0';
+        g.textAlign = 'center';
+        g.fillText(`COMBO ×${combo}`, lz[1] / 2, 70);
+        g.fillText(`COMBO ×${combo}`, (rz[0] + rz[1]) / 2, 70);
+      }
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.age += dt;
+        if (p.age >= p.life) {
+          parts.splice(i, 1);
+          continue;
+        }
+        g.globalAlpha = Math.min(1, (p.life - p.age) / (p.life * 0.35));
+        if (p.k === 'emoji') {
+          p.y += p.vy * dt;
+          const wob = Math.sin(p.age * 3 + p.ph) * 18;
+          g.drawImage(p.sprite, p.x + wob - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        } else {
+          p.vy += 1100 * dt;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.rot += p.vr * dt;
+          // Les confettis restent dans la marge : ils rebondissent sur ses bords.
+          const [x0, x1] = p.x < canvas.width / 2 ? lz : rz;
+          if (p.x < x0 || p.x > x1) {
+            p.vx *= -0.8;
+            p.x = Math.max(x0, Math.min(x1, p.x));
+          }
+          g.save();
+          g.translate(p.x, p.y);
+          g.rotate(p.rot);
+          g.fillStyle = p.color;
+          if (p.shape === 0) g.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+          else if (p.shape === 1) {
+            g.beginPath();
+            g.arc(0, 0, p.size / 2.4, 0, 6.3);
+            g.fill();
+          } else if (p.shape === 2) {
+            g.beginPath();
+            g.moveTo(0, -p.size / 2);
+            g.lineTo(p.size / 2, p.size / 2);
+            g.lineTo(-p.size / 2, p.size / 2);
+            g.fill();
+          } else {
+            g.beginPath();
+            for (let s = 0; s < 10; s++) {
+              const r = s % 2 ? p.size / 4 : p.size / 1.6;
+              const a = (s * Math.PI) / 5;
+              g.lineTo(Math.sin(a) * r, -Math.cos(a) * r);
+            }
+            g.fill();
+          }
+          g.restore();
+        }
+      }
+      g.globalAlpha = 1;
+    });
+    return () => {
+      socket.off('duel:cheers', onCheers);
+      stop();
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+  return <canvas ref={ref} className="duel-cheer-canvas" aria-hidden="true" />;
+}
+
+/**
+ * Téléphone d'un parieur pendant les jeux : seulement des emojis et des confettis (grille de 2 colonnes, gros boutons).
+ * Les appuis sont regroupés par lots toutes les 100 ms ; le serveur plafonne à 15 par seconde (le surplus est ignoré sans erreur).
+ */
+function CheerPad({ cheer }) {
+  const pending = useRef(new Map());
+  useEffect(() => {
+    const flush = () => {
+      for (const [key, count] of pending.current) {
+        const [kind, emoji] = key.split('|');
+        cheer({ kind, emoji: emoji || undefined, count });
+      }
+      pending.current.clear();
+    };
+    const id = setInterval(flush, 100);
+    return () => {
+      clearInterval(id);
+      flush();
+    };
+  }, []);
+  const tap = (kind, emoji = '') => {
+    navigator.vibrate?.(12);
+    const key = `${kind}|${emoji}`;
+    pending.current.set(key, Math.min(15, (pending.current.get(key) ?? 0) + 1));
   };
   return (
-    <div className="duel-cheerpad" role="group" aria-label="Encourager">
+    <div className="duel-cheerpad is-fill" role="group" aria-label="Encourager">
       {EMOJIS.map((e) => (
-        <button key={e} className="duel-cheerbtn" disabled={cool} onClick={() => send({ kind: 'emoji', emoji: e })} aria-label={`Envoyer ${e}`}>
+        <button key={e} className="duel-cheerbtn" onClick={() => tap('emoji', e)} aria-label={`Envoyer ${e}`}>
           {e}
         </button>
       ))}
-      <button className={`duel-cheerbtn is-wide ${my?.bet ? CAMPS[my.bet].cls : ''}`} disabled={cool} onClick={() => send({ kind: 'confetti' })}>
+      <button className="duel-cheerbtn is-wide" onClick={() => tap('confetti')}>
         🎉 Confettis
       </button>
     </div>
@@ -408,7 +562,7 @@ export function HostQuestion({ state, gameAct, onQuit }) {
       <>
         {!['notice', 'intro', 'play'].includes(round.step) && <KingBanner state={state} round={round} />}
         {Step && <Step key={round.phaseId} state={state} round={round} gameAct={gameAct} />}
-        {round.cheers && <CheerLayer feed={round.cheers} />}
+        {['betsReveal', 'ready', 'intro', 'play'].includes(round.step) && <CheerCanvas />}
       </>
     );
   }
@@ -535,36 +689,12 @@ function BetButtons({ state, round, my, vote }) {
   );
 }
 
-function Spectator({ state, round, act, my }) {
-  const View = MG_VIEWS[round.mg?.id]?.Bettor;
-  const cheering = ['betsReveal', 'ready', 'play'].includes(round.step) && !round.finished;
-  const odds = round.odds;
+function Spectator({ round, my, cheer }) {
+  // Seul rappel du pari : un fin liseré en haut (rouge ou bleu, avec son libellé pour les lecteurs d'écran).
   return (
-    <div className="duel-spectator">
-      <div className="duel-bets-fighters is-small">
-        <Fighter state={state} round={round} camp="rouge" size={70} />
-        <div className="duel-vs">VS</div>
-        <Fighter state={state} round={round} camp="bleu" size={70} />
-      </div>
-      {my.bet ? (
-        <p className={`duel-mybet ${CAMPS[my.bet].cls}`}>
-          Tu as parié sur {CAMPS[my.bet].label} : {playerOf(state, idOf(round, my.bet)).name}
-        </p>
-      ) : (
-        <p className="duel-mybet">Tu n’as pas parié : tu boiras quoi qu’il arrive.</p>
-      )}
-      {odds && (
-        <div className="duel-odds is-small" role="img" aria-label={`Cote : ROUGE ${odds.rouge} %, BLEU ${odds.bleu} %`}>
-          <span className="is-rouge" style={{ width: `${odds.rouge}%` }}>
-            {odds.rouge} %
-          </span>
-          <span className="is-bleu" style={{ width: `${odds.bleu}%` }}>
-            {odds.bleu} %
-          </span>
-        </div>
-      )}
-      {round.step === 'play' && View && round.play && <View state={state} round={round} play={round.play} />}
-      {cheering ? <CheerPad act={act} my={my} /> : <p className="muted">Regarde l’écran !</p>}
+    <div className="duel-spectator is-fill">
+      <div className={`duel-betband ${my.bet ? CAMPS[my.bet].cls : 'is-none'}`} role="note" aria-label={my.bet ? `Ton pari : ${CAMPS[my.bet].label}` : 'Pas de pari'} />
+      {['betsReveal', 'intro', 'ready', 'play'].includes(round.step) && !round.finished ? <CheerPad cheer={cheer} /> : <p className="duel-eyebrow">Regarde l’écran !</p>}
     </div>
   );
 }
@@ -649,7 +779,7 @@ function DuelistScreen({ state, round, act, my }) {
   return <div className="center">{intro}</div>;
 }
 
-export function PlayerRound({ state, act, vote }) {
+export function PlayerRound({ state, act, vote, cheer }) {
   const round = state.round;
   const my = round?.me;
   useEffect(() => () => teardownGame(), []);
@@ -680,7 +810,7 @@ export function PlayerRound({ state, act, vote }) {
         <p className="lead">Qui va se battre ?</p>
       </div>
     );
-  } else body = <Spectator state={state} round={round} act={act} my={my} />;
+  } else body = <Spectator round={round} my={my} cheer={cheer} />;
   return (
     <div key={round.phaseId} className="duel-phone">
       {body}

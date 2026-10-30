@@ -72,8 +72,9 @@ export function pickMinigame(active, last, rng = Math.random) {
 // ---------- Emojis et confettis des parieurs ----------
 
 export const EMOJIS = ['🔥', '😱', '😂', '👏', '💀', '🍿', '😈', '🙌'];
-export const CHEER_GAP_MS = 1000; // un envoi par seconde et par joueur
-export const FEED_MAX = 40; // éléments gardés pour la TV
+export const CHEER_PER_SEC = 15; // appuis par seconde et par joueur au plus : le surplus est ignoré sans erreur
+export const CHEER_BATCH_MAX = 15; // appuis regroupés dans un seul envoi
+export const FEED_MAX = 200; // éléments en attente d'envoi à la TV (les plus anciens sont jetés)
 
 /** Un envoi des parieurs (emoji de la liste fixe ou confettis). Renvoie l'élément à afficher ou { error }. */
 export function cleanCheer(action) {

@@ -478,6 +478,17 @@ export class Game {
     return error;
   }
 
+  /** Emojis du mode Duel : envoi sans état (la TV les reçoit par `duel:cheers`). Renvoie un message d'erreur ou null. */
+  cheer(playerId, payload) {
+    if (!this.players.has(playerId) || this.isLate(playerId)) return 'Pas maintenant.';
+    return this.rules?.cheer ? this.rules.cheer(this, playerId, payload) : 'Pas maintenant.';
+  }
+
+  /** Emojis en attente d'envoi à la TV (vidés à chaque appel). */
+  drainCheers() {
+    return this.rules?.drainCheers?.(this) ?? [];
+  }
+
   /** Action de l'hôte propre au jeu (« Suivant », « Lancer la roue »…). */
   gameHostAction(payload, roundId) {
     if (roundId !== undefined && roundId !== this.roundId) return null; // clic en retard sur une manche passée : ignoré

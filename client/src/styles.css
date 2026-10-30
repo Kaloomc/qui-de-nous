@@ -6583,3 +6583,15 @@ body.loup-night {
 .duel-col.is-bleu .duel-thumb.is-chosen .avatar { box-shadow: 0 0 0 6px var(--duel-blue), 0 0 60px 18px rgba(47, 123, 255, 0.7); }
 @keyframes duel-chosen { from { transform: scale(0.85); } 60% { transform: scale(1.3); } to { transform: scale(1.22); } }
 @media (prefers-reduced-motion: reduce) { .duel-thumb.is-chosen { animation: none; transform: scale(1.2); } .duel-thumb { transition: none; } }
+
+/* ---------- Emojis et confettis ---------- */
+.duel-cheer-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; }
+.duel-spectator.is-fill { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 0; }
+.duel-betband { height: 10px; border-radius: 0 0 8px 8px; margin: -24px -16px 4px; }
+.duel-betband.is-rouge { background: var(--duel-red); }
+.duel-betband.is-bleu { background: var(--duel-blue); }
+.duel-betband.is-none { background: rgba(255, 255, 255, 0.2); }
+.duel-cheerpad.is-fill { flex: 1; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 10px; }
+.duel-cheerpad.is-fill .duel-cheerbtn { font-size: 3.2rem; min-height: 90px; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.duel-cheerpad.is-fill .duel-cheerbtn:active { transform: scale(0.94); background: rgba(255, 255, 255, 0.25); }
+.duel-cheerpad.is-fill .duel-cheerbtn.is-wide { grid-column: 1 / -1; font-size: 2rem; background: linear-gradient(90deg, var(--duel-red-d), var(--duel-blue-d)); }

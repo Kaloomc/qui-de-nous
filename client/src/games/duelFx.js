@@ -20,6 +20,27 @@ export function later(fn, ms) {
   };
 }
 
+/** Boucle d'animation (une image à la fois), annulée par teardownGame() comme le reste. Renvoie sa fonction d'arrêt. */
+export function startLoop(fn) {
+  let id;
+  let stopped = false;
+  const step = (t) => {
+    if (stopped) return;
+    frames.delete(id);
+    fn(t);
+    if (stopped) return;
+    id = requestAnimationFrame(step);
+    frames.add(id);
+  };
+  id = requestAnimationFrame(step);
+  frames.add(id);
+  return () => {
+    stopped = true;
+    cancelAnimationFrame(id);
+    frames.delete(id);
+  };
+}
+
 /** Annule d'un coup tous les minuteurs et animations du mode (fin du mode, changement de jeu, pause). */
 export function teardownGame() {
   for (const id of timeouts) clearTimeout(id);

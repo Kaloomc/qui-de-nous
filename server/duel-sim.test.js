@@ -87,7 +87,7 @@ async function session(seed) {
         assert.ok(!d.bettors?.includes(d.red) && !d.bettors?.includes(d.blue), 'un duelliste parmi les parieurs');
       }
       const st = game.publicState({ host: true }).round;
-      assert.ok((st.cheers?.length ?? 0) <= D.FEED_MAX);
+      assert.ok(game.drainCheers().length <= D.FEED_MAX);
       assert.deepEqual(game.publicState({ host: true }).votedIds, [], 'noms des parieurs publics');
     }
     for (const name of Object.keys(game.timers)) assert.match(name, TIMER, `minuteur inattendu ${name}`);
