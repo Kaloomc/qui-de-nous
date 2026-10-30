@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { avatarColor, inkFor } from './colors.js';
 import { serverNow, useRemaining } from './lib.js';
 import { sounds } from './sound.js';
@@ -27,7 +27,8 @@ export function TimerBar({ timer, state, children, small = false }) {
   );
 }
 
-export function Avatar({ player, size = 64, className = '' }) {
+// Mémorisé sur ce qui se voit : l'état complet arrive en nouveaux objets à chaque diffusion, sans que l'avatar change.
+export const Avatar = memo(function Avatar({ player, size = 64, className = '' }) {
   const style = { width: size, height: size, fontSize: size * 0.45 };
   if (player?.photoUrl) {
     return <img className={`avatar ${className}`} style={style} src={player.photoUrl} alt={player.name} draggable={false} />;
@@ -37,7 +38,7 @@ export function Avatar({ player, size = 64, className = '' }) {
       {(player?.name ?? '?').charAt(0).toUpperCase()}
     </span>
   );
-}
+}, (a, b) => a.size === b.size && a.className === b.className && a.player?.name === b.player?.name && a.player?.photoUrl === b.player?.photoUrl);
 
 export function PlayerChip({ player, size = 72, dim = false, badge, caption, inline = false, onRemove }) {
   if (inline) {

@@ -6328,7 +6328,7 @@ body.loup-night {
 .mg-simon-duelist { display: grid; gap: 14px; text-align: center; }
 .mg-gauges { display: flex; gap: 60px; align-items: flex-end; height: 34vh; }
 .mg-gauge { display: grid; grid-template-rows: 1fr auto auto; justify-items: center; align-items: end; gap: 4px; height: 100%; width: 140px; }
-.mg-gauge-bar { width: 100%; border-radius: 14px 14px 0 0; transition: height 0.25s; }
+.mg-gauge-bar { width: 100%; height: 100%; transform-origin: bottom; border-radius: 14px 14px 0 0; transition: transform 0.25s; will-change: transform; }
 .mg-gauge.is-rouge .mg-gauge-bar { background: var(--duel-red); }
 .mg-gauge.is-bleu .mg-gauge-bar { background: var(--duel-blue); }
 .mg-gauge strong { font-size: 2.4rem; }
@@ -6658,3 +6658,18 @@ body.loup-night {
 .mg-line.is-rouge text { fill: #ffb3ba; }
 .mg-line.is-bleu text { fill: #b9d3ff; }
 .mg-truth path { stroke-width: 1.4; }
+
+/* Écran de résultat : décompte sous le contenu (jamais par-dessus), buveurs en grand, vainqueur / battu lisibles sans la couleur */
+.results-screen { min-height: 0; }
+.results-screen > .duel-results { flex: none; padding-bottom: 12px; }
+.results-screen > .timer, .results-screen > .auto-hint, .results-screen > .actions { position: static; flex: none; margin-top: 10px; }
+.duel-winner-burst { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+.duel-bets-fighters > div { display: grid; justify-items: center; gap: 6px; }
+.duel-outcome { font-weight: 800; font-size: clamp(1.1rem, 2vw, 1.7rem); padding: 4px 14px; border-radius: 999px; border: 3px solid currentColor; }
+.duel-outcome.is-win { background: var(--yellow); color: #2a1d00; border-color: #2a1d00; }
+.duel-outcome.is-lose { background: transparent; color: var(--muted); border-style: dashed; }
+.duel-drinkers-grid { gap: 14px 22px; }
+.duel-drinker { min-width: 104px; max-width: 150px; font-size: clamp(1rem, 1.5vw, 1.35rem); }
+.duel-drinker-sips { font-size: 1.25em; background: rgba(255, 201, 60, 0.16); border: 2px solid var(--yellow); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .duel-winner-burst { display: none; } }
+.duel-results .is-loser { opacity: 0.72; }

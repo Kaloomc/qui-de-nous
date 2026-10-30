@@ -607,6 +607,52 @@ export function HostReveal({ state }) {
   );
 }
 
+/** Pluie de confettis de victoire : deux salves depuis le haut, puis le canvas se vide ; rien du tout avec « réduire les animations ». */
+function WinnerBurst({ camp }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (reducedMotion()) return undefined;
+    const canvas = ref.current;
+    const g = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const parts = [];
+    const colors = camp === 'bleu' ? ['#2f7bff', '#ffc93c', '#ffffff', '#3ee0c5'] : ['#ff3b4e', '#ffc93c', '#ffffff', '#ff8a3d'];
+    const burst = (n) => {
+      for (let i = 0; i < n; i++) parts.push({ x: Math.random() * canvas.width, y: -20 - Math.random() * 200, vx: (Math.random() - 0.5) * 240, vy: 120 + Math.random() * 320, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 12, w: 10 + Math.random() * 14, h: 6 + Math.random() * 10, color: colors[i % colors.length], gold: i % 5 === 0 });
+    };
+    burst(140);
+    const second = later(() => burst(120), 900);
+    let last = performance.now();
+    const stop = startLoop((t) => {
+      const dt = Math.min(0.05, (t - last) / 1000);
+      last = t;
+      g.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.x += (p.vx + Math.sin(p.y / 60) * 60) * dt;
+        p.y += p.vy * dt;
+        p.rot += p.vr * dt;
+        if (p.y > canvas.height + 30) {
+          parts.splice(i, 1);
+          continue;
+        }
+        g.save();
+        g.translate(p.x, p.y);
+        g.rotate(p.rot);
+        g.fillStyle = p.gold ? '#ffd24a' : p.color;
+        g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        g.restore();
+      }
+    });
+    return () => {
+      second?.();
+      stop();
+    };
+  }, [camp]);
+  return <canvas ref={ref} className="duel-winner-burst" aria-hidden="true" />;
+}
+
 export function HostResults({ state, onQuit }) {
   const r = state.results;
   const round = state.round;
@@ -619,11 +665,13 @@ export function HostResults({ state, onQuit }) {
   return (
     <div className="duel-results">
       <HostMenu skip={false} gameAct={() => {}} onQuit={onQuit} />
-      <h1 className={`duel-winner ${tie ? '' : CAMPS[r.winner].cls}`}>{tie ? 'Égalité !' : `${winner.name} gagne !`}</h1>
+      {!tie && <WinnerBurst camp={r.winner} />}
+      <h1 className={`duel-winner ${tie ? '' : CAMPS[r.winner].cls}`}>{tie ? 'Égalité !' : `🏆 ${winner.name} gagne !`}</h1>
       <div className="duel-bets-fighters is-small">
         {['rouge', 'bleu'].map((camp) => (
           <div key={camp} className={tie ? '' : r.winner === camp ? 'is-winner' : 'is-loser'}>
-            <Fighter state={state} round={{ ...round, kingId: r.kingId }} camp={camp} size={120} />
+            <Fighter state={state} round={{ ...round, kingId: r.kingId }} camp={camp} size={150} />
+            {!tie && <span className={`duel-outcome ${r.winner === camp ? 'is-win' : 'is-lose'}`}>{r.winner === camp ? '🏆 Vainqueur' : '✕ Battu'}</span>}
           </div>
         ))}
       </div>
@@ -647,9 +695,9 @@ export function HostResults({ state, onQuit }) {
         <div className="duel-drinkers-grid">
           {drinkers.map(([pid, n]) => (
             <div key={pid} className="duel-drinker">
-              <Avatar player={playerOf(state, pid)} size={drinkers.length > 14 ? 46 : 70} />
+              <Avatar player={playerOf(state, pid)} size={drinkers.length > 14 ? 64 : drinkers.length > 8 ? 84 : 104} />
               <strong>{playerOf(state, pid).name}</strong>
-              <span className="duel-drinker-sips">{sipsLabel(n)}</span>
+              <span className="duel-drinker-sips">🍺 {sipsLabel(n)}</span>
               {pid === r.loserId && <small>perdant</small>}
               {r.wrong.includes(pid) && <small>mauvais pari</small>}
               {r.silent.includes(pid) && <small>sans pari</small>}

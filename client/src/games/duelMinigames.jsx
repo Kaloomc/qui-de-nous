@@ -202,7 +202,7 @@ const Couleur = {
         <div className="mg-gauges">
           {['rouge', 'bleu'].map((camp) => (
             <div key={camp} className={`mg-gauge is-${camp}`}>
-              <div className="mg-gauge-bar" style={{ height: `${Math.max(4, (100 * Math.max(0, play.gauge[camp])) / top)}%` }} />
+              <div className="mg-gauge-bar" style={{ transform: `scaleY(${Math.max(0.04, Math.max(0, play.gauge[camp]) / top)})` }} />
               <strong>{play.gauge[camp]}</strong>
               <small>{CAMP_LABEL[camp]}</small>
             </div>
