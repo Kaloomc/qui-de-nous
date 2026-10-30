@@ -6647,3 +6647,14 @@ body.loup-night {
 .mg-choice-num { font-size: 3rem; font-weight: 800; }
 .mg-culture-duelist .mg-choices.is-picto { grid-template-columns: 1fr 1fr; }
 @media (prefers-reduced-motion: reduce) { .mg-curtain, .mg-row { transition: none; } }
+
+/* Géo-duel : vraie carte (pays, noms, traits de révélation) */
+.mg-map-zoom button { width: 56px; height: 56px; font-size: 2rem; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5); }
+.mg-labels text { fill: #f3fff8; font-weight: 700; paint-order: stroke; stroke: #0f2a22; stroke-width: 0.35px; letter-spacing: 0.02em; }
+.mg-line line { stroke-linecap: round; }
+.mg-line.is-rouge line { stroke: #ff6b7a; }
+.mg-line.is-bleu line { stroke: #6fa3ff; }
+.mg-line text { font-weight: 800; paint-order: stroke; stroke: #14102a; stroke-width: 0.5px; }
+.mg-line.is-rouge text { fill: #ffb3ba; }
+.mg-line.is-bleu text { fill: #b9d3ff; }
+.mg-truth path { stroke-width: 1.4; }

@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { haversine, toLatLon, toXY, MAX_KM } from '../shared/geo.js';
-import { MAP_H, MAP_W, WORLD_PATH } from '../shared/worldmap.js';
+import { COUNTRIES, LAT_MAX, LAT_MIN, MAP_H, MAP_W } from '../shared/worldmap.js';
 import * as GEO from './duel/minigames/geo.js';
 import { duel, leaks } from './duelTestKit.js';
 
@@ -26,9 +26,14 @@ test('carte : conversion aller-retour, fond de carte embarqué sans service exte
     const back = toLatLon(...Object.values(toXY(p)));
     assert.ok(Math.abs(back.lat - p.lat) < 1e-9 && Math.abs(back.lon - p.lon) < 1e-9);
   }
-  assert.ok(WORLD_PATH.startsWith('M') && WORLD_PATH.length > 20000);
-  assert.equal(MAP_W / MAP_H, 2);
-  assert.equal(/https?:/.test(WORLD_PATH), false);
+  assert.ok(COUNTRIES.length >= 150, `${COUNTRIES.length} pays`);
+  for (const c of COUNTRIES) assert.ok(c.n && c.d.startsWith('M') && c.d.length > 10 && !/https?:/.test(c.d), c.n);
+  assert.equal(COUNTRIES.some((c) => /^antarctique$/i.test(c.n)), false, 'Antarctique coupée');
+  assert.ok(Math.abs(MAP_H - ((LAT_MAX - LAT_MIN) * MAP_W) / 360) < 0.1, 'projection équirectangulaire cohérente');
+  const { x, y } = toXY({ lat: LAT_MAX, lon: -180 });
+  assert.deepEqual([x, y], [0, 0]);
+  assert.ok(Math.abs(toXY({ lat: LAT_MIN, lon: 180 }).y - MAP_H) < 0.1);
+  for (const c of cities) assert.ok(c.lat <= LAT_MAX && c.lat >= LAT_MIN, `${c.nom} hors de la carte`);
 });
 
 test('contenu : au moins 120 lieux connus, coordonnées valides, source, noms uniques, tous les continents', () => {

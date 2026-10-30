@@ -1,7 +1,6 @@
 // Vues des mini-jeux de la partie 2 du mode Duel (même contrat que duelMinigames.jsx : Tv, Duelist, Bettor, Summary).
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { toLatLon, toXY } from '../../../shared/geo.js';
-import { MAP_H, MAP_W, WORLD_PATH } from '../../../shared/worldmap.js';
+import { WorldMap } from './duelMap.jsx';
 import { DT_MS, DUCK_H, HIGH, LOW, MAX_FRAMES, OBS_W, RUN_W, STAND_H, makeTrack, simulate } from '../../../shared/runner.js';
 import { TimerBar } from '../components.jsx';
 import { serverNow } from '../lib.js';
@@ -794,83 +793,6 @@ Course.Bettor = Course.Tv;
 
 const fmtKm = (km) => `${Math.round(km).toLocaleString('fr-FR')} km`;
 
-/** Carte du monde simplifiée (Natural Earth, domaine public) : épingles et position exacte, zoom et déplacement au doigt. */
-function WorldMap({ pins = {}, truth = null, onPlace = null, mine = null, interactive = false }) {
-  const [view, setView] = useState({ x: 0, y: 0, w: MAP_W });
-  const svg = useRef(null);
-  const drag = useRef(null);
-  const h = view.w / 2;
-  const clamp = (v) => ({ w: v.w, x: Math.max(0, Math.min(MAP_W - v.w, v.x)), y: Math.max(0, Math.min(MAP_H - v.w / 2, v.y)) });
-  const zoom = (f, cx = view.x + view.w / 2, cy = view.y + h / 2) => {
-    const w = Math.max(125, Math.min(MAP_W, view.w * f));
-    setView(clamp({ w, x: cx - ((cx - view.x) * w) / view.w, y: cy - ((cy - view.y) * w) / view.w }));
-  };
-  const toMap = (e) => {
-    const r = svg.current.getBoundingClientRect();
-    return { x: view.x + ((e.clientX - r.left) / r.width) * view.w, y: view.y + ((e.clientY - r.top) / r.height) * h };
-  };
-  const mark = (camp, p, key) => {
-    const { x, y } = toXY(p);
-    const s = view.w / 60;
-    return (
-      <g key={key} className={`mg-pin is-${camp}`} transform={`translate(${x} ${y})`}>
-        {camp === 'rouge' ? <circle r={s} /> : <rect x={-s} y={-s} width={2 * s} height={2 * s} />}
-        <text y={-s * 1.4} fontSize={s * 1.6} textAnchor="middle">
-          {camp === 'rouge' ? 'R' : 'B'}
-        </text>
-      </g>
-    );
-  };
-  return (
-    <div className="mg-map-wrap">
-      <svg
-        ref={svg}
-        className="mg-map"
-        viewBox={`${view.x} ${view.y} ${view.w} ${h}`}
-        role="img"
-        aria-label="Carte du monde"
-        onPointerDown={(e) => {
-          if (!interactive) return;
-          e.currentTarget.setPointerCapture?.(e.pointerId);
-          drag.current = { sx: e.clientX, sy: e.clientY, vx: view.x, vy: view.y, moved: false };
-        }}
-        onPointerMove={(e) => {
-          const d = drag.current;
-          if (!d) return;
-          const dx = e.clientX - d.sx;
-          const dy = e.clientY - d.sy;
-          if (Math.abs(dx) + Math.abs(dy) > 8) d.moved = true;
-          if (d.moved) {
-            const r = svg.current.getBoundingClientRect();
-            setView(clamp({ w: view.w, x: d.vx - (dx / r.width) * view.w, y: d.vy - (dy / r.height) * h }));
-          }
-        }}
-        onPointerUp={(e) => {
-          const d = drag.current;
-          drag.current = null;
-          if (d && !d.moved && onPlace) onPlace(toLatLon(toMap(e).x, toMap(e).y));
-        }}
-      >
-        <rect width={MAP_W} height={MAP_H} fill="#16335a" />
-        <path d={WORLD_PATH} fill="#3d6b4f" stroke="#a8d4b8" strokeWidth={view.w / 1200} />
-        {truth && (
-          <g transform={`translate(${toXY(truth).x} ${toXY(truth).y})`} className="mg-truth">
-            <path d="M0 -10 L3 -3 L10 -3 L4.5 1.5 L6.5 9 L0 4.5 L-6.5 9 L-4.5 1.5 L-10 -3 L-3 -3 Z" transform={`scale(${view.w / 700})`} />
-          </g>
-        )}
-        {Object.entries(pins).map(([camp, p]) => p && mark(camp, p, camp))}
-        {mine && !Object.keys(pins).length && mark(mine.camp, mine.pin, 'mine')}
-      </svg>
-      {interactive && (
-        <div className="mg-map-zoom">
-          <button onClick={() => zoom(0.6)} aria-label="Zoom avant">+</button>
-          <button onClick={() => zoom(1 / 0.6)} aria-label="Zoom arrière">−</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
 const Geo = {
   Tv({ play, state }) {
     const rev = play.shown;
@@ -879,7 +801,7 @@ const Geo = {
         <p className="duel-eyebrow">Ville {play.n} sur {play.count}</p>
         <h2 className="mg-geo-city">{rev ? rev.city : `📍 ${play.city?.nom ?? ''}`}</h2>
         {!rev && <p className="duel-eyebrow">{play.city?.pays} · Pose ton épingle sur la carte !</p>}
-        <WorldMap pins={rev?.pins ?? {}} truth={rev?.truth ?? null} />
+        <WorldMap pins={rev?.pins ?? {}} truth={rev?.truth ?? null} km={rev?.km ?? null} />
         <div className="mg-geo-status">
           {['rouge', 'bleu'].map((camp) => (
             <span key={camp} className={`is-${camp}`}>
@@ -902,7 +824,7 @@ const Geo = {
       <div className="mg-geo-duelist">
         <h2 className="mg-geo-city is-small">{rev ? rev.city : `📍 ${play.city?.nom ?? ''}`}</h2>
         {!rev && <p className="muted">{play.city?.pays} · touche la carte, déplace-toi, zoome avec + et −</p>}
-        <WorldMap interactive={!rev} pins={rev?.pins ?? {}} truth={rev?.truth ?? null} mine={play.mine ? { camp: side, pin: play.mine } : null} onPlace={(pin) => act({ pin, n: play.n })} />
+        <WorldMap interactive={!rev} pins={rev?.pins ?? {}} truth={rev?.truth ?? null} km={rev?.km ?? null} mine={play.mine ? { camp: side, pin: play.mine } : null} onPlace={(pin) => act({ pin, n: play.n })} />
         {rev && <p className="mg-geo-status">À {fmtKm(rev.km[side])} de {rev.city}</p>}
         {play.deadline && (
           <TimerBar timer={{ endsAt: play.deadline, totalMs: 15000, paused: false }} state={state} small>
