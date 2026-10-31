@@ -40,7 +40,7 @@ export function PenaltyBadge({ left, flash, ms }) {
   return (
     <p className="duel-notice mg-penalty" role="status">
       Mauvaise réponse · {(left / 1000).toFixed(1).replace('.', ',')} s
-      {flash && ms ? <span className="mg-penalty-float">−{ms / 1000} s</span> : null}
+      {flash && ms ? <span className="mg-penalty-float" data-decor="true">−{ms / 1000} s</span> : null}
     </p>
   );
 }
@@ -61,7 +61,7 @@ export function TvWrongs({ wrongs, ms }) {
   if (!flash.rouge && !flash.bleu) return <div className="mg-tvwrongs" aria-hidden="true" />;
   return (
     <div className="mg-tvwrongs" role="status">
-      {['rouge', 'bleu'].map((camp) => flash[camp] && <span key={camp} className={`mg-penalty-float is-tv is-${camp}`}>{camp === 'rouge' ? 'ROUGE' : 'BLEU'} : erreur{ms ? ` −${ms / 1000} s` : ''}</span>)}
+      {['rouge', 'bleu'].map((camp) => flash[camp] && <span key={camp} data-decor="true" className={`mg-penalty-float is-tv is-${camp}`}>{camp === 'rouge' ? 'ROUGE' : 'BLEU'} : erreur{ms ? ` −${ms / 1000} s` : ''}</span>)}
     </div>
   );
 }

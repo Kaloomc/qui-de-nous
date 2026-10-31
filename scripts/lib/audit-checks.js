@@ -28,7 +28,7 @@ export function auditChecks({ tv, scale }) {
     return true;
   };
   // Éléments volontairement ignorés : décor (data-decor), canvas plein écran, pastilles d'hôte, numéro de version.
-  const ignored = (el) => !!el.closest('.duel-thumb:not(.is-center), [data-decor], .duel-cheers, .duel-winner-burst, .mg-splash, .brand-version, .version-tag, .app-version, [aria-hidden="true"]:not(svg)');
+  const ignored = (el) => !!el.closest('.mg-die.is-rolling, .duel-thumb:not(.is-center), [data-decor], .duel-cheers, .duel-winner-burst, .mg-splash, .brand-version, .version-tag, .app-version, [aria-hidden="true"]:not(svg)');
   const inSvg = (el) => !!el.closest('svg') && el.tagName.toLowerCase() !== 'svg';
 
   // 1. Aucun scroll.
@@ -89,8 +89,16 @@ export function auditChecks({ tv, scale }) {
     const isControl = ['button', 'img', 'svg', 'input', 'select', 'textarea'].includes(tag) || /\bavatar\b/.test(cls);
     if (!hasText && !isControl) continue;
     const r = el.getBoundingClientRect();
-    const box = hasText && !isControl ? textRect(el) : { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+    let box = hasText && !isControl ? textRect(el) : { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
     if (!box) continue;
+    // Seule la partie visible compte : on rogne la boîte par les parents à débordement caché ou défilant.
+    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+      const ps = getComputedStyle(p);
+      if (ps.overflowX === 'visible' && ps.overflowY === 'visible') continue;
+      const pr = p.getBoundingClientRect();
+      box = { left: Math.max(box.left, pr.left), top: Math.max(box.top, pr.top), right: Math.min(box.right, pr.right), bottom: Math.min(box.bottom, pr.bottom) };
+    }
+    if (box.right <= box.left || box.bottom <= box.top) continue;
     items.push({ el, box, tag, hasText, isControl });
 
     // 2. Débordements et textes coupés.

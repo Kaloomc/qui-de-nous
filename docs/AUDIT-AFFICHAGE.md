@@ -1,156 +1,20 @@
 # Audit d’affichage du mode Duel
 
-Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesures dans le navigateur, aucune image enregistrée. Polices Google bloquées (hors ligne) : polices de secours.
+Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1623 mesures dans le navigateur, aucune image enregistrée. Polices Google bloquées (hors ligne) : polices de secours.
 
-**122 défaut(s) bloquant(s)**, 1284 avertissement(s) (non bloquants : tailles de texte, écarts entre boutons, espace).
+**0 défaut(s) bloquant(s)**, 1714 avertissement(s) (non bloquants : tailles de texte, écarts entre boutons, espace).
 
 | Catégorie | Bloquants | Avertissements |
 |---|---|---|
-| police-petite | 0 | 664 |
-| police | 0 | 569 |
-| chevauchement | 14 | 0 |
-| espace | 0 | 39 |
-| regle | 0 | 7 |
-| scroll | 52 | 0 |
-| hors-ecran | 55 | 0 |
-| contraste | 1 | 0 |
-| ecart | 0 | 5 |
+| police-petite | 0 | 661 |
+| police | 0 | 594 |
+| espace | 0 | 61 |
+| ecart | 0 | 389 |
+| regle | 0 | 9 |
 
 ## Défauts bloquants
 
-### chevauchement
-
-- **options** · options · TV · 1366×768 : div.chip-avatar « × »  ×  strong « 👑 Roi de la colline »
-- **options** · options · TV · 1366×768 : div.chip-avatar « × »  ×  small « Le gagnant reste et affronte »
-- **options** · options · TV · 1366×768 : img.avatar «  »  ×  strong « 👑 Roi de la colline »
-- **options** · options · TV · 1366×768 : img.avatar «  »  ×  small « Le gagnant reste et affronte »
-- **culture** · après les actions · TV · 1280×720 : span.is-rouge « ROUGE 0 »  ×  span.mg-penalty-float.is-tv « ROUGE : erreur −2 s »
-- **culture** · après les actions · TV · 1280×720 : span.is-bleu « 0 BLEU »  ×  span.mg-penalty-float.is-tv « BLEU : erreur −2 s »
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · TV · 1920×1080, 1366×768, 1280×720 : button.ctrl « Passer ce duel »  ×  svg « CanadaRussie »
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · TV · 1366×768, 1280×720 : button.ctrl « Terminer le mode »  ×  svg « CanadaRussie »
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · duelliste · 390×844, 360×640, 320×568 : svg « CanadaÉtats-UnisRussieGroenl »  ×  button « + »
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · duelliste · 390×844, 360×640, 320×568 : svg « CanadaÉtats-UnisRussieGroenl »  ×  button « − »
-- **des** · révélation de la manche / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : small « Dé final »  ×  svg «  »
-- **des** · révélation de la manche / suspense du vainqueur · TV · 1920×1080, 1280×720 : svg «  »  ×  em.mg-des-badge « 🏆 Plus haut »
-- **des** · révélation de la manche · duelliste · 390×844, 360×640, 320×568 : small « Dé final »  ×  svg «  »
-- **des** · révélation de la manche · duelliste · 390×844, 320×568 : svg «  »  ×  em.mg-des-badge « 🏆 Plus haut »
-
-### scroll
-
-- **pfc** · début du jeu / en cours · duelliste · 320×568 : défilement vertical : 636 px pour 568
-- **culture** · début du jeu / en cours / plus tard · duelliste · 320×568 : défilement vertical : 582 px pour 568
-- **culture** · après les actions · duelliste · 320×568 : défilement vertical : 637 px pour 568
-- **culture** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 798 px pour 768
-- **culture** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 772 px pour 720
-- **defuse** · début du jeu / en cours · TV · 1280×720 : défilement vertical : 734 px pour 720
-- **defuse** · après les actions / suspense du vainqueur · TV · 1920×1080 : défilement vertical : 1310 px pour 1080
-- **defuse** · après les actions / suspense du vainqueur · TV · 1366×768 : défilement vertical : 1015 px pour 768
-- **defuse** · après les actions / suspense du vainqueur · TV · 1280×720 : défilement vertical : 968 px pour 720
-- **code** · début du jeu / en cours / après les actions · TV · 1366×768 : défilement vertical : 894 px pour 768
-- **code** · début du jeu / en cours / après les actions · TV · 1280×720 : défilement vertical : 853 px pour 720
-- **code** · suspense du vainqueur · TV · 1920×1080 : défilement vertical : 1343 px pour 1080
-- **code** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 1143 px pour 768
-- **code** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 1088 px pour 720
-- **plateau** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 774 px pour 768
-- **plateau** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 748 px pour 720
-- **course** · début du jeu · duelliste · 844×390 : défilement vertical : 564 px pour 390
-- **course** · en cours · TV · 1366×768 : défilement vertical : 854 px pour 768
-- **course** · en cours · TV · 1280×720 : défilement vertical : 837 px pour 720
-- **geo** · début du jeu / en cours / après les actions · TV · 1920×1080 : défilement vertical : 1126 px pour 1080
-- **geo** · début du jeu / en cours / après les actions · TV · 1366×768 : défilement vertical : 850 px pour 768
-- **geo** · début du jeu / en cours / après les actions · TV · 1280×720 : défilement vertical : 810 px pour 720
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · duelliste · 360×640 : défilement vertical : 643 px pour 640
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · duelliste · 320×568 : défilement vertical : 597 px pour 568
-- **geo** · révélation des distances · TV · 1920×1080 : défilement vertical : 1187 px pour 1080
-- **geo** · révélation des distances · TV · 1366×768 : défilement vertical : 896 px pour 768
-- **geo** · révélation des distances · TV · 1280×720 : défilement vertical : 854 px pour 720
-- **geo** · suspense du vainqueur · TV · 1920×1080 : défilement vertical : 1520 px pour 1080
-- **geo** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 1144 px pour 768
-- **geo** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 1088 px pour 720
-- **quisuisje** · suspense du vainqueur · TV · 1920×1080 : défilement vertical : 1098 px pour 1080
-- **quisuisje** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 912 px pour 768
-- **quisuisje** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 887 px pour 720
-- **chrono** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 910 px pour 768
-- **chrono** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 888 px pour 720
-- **des** · début du jeu / négociation / un joueur prêt / décision (+1) · parieur · 360×640 : défilement vertical : 709 px pour 640
-- **des** · début du jeu / négociation / un joueur prêt / décision (+1) · parieur · 320×568 : défilement vertical : 709 px pour 568
-- **des** · début du jeu / négociation · duelliste · 320×568 : défilement vertical : 671 px pour 568
-- **des** · un joueur prêt · duelliste · 360×640 : défilement vertical : 652 px pour 640
-- **des** · un joueur prêt · duelliste · 320×568 : défilement vertical : 699 px pour 568
-- **des** · choix enregistrés (secret parieurs) · parieur · 360×640 : défilement vertical : 732 px pour 640
-- **des** · choix enregistrés (secret parieurs) · parieur · 320×568 : défilement vertical : 732 px pour 568
-- **des** · révélation de la manche · TV · 1280×720 : défilement vertical : 750 px pour 720
-- **des** · révélation de la manche · duelliste · 320×568 : défilement vertical : 604 px pour 568
-- **des** · suspense du vainqueur · TV · 1920×1080 : défilement vertical : 1213 px pour 1080
-- **des** · suspense du vainqueur · TV · 1366×768 : défilement vertical : 1013 px pour 768
-- **des** · suspense du vainqueur · TV · 1280×720 : défilement vertical : 985 px pour 720
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 360×640 : défilement vertical : 815 px pour 640
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 320×568 : défilement vertical : 791 px pour 568
-- **russe** · SPLASH / suspense du vainqueur · TV · 1920×1080 : défilement vertical : 1168 px pour 1080
-- **russe** · SPLASH / suspense du vainqueur · TV · 1366×768 : défilement vertical : 958 px pour 768
-- **russe** · SPLASH / suspense du vainqueur · TV · 1280×720 : défilement vertical : 909 px pour 720
-
-### hors-ecran
-
-- **pfc** · début du jeu · duelliste · 320×568 : texte sous le bas de l'écran : div.timer-label « 7 s »
-- **pfc** · en cours · duelliste · 320×568 : texte sous le bas de l'écran : div.timer-label « 6 s »
-- **culture** · après les actions · duelliste · 320×568 : texte sous le bas de l'écran : button.mg-choice « D Waterloo »
-- **culture** · après les actions · duelliste · 320×568 : texte sous le bas de l'écran : b « D »
-- **culture** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **defuse** · après les actions / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : small « uni »
-- **defuse** · après les actions / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : small « pointillé »
-- **defuse** · après les actions / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : small « rayé »
-- **defuse** · après les actions / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : div.timer-label « 36 s avant l’explosion »
-- **defuse** · après les actions / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **code** · début du jeu · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : div.timer-label « 60 s »
-- **code** · en cours · TV · 1366×768 : texte sous le bas de l'écran : div.timer-label « 57 s »
-- **code** · en cours / après les actions / suspense du vainqueur · TV · 1280×720, 1366×768, 1920×1080 : texte sous le bas de l'écran : div.timer-label « 56 s »
-- **code** · suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **plateau** · suspense du vainqueur · TV · 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **course** · début du jeu · duelliste · 844×390 : texte sous le bas de l'écran : button.mg-run-btn.is-jump « ⬆ SAUTER »
-- **course** · début du jeu · duelliste · 844×390 : texte sous le bas de l'écran : button.mg-run-btn.is-duck « ⬇ SE BAISSER »
-- **course** · en cours · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Le dernier debout gagne »
-- **course** · en cours · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **geo** · début du jeu / révélation des distances / suspense du vainqueur · TV · 1366×768, 1280×720, 1920×1080 : texte sous le bas de l'écran : div.timer-label « 15 s »
-- **geo** · en cours · TV · 1366×768 : texte sous le bas de l'écran : div.timer-label « 12 s »
-- **geo** · en cours / après les actions · TV · 1280×720, 1366×768 : texte sous le bas de l'écran : div.timer-label « 11 s »
-- **geo** · révélation des distances / suspense du vainqueur · TV · 1366×768, 1280×720, 1920×1080 : texte sous le bas de l'écran : p.duel-cote-line « Total : ROUGE 5 155 km · BLE »
-- **geo** · révélation des distances / suspense du vainqueur · TV · 1280×720 : texte sous le bas de l'écran : div.timer-label « 14 s »
-- **geo** · suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : span.is-rouge « ROUGE : cherche… »
-- **geo** · suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : span.is-bleu « BLEU : cherche… »
-- **geo** · suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **quisuisje** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : button.mg-choice « C Le Kalahari »
-- **quisuisje** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : b « C »
-- **quisuisje** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : button.mg-choice « D Le désert de Gobi »
-- **quisuisje** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : b « D »
-- **quisuisje** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : div.timer-label « 11 s »
-- **quisuisje** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **chrono** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : span.is-rouge « ROUGE : 1 / 5 bien placées »
-- **chrono** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : span.is-bleu « BLEU : 0 / 5 bien placées »
-- **chrono** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : div.timer-label « 26 s »
-- **chrono** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **chrono** · suspense du vainqueur · TV · 1280×720 : texte sous le bas de l'écran : b « ? »
-- **des** · début du jeu / négociation / un joueur prêt / décision (+2) · parieur · 360×640, 320×568 : texte sous le bas de l'écran : button.duel-cheerbtn.is-wide « 🎉 Confettis »
-- **des** · début du jeu / négociation / un joueur prêt / décision (+2) · parieur · 320×568 : texte sous le bas de l'écran : button.duel-cheerbtn « 😈 »
-- **des** · début du jeu / négociation / un joueur prêt / décision (+2) · parieur · 320×568 : texte sous le bas de l'écran : button.duel-cheerbtn « 🙌 »
-- **des** · début du jeu / négociation · duelliste · 320×568 : texte sous le bas de l'écran : button.btn.btn-primary « Prêt »
-- **des** · début du jeu / un joueur prêt · duelliste · 320×568 : texte sous le bas de l'écran : div.timer-label « Négociation : 29 s »
-- **des** · négociation · duelliste · 320×568 : texte sous le bas de l'écran : div.timer-label « Négociation : 28 s »
-- **des** · un joueur prêt · duelliste · 320×568 : texte sous le bas de l'écran : button.btn.btn-primary « ✔ Prêt (on attend l’autre) »
-- **des** · suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **des** · suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : em.mg-des-badge « 🏆 Plus haut »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 360×640, 320×568 : texte sous le bas de l'écran : button.duel-cheerbtn « 😈 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 360×640, 320×568 : texte sous le bas de l'écran : button.duel-cheerbtn « 🙌 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 360×640, 320×568 : texte sous le bas de l'écran : button.duel-cheerbtn.is-wide « 🎉 Confettis »
-- **russe** · SPLASH / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : texte sous le bas de l'écran : p.duel-eyebrow « Et le vainqueur est… »
-- **russe** · SPLASH / suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : b « 4 »
-- **russe** · SPLASH / suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : span « ✓ B »
-- **russe** · SPLASH / suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : span.is-rouge « ROUGE : 🎟 Passe ×1 »
-- **russe** · SPLASH / suspense du vainqueur · TV · 1366×768, 1280×720 : texte sous le bas de l'écran : span.is-bleu « BLEU : ✕ plus de Passe »
-
-### contraste
-
-- **code** · après les actions / suspense du vainqueur · TV · 1920×1080, 1366×768, 1280×720 : contraste 2.9:1 : i « ↔ »
+Aucun.
 
 ## Avertissements
 
@@ -194,7 +58,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **pfc** · roulette des duellistes (début) · TV · 1920×1080 : texte de 21 px (< 28) : strong « Aïcha »
 - **pfc** · roulette des duellistes (début) / roulette des duellistes (fin) / roulette des mini-jeux / paris (+11) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **pfc** · roulette des duellistes (début) / roulette des duellistes (fin) · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label.duel-col-label « ROUGE »
-- **pfc** · roulette des duellistes (début) · TV · 1366×768 : texte de 15 px (< 20) : strong « Camille »
+- **pfc** · roulette des duellistes (début) / roulette des duellistes (fin) · TV · 1366×768 : texte de 15 px (< 20) : strong « Camille »
 - **pfc** · roulette des duellistes (début) / roulette des duellistes (fin) · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label.duel-col-label « BLEU »
 - **pfc** · roulette des duellistes (début) / roulette des duellistes (fin) · TV · 1366×768 : texte de 15 px (< 20) : strong « Inès »
 - **pfc** · roulette des duellistes (début) / roulette des duellistes (fin) / roulette des mini-jeux / paris (+11) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -204,9 +68,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **pfc** · roulette des duellistes (début) · TV · 1280×720 : texte de 14 px (< 19) : strong « Thomas »
 - **pfc** · roulette des duellistes (fin) · TV · 1920×1080 : texte de 21 px (< 28) : strong « Inès »
 - **pfc** · roulette des duellistes (fin) · TV · 1920×1080 : texte de 21 px (< 28) : strong « Thomas »
-- **pfc** · roulette des duellistes (fin) · TV · 1366×768 : texte de 15 px (< 20) : strong « Mehdi »
 - **pfc** · roulette des duellistes (fin) · TV · 1280×720 : texte de 14 px (< 19) : strong « Inès »
-- **pfc** · roulette des duellistes (fin) · TV · 1280×720 : texte de 14 px (< 19) : strong « Mehdi »
+- **pfc** · roulette des duellistes (fin) · TV · 1280×720 : texte de 14 px (< 19) : strong « Camille »
 - **pfc** · paris / paris révélés / prêt / prêt (un joueur prêt) (+3) · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « ROUGE »
 - **pfc** · paris / paris révélés / prêt / prêt (un joueur prêt) (+3) · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « BLEU »
 - **pfc** · paris / paris révélés / prêt / prêt (un joueur prêt) (+3) · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « ROUGE »
@@ -239,8 +102,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
+- **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
@@ -251,8 +114,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **pfc** · résultat / résultat (décompte) · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **pfc** · résultat / résultat (décompte) · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **pfc** · résultat / résultat (décompte) · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **culture** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **culture** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **culture** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -266,7 +129,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **culture** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **culture** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **culture** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
-- **culture** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
+- **culture** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **culture** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **culture** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **culture** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
@@ -277,8 +140,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **culture** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **culture** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **culture** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **culture** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **culture** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **culture** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **feu** · carte d’intro / début du jeu / en cours / résultat · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **feu** · carte d’intro / début du jeu / en cours / résultat · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **feu** · carte d’intro / début du jeu / en cours / résultat · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -292,7 +155,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **feu** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **feu** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Faux départ de ROUGE ! »
 - **feu** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 2 paris sur  »
-- **feu** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
+- **feu** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
 - **feu** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
 - **feu** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
 - **feu** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
@@ -308,8 +171,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **feu** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Faux départ de ROUGE ! »
 - **feu** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 2 paris sur  »
 - **feu** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **feu** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **feu** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **feu** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **simon** · carte d’intro / début du jeu / en cours / résultat · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **simon** · carte d’intro / début du jeu / en cours / résultat · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **simon** · carte d’intro / début du jeu / en cours / résultat · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -321,8 +184,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **simon** · après les actions / suspense du vainqueur / résultat · TV · 1280×720 : texte de 14 px (< 19) : span.duel-camp-label « BLEU »
 - **simon** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Tours réussis : ROUGE 0 – 0  »
 - **simon** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Égalité : seuls les duellist »
-- **simon** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **simon** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
+- **simon** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
 - **simon** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **simon** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « Tours réussis : ROUGE 0 – 0  »
 - **simon** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « Égalité : seuls les duellist »
@@ -330,8 +193,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **simon** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Tours réussis : ROUGE 0 – 0  »
 - **simon** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Égalité : seuls les duellist »
 - **simon** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **simon** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **simon** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **simon** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **couleur** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **couleur** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **couleur** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -353,7 +216,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **couleur** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **couleur** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **couleur** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
-- **couleur** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
+- **couleur** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **couleur** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **couleur** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **couleur** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
@@ -364,23 +227,23 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **couleur** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **couleur** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **couleur** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **couleur** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **couleur** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **couleur** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **defuse** · carte d’intro / début du jeu / en cours / résultat · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **defuse** · carte d’intro / début du jeu / en cours / résultat · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **defuse** · carte d’intro / début du jeu / en cours / résultat · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
-- **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : small « uni »
 - **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : small « pointillé »
 - **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : small « rayé »
-- **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : small « uni »
+- **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : small « uni »
 - **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : small « pointillé »
 - **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : small « rayé »
-- **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : small « uni »
+- **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : small « uni »
 - **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : small « pointillé »
 - **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : small « rayé »
-- **defuse** · début du jeu / en cours · duelliste · 390×844, 360×640, 320×568 : texte de 13 px (< 16) : small « uni »
+- **defuse** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : small « uni »
 - **defuse** · début du jeu / en cours · duelliste · 390×844, 360×640, 320×568 : texte de 13 px (< 16) : small « pointillé »
 - **defuse** · début du jeu / en cours · duelliste · 390×844, 360×640, 320×568 : texte de 13 px (< 16) : small « rayé »
+- **defuse** · début du jeu / en cours · duelliste · 390×844, 360×640, 320×568 : texte de 13 px (< 16) : small « uni »
 - **defuse** · après les actions / suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « ROUGE »
 - **defuse** · après les actions / suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « BLEU »
 - **defuse** · après les actions / suspense du vainqueur / résultat · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « ROUGE »
@@ -391,8 +254,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **defuse** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **defuse** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Mauvais fils : ROUGE 0 – 1 B »
 - **defuse** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **defuse** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
 - **defuse** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
+- **defuse** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **defuse** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **defuse** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **defuse** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
@@ -405,8 +268,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **defuse** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Mauvais fils : ROUGE 0 – 1 B »
 - **defuse** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **defuse** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **defuse** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **defuse** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **defuse** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **code** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **code** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **code** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -419,9 +282,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **code** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **code** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **code** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **code** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
+- **code** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
 - **code** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **code** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
+- **code** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **code** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **code** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **code** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -432,6 +295,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **code** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **code** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
 - **code** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **code** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **simon2** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **simon2** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **simon2** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -444,9 +308,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **simon2** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **simon2** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **simon2** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **simon2** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **simon2** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **simon2** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
+- **simon2** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
+- **simon2** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
 - **simon2** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **simon2** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **simon2** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -456,8 +320,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **simon2** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **simon2** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **simon2** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **simon2** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **simon2** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **simon2** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **crash** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **crash** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **crash** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -467,9 +331,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **crash** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 17 px (< 20) : span.is-bleu « BLEU : pas encore banqué »
 - **crash** · début du jeu / en cours · TV · 1280×720 : texte de 16 px (< 19) : span.is-rouge « ROUGE : pas encore banqué »
 - **crash** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 16 px (< 19) : span.is-bleu « BLEU : pas encore banqué »
-- **crash** · après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 24 px (< 28) : span.is-rouge « ROUGE : banqué à 1,78x »
-- **crash** · après les actions / suspense du vainqueur · TV · 1366×768 : texte de 17 px (< 20) : span.is-rouge « ROUGE : banqué à 1,78x »
-- **crash** · après les actions / suspense du vainqueur · TV · 1280×720 : texte de 16 px (< 19) : span.is-rouge « ROUGE : banqué à 1,78x »
+- **crash** · après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 24 px (< 28) : span.is-rouge « ROUGE : banqué à 1,79x »
+- **crash** · après les actions / suspense du vainqueur · TV · 1366×768 : texte de 17 px (< 20) : span.is-rouge « ROUGE : banqué à 1,79x »
+- **crash** · après les actions / suspense du vainqueur · TV · 1280×720 : texte de 16 px (< 19) : span.is-rouge « ROUGE : banqué à 1,79x »
 - **crash** · suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « ROUGE »
 - **crash** · suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « BLEU »
 - **crash** · suspense du vainqueur / résultat · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « ROUGE »
@@ -479,9 +343,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **crash** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **crash** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **crash** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **crash** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
+- **crash** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
 - **crash** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **crash** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
+- **crash** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
 - **crash** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **crash** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **crash** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -492,7 +356,6 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **crash** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **crash** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
 - **crash** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
-- **crash** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **dilemme** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **dilemme** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **dilemme** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -508,8 +371,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **dilemme** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **dilemme** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **dilemme** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **dilemme** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
-- **dilemme** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
+- **dilemme** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Aïcha »
+- **dilemme** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
 - **dilemme** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
 - **dilemme** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **dilemme** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
@@ -520,8 +383,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **dilemme** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **dilemme** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **dilemme** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **dilemme** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **dilemme** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **dilemme** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **soleil** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **soleil** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **soleil** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -534,9 +397,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **soleil** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **soleil** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **soleil** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **soleil** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
+- **soleil** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
 - **soleil** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **soleil** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
+- **soleil** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
 - **soleil** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **soleil** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **soleil** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -560,9 +423,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **plateau** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **plateau** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **plateau** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **plateau** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
+- **plateau** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
 - **plateau** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **plateau** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
+- **plateau** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **plateau** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **plateau** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **plateau** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -585,7 +448,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **course** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Distance : ROUGE 674 – 674 B »
 - **course** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Égalité : seuls les duellist »
 - **course** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
-- **course** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
+- **course** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Aïcha »
 - **course** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **course** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « Distance : ROUGE 674 – 674 B »
 - **course** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « Égalité : seuls les duellist »
@@ -594,10 +457,12 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **course** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Égalité : seuls les duellist »
 - **course** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
 - **course** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
-- **course** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **geo** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **geo** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **geo** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
+- **geo** · révélation des distances / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : p.duel-cote-line « Total : ROUGE 6 498 km · BLE »
+- **geo** · révélation des distances / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : p.duel-cote-line « Total : ROUGE 6 498 km · BLE »
+- **geo** · révélation des distances / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : p.duel-cote-line « Total : ROUGE 6 498 km · BLE »
 - **geo** · suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « ROUGE »
 - **geo** · suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « BLEU »
 - **geo** · suspense du vainqueur / résultat · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « ROUGE »
@@ -607,7 +472,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **geo** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **geo** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **geo** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **geo** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
+- **geo** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
 - **geo** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
 - **geo** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **geo** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
@@ -620,7 +485,6 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **geo** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **geo** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
 - **geo** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
-- **geo** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+2) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -633,9 +497,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **quisuisje** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
-- **quisuisje** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **quisuisje** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
+- **quisuisje** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
+- **quisuisje** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
+- **quisuisje** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **quisuisje** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **quisuisje** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -645,37 +509,35 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **quisuisje** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **quisuisje** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **quisuisje** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
+- **quisuisje** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **quisuisje** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **chrono** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **chrono** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **chrono** · carte d’intro / début du jeu / en cours / après les actions (+1) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : b « ? »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Victor Hugo publie Notre-Dam »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Apollo 11 pose les premiers  »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « La sonde Luna 2 atteint la L »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Adolphe Pégoud réalise les p »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Les Jeux olympiques ont lieu »
-- **chrono** · début du jeu / en cours · TV · 1920×1080 : texte de 21 px (< 28) : span.is-rouge « ROUGE : 0 / 5 bien placées »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Apple popularise l’interface »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Cugnot présente son « fardie »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « La statue de la Liberté est  »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 26 px (< 28) : span « Première édition des 24 Heur »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 21 px (< 28) : span.is-rouge « ROUGE : 0 / 5 bien placées »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 21 px (< 28) : span.is-bleu « BLEU : 0 / 5 bien placées »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : b « ? »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Victor Hugo publie Notre-Dam »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Apollo 11 pose les premiers  »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « La sonde Luna 2 atteint la L »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Adolphe Pégoud réalise les p »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Les Jeux olympiques ont lieu »
-- **chrono** · début du jeu / en cours · TV · 1366×768 : texte de 15 px (< 20) : span.is-rouge « ROUGE : 0 / 5 bien placées »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Apple popularise l’interface »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Cugnot présente son « fardie »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « La statue de la Liberté est  »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 18 px (< 20) : span « Première édition des 24 Heur »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 15 px (< 20) : span.is-rouge « ROUGE : 0 / 5 bien placées »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1366×768 : texte de 15 px (< 20) : span.is-bleu « BLEU : 0 / 5 bien placées »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : b « ? »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Victor Hugo publie Notre-Dam »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Apollo 11 pose les premiers  »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « La sonde Luna 2 atteint la L »
-- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Adolphe Pégoud réalise les p »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Les Jeux olympiques ont lieu »
-- **chrono** · début du jeu / en cours · TV · 1280×720 : texte de 14 px (< 19) : span.is-rouge « ROUGE : 0 / 5 bien placées »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Apple popularise l’interface »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Cugnot présente son « fardie »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « La statue de la Liberté est  »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 17 px (< 19) : span « Première édition des 24 Heur »
+- **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 14 px (< 19) : span.is-rouge « ROUGE : 0 / 5 bien placées »
 - **chrono** · début du jeu / en cours / après les actions / suspense du vainqueur · TV · 1280×720 : texte de 14 px (< 19) : span.is-bleu « BLEU : 0 / 5 bien placées »
-- **chrono** · après les actions / suspense du vainqueur · TV · 1920×1080 : texte de 21 px (< 28) : span.is-rouge « ROUGE : 1 / 5 bien placées »
-- **chrono** · après les actions / suspense du vainqueur · TV · 1366×768 : texte de 15 px (< 20) : span.is-rouge « ROUGE : 1 / 5 bien placées »
-- **chrono** · après les actions / suspense du vainqueur · TV · 1280×720 : texte de 14 px (< 19) : span.is-rouge « ROUGE : 1 / 5 bien placées »
 - **chrono** · suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « ROUGE »
 - **chrono** · suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « BLEU »
 - **chrono** · suspense du vainqueur / résultat · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « ROUGE »
@@ -685,9 +547,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **chrono** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **chrono** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **chrono** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **chrono** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
+- **chrono** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Aïcha »
 - **chrono** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **chrono** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
+- **chrono** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
 - **chrono** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **chrono** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **chrono** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -722,9 +584,9 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **vf** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **vf** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **vf** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **vf** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
-- **vf** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
-- **vf** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
+- **vf** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
+- **vf** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
+- **vf** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **vf** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
 - **vf** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **vf** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
@@ -734,8 +596,8 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **vf** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **vf** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **vf** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
-- **vf** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **vf** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **vf** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 - **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+5) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+5) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+5) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
@@ -767,7 +629,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **des** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
 - **des** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **des** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
-- **des** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Sacha »
+- **des** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
 - **des** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
 - **des** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
 - **des** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
@@ -784,42 +646,41 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+3) · TV · 1920×1080 : texte de 26 px (< 28) : summary « ⋯ »
 - **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+3) · TV · 1366×768 : texte de 18 px (< 20) : summary « ⋯ »
 - **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+3) · TV · 1280×720 : texte de 17 px (< 19) : summary « ⋯ »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+3) · TV · 1920×1080 : texte de 24 px (< 28) : span.is-rouge « ROUGE : 🎟 Passe ×1 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · TV · 1920×1080 : texte de 24 px (< 28) : span.is-bleu « BLEU : 🎟 Passe ×1 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+3) · TV · 1366×768 : texte de 17 px (< 20) : span.is-rouge « ROUGE : 🎟 Passe ×1 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · TV · 1366×768 : texte de 17 px (< 20) : span.is-bleu « BLEU : 🎟 Passe ×1 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+3) · TV · 1280×720 : texte de 16 px (< 19) : span.is-rouge « ROUGE : 🎟 Passe ×1 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · TV · 1280×720 : texte de 16 px (< 19) : span.is-bleu « BLEU : 🎟 Passe ×1 »
-- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 24 px (< 28) : span.is-bleu « BLEU : ✕ plus de Passe »
-- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 17 px (< 20) : span.is-bleu « BLEU : ✕ plus de Passe »
-- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 16 px (< 19) : span.is-bleu « BLEU : ✕ plus de Passe »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · TV · 1920×1080 : texte de 24 px (< 28) : span.is-rouge « ROUGE : 🎟 Passe ×1 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+3) · TV · 1920×1080 : texte de 24 px (< 28) : span.is-bleu « BLEU : 🎟 Passe ×1 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · TV · 1366×768 : texte de 17 px (< 20) : span.is-rouge « ROUGE : 🎟 Passe ×1 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+3) · TV · 1366×768 : texte de 17 px (< 20) : span.is-bleu « BLEU : 🎟 Passe ×1 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · TV · 1280×720 : texte de 16 px (< 19) : span.is-rouge « ROUGE : 🎟 Passe ×1 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+3) · TV · 1280×720 : texte de 16 px (< 19) : span.is-bleu « BLEU : 🎟 Passe ×1 »
+- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 24 px (< 28) : span.is-rouge « ROUGE : ✕ plus de Passe »
+- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 17 px (< 20) : span.is-rouge « ROUGE : ✕ plus de Passe »
+- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 16 px (< 19) : span.is-rouge « ROUGE : ✕ plus de Passe »
 - **russe** · SPLASH / suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « ROUGE »
 - **russe** · SPLASH / suspense du vainqueur / résultat · TV · 1920×1080 : texte de 21 px (< 28) : span.duel-camp-label « BLEU »
 - **russe** · SPLASH / suspense du vainqueur / résultat · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « ROUGE »
 - **russe** · SPLASH / suspense du vainqueur / résultat · TV · 1366×768 : texte de 15 px (< 20) : span.duel-camp-label « BLEU »
 - **russe** · SPLASH / suspense du vainqueur / résultat · TV · 1280×720 : texte de 14 px (< 19) : span.duel-camp-label « ROUGE »
 - **russe** · SPLASH / suspense du vainqueur / résultat · TV · 1280×720 : texte de 14 px (< 19) : span.duel-camp-label « BLEU »
-- **russe** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
 - **russe** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-win « 🏆 Vainqueur »
-- **russe** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « ROUGE a pris la case piégée  »
-- **russe** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 2 paris sur  »
-- **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Yanis »
-- **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Mehdi »
-- **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Inès »
+- **russe** · résultat · TV · 1920×1080 : texte de 24 px (< 28) : span.duel-outcome.is-lose « ✕ Battu »
+- **russe** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « BLEU a pris la case piégée ( »
+- **russe** · résultat · TV · 1920×1080 : texte de 22 px (< 28) : p.duel-cote-line « Cote Standard : 4 paris sur  »
+- **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Thomas »
+- **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Camille »
 - **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Léa »
-- **russe** · résultat · TV · 1920×1080 : texte de 20 px (< 28) : strong « Aïcha »
 - **russe** · résultat · TV · 1920×1080 : texte de 21 px (< 28) : button.btn.btn-primary « Duel suivant »
-- **russe** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
 - **russe** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-win « 🏆 Vainqueur »
-- **russe** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « ROUGE a pris la case piégée  »
-- **russe** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « Cote Standard : 2 paris sur  »
+- **russe** · résultat · TV · 1366×768 : texte de 17 px (< 20) : span.duel-outcome.is-lose « ✕ Battu »
+- **russe** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « BLEU a pris la case piégée ( »
+- **russe** · résultat · TV · 1366×768 : texte de 16 px (< 20) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **russe** · résultat · TV · 1366×768 : texte de 15 px (< 20) : button.btn.btn-primary « Duel suivant »
-- **russe** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
 - **russe** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-win « 🏆 Vainqueur »
-- **russe** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « ROUGE a pris la case piégée  »
-- **russe** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 2 paris sur  »
+- **russe** · résultat · TV · 1280×720 : texte de 16 px (< 19) : span.duel-outcome.is-lose « ✕ Battu »
+- **russe** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « BLEU a pris la case piégée ( »
+- **russe** · résultat · TV · 1280×720 : texte de 15 px (< 19) : p.duel-cote-line « Cote Standard : 4 paris sur  »
 - **russe** · résultat · TV · 1280×720 : texte de 14 px (< 19) : button.btn.btn-primary « Duel suivant »
 - **russe** · résultat · parieur · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
+- **russe** · résultat · duelliste · 390×844, 360×640, 320×568 : texte de 14 px (< 16) : p.muted.small « Regarde l’écran pour les rés »
 
 ### police
 
@@ -936,17 +797,17 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **pfc** · résultat / résultat (décompte) · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
+- **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **pfc** · résultat / résultat (décompte) · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
+- **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
 - **pfc** · résultat / résultat (décompte) · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
@@ -963,14 +824,14 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **culture** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
 - **culture** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **culture** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **culture** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **culture** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **culture** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **culture** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **culture** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
 - **culture** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
 - **culture** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **culture** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **culture** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **culture** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **culture** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **culture** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
 - **culture** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
@@ -984,7 +845,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **feu** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **feu** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **feu** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **feu** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
+- **feu** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **feu** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 2 gorgées »
 - **feu** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **feu** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
@@ -993,7 +854,7 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **feu** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
 - **feu** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
 - **feu** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Aïcha »
-- **feu** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
+- **feu** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **feu** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 2 gorgées »
 - **feu** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **feu** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
@@ -1009,12 +870,12 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **simon** · début du jeu / en cours · TV · 1280×720 : texte de 13 px (< 13) : span.duel-camp-label « ROUGE »
 - **simon** · début du jeu / en cours · TV · 1280×720 : texte de 13 px (< 13) : span.duel-camp-label « BLEU »
 - **simon** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
-- **simon** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
-- **simon** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **simon** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
-- **simon** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
-- **simon** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
+- **simon** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
+- **simon** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **simon** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
+- **simon** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
+- **simon** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **couleur** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **couleur** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **couleur** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1028,14 +889,14 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **couleur** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
 - **couleur** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **couleur** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **couleur** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **couleur** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **couleur** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **couleur** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **couleur** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
 - **couleur** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
 - **couleur** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **couleur** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **couleur** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **couleur** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **couleur** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **couleur** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
 - **couleur** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
@@ -1049,17 +910,17 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **defuse** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **defuse** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **defuse** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **defuse** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
+- **defuse** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **defuse** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **defuse** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **defuse** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **defuse** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **defuse** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **defuse** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **defuse** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **defuse** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
+- **defuse** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **defuse** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **defuse** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **defuse** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **defuse** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **defuse** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **defuse** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
 - **defuse** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
@@ -1073,20 +934,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **code** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **code** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **code** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **code** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
+- **code** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
 - **code** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **code** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **code** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **code** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **code** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **code** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
-- **code** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Yanis »
+- **code** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
+- **code** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
 - **code** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **code** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **code** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **code** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **code** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **code** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
+- **code** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
 - **simon2** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **simon2** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **simon2** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1097,20 +958,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **simon2** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **simon2** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **simon2** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **simon2** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
+- **simon2** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **simon2** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **simon2** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **simon2** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **simon2** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **simon2** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **simon2** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **simon2** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **simon2** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
+- **simon2** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
+- **simon2** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **simon2** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **simon2** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **simon2** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **simon2** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **simon2** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **simon2** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **simon2** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
+- **simon2** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
 - **crash** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **crash** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **crash** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1121,20 +982,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **crash** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **crash** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **crash** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **crash** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
+- **crash** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
 - **crash** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **crash** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **crash** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **crash** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **crash** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **crash** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **crash** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
+- **crash** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
+- **crash** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Yanis »
 - **crash** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **crash** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **crash** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **crash** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **crash** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **crash** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
+- **crash** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
 - **dilemme** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **dilemme** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **dilemme** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1145,17 +1006,17 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **dilemme** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **dilemme** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **dilemme** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **dilemme** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
+- **dilemme** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Aïcha »
 - **dilemme** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **dilemme** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **dilemme** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **dilemme** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **dilemme** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **dilemme** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **dilemme** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
-- **dilemme** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
+- **dilemme** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Aïcha »
 - **dilemme** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **dilemme** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **dilemme** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **dilemme** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **dilemme** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **dilemme** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
 - **dilemme** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
@@ -1181,20 +1042,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **soleil** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **soleil** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **soleil** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **soleil** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
+- **soleil** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
 - **soleil** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **soleil** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **soleil** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **soleil** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **soleil** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **soleil** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **soleil** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
+- **soleil** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
+- **soleil** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Yanis »
 - **soleil** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **soleil** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **soleil** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **soleil** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **soleil** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **soleil** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
+- **soleil** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
 - **plateau** · début du jeu / en cours / après les actions / plus tard · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **plateau** · début du jeu / en cours / après les actions / plus tard · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **plateau** · début du jeu / en cours / après les actions / plus tard · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1205,20 +1066,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **plateau** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **plateau** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **plateau** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **plateau** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
+- **plateau** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
 - **plateau** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **plateau** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **plateau** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **plateau** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **plateau** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **plateau** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
-- **plateau** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Yanis »
+- **plateau** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
+- **plateau** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
 - **plateau** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **plateau** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **plateau** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **plateau** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **plateau** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **plateau** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
+- **plateau** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
 - **course** · début du jeu · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **course** · début du jeu · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **course** · début du jeu · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1228,10 +1089,10 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **course** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **course** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
 - **course** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
-- **course** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
+- **course** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Aïcha »
 - **course** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Yanis »
 - **course** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
-- **course** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
+- **course** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Aïcha »
 - **geo** · début du jeu / en cours / après les actions / révélation des distances · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **geo** · début du jeu / en cours / après les actions / révélation des distances · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **geo** · début du jeu / en cours / après les actions / révélation des distances · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1242,14 +1103,14 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **geo** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **geo** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **geo** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **geo** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
+- **geo** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
 - **geo** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **geo** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **geo** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **geo** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **geo** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **geo** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **geo** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
+- **geo** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
 - **geo** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **geo** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **geo** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
@@ -1258,28 +1119,55 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **geo** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
 - **quisuisje** · début du jeu / en cours / après les actions / plus tard · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **quisuisje** · début du jeu / en cours / après les actions / plus tard · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : li.pop-in « Indice 1 Je mesure 3 776 mèt »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : b « Indice 1 »
+- **quisuisje** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 16 px (< 20) : li.is-hidden « Indice 2 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : b « Indice 2 »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : li.is-hidden « Indice 3 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : b « Indice 3 »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : li.is-hidden « Indice 4 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1920×1080 : texte de 16 px (< 20) : b « Indice 4 »
 - **quisuisje** · début du jeu / en cours / après les actions / plus tard · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
 - **quisuisje** · début du jeu / en cours / après les actions / plus tard · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « BLEU »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : li.pop-in « Indice 1 Je mesure 3 776 mèt »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : b « Indice 1 »
+- **quisuisje** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 11 px (< 14) : li.is-hidden « Indice 2 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : b « Indice 2 »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : li.is-hidden « Indice 3 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : b « Indice 3 »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : li.is-hidden « Indice 4 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1366×768 : texte de 11 px (< 14) : b « Indice 4 »
 - **quisuisje** · début du jeu / en cours / après les actions / plus tard · TV · 1280×720 : texte de 13 px (< 13) : span.duel-camp-label « ROUGE »
 - **quisuisje** · début du jeu / en cours / après les actions / plus tard · TV · 1280×720 : texte de 13 px (< 13) : span.duel-camp-label « BLEU »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : li.pop-in « Indice 1 Je mesure 3 776 mèt »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : b « Indice 1 »
+- **quisuisje** · début du jeu / en cours / après les actions · TV · 1280×720 : texte de 11 px (< 13) : li.is-hidden « Indice 2 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : b « Indice 2 »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : li.is-hidden « Indice 3 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : b « Indice 3 »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : li.is-hidden « Indice 4 … »
+- **quisuisje** · début du jeu / en cours / après les actions / plus tard (+1) · TV · 1280×720 : texte de 11 px (< 13) : b « Indice 4 »
+- **quisuisje** · plus tard / suspense du vainqueur · TV · 1920×1080 : texte de 16 px (< 20) : li.pop-in « Indice 2 Un moine m’a gravi  »
+- **quisuisje** · plus tard / suspense du vainqueur · TV · 1366×768 : texte de 11 px (< 14) : li.pop-in « Indice 2 Un moine m’a gravi  »
+- **quisuisje** · plus tard / suspense du vainqueur · TV · 1280×720 : texte de 11 px (< 13) : li.pop-in « Indice 2 Un moine m’a gravi  »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **quisuisje** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **quisuisje** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
+- **quisuisje** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
 - **quisuisje** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **quisuisje** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **quisuisje** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **quisuisje** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **quisuisje** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **quisuisje** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **quisuisje** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
-- **quisuisje** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
+- **quisuisje** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
+- **quisuisje** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
 - **quisuisje** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **quisuisje** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **quisuisje** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **quisuisje** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **quisuisje** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **quisuisje** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **quisuisje** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
+- **quisuisje** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
 - **chrono** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **chrono** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **chrono** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1290,20 +1178,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **chrono** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **chrono** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **chrono** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **chrono** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
+- **chrono** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Aïcha »
 - **chrono** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **chrono** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **chrono** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **chrono** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **chrono** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **chrono** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
-- **chrono** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
+- **chrono** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
+- **chrono** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Aïcha »
 - **chrono** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **chrono** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **chrono** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **chrono** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **chrono** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **chrono** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
+- **chrono** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
 - **vf** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **vf** · début du jeu / en cours / après les actions · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **vf** · début du jeu / en cours / après les actions · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1314,20 +1202,20 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **vf** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **vf** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **vf** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **vf** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
+- **vf** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
 - **vf** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **vf** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **vf** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
+- **vf** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
 - **vf** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **vf** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **vf** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
-- **vf** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
+- **vf** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
+- **vf** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
 - **vf** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **vf** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **vf** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
+- **vf** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
 - **vf** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **vf** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **vf** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
+- **vf** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
 - **des** · début du jeu / négociation / un joueur prêt / décision (+3) · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « ROUGE »
 - **des** · début du jeu / négociation / un joueur prêt / décision (+3) · TV · 1920×1080 : texte de 19 px (< 20) : span.duel-camp-label « BLEU »
 - **des** · début du jeu / négociation / un joueur prêt / décision (+3) · TV · 1366×768 : texte de 14 px (< 14) : span.duel-camp-label « ROUGE »
@@ -1338,14 +1226,14 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **des** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **des** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **des** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **des** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Sacha »
+- **des** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
 - **des** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **des** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
 - **des** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **des** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **des** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
 - **des** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **des** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Sacha »
+- **des** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
 - **des** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **des** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
 - **des** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
@@ -1359,39 +1247,37 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · TV · 1280×720 : texte de 13 px (< 13) : span.duel-camp-label « ROUGE »
 - **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · TV · 1280×720 : texte de 13 px (< 13) : span.duel-camp-label « BLEU »
 - **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 390×844, 360×640, 320×568 : texte de 9 px (< 12) : span « 💧 PIÉGÉE »
-- **russe** · CLIC (case sûre) / plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 18 px (< 20) : span « ✓ R »
-- **russe** · CLIC (case sûre) / plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 13 px (< 14) : span « ✓ R »
-- **russe** · CLIC (case sûre) / plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 12 px (< 13) : span « ✓ R »
-- **russe** · CLIC (case sûre) / plusieurs cases retournées · parieur · 390×844, 360×640, 320×568 : texte de 9 px (< 12) : span « ✓ R »
-- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 18 px (< 20) : span « ✓ B »
-- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 13 px (< 14) : span « ✓ B »
-- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 12 px (< 13) : span « ✓ B »
-- **russe** · plusieurs cases retournées · parieur · 390×844, 360×640, 320×568 : texte de 9 px (< 12) : span « ✓ B »
+- **russe** · CLIC (case sûre) / plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 18 px (< 20) : span « ✓ B »
+- **russe** · CLIC (case sûre) / plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 13 px (< 14) : span « ✓ B »
+- **russe** · CLIC (case sûre) / plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 12 px (< 13) : span « ✓ B »
+- **russe** · CLIC (case sûre) / plusieurs cases retournées · parieur · 390×844, 360×640, 320×568 : texte de 9 px (< 12) : span « ✓ B »
+- **russe** · CLIC (case sûre) / plusieurs cases retournées · duelliste · 390×844, 360×640, 320×568 : texte de 11 px (< 12) : span « ✓ B »
+- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 18 px (< 20) : span « ✓ R »
+- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 13 px (< 14) : span « ✓ R »
+- **russe** · plusieurs cases retournées / SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 12 px (< 13) : span « ✓ R »
+- **russe** · plusieurs cases retournées · parieur · 390×844, 360×640, 320×568 : texte de 9 px (< 12) : span « ✓ R »
+- **russe** · plusieurs cases retournées · duelliste · 390×844, 360×640, 320×568 : texte de 11 px (< 12) : span « ✓ R »
 - **russe** · SPLASH / suspense du vainqueur · TV · 1920×1080 : texte de 18 px (< 20) : span « 💦 »
 - **russe** · SPLASH / suspense du vainqueur · TV · 1366×768 : texte de 13 px (< 14) : span « 💦 »
 - **russe** · SPLASH / suspense du vainqueur · TV · 1280×720 : texte de 12 px (< 13) : span « 💦 »
-- **russe** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 2 gorgées »
+- **russe** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **russe** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « perdant »
 - **russe** · résultat · TV · 1920×1080 : texte de 18 px (< 20) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **russe** · résultat · TV · 1920×1080 : texte de 17 px (< 20) : small « mauvais pari »
-- **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Yanis »
-- **russe** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 2 gorgées »
+- **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Thomas »
+- **russe** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **russe** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « perdant »
-- **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Mehdi »
+- **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Camille »
 - **russe** · résultat · TV · 1366×768 : texte de 13 px (< 14) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **russe** · résultat · TV · 1366×768 : texte de 12 px (< 14) : small « mauvais pari »
-- **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Inès »
 - **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Léa »
-- **russe** · résultat · TV · 1366×768 : texte de 14 px (< 14) : strong « Aïcha »
-- **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Yanis »
-- **russe** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 2 gorgées »
+- **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Thomas »
+- **russe** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 3 gorgées »
 - **russe** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « perdant »
-- **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Mehdi »
+- **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Camille »
 - **russe** · résultat · TV · 1280×720 : texte de 12 px (< 13) : span.duel-drinker-sips « 🍺 1 gorgée »
 - **russe** · résultat · TV · 1280×720 : texte de 11 px (< 13) : small « mauvais pari »
-- **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Inès »
 - **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Léa »
-- **russe** · résultat · TV · 1280×720 : texte de 13 px (< 13) : strong « Aïcha »
 
 ### espace
 
@@ -1401,57 +1287,465 @@ Généré par `npm run audit:affichage` (scripts/audit-affichage.js) : 1626 mesu
 - **pfc** · prêt / prêt (un joueur prêt) · TV · 1920×1080 : contenu sur 14 % de l'écran seulement, texte de 40 px au plus
 - **pfc** · prêt / prêt (un joueur prêt) · TV · 1366×768 : contenu sur 14 % de l'écran seulement, texte de 28 px au plus
 - **pfc** · prêt / prêt (un joueur prêt) · TV · 1280×720 : contenu sur 15 % de l'écran seulement, texte de 27 px au plus
-- **feu** · après les actions / suspense du vainqueur · TV · 1920×1080 : contenu sur 10 % de l'écran seulement, texte de 48 px au plus
-- **feu** · après les actions / suspense du vainqueur · TV · 1366×768 : contenu sur 11 % de l'écran seulement, texte de 34 px au plus
-- **feu** · après les actions / suspense du vainqueur · TV · 1280×720 : contenu sur 12 % de l'écran seulement, texte de 32 px au plus
+- **feu** · après les actions / suspense du vainqueur · TV · 1920×1080 : contenu sur 6 % de l'écran seulement, texte de 48 px au plus
+- **feu** · après les actions / suspense du vainqueur · TV · 1366×768 : contenu sur 6 % de l'écran seulement, texte de 34 px au plus
+- **feu** · après les actions / suspense du vainqueur · TV · 1280×720 : contenu sur 6 % de l'écran seulement, texte de 32 px au plus
 - **simon** · début du jeu / en cours · TV · 1920×1080 : contenu sur 5 % de l'écran seulement, texte de 54 px au plus
 - **simon** · début du jeu / en cours · TV · 1366×768 : contenu sur 8 % de l'écran seulement, texte de 39 px au plus
 - **simon** · début du jeu / en cours · TV · 1280×720 : contenu sur 9 % de l'écran seulement, texte de 36 px au plus
-- **simon** · après les actions / suspense du vainqueur · TV · 1920×1080 : contenu sur 20 % de l'écran seulement, texte de 54 px au plus
-- **simon** · après les actions / suspense du vainqueur · TV · 1366×768 : contenu sur 22 % de l'écran seulement, texte de 39 px au plus
-- **simon** · après les actions / suspense du vainqueur · TV · 1280×720 : contenu sur 23 % de l'écran seulement, texte de 36 px au plus
+- **simon** · après les actions / suspense du vainqueur · TV · 1920×1080 : contenu sur 13 % de l'écran seulement, texte de 54 px au plus
+- **simon** · après les actions / suspense du vainqueur · TV · 1366×768 : contenu sur 14 % de l'écran seulement, texte de 39 px au plus
+- **simon** · après les actions / suspense du vainqueur · TV · 1280×720 : contenu sur 15 % de l'écran seulement, texte de 36 px au plus
 - **couleur** · début du jeu / en cours / après les actions · TV · 1920×1080 : contenu sur 17 % de l'écran seulement, texte de 40 px au plus
 - **couleur** · début du jeu / en cours / après les actions · TV · 1366×768 : contenu sur 17 % de l'écran seulement, texte de 28 px au plus
 - **couleur** · début du jeu / en cours / après les actions · TV · 1280×720 : contenu sur 17 % de l'écran seulement, texte de 27 px au plus
+- **couleur** · suspense du vainqueur · TV · 1920×1080 : contenu sur 26 % de l'écran seulement, texte de 40 px au plus
+- **couleur** · suspense du vainqueur · TV · 1366×768 : contenu sur 27 % de l'écran seulement, texte de 28 px au plus
+- **couleur** · suspense du vainqueur · TV · 1280×720 : contenu sur 27 % de l'écran seulement, texte de 27 px au plus
 - **code** · début du jeu / en cours · TV · 1920×1080 : contenu sur 22 % de l'écran seulement, texte de 42 px au plus
+- **code** · début du jeu / en cours · TV · 1366×768 : contenu sur 21 % de l'écran seulement, texte de 30 px au plus
+- **code** · début du jeu / en cours · TV · 1280×720 : contenu sur 21 % de l'écran seulement, texte de 28 px au plus
 - **code** · après les actions · TV · 1920×1080 : contenu sur 30 % de l'écran seulement, texte de 42 px au plus
-- **simon2** · début du jeu / en cours / après les actions · TV · 1920×1080 : contenu sur 20 % de l'écran seulement, texte de 54 px au plus
-- **simon2** · début du jeu / en cours / après les actions · TV · 1366×768 : contenu sur 26 % de l'écran seulement, texte de 39 px au plus
-- **simon2** · début du jeu / en cours / après les actions · TV · 1280×720 : contenu sur 28 % de l'écran seulement, texte de 36 px au plus
+- **code** · après les actions · TV · 1366×768 : contenu sur 30 % de l'écran seulement, texte de 30 px au plus
+- **code** · après les actions · TV · 1280×720 : contenu sur 29 % de l'écran seulement, texte de 28 px au plus
+- **code** · suspense du vainqueur · TV · 1920×1080 : contenu sur 28 % de l'écran seulement, texte de 42 px au plus
+- **code** · suspense du vainqueur · TV · 1366×768 : contenu sur 25 % de l'écran seulement, texte de 30 px au plus
+- **code** · suspense du vainqueur · TV · 1280×720 : contenu sur 25 % de l'écran seulement, texte de 28 px au plus
+- **simon2** · début du jeu / en cours · TV · 1920×1080 : contenu sur 21 % de l'écran seulement, texte de 54 px au plus
+- **simon2** · début du jeu / en cours / suspense du vainqueur · TV · 1366×768 : contenu sur 27 % de l'écran seulement, texte de 39 px au plus
+- **simon2** · début du jeu / en cours · TV · 1280×720 : contenu sur 29 % de l'écran seulement, texte de 36 px au plus
+- **simon2** · après les actions · TV · 1920×1080 : contenu sur 12 % de l'écran seulement, texte de 54 px au plus
+- **simon2** · après les actions · TV · 1366×768 : contenu sur 17 % de l'écran seulement, texte de 39 px au plus
+- **simon2** · après les actions · TV · 1280×720 : contenu sur 18 % de l'écran seulement, texte de 36 px au plus
+- **simon2** · suspense du vainqueur · TV · 1920×1080 : contenu sur 22 % de l'écran seulement, texte de 54 px au plus
+- **simon2** · suspense du vainqueur · TV · 1280×720 : contenu sur 28 % de l'écran seulement, texte de 36 px au plus
 - **course** · début du jeu · TV · 1920×1080 : contenu sur 12 % de l'écran seulement, texte de 40 px au plus
 - **course** · début du jeu · TV · 1366×768 : contenu sur 20 % de l'écran seulement, texte de 28 px au plus
 - **course** · début du jeu · TV · 1280×720 : contenu sur 22 % de l'écran seulement, texte de 27 px au plus
-- **course** · en cours · TV · 1920×1080 : contenu sur 26 % de l'écran seulement, texte de 40 px au plus
-- **course** · après les actions / suspense du vainqueur · TV · 1920×1080 : contenu sur 9 % de l'écran seulement, texte de 40 px au plus
-- **course** · après les actions / suspense du vainqueur · TV · 1366×768 : contenu sur 10 % de l'écran seulement, texte de 28 px au plus
-- **course** · après les actions / suspense du vainqueur · TV · 1280×720 : contenu sur 10 % de l'écran seulement, texte de 27 px au plus
-- **chrono** · début du jeu / en cours · TV · 1920×1080 : contenu sur 16 % de l'écran seulement, texte de 40 px au plus
-- **chrono** · début du jeu / en cours · TV · 1366×768 : contenu sur 23 % de l'écran seulement, texte de 28 px au plus
-- **chrono** · début du jeu / en cours · TV · 1280×720 : contenu sur 24 % de l'écran seulement, texte de 27 px au plus
-- **chrono** · après les actions · TV · 1920×1080 : contenu sur 20 % de l'écran seulement, texte de 40 px au plus
-- **chrono** · après les actions · TV · 1366×768 : contenu sur 28 % de l'écran seulement, texte de 28 px au plus
-- **chrono** · après les actions · TV · 1280×720 : contenu sur 30 % de l'écran seulement, texte de 27 px au plus
-- **vf** · début du jeu / en cours / après les actions · TV · 1920×1080 : contenu sur 15 % de l'écran seulement, texte de 54 px au plus
-- **vf** · début du jeu / en cours / après les actions · TV · 1366×768 : contenu sur 15 % de l'écran seulement, texte de 39 px au plus
-- **vf** · début du jeu / en cours / après les actions · TV · 1280×720 : contenu sur 15 % de l'écran seulement, texte de 36 px au plus
+- **course** · en cours / après les actions / suspense du vainqueur · TV · 1920×1080 : contenu sur 22 % de l'écran seulement, texte de 40 px au plus
+- **course** · en cours · TV · 1366×768 : contenu sur 29 % de l'écran seulement, texte de 28 px au plus
+- **course** · en cours · TV · 1280×720 : contenu sur 28 % de l'écran seulement, texte de 27 px au plus
+- **course** · après les actions / suspense du vainqueur · TV · 1366×768 : contenu sur 9 % de l'écran seulement, texte de 28 px au plus
+- **course** · après les actions / suspense du vainqueur · TV · 1280×720 : contenu sur 9 % de l'écran seulement, texte de 27 px au plus
+- **geo** · début du jeu / en cours / suspense du vainqueur · TV · 1920×1080 : contenu sur 27 % de l'écran seulement, texte de 54 px au plus
+- **geo** · début du jeu / en cours · TV · 1366×768 : contenu sur 27 % de l'écran seulement, texte de 39 px au plus
+- **geo** · début du jeu / en cours / révélation des distances · TV · 1280×720 : contenu sur 28 % de l'écran seulement, texte de 36 px au plus
+- **geo** · révélation des distances · TV · 1920×1080 : contenu sur 28 % de l'écran seulement, texte de 54 px au plus
+- **geo** · révélation des distances · TV · 1366×768 : contenu sur 28 % de l'écran seulement, texte de 39 px au plus
+- **geo** · suspense du vainqueur · TV · 1366×768 : contenu sur 23 % de l'écran seulement, texte de 39 px au plus
+- **geo** · suspense du vainqueur · TV · 1280×720 : contenu sur 22 % de l'écran seulement, texte de 36 px au plus
+- **chrono** · début du jeu / en cours / après les actions · TV · 1920×1080 : contenu sur 19 % de l'écran seulement, texte de 40 px au plus
+- **chrono** · début du jeu / en cours / après les actions · TV · 1366×768 : contenu sur 26 % de l'écran seulement, texte de 28 px au plus
+- **chrono** · début du jeu / en cours / après les actions · TV · 1280×720 : contenu sur 28 % de l'écran seulement, texte de 27 px au plus
+- **chrono** · suspense du vainqueur · TV · 1366×768 : contenu sur 29 % de l'écran seulement, texte de 28 px au plus
+- **chrono** · suspense du vainqueur · TV · 1280×720 : contenu sur 27 % de l'écran seulement, texte de 27 px au plus
+- **vf** · début du jeu / en cours / après les actions · TV · 1920×1080 : contenu sur 16 % de l'écran seulement, texte de 54 px au plus
+- **vf** · début du jeu / en cours / après les actions · TV · 1366×768 : contenu sur 22 % de l'écran seulement, texte de 39 px au plus
+- **vf** · début du jeu / en cours / après les actions · TV · 1280×720 : contenu sur 19 % de l'écran seulement, texte de 36 px au plus
+
+### ecart
+
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **pfc** · paris révélés / prêt / prêt (un joueur prêt) / carte d’intro (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **culture** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **feu** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **simon** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **couleur** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **defuse** · carte d’intro / début du jeu / en cours · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **code** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **simon2** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **crash** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **dilemme** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **soleil** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **plateau** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **course** · carte d’intro / début du jeu · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **course** · carte d’intro / début du jeu · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **course** · carte d’intro / début du jeu · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **course** · carte d’intro / début du jeu · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **geo** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **quisuisje** · carte d’intro / début du jeu / en cours / après les actions (+1) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **chrono** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **vf** · carte d’intro / début du jeu / en cours / après les actions · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **des** · carte d’intro / début du jeu / négociation / un joueur prêt (+4) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😱 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 😂 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 👏 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 👏 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 💀 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🍿 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 🍿 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn « 😈 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 🙌 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn « 🙌 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😈 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 390×844, 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🙌 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🔥 » et button.duel-cheerbtn « 💀 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 😂 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😱 » et button.duel-cheerbtn « 🍿 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 😂 » et button.duel-cheerbtn « 😈 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 👏 » et button.duel-cheerbtn « 🙌 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 💀 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn « 😈 »
+- **russe** · carte d’intro / début du jeu / annonce du premier / tour du premier joueur (+2) · parieur · 360×640, 320×568 : moins de 8 px entre button.duel-cheerbtn « 🍿 » et button.duel-cheerbtn.is-wide « 🎉 Confettis »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber « 1 » et button.mg-chamber « 2 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber « 1 » et button.mg-chamber « 6 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber « 3 » et button.mg-chamber « 4 »
+- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber « 4 » et button.mg-chamber.is-trap « 5💧 PIÉGÉE »
+- **russe** · CLIC (case sûre) · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber.is-safe « 1✓ B » et button.mg-chamber « 2 »
+- **russe** · CLIC (case sûre) / plusieurs cases retournées · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber.is-safe « 1✓ B » et button.mg-chamber « 6 »
+- **russe** · plusieurs cases retournées · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber.is-safe « 1✓ B » et button.mg-chamber.is-safe « 2✓ B »
+- **russe** · plusieurs cases retournées · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber.is-safe « 3✓ R » et button.mg-chamber.is-safe « 4✓ B »
+- **russe** · plusieurs cases retournées · parieur · 360×640, 320×568 : moins de 8 px entre button.mg-chamber.is-safe « 4✓ B » et button.mg-chamber.is-trap « 5💧 PIÉGÉE »
 
 ### regle
 
 - **pfc** · carte d’intro / carte d’intro (décompte) · duelliste · 390×844, 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Choisis pierre, feuille ou c »
 - **feu** · carte d’intro · duelliste · 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Tire seulement quand tu ente »
+- **code** · carte d’intro · duelliste · 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Trouve le code secret : vert »
 - **simon2** · carte d’intro · duelliste · 390×844, 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Rejoue toute la suite, puis  »
-- **crash** · carte d’intro · duelliste · 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Banque avant que ça explose. »
 - **dilemme** · carte d’intro · duelliste · 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Partager ou trahir ? Parlez- »
 - **soleil** · carte d’intro · duelliste · 320×568 : règle sur 3 lignes : p.duel-intro-rule « Avance en maintenant le bout »
+- **quisuisje** · carte d’intro · duelliste · 320×568 : règle sur 3 lignes : p.duel-intro-rule « Devine qui je suis. Moins il »
 - **des** · carte d’intro · duelliste · 390×844, 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Tu vois son dé, pas le tien  »
-
-### ecart
-
-- **geo** · début du jeu / en cours / après les actions / révélation des distances · duelliste · 390×844, 360×640, 320×568 : moins de 8 px entre button « + » et button « − »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur · parieur · 320×568 : moins de 8 px entre button.mg-chamber.is-trap « 1💧 PIÉGÉE » et button.mg-chamber « 2 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) (+1) · parieur · 320×568 : moins de 8 px entre button.mg-chamber.is-trap « 1💧 PIÉGÉE » et button.mg-chamber « 6 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · parieur · 320×568 : moins de 8 px entre button.mg-chamber « 3 » et button.mg-chamber « 4 »
-- **russe** · début du jeu / annonce du premier / tour du premier joueur / CLIC (case sûre) · parieur · 320×568 : moins de 8 px entre button.mg-chamber « 4 » et button.mg-chamber « 5 »
+- **russe** · carte d’intro · duelliste · 390×844, 360×640, 320×568 : règle sur 3 lignes : p.duel-intro-rule « Une case sur 6 déclenche le  »
 
 ## Console du navigateur
 

@@ -183,6 +183,7 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
       <svg
         ref={svg}
         className="mg-map"
+        data-decor="true"
         viewBox={`${view.x} ${view.y} ${view.w} ${h}`}
         role="img"
         aria-label="Carte du monde"

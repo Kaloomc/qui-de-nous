@@ -11,6 +11,7 @@ import { buildStrip, travel } from '../../../shared/roulette.js';
 import { socket } from '../lib.js';
 import { later, reducedMotion, reelAt, stableShuffle, startLoop, teardownGame, useFrameElapsed, useTvScale } from './duelFx.js';
 import { MG_VIEWS } from './duelMinigames.jsx';
+import { FitScene } from './FitScene.jsx';
 
 export const id = 'duel';
 export const waitingText = 'Les paris sont ouverts…';
@@ -536,7 +537,7 @@ function PlayTv({ state, round, gameAct }) {
       <div className="duel-corner is-bleu">
         <Fighter state={state} round={round} camp="bleu" size={150} />
       </div>
-      <div className="duel-play-body">{View && round.play ? <View state={state} round={round} play={round.play} gameAct={gameAct} /> : null}</div>
+      <div className="duel-play-body">{View && round.play ? <FitScene><View state={state} round={round} play={round.play} gameAct={gameAct} /></FitScene> : null}</div>
     </div>
   );
 }
@@ -592,11 +593,12 @@ export function HostReveal({ state }) {
     return () => teardownGame();
   }, [done]);
   return (
+    <FitScene>
     <div className="duel-reveal">
       <div className="duel-bets-fighters">
         {['rouge', 'bleu'].map((camp) => (
           <div key={camp} className={done ? (r.winner === camp ? 'is-winner' : r.winner === 'égalité' ? '' : 'is-loser') : ''}>
-            <Fighter state={state} round={round} camp={camp} size={200} />
+            <Fighter state={state} round={round} camp={camp} size={View && round.play && !done ? 90 : 200} />
           </div>
         ))}
       </div>
@@ -607,6 +609,7 @@ export function HostReveal({ state }) {
       )}
       <p className="duel-eyebrow">{done ? (r.winner === 'égalité' ? 'Égalité !' : `${CAMPS[r.winner].label} gagne !`) : 'Et le vainqueur est…'}</p>
     </div>
+    </FitScene>
   );
 }
 
@@ -667,6 +670,7 @@ export function HostResults({ state, onQuit }) {
   const tie = r.winner === 'égalité';
   const winner = r.winnerId ? playerOf(state, r.winnerId) : null;
   return (
+    <FitScene reserve={Math.round(190 * sc)}>
     <div className="duel-results">
       <HostMenu skip={false} gameAct={() => {}} onQuit={onQuit} />
       {!tie && <WinnerBurst camp={r.winner} />}
@@ -710,6 +714,7 @@ export function HostResults({ state, onQuit }) {
         </div>
       </div>
     </div>
+    </FitScene>
   );
 }
 

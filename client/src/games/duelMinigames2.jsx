@@ -801,7 +801,7 @@ const Geo = {
         <p className="duel-eyebrow">Ville {play.n} sur {play.count}</p>
         <h2 className="mg-geo-city">{rev ? rev.city : `📍 ${play.city?.nom ?? ''}`}</h2>
         {!rev && <p className="duel-eyebrow">{play.city?.pays} · Pose ton épingle sur la carte !</p>}
-        <WorldMap pins={rev?.pins ?? {}} truth={rev?.truth ?? null} km={rev?.km ?? null} ratio={0.42} maxVh={58} resetKey={play.n} />
+        <WorldMap pins={rev?.pins ?? {}} truth={rev?.truth ?? null} km={rev?.km ?? null} ratio={0.42} maxVh={46} resetKey={play.n} />
         <div className="mg-geo-status">
           {['rouge', 'bleu'].map((camp) => (
             <span key={camp} className={`is-${camp}`}>
@@ -824,7 +824,7 @@ const Geo = {
       <div className="mg-geo-duelist">
         <h2 className="mg-geo-city is-small">{rev ? rev.city : `📍 ${play.city?.nom ?? ''}`}</h2>
         {!rev && <p className="muted">{play.city?.pays} · touche la carte pour poser l’épingle (tu peux la déplacer). Zoome avec + / − ou deux doigts</p>}
-        <WorldMap interactive={!rev} pins={rev?.pins ?? {}} truth={rev?.truth ?? null} km={rev?.km ?? null} camp={side} mine={play.mine ? { camp: side, pin: play.mine } : null} ratio={1.15} start={640} resetKey={play.n} onPlace={(pin) => act({ pin, n: play.n })} />
+        <WorldMap interactive={!rev} pins={rev?.pins ?? {}} truth={rev?.truth ?? null} km={rev?.km ?? null} camp={side} mine={play.mine ? { camp: side, pin: play.mine } : null} ratio={Math.max(0.6, Math.min(1.15, (innerHeight - 390) / innerWidth))} start={640} resetKey={play.n} onPlace={(pin) => act({ pin, n: play.n })} />
         {rev && <p className="mg-geo-status">À {fmtKm(rev.km[side])} de {rev.city}</p>}
         {play.deadline && (
           <TimerBar timer={{ endsAt: play.deadline, totalMs: 15000, paused: false }} state={state} small>

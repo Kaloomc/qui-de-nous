@@ -6806,3 +6806,81 @@ body.loup-night {
 .mode-duel.phase-lobby .qr { width: min(100%, 20vh, 260px); }
 .mode-duel.phase-lobby .lobby-join { overflow: visible; }
 .mode-duel.phase-lobby .lobby-players .grid-host { grid-auto-rows: max-content; }
+
+/* Audit d'affichage : suspense du vainqueur et Géo-duel compacts sur la TV ; téléphones : tout tient sans défilement */
+.mode-duel .duel-reveal { gap: 0.6rem; }
+.mode-duel .duel-reveal .duel-bets-fighters { margin-top: 0; }
+.mode-duel .mg-geo { gap: 6px; }
+.mode-duel .mg-geo .mg-geo-city { font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1.1; }
+.mode-duel .mg-geo .mg-geo-status { font-size: 2.2rem; gap: 36px; }
+.mode-duel .mg-geo .duel-cote-line { font-size: 1.6rem; }
+.duel-spectator.is-fill { min-height: 0; }
+.duel-cheerpad.is-fill { min-height: 0; grid-auto-rows: minmax(52px, 1fr); }
+.duel-cheerpad.is-fill .duel-cheerbtn { min-height: 52px; font-size: clamp(2rem, 8dvh, 3.2rem); }
+.mg-des-duelist > .mg-die { width: min(190px, 20dvh); height: auto; }
+.mg-des-duelist .mg-des-col .mg-die { max-width: 100%; height: auto; }
+.mg-des-secret-row .mg-die { width: min(64px, 9dvh); height: auto; }
+.mg-pfc-btn { min-height: clamp(64px, 14dvh, 96px); }
+@media (max-height: 640px) {
+  .mg-des-duelist, .mg-russe-duelist, .mg-pfc-pad { gap: 8px; }
+  .mg-des-btn { min-height: 52px; font-size: 1.2rem; }
+}
+
+/* Audit : pastilles du Code sans chevauchement (symbole au-dessus, icône dessous), Qui suis-je compact, barillet et dés des petits écrans */
+.mg-tile { width: 54px; height: 68px; grid-template-rows: 1fr auto; padding: 4px 0 2px; }
+.mg-tile b { font-size: 1.5rem; }
+.mg-tile i { position: static; font-size: 1rem; line-height: 1; }
+.mg-qui-duelist .mg-choice { min-height: 48px; padding: 6px 12px; font-size: 1.05rem; }
+.mg-qui-duelist .mg-choices { gap: 8px; }
+.mg-qui-clues li { font-size: 1rem; padding: 6px 10px; }
+.mg-barrel.is-compact { width: min(56vw, 200px, 28dvh); }
+.duel-cheerpad.is-fill { grid-auto-rows: minmax(48px, 1fr); }
+.duel-cheerpad.is-fill .duel-cheerbtn { min-height: 48px; }
+@media (max-height: 640px) {
+  .mg-des-hint { font-size: 1rem; }
+  .mg-des-mine { font-size: 1.2rem; }
+  .mg-secret { padding: 4px 8px; gap: 2px; }
+  .mg-secret-title { font-size: 1rem; }
+}
+
+.fit-scene { width: 100%; }
+.fit-scene-inner { width: 100%; }
+
+/* Audit (3) : pastilles du Code lisibles, barillet des petits écrans, dés compacts */
+.mg-tile b { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: #14102a; font-size: 1.3rem; }
+.mg-tile i { color: #14102a; background: rgba(255, 255, 255, 0.92); border-radius: 6px; padding: 0 6px; font-weight: 800; }
+.mg-chamber.is-safe { transform: translate(-50%, -50%); }
+.mg-chamber { gap: 2px; }
+.mg-chamber span { line-height: 1.2; }
+.mg-barrel.is-compact { width: min(56vw, 200px, 24dvh); }
+.duel-cheerpad.is-fill { grid-auto-rows: minmax(44px, 1fr); gap: 6px; }
+.duel-cheerpad.is-fill .duel-cheerbtn { min-height: 44px; }
+@media (max-height: 640px) {
+  .mg-des-duelist > .mg-die { width: min(190px, 16dvh); }
+  .mg-des-reveal.is-small .mg-die { width: 56px; height: auto; }
+  .mg-des-col { padding: 6px 10px; gap: 2px; }
+  .mg-des-reveal { gap: 6px; }
+}
+
+/* Audit (4) : petits téléphones (hauteur ≤ 640 px) : marges réduites, emojis sur 4 colonnes, barillet un peu plus grand pour séparer les cases */
+.mg-barrel.is-compact { width: min(60vw, 220px, 30dvh); }
+@media (max-height: 700px) {
+  .duel-cheerpad.is-fill { grid-template-columns: repeat(4, 1fr); }
+  .duel-cheerpad.is-fill .duel-cheerbtn { font-size: 1.8rem; }
+  .duel-eyebrow { font-size: 1.1rem; }
+}
+
+/* Audit (5) : téléphones étroits ou bas */
+@media (max-width: 480px) {
+  .duel-duelist .duel-score { font-size: 1.3rem; }
+  .mg-qui-clues { gap: 4px; font-size: 1rem; }
+  .mg-qui-clues li { padding: 4px 10px; }
+  .mg-qui-duelist .mg-qui-clues li.is-hidden { display: none; }
+  .mg-choice { min-height: 46px; padding: 4px 12px; }
+  .mg-question.is-small { font-size: 1.15rem; }
+  .mg-qui-feedback { font-size: 1.05rem; padding: 6px 10px; }
+}
+@media (max-height: 640px) {
+  .duel-duelist .duel-score { display: none; }
+  .mg-culture-duelist, .mg-qui-duelist { gap: 6px; }
+}
