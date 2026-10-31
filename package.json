@@ -29,6 +29,7 @@
     "fairness": "node scripts/fairness-report.js",
     "nbmsoak": "node scripts/nbm-soak.js",
     "audit:display": "node scripts/display-audit.mjs",
+    "audit:affichage": "vite build && node scripts/audit-affichage.js",
     "narration:durations": "node scripts/narration-durations.js",
     "loupsim": "node scripts/loup-sim.js",
     "test": "node --test server/*.test.js"
