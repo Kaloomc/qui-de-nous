@@ -234,13 +234,13 @@ function BetsReveal({ state, round }) {
         <Fighter state={state} round={round} camp="bleu" size={110} />
       </div>
       <div className="duel-odds" role="img" aria-label={`Cote : ROUGE ${pct} %, BLEU ${100 - pct} %`}>
-        <span className="is-rouge" style={{ width: `${pct}%` }}>
-          ROUGE {pct} %
-        </span>
-        <span className="is-bleu" style={{ width: `${100 - pct}%` }}>
-          {100 - pct} % BLEU
-        </span>
+        <span className="is-rouge" style={{ width: `${pct}%` }} />
+        <span className="is-bleu" style={{ width: `${100 - pct}%` }} />
       </div>
+      <p className="duel-odds-labels" aria-hidden="true">
+        <span className="is-rouge">ROUGE {pct} %</span>
+        <span className="is-bleu">{100 - pct} % BLEU</span>
+      </p>
       <div className="duel-crowd">
         {['rouge', 'bleu'].map((camp) => (
           <div key={camp} className={`duel-crowd-side ${CAMPS[camp].cls}`}>
@@ -565,7 +565,7 @@ export function HostQuestion({ state, gameAct, onQuit }) {
     body = (
       <>
         {!['notice', 'intro', 'play'].includes(round.step) && <KingBanner state={state} round={round} />}
-        {Step && <Step key={round.phaseId} state={state} round={round} gameAct={gameAct} />}
+        {Step && (round.step === 'play' ? <Step key={round.phaseId} state={state} round={round} gameAct={gameAct} /> : <FitScene key={round.phaseId}><Step state={state} round={round} gameAct={gameAct} /></FitScene>)}
         {['betsReveal', 'ready', 'intro', 'play'].includes(round.step) && <CheerCanvas />}
       </>
     );

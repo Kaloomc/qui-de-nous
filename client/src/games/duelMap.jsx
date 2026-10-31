@@ -179,7 +179,7 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
   };
   const t = truth ? toXY(truth) : null;
   return (
-    <div className="mg-map-wrap" style={maxVh ? { width: `min(94vw, 1800px, calc(${maxVh}vh / ${ratio}))` } : undefined}>
+    <div className="mg-map-wrap" style={maxVh ? { width: `min(70vw, 1800px, calc(${maxVh}vh / ${ratio}))` } : undefined}>
       <svg
         ref={svg}
         className="mg-map"

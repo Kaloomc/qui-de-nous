@@ -6884,3 +6884,56 @@ body.loup-night {
   .duel-duelist .duel-score { display: none; }
   .mg-culture-duelist, .mg-qui-duelist { gap: 6px; }
 }
+
+/* Audit (6) : prénoms de 20 caractères, coins de la TV, Course en paysage, textes de la TV plus grands */
+.mode-duel .chip-name { white-space: normal; overflow-wrap: anywhere; max-width: 100%; line-height: 1.1; text-align: center; overflow: visible; text-overflow: clip; }
+.mode-duel.phase-lobby .grid-host { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.duel-thumb strong { white-space: normal; overflow-wrap: anywhere; overflow: visible; text-overflow: clip; line-height: 1.05; font-size: 1.25rem; text-align: center; }
+.duel-corner { max-width: 15vw; text-align: center; }
+.duel-corner .duel-fighter-name { overflow-wrap: anywhere; line-height: 1.05; font-size: clamp(1.2rem, 1.9vw, 2.2rem); }
+.duel-play-body { padding-inline: min(15vw, 290px); }
+.mode-duel .settings-summary em { color: #ffd37a; }
+.mode-duel .duel-camp-label { font-size: 1.5rem; }
+.mode-duel .duel-drinker-sips { font-size: 1.5rem; }
+.mode-duel.phase-lobby .duel-setup-title, .mode-duel.phase-lobby .settings-summary em { font-size: 1.25rem; }
+.mode-duel .host-controls .ctrl { font-size: 1.25rem; }
+.mode-duel .duel-thumb small, .mode-duel small { font-size: max(1.3rem, 0.85em); }
+@media (orientation: landscape) and (max-height: 520px) {
+  .mg-course-duelist { flex-direction: row; align-items: stretch; gap: 8px; }
+  .mg-course-buttons { display: contents; }
+  .mg-run-btn { min-height: 0; width: 19vw; font-size: 1.05rem; order: 1; border-radius: 18px; }
+  .mg-run-btn.is-duck { order: 3; }
+  .mg-course-duelist .mg-lane { order: 2; flex: 1; width: auto; min-width: 0; align-self: center; }
+  .duel-duelist > .duel-eyebrow { display: none; }
+}
+@media (max-height: 640px) {
+  .mg-chrono-card { min-height: 46px; padding: 4px 10px; font-size: 1rem; }
+  .mg-chrono-duelist { gap: 6px; }
+}
+
+.mode-duel .grid-host .pop-in, .mode-duel .grid-host .chip { min-width: 0; width: 100%; }
+.mode-duel .grid-host .chip-name { display: block; width: 100%; }
+
+/* Audit (7) : 8 px entre deux zones tactiles, règles d'intro sur 2 lignes au plus sur téléphone */
+.duel-cheerpad.is-fill { gap: 8px; }
+@media (max-width: 480px) {
+  .duel-intro-rule { font-size: 1.05rem; line-height: 1.25; }
+}
+@media (max-height: 640px) {
+  .mg-geo-duelist { gap: 4px; }
+  .mg-geo-duelist .mg-geo-city.is-small { font-size: 1.4rem; }
+}
+
+/* Audit (8) : libellés de la cote sous la barre (un segment à 0 % ne coupe plus son texte), petits téléphones, prénoms longs */
+.duel-odds { height: 28px; }
+.duel-odds-labels { display: flex; justify-content: space-between; width: min(1100px, 92%); font-weight: 800; font-size: 1.5rem; }
+.duel-odds-labels .is-rouge { color: #ff8a93; }
+.duel-odds-labels .is-bleu { color: #8fb8ff; }
+.mode-duel.phase-lobby .grid-host { padding-inline: 8px; }
+.mode-duel.phase-lobby .grid-host .chip-name { font-size: 1.2rem; }
+@media (max-height: 640px) {
+  .duel-duelist { gap: 6px; }
+  .duel-duelist > .duel-eyebrow { font-size: 1rem; line-height: 1.1; }
+}
+.mg-russe-duelist .mg-barrel { width: min(100%, 560px, 46dvh); }
+@media (max-height: 640px) { .mg-russe-msg { font-size: 1.15rem; } }

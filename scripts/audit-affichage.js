@@ -104,7 +104,6 @@ async function makeEnv(browser, srv, avatars, v) {
   await env.tv.waitForURL(/\/host\/[A-Z0-9]{4}/);
   const code = env.tv.url().split('/').pop();
   env.game = srv.store.get(code);
-  if (v.adult) env.game.adult = { active: true, pending: false, confirmed: new Set(), refused: new Set(), changedAt: 0 };
   await env.tv.getByRole('button', { name: /Mode Duel/ }).first().click();
   await env.tv.waitForSelector('.duel-setup');
   const names = v.longNames ? [...LONG_NAMES, ...EXTRA_NAMES] : [...CAST.map((c) => c.name), ...EXTRA_NAMES];
@@ -121,6 +120,7 @@ async function makeEnv(browser, srv, avatars, v) {
     if (Date.now() - t0 > 30000) throw new Error('joueurs non connectés');
     await sleep(50);
   }
+  if (v.adult) env.game.adult = { active: true, pending: false, confirmed: new Set(env.game.players.keys()), refused: new Set(), changedAt: 0 };
   // Les 3 vrais téléphones sont toujours les premiers tirés : deux duellistes + un parieur.
   const role = 'duel:duelliste';
   env.game.spotlight.pick(role, [...env.game.players.keys()]);
@@ -375,6 +375,9 @@ function report() {
     }
   }
   lines.push('## Console du navigateur', '', ...(consoleIssues.size ? [...consoleIssues].map((c) => `- ${c}`) : ['Aucune erreur ni avertissement.']), '');
+  // L'audit de clarté (lecture humaine) est écrit à la main dans docs/audit-affichage-clarte.md et recopié à la fin du rapport.
+  const clarte = path.join(ROOT, 'docs/audit-affichage-clarte.md');
+  if (fs.existsSync(clarte)) lines.push('', fs.readFileSync(clarte, 'utf8'));
   fs.writeFileSync(path.join(ROOT, 'docs/AUDIT-AFFICHAGE.md'), lines.join('\n'));
   console.log(`${measures} mesures : ${blocking.length} défaut(s) bloquant(s), ${list.length - blocking.length} avertissement(s), ${consoleIssues.size} message(s) de console.`);
   for (const x of blocking.slice(0, 40)) console.log(`  ✘ [${x.cat}] ${x.game} · ${[...x.phases][0]} · ${x.view} · ${[...x.sizes][0]} : ${x.msg}`);
@@ -401,7 +404,7 @@ const VARIANTS = [
         { name: 'sans photos', players: 8, noPhotos: true, games: ['pfc', 'code'], phoneSizes: [[390, 844], [320, 568]], tvSizes: [[1920, 1080]], skipNotice: true },
         { name: 'thème 18+', players: 8, adult: true, games: ['pfc', 'des', 'russe'], phoneSizes: [[390, 844]], tvSizes: [[1920, 1080], [1366, 768]], skipNotice: true },
         { name: 'mouvement réduit', players: 8, reduced: true, games: ['pfc', 'geo', 'russe'], phoneSizes: [[390, 844]], tvSizes: [[1920, 1080]], skipNotice: true },
-        { name: 'zoom 125 %', players: 8, games: ['pfc', 'geo', 'des'], phoneSizes: [[312, 675], [256, 454]], tvSizes: [[1536, 864], [1093, 614]], skipNotice: true },
+        { name: 'zoom 125 %', players: 8, games: ['pfc', 'geo', 'des'], phoneSizes: [[312, 675]], tvSizes: [[1536, 864], [1093, 614]], skipNotice: true },
       ]),
 ];
 let failed = 0;

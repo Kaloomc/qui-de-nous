@@ -1,2 +1,8 @@
-✔ standard (201 s)
-1623 mesures : 0 défaut(s) bloquant(s), 1714 avertissement(s), 0 message(s) de console.
+✔ standard (200 s)
+✔ 30 joueurs (37 s)
+✔ prénoms de 20 caractères (39 s)
+✔ sans photos (20 s)
+✔ thème 18+ (30 s)
+✔ mouvement réduit (22 s)
+✔ zoom 125 % (29 s)
+2765 mesures : 0 défaut(s) bloquant(s), 2779 avertissement(s), 0 message(s) de console.

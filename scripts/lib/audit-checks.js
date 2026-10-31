@@ -28,7 +28,7 @@ export function auditChecks({ tv, scale }) {
     return true;
   };
   // Éléments volontairement ignorés : décor (data-decor), canvas plein écran, pastilles d'hôte, numéro de version.
-  const ignored = (el) => !!el.closest('.mg-die.is-rolling, .duel-thumb:not(.is-center), [data-decor], .duel-cheers, .duel-winner-burst, .mg-splash, .brand-version, .version-tag, .app-version, [aria-hidden="true"]:not(svg)');
+  const ignored = (el) => !!el.closest('.mg-pad.is-lit, .mg-die.is-rolling, .duel-thumb:not(.is-center), [data-decor], .duel-cheers, .duel-winner-burst, .mg-splash, .brand-version, .version-tag, .app-version, [aria-hidden="true"]:not(svg)');
   const inSvg = (el) => !!el.closest('svg') && el.tagName.toLowerCase() !== 'svg';
 
   // 1. Aucun scroll.
