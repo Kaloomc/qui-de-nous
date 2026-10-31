@@ -8,7 +8,7 @@ import { GameIcon, LockIcon, Logo } from '../icons.jsx';
 import { PartyBar, PartyCard, PartySetupModal, PartyTransition, partyNextLabel } from '../party.jsx';
 import { HostRecap } from '../recap.jsx';
 import { preloadNarration, teardownGame } from '../narrator.js';
-import { teardownGame as teardownDuel } from '../games/duelFx.js';
+import { teardownGame as teardownDuel, tvScale } from '../games/duelFx.js';
 import { DuelCard, DuelSetup } from '../games/duelSetup.jsx';
 import { LoupSetup } from '../games/loupSetup.jsx';
 import { AdultButton, AdultGateModal, AdultOffButton, AdultTheme } from '../adult.jsx';
@@ -68,6 +68,23 @@ export default function Host({ code }) {
   const kick = (player) => {
     if (window.confirm(`Retirer ${player.name} de la partie ?`)) act('host:kick', { playerId: player.id });
   };
+
+  const isDuel = state?.mode === 'duel';
+  const [, bumpScale] = useState(0); // redessine à chaque changement de taille d'écran (tailles en pixels calculées avec tvScale)
+  // Mode Duel : toute la TV est dessinée pour 1080p, puis ramenée à la taille réelle de l'écran (les tailles en rem suivent).
+  useEffect(() => {
+    if (!isDuel) return undefined;
+    const apply = () => {
+      document.documentElement.style.fontSize = `${16 * tvScale()}px`;
+      bumpScale((n) => n + 1);
+    };
+    apply();
+    addEventListener('resize', apply);
+    return () => {
+      removeEventListener('resize', apply);
+      document.documentElement.style.fontSize = '';
+    };
+  }, [isDuel]);
 
   if (fatal) {
     return (
@@ -492,7 +509,7 @@ function Lobby({ state, mode, onStart, onKick, onSettings, onChangeGame, adultSl
           <div className="grid grid-host">
             {state.players.map((p) => (
               <div key={p.id} className="pop-in">
-                <PlayerChip player={p} size={110} onRemove={() => onKick(p)} />
+                <PlayerChip player={p} size={mode.id === 'duel' ? Math.round(76 * tvScale()) : 110} onRemove={() => onKick(p)} />
               </div>
             ))}
           </div>

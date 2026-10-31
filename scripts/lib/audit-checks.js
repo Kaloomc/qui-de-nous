@@ -17,10 +17,18 @@ export function auditChecks({ tv, scale }) {
   const visible = (el) => {
     const r = el.getBoundingClientRect();
     const s = getComputedStyle(el);
-    return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && Number(s.opacity) > 0.05;
+    if (!(r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && Number(s.opacity) > 0.05)) return false;
+    // Entièrement rogné par un parent à débordement caché : invisible (ex. vignettes de la roulette hors du cadre).
+    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+      const ps = getComputedStyle(p);
+      if (ps.overflowX === 'visible' && ps.overflowY === 'visible') continue;
+      const pr = p.getBoundingClientRect();
+      if (r.right <= pr.left || r.left >= pr.right || r.bottom <= pr.top || r.top >= pr.bottom) return false;
+    }
+    return true;
   };
   // Éléments volontairement ignorés : décor (data-decor), canvas plein écran, pastilles d'hôte, numéro de version.
-  const ignored = (el) => !!el.closest('[data-decor], .duel-cheers, .duel-winner-burst, .mg-splash, .brand-version, .version-tag, .app-version, [aria-hidden="true"]:not(svg)');
+  const ignored = (el) => !!el.closest('.duel-thumb:not(.is-center), [data-decor], .duel-cheers, .duel-winner-burst, .mg-splash, .brand-version, .version-tag, .app-version, [aria-hidden="true"]:not(svg)');
   const inSvg = (el) => !!el.closest('svg') && el.tagName.toLowerCase() !== 'svg';
 
   // 1. Aucun scroll.
@@ -55,12 +63,17 @@ export function auditChecks({ tv, scale }) {
   const textRect = (el) => {
     const range = document.createRange();
     let r = null;
+    // Hauteur d'une ligne : la boîte de ligne (interligne), pas la hauteur du glyphe (un chiffre géant à interligne 1 ne déborde pas sur la ligne suivante).
+    const lh = parseFloat(getComputedStyle(el).lineHeight);
     for (const n of el.childNodes) {
       if (n.nodeType !== 3 || !n.textContent.trim()) continue;
       range.selectNodeContents(n);
       for (const q of range.getClientRects()) {
         if (!q.width || !q.height) continue;
-        r = r ? { left: Math.min(r.left, q.left), top: Math.min(r.top, q.top), right: Math.max(r.right, q.right), bottom: Math.max(r.bottom, q.bottom) } : { left: q.left, top: q.top, right: q.right, bottom: q.bottom };
+        const cut = lh > 0 && q.height > lh ? (q.height - lh) / 2 : 0;
+        const top = q.top + cut;
+        const bottom = q.bottom - cut;
+        r = r ? { left: Math.min(r.left, q.left), top: Math.min(r.top, top), right: Math.max(r.right, q.right), bottom: Math.max(r.bottom, bottom) } : { left: q.left, top, right: q.right, bottom };
       }
     }
     return r;

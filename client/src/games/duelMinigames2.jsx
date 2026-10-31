@@ -277,7 +277,7 @@ function CrashCurve({ play, t, heat }) {
     pts.push(`${((tt / tMax) * W).toFixed(1)},${(H - ((play.rate * tt) / Math.log(20)) * H).toFixed(1)}`);
   }
   return (
-    <svg className="mg-crash-curve" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+    <svg className="mg-crash-curve" data-decor="true" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
       <polyline points={pts.join(' ')} fill="none" stroke={`hsl(${170 - heat * 170} 90% 55%)`} strokeWidth="8" strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   );

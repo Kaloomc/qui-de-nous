@@ -9,7 +9,7 @@ import { sipsLabel } from '../sips.jsx';
 import { sounds } from '../sound.js';
 import { buildStrip, travel } from '../../../shared/roulette.js';
 import { socket } from '../lib.js';
-import { later, reducedMotion, reelAt, stableShuffle, startLoop, teardownGame, useFrameElapsed } from './duelFx.js';
+import { later, reducedMotion, reelAt, stableShuffle, startLoop, teardownGame, useFrameElapsed, useTvScale } from './duelFx.js';
 import { MG_VIEWS } from './duelMinigames.jsx';
 
 export const id = 'duel';
@@ -44,11 +44,12 @@ const noticeText = (state, notice) => {
 function Fighter({ state, round, camp, size = 150, status = null, locked = true, player: forced = null }) {
   const player = forced ?? playerOf(state, idOf(round, camp));
   const king = round.kingId && round.kingId === player.id;
+  const k = useTvScale();
   return (
     <div className={`duel-fighter ${CAMPS[camp].cls} ${locked ? 'is-locked' : 'is-spinning'}`}>
       <span className="duel-camp-label">{CAMPS[camp].label}</span>
       <div className="duel-fighter-avatar">
-        <Avatar player={player} size={size} />
+        <Avatar player={player} size={Math.round(size * k)} />
         {king && (
           <span className="duel-crown" aria-label="Roi de la colline">
             👑
@@ -104,6 +105,8 @@ const WINDOW_ROWS = 3;
 
 /** Une colonne de la roulette : photos qui défilent (rouge : de haut en bas, bleu : de bas en haut), arrêt net sur l'élu avec zoom et halo. */
 function RouletteColumn({ state, strip, camp, elapsed, lockAt }) {
+  const sc = useTvScale();
+  const row = ROW * sc;
   const dir = camp === 'rouge' ? 'down' : 'up';
   const L = strip.length;
   const items = dir === 'down' ? [...strip].reverse() : strip;
@@ -111,13 +114,13 @@ function RouletteColumn({ state, strip, camp, elapsed, lockAt }) {
   const idx = dir === 'down' ? (L - 1) * (1 - p) : (L - 1) * p;
   const center = Math.round(idx);
   const locked = p >= 1;
-  const y = (WINDOW_ROWS * ROW) / 2 - ROW / 2 - idx * ROW;
+  const y = (WINDOW_ROWS * row) / 2 - row / 2 - idx * row;
   useReelSound({ index: center, locked }, elapsed !== Infinity);
   const byId = useMemo(() => new Map(state.players.map((pl) => [pl.id, pl])), [state.players]);
   const from = Math.max(0, center - 3);
   const to = Math.min(L - 1, center + 3);
   return (
-    <div className={`duel-col ${CAMPS[camp].cls} ${locked ? 'is-locked' : ''}`} style={{ height: WINDOW_ROWS * ROW }}>
+    <div className={`duel-col ${CAMPS[camp].cls} ${locked ? 'is-locked' : ''}`} style={{ height: WINDOW_ROWS * row }}>
       <span className="duel-camp-label duel-col-label">{CAMPS[camp].label}</span>
       <div className="duel-col-strip" style={{ transform: `translateY(${y}px)` }}>
         {items.slice(from, to + 1).map((id, i) => {
@@ -125,8 +128,8 @@ function RouletteColumn({ state, strip, camp, elapsed, lockAt }) {
           const player = byId.get(id) ?? { id, name: '?', photoUrl: null };
           const isCenter = k === center;
           return (
-            <div key={k} className={`duel-thumb ${isCenter ? 'is-center' : ''} ${isCenter && locked ? 'is-chosen' : ''}`} style={{ top: k * ROW, height: ROW }}>
-              <Avatar player={player} size={isCenter ? 150 : 120} />
+            <div key={k} className={`duel-thumb ${isCenter ? 'is-center' : ''} ${isCenter && locked ? 'is-chosen' : ''}`} style={{ top: k * row, height: row }}>
+              <Avatar player={player} size={Math.round((isCenter ? 150 : 120) * sc)} />
               <strong>{player.name}</strong>
             </div>
           );
@@ -654,6 +657,7 @@ function WinnerBurst({ camp }) {
 }
 
 export function HostResults({ state, onQuit }) {
+  const sc = useTvScale();
   const r = state.results;
   const round = state.round;
   const drinkers = Object.entries(r.sips)
@@ -695,7 +699,7 @@ export function HostResults({ state, onQuit }) {
         <div className="duel-drinkers-grid">
           {drinkers.map(([pid, n]) => (
             <div key={pid} className="duel-drinker">
-              <Avatar player={playerOf(state, pid)} size={drinkers.length > 14 ? 64 : drinkers.length > 8 ? 84 : 104} />
+              <Avatar player={playerOf(state, pid)} size={Math.round((drinkers.length > 14 ? 60 : drinkers.length > 8 ? 76 : 92) * sc)} />
               <strong>{playerOf(state, pid).name}</strong>
               <span className="duel-drinker-sips">🍺 {sipsLabel(n)}</span>
               {pid === r.loserId && <small>perdant</small>}

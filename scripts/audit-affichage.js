@@ -165,7 +165,7 @@ async function measure(env, game, phase, { landscape = false, tvOnly = false } =
   const tvSizes = env.v.tvSizes ?? TV_SIZES;
   for (const [w, h] of tvSizes) {
     await env.tv.setViewportSize({ width: w, height: h });
-    await sleep(70);
+    await sleep(160);
     measures += 1;
     record(await env.tv.evaluate(auditChecks, { tv: true, scale: w / 1920 }), { ...base, view: 'TV' }, `${w}×${h}`);
   }

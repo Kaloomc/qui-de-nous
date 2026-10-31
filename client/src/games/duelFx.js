@@ -6,6 +6,18 @@ import { serverNow } from '../lib.js';
 const timeouts = new Set();
 const frames = new Set();
 
+/** Échelle de la TV par rapport à un écran 1920×1080 (jamais en dessous de 0,5) : tout le mode Duel est dessiné pour 1080p puis ramené à la taille réelle. */
+export const tvScale = () => (typeof innerWidth === 'number' ? Math.max(0.5, Math.min(1.5, innerWidth / 1920, innerHeight / 1080)) : 1);
+export function useTvScale() {
+  const [k, setK] = useState(tvScale);
+  useEffect(() => {
+    const f = () => setK(tvScale());
+    addEventListener('resize', f);
+    return () => removeEventListener('resize', f);
+  }, []);
+  return k;
+}
+
 export const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function later(fn, ms) {
