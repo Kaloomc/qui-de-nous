@@ -4,7 +4,7 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { toLatLon, toXY } from '../../../shared/geo.js';
 import { COUNTRIES, MAP_H, MAP_W } from '../../../shared/worldmap.js';
-import { later, reducedMotion, startLoop } from './duelFx.js';
+import { reducedMotion, startLoop } from './duelFx.js';
 
 export const ZOOMS = [1000, 640, 410, 260, 165, 105, 66, 42, 26]; // largeur visible, en unités de carte : 9 niveaux
 const FILLS = ['#3d6b5c', '#477566', '#35604f', '#527c6a', '#43705f'];
@@ -29,6 +29,13 @@ const clampView = (v, ratio) => {
   return { x, y, w };
 };
 
+/** Vue de départ : le monde entier, ou (téléphone) une fenêtre plus serrée centrée sur l'Europe et l'Atlantique. */
+function startView(w, ratio) {
+  if (w >= MAP_W) return clampView({ x: 0, y: 0, w: MAP_W }, ratio);
+  const c = toXY({ lat: 32, lon: 10 });
+  return clampView({ x: c.x - w / 2, y: c.y - (w * ratio) / 2, w }, ratio);
+}
+
 /** Vue qui cadre un ensemble de points (pour la révélation) : centre et largeur, avec de l'air autour. */
 function fitView(points, ratio) {
   const xs = points.map((p) => p.x);
@@ -45,15 +52,15 @@ function fitView(points, ratio) {
  * pins : { rouge, bleu } (lat/lon) ; truth : la vraie position (à la révélation) ; km : distances à afficher ;
  * onPlace(pin) : pose d'une épingle au toucher ; mine : { camp, pin } l'épingle du joueur avant la révélation.
  */
-export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, mine = null, interactive = false, ratio = MAP_H / MAP_W }) {
+export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, mine = null, camp = null, interactive = false, ratio = MAP_H / MAP_W, maxVh = null, start = MAP_W, resetKey = 0 }) {
   const svg = useRef(null);
-  const [view, setView] = useState(() => clampView({ x: 0, y: 0, w: MAP_W }, ratio));
+  const [view, setView] = useState(() => startView(start, ratio));
+  const [local, setLocal] = useState(null); // mon épingle posée, affichée tout de suite sans attendre le serveur
   const viewRef = useRef(view);
   viewRef.current = view;
   const pointers = useRef(new Map());
   const gesture = useRef(null);
   const lastTap = useRef({ t: 0, x: 0, y: 0 });
-  const pending = useRef(null);
   const h = view.w * ratio;
 
   const toMap = (clientX, clientY, v = viewRef.current) => {
@@ -65,13 +72,16 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
     const w = Math.max(ZOOMS.at(-1), Math.min(MAP_W, v.w * factor));
     return clampView({ w, x: at.x - ((at.x - v.x) * w) / v.w, y: at.y - ((at.y - v.y) * w) / v.w }, ratio);
   };
-  const step = (dir) => {
+  /** `in` : prochain niveau plus proche (+) ; sinon plus lointain (−). */
+  const step = (zoomIn) => {
     const v = viewRef.current;
     const at = { x: v.x + v.w / 2, y: v.y + (v.w * ratio) / 2 };
-    const levels = ZOOMS;
-    const i = levels.findIndex((z) => z <= v.w + 0.5);
-    const target = levels[Math.max(0, Math.min(levels.length - 1, (i < 0 ? 0 : i) + dir))];
+    const target = zoomIn ? ZOOMS.find((z) => z < v.w - 0.5) ?? ZOOMS.at(-1) : [...ZOOMS].reverse().find((z) => z > v.w + 0.5) ?? ZOOMS[0];
     setView(zoomAt(target / v.w, at));
+  };
+  const place = (pin) => {
+    setLocal(pin);
+    onPlace?.(pin);
   };
 
   // Révélation : zoom animé sur le vrai lieu (cadre les épingles et la position exacte).
@@ -93,7 +103,11 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
     });
   }, [truth?.lat, truth?.lon]);
 
-  useEffect(() => () => pending.current?.(), []);
+  // Nouvelle ville : on repart de la vue de départ, sans épingle.
+  useEffect(() => {
+    setLocal(null);
+    setView(startView(start, ratio));
+  }, [resetKey]);
 
   const onDown = (e) => {
     if (!interactive) return;
@@ -130,28 +144,23 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
     pointers.current.delete(e.pointerId);
     if (!g) return;
     if (pointers.current.size > 0) {
-      gesture.current = { kind: 'pan', sx: e.clientX, sy: e.clientY, v: viewRef.current, moved: true };
+      const [rest] = [...pointers.current.values()];
+      gesture.current = { kind: 'pan', sx: rest.x, sy: rest.y, v: viewRef.current, moved: true };
       return;
     }
     gesture.current = null;
     if (g.kind !== 'pan' || g.moved) return;
-    // Un toucher simple pose l'épingle ; deux touchers rapprochés zooment (double tap).
+    // Un toucher simple pose l'épingle tout de suite (elle se déplace jusqu'à la fin du temps) ; deux touchers rapprochés zooment (double tap).
     const now = performance.now();
     const at = toMap(e.clientX, e.clientY);
     const lt = lastTap.current;
     if (now - lt.t < 320 && Math.hypot(e.clientX - lt.x, e.clientY - lt.y) < 30) {
-      pending.current?.();
-      pending.current = null;
       lastTap.current = { t: 0, x: 0, y: 0 };
       setView(zoomAt(0.5, at));
       return;
     }
     lastTap.current = { t: now, x: e.clientX, y: e.clientY };
-    pending.current?.();
-    pending.current = later(() => {
-      pending.current = null;
-      if (onPlace) onPlace(toLatLon(at.x, at.y));
-    }, 330);
+    place(toLatLon(at.x, at.y));
   };
 
   const unit = view.w / 55; // taille d'un repère à l'écran : constante quelle que soit l'échelle
@@ -170,7 +179,7 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
   };
   const t = truth ? toXY(truth) : null;
   return (
-    <div className="mg-map-wrap">
+    <div className="mg-map-wrap" style={maxVh ? { width: `min(100%, 1800px, calc(${maxVh}vh / ${ratio}))` } : undefined}>
       <svg
         ref={svg}
         className="mg-map"
@@ -188,14 +197,9 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
             <stop offset="0" stopColor="#1d2f66" />
             <stop offset="1" stopColor="#14224d" />
           </linearGradient>
-          <filter id="mg-soft" x="-5%" y="-5%" width="110%" height="110%">
-            <feDropShadow dx="0" dy="1.2" stdDeviation="1.4" floodColor="#000" floodOpacity="0.45" />
-          </filter>
         </defs>
         <rect x={-500} y={-500} width={MAP_W + 1000} height={MAP_H + 1000} fill="url(#mg-sea)" />
-        <g filter="url(#mg-soft)">
-          <Countries />
-        </g>
+        <Countries />
         <g className="mg-labels" pointerEvents="none">
           {labels.map((c) => (
             <text key={c.n} x={c.lx} y={c.ly} fontSize={view.w / 62} textAnchor="middle">
@@ -225,12 +229,12 @@ export function WorldMap({ pins = {}, truth = null, km = null, onPlace = null, m
           </g>
         )}
         {Object.entries(pins).map(([camp, p]) => p && mark(camp, p, camp))}
-        {mine && !Object.keys(pins).length && mark(mine.camp, mine.pin, 'mine')}
+        {!Object.keys(pins).length && (local ?? mine?.pin) && mark(camp ?? mine?.camp ?? 'rouge', local ?? mine.pin, 'mine')}
       </svg>
       {interactive && (
         <div className="mg-map-zoom">
-          <button onClick={() => step(-1)} aria-label="Zoom avant">+</button>
-          <button onClick={() => step(1)} aria-label="Zoom arrière">−</button>
+          <button onClick={() => step(true)} aria-label="Zoom avant">+</button>
+          <button onClick={() => step(false)} aria-label="Zoom arrière">−</button>
         </div>
       )}
     </div>
